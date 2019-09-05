@@ -63,6 +63,21 @@ static int _bsearch (int* array, int len, int elem, int* posBefore)
 }
 
 
+/*! \brief Search an element in given set.
+ *
+ *  \details Get the index of the element in given set.
+ *
+ *  \param   set            Set to search index of the element.
+ *  \param   elem           Element value to search by index in the set
+ *
+ *  \return  -1, if the element if not found.
+ *           integer index of the element, otherwise.
+ */
+int indexOf(Set * set, int elem)
+{
+	return _bsearch(set->data, set->size - 1, elem, NULL);
+}
+
 /*! \brief Is the element in given set.
  *
  *  \details Check is there an element in given set.
@@ -76,21 +91,6 @@ static int _bsearch (int* array, int len, int elem, int* posBefore)
 int contains(Set* set, int elem)
 {
     return indexOf(set, elem) != -1;
-}
-
-/*! \brief Search an element in given set.
- *
- *  \details Get the index of the element in given set.
- *
- *  \param   set            Set to search index of the element.
- *  \param   elem           Element value to search by index in the set 
- *
- *  \return  -1, if the element if not found.
- *           integer index of the element, otherwise.
- */
-int indexOf(Set * set, int elem)
-{
-    return _bsearch(set->data, set->size - 1, elem, NULL);
 }
 
 /*! \brief Insert an element to given set.
