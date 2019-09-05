@@ -18,4 +18,4 @@ int CalculateDeterminant(Matrix* matrix);
 
 void FreeMatrix(Matrix* a);
 
-#endif MATRIX_H
+#endif //MATRIX_H

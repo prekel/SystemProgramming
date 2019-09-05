@@ -93,8 +93,8 @@ int CalculateDeterminant(Matrix* matrix)
             int sign = (i % 2) ? -1 : 1;
             Matrix* minor = GetMinor(matrix, 0, i);
             int det = CalculateDeterminant(minor);
-            int i1 = matrix->pData[0][i];
-            ret += sign * i1 * det;
+            int firstrow = matrix->pData[0][i];
+            ret += sign * firstrow * det;
             FreeMatrix(minor);
         }
         return ret;
@@ -104,7 +104,9 @@ int CalculateDeterminant(Matrix* matrix)
 void FreeMatrix(Matrix* a)
 {
     for (int i = 0; i < a->ColumnsCount; i++)
+    {
         free(a->pData[i]);
+    }
     free(a->pData);
     free(a);
 }
