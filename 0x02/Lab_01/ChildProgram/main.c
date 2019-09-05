@@ -9,8 +9,8 @@ int main()
 {
     int rows = 4;
     int columns = 4;
-    struct Matrix* matrix1 = CreateEmptyMatrix(rows, columns);
-    struct Matrix* matrix2 = CreateEmptyMatrix(rows, columns);
+    Matrix* matrix1 = CreateEmptyMatrix(rows, columns);
+    Matrix* matrix2 = CreateEmptyMatrix(rows, columns);
 
     for (int i = 0; i < columns; i++)
     {
@@ -36,7 +36,7 @@ int main()
     printf("\n");
     fflush(stdout);
 
-    struct Matrix* sum = SumMatrices(matrix1, matrix2);
+    Matrix* sum = SumMatrices(matrix1, matrix2);
 
     printf("Матрица matrix1:\n");
     for (int i = 0; i < columns; i++)

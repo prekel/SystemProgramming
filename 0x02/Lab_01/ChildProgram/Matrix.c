@@ -3,9 +3,9 @@
 
 #include "Matrix.h"
 
-struct Matrix* CreateEmptyMatrix(int rowsCount, int columnsCount)
+Matrix* CreateEmptyMatrix(int rowsCount, int columnsCount)
 {
-    struct Matrix* ret = (struct Matrix*) malloc(sizeof(int));
+    Matrix* ret = (Matrix*) malloc(sizeof(int));
     ret->RowsCount = rowsCount;
     ret->ColumnsCount = columnsCount;
     ret->pData = (int**) malloc(ret->ColumnsCount * sizeof(int*));
@@ -21,12 +21,12 @@ struct Matrix* CreateEmptyMatrix(int rowsCount, int columnsCount)
     return ret;
 }
 
-struct Matrix* SumMatrices(struct Matrix* MatrixA, struct Matrix* MatrixB)
+Matrix* SumMatrices(Matrix* MatrixA, Matrix* MatrixB)
 {
     assert(MatrixA->RowsCount == MatrixB->RowsCount);
     assert(MatrixA->ColumnsCount == MatrixB->ColumnsCount);
 
-    struct Matrix* ret =
+    Matrix* ret =
             CreateEmptyMatrix(MatrixA->RowsCount, MatrixA->ColumnsCount);
 
     for (int i = 0; i < ret->ColumnsCount; i++)
@@ -40,9 +40,9 @@ struct Matrix* SumMatrices(struct Matrix* MatrixA, struct Matrix* MatrixB)
     return ret;
 }
 
-struct Matrix* GetMinor(struct Matrix* matrix, int row, int column)
+Matrix* GetMinor(Matrix* matrix, int row, int column)
 {
-    struct Matrix* ret
+    Matrix* ret
             = CreateEmptyMatrix(
                     matrix->RowsCount - 1,
                     matrix->ColumnsCount - 1);
@@ -67,7 +67,7 @@ struct Matrix* GetMinor(struct Matrix* matrix, int row, int column)
     return ret;
 }
 
-int CalculateDeterminant(struct Matrix* matrix)
+int CalculateDeterminant(Matrix* matrix)
 {
     assert(matrix->ColumnsCount == matrix->RowsCount);
 
@@ -91,7 +91,7 @@ int CalculateDeterminant(struct Matrix* matrix)
         for (int i = 0; i < matrix->ColumnsCount; i++)
         {
             int sign = (i % 2) ? -1 : 1;
-            struct Matrix* minor = GetMinor(matrix, 0, i);
+            Matrix* minor = GetMinor(matrix, 0, i);
             int det = CalculateDeterminant(minor);
             int i1 = matrix->pData[0][i];
             ret += sign * i1 * det;
@@ -101,7 +101,7 @@ int CalculateDeterminant(struct Matrix* matrix)
     }
 }
 
-void FreeMatrix(struct Matrix* a)
+void FreeMatrix(Matrix* a)
 {
     for (int i = 0; i < a->ColumnsCount; i++)
         free(a->pData[i]);

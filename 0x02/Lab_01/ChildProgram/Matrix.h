@@ -1,21 +1,21 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-struct Matrix
+typedef struct Matrix
 {
     int RowsCount;
     int ColumnsCount;
     int** pData;
-};
+} Matrix;
 
-struct Matrix* CreateEmptyMatrix(int rowsCount, int columnsCount);
+Matrix* CreateEmptyMatrix(int rowsCount, int columnsCount);
 
-struct Matrix* SumMatrices(struct Matrix* MatrixA, struct Matrix* MatrixB);
+Matrix* SumMatrices(Matrix* MatrixA, Matrix* MatrixB);
 
-struct Matrix* GetMinor(struct Matrix* matrix, int row, int column);
+Matrix* GetMinor(Matrix* matrix, int row, int column);
 
-int CalculateDeterminant(struct Matrix* matrix);
+int CalculateDeterminant(Matrix* matrix);
 
-void FreeMatrix(struct Matrix* a);
+void FreeMatrix(Matrix* a);
 
 #endif MATRIX_H
