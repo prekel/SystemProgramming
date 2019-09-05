@@ -7,11 +7,18 @@
  */
 int main()
 {
-    int rows = 4;
-    int columns = 4;
+    int rows = 0;
+    int columns = 0;
+    printf("Введите порядок матриц: ");
+    fflush(stdout);
+    scanf("%d", &rows);
+    columns = rows;
+
     Matrix* matrix1 = CreateEmptyMatrix(rows, columns);
     Matrix* matrix2 = CreateEmptyMatrix(rows, columns);
 
+    printf("Введите матрицу matrix1:\n");
+    fflush(stdout);
     for (int i = 0; i < columns; i++)
     {
         for (int j = 0; j < rows; j++)
@@ -24,6 +31,8 @@ int main()
     printf("\n");
     fflush(stdout);
 
+    printf("Введите матрицу matrix2:\n");
+    fflush(stdout);
     for (int i = 0; i < columns; i++)
     {
         for (int j = 0; j < rows; j++)
@@ -78,7 +87,7 @@ int main()
     fflush(stdout);
 
     int det = CalculateDeterminant(sum);
-    printf("Определитель суммы матриц det = %d", det);
+    printf("Определитель суммы матриц det = %d\n", det);
     fflush(stdout);
 
     FreeMatrix(matrix1);
