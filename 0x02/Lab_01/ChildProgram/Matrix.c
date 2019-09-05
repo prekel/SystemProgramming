@@ -40,7 +40,7 @@ struct Matrix* SumMatrices(struct Matrix* MatrixA, struct Matrix* MatrixB)
     return ret;
 }
 
-struct Matrix* Minor(struct Matrix* matrix, int row, int column)
+struct Matrix* GetMinor(struct Matrix* matrix, int row, int column)
 {
     struct Matrix* ret
             = CreateEmptyMatrix(
@@ -85,13 +85,13 @@ int CalculateDeterminant(struct Matrix* matrix)
         int d = matrix->pData[1][1];
         return a * d - c * b;
     }
-    if (n == 3)
+    if (n >= 3)
     {
         int ret = 0;
         for (int i = 0; i < matrix->ColumnsCount; i++)
         {
             int sign = (i % 2) ? -1 : 1;
-            struct Matrix* minor = Minor(matrix, 0, i);
+            struct Matrix* minor = GetMinor(matrix, 0, i);
             int det = CalculateDeterminant(minor);
             int i1 = matrix->pData[0][i];
             ret += sign * i1 * det;

@@ -12,7 +12,7 @@ struct Matrix* CreateEmptyMatrix(int rowsCount, int columnsCount);
 
 struct Matrix* SumMatrices(struct Matrix* MatrixA, struct Matrix* MatrixB);
 
-struct Matrix* Minor(struct Matrix* matrix, int row, int column);
+struct Matrix* GetMinor(struct Matrix* matrix, int row, int column);
 
 int CalculateDeterminant(struct Matrix* matrix);
 
