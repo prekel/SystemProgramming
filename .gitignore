@@ -9,5 +9,8 @@ compile_commands.json
 CTestTestfile.cmake
 
 
-.idea
+/.idea/
 cmake-build-debug
+/.vs/
+/out/
+/CMakeSettings.json
