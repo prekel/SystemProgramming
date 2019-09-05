@@ -3,12 +3,15 @@
 
 struct Matrix
 {
-	int RowCount;
-	int ColumnsCount;
-	int** pData;
+    int RowsCount;
+    int ColumnsCount;
+    int** pData;
 };
 
-struct Matrix CreateEmptyMatrix(int n, int m);
+struct Matrix* CreateEmptyMatrix(int rowsCount, int columnsCount);
+
+struct Matrix* SumMatrices(struct Matrix* MatrixA, struct Matrix* MatrixB);
+
 void FreeMatrix(struct Matrix* a);
 
 #endif MATRIX_H
