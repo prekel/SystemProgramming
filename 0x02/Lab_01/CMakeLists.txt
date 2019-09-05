@@ -3,4 +3,6 @@ project(Lab_01 C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(Lab_01 main.c)
+add_subdirectory(ChildProgram)
+
+#add_executable(Lab_01 main.c)
