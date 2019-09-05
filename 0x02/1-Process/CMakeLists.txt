@@ -1,0 +1,18 @@
+cmake_minimum_required(VERSION 3.10)
+project(fork1 C)
+project(fork2 C)
+project(fork3 C)
+project(print-pid C)
+project(sigchld C)
+project(system C)
+project(zombie C)
+
+set(CMAKE_C_STANDARD 11)
+
+add_executable(fork1 fork1.c)
+add_executable(fork2 fork2.c)
+add_executable(fork3 fork3.c)
+add_executable(print-pid print-pid.c)
+add_executable(sigchld sigchld.c)
+add_executable(system system.c)
+add_executable(zombie zombie.c)
