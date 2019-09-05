@@ -7,8 +7,8 @@
  */
 int main()
 {
-    int rows = 2;
-    int columns = 3;
+    int rows = 4;
+    int columns = 4;
     struct Matrix* matrix1 = CreateEmptyMatrix(rows, columns);
     struct Matrix* matrix2 = CreateEmptyMatrix(rows, columns);
 
@@ -65,6 +65,10 @@ int main()
         }
         printf("\n");
     }
+
+    int det = CalculateDeterminant(sum);
+    printf("det = %d", det);
+    fflush(stdout);
 
     FreeMatrix(matrix1);
     FreeMatrix(matrix2);

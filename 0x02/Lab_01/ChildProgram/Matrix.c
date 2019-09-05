@@ -40,6 +40,67 @@ struct Matrix* SumMatrices(struct Matrix* MatrixA, struct Matrix* MatrixB)
     return ret;
 }
 
+struct Matrix* Minor(struct Matrix* matrix, int row, int column)
+{
+    struct Matrix* ret
+            = CreateEmptyMatrix(
+                    matrix->RowsCount - 1,
+                    matrix->ColumnsCount - 1);
+
+    for (int i = 0; i < ret->ColumnsCount; i++)
+    {
+        for (int j = 0; j < ret->RowsCount; j++)
+        {
+            int oldi = i;
+            int oldj = j;
+            if (i >= row)
+            {
+                oldi++;
+            }
+            if (j >= column)
+            {
+                oldj++;
+            }
+            ret->pData[i][j] = matrix->pData[oldi][oldj];
+        }
+    }
+    return ret;
+}
+
+int CalculateDeterminant(struct Matrix* matrix)
+{
+    assert(matrix->ColumnsCount == matrix->RowsCount);
+
+    int n = matrix->ColumnsCount;
+
+    if (n == 1)
+    {
+        return matrix->pData[0][0];
+    }
+    if (n == 2)
+    {
+        int a = matrix->pData[0][0];
+        int b = matrix->pData[1][0];
+        int c = matrix->pData[0][1];
+        int d = matrix->pData[1][1];
+        return a * d - c * b;
+    }
+    if (n == 3)
+    {
+        int ret = 0;
+        for (int i = 0; i < matrix->ColumnsCount; i++)
+        {
+            int sign = (i % 2) ? -1 : 1;
+            struct Matrix* minor = Minor(matrix, 0, i);
+            int det = CalculateDeterminant(minor);
+            int i1 = matrix->pData[0][i];
+            ret += sign * i1 * det;
+            FreeMatrix(minor);
+        }
+        return ret;
+    }
+}
+
 void FreeMatrix(struct Matrix* a)
 {
     for (int i = 0; i < a->ColumnsCount; i++)
