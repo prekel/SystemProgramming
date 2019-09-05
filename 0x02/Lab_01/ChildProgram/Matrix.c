@@ -5,7 +5,7 @@
 
 Matrix* CreateEmptyMatrix(int rowsCount, int columnsCount)
 {
-    Matrix* ret = (Matrix*) malloc(sizeof(int));
+    Matrix* ret = (Matrix*) malloc(sizeof(Matrix));
     ret->RowsCount = rowsCount;
     ret->ColumnsCount = columnsCount;
     ret->pData = (int**) malloc(ret->ColumnsCount * sizeof(int*));
