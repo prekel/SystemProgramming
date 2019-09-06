@@ -1,6 +1,20 @@
 #include <stdio.h>
-
+#include <stdbool.h>
+#include <malloc.h>
 #include "Matrix.h"
+#include "Input.h"
+
+//#define MAX_STRING_LENGTH 100
+
+bool MatrixSizeChecker(int n)
+{
+    return n >= 1;
+}
+
+bool MatrixElementChecker(int n)
+{
+    return true;
+}
 
 /*! \brief Main function
  *  \return Integer 0 upon exit success
@@ -9,10 +23,11 @@ int main()
 {
     int rows = 0;
     int columns = 0;
-    printf("Введите порядок матриц: ");
-    fflush(stdout);
-    scanf("%d", &rows);
-    columns = rows;
+    //printf("Введите порядок матриц: ");
+    //fflush(stdout);
+    //scanf("%d", &rows);
+    columns = rows = CycleInputInt("Введите порядок матриц: ",
+            MatrixSizeChecker);
 
     Matrix* matrix1 = CreateEmptyMatrix(rows, columns);
     Matrix* matrix2 = CreateEmptyMatrix(rows, columns);
@@ -23,9 +38,16 @@ int main()
     {
         for (int j = 0; j < rows; j++)
         {
-            printf("matrix1[%d][%d] = ", i, j);
-            fflush(stdout);
-            scanf("%d", &matrix1->pData[i][j]);
+            //printf("matrix1[%d][%d] = ", i, j);
+            //fflush(stdout);
+            //scanf("%d", &matrix1->pData[i][j]);
+
+            ssize_t len = snprintf(NULL, 0, "matrix1[%d][%d] = ", i, j);
+            char* s = malloc(len + 1);
+            snprintf(s, len + 1, "matrix1[%d][%d] = ", i, j);
+            free(s);
+
+            matrix1->pData[i][j] = CycleInputInt(s, MatrixElementChecker);
         }
     }
     printf("\n");
@@ -37,9 +59,17 @@ int main()
     {
         for (int j = 0; j < rows; j++)
         {
-            printf("matrix2[%d][%d] = ", i, j);
-            fflush(stdout);
-            scanf("%d", &matrix2->pData[i][j]);
+            //printf("matrix2[%d][%d] = ", i, j);
+            //fflush(stdout);
+            //scanf("%d", &matrix2->pData[i][j]);
+
+            ssize_t len = snprintf(NULL, 0, "matrix2[%d][%d] = ", i, j);
+            char* s = malloc(len + 1);
+            snprintf(s, len + 1, "matrix2[%d][%d] = ", i, j);
+            free(s);
+
+            //sprintf(s, "matrix2[%d][%d] = ", i, j);
+            matrix2->pData[i][j] = CycleInputInt(s, MatrixElementChecker);
         }
     }
     printf("\n");

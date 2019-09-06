@@ -20,6 +20,7 @@ int CycleInputInt(char* output, bool(* checker)(int))
     while (true)
     {
         printf("%s", output);
+        fflush(stdout);
         //scanf("%s", string_number);
         InputLine(string_number);
         int code = sscanf(string_number, "%d", &n);
@@ -36,6 +37,7 @@ double CycleInputDouble(char* output, bool(* checker)(double))
     while (true)
     {
         printf("%s", output);
+        fflush(stdout);
         //scanf("%s", string_number);
         InputLine(string_number);
         int code = sscanf(string_number, "%lf", &n);
