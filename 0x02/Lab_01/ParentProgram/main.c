@@ -24,8 +24,7 @@ int spawn(char* program, char** argList)
     {
         /* This is the parent process.  */
         return childPid;
-    }
-    else
+    } else
     {
         /* Now execute PROGRAM, searching for it in the path. */
         execvp(program, argList);
@@ -39,10 +38,15 @@ int spawn(char* program, char** argList)
 /*! \brief Main function
  *  \return Integer 0 upon exit success
  */
-int main()
+int main(int argc, char** argv)
 {
-    char* child = "/home/vladislav/Projects/SystemProgramming/cmake-build"
-                  "-debug/0x02/Lab_01/ChildProgram/ChildProgram";
+    char* child = NULL;
+    if (argc == 2)
+    {
+        child = argv[1];
+    } else {
+        child = "../ChildProgram/ChildProgram";
+    }
 
     int childpid = spawn(child, NULL);
     waitpid(childpid, NULL, 0);

@@ -14,3 +14,4 @@ cmake-build-debug
 /.vs/
 /out/
 /CMakeSettings.json
+/CMakeLists.txt.user
