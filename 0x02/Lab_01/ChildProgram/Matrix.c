@@ -40,7 +40,7 @@ Matrix* SumMatrices(Matrix* MatrixA, Matrix* MatrixB)
     return ret;
 }
 
-Matrix* GetMinor(Matrix* matrix, int row, int column)
+Matrix* GetMinor(Matrix* matrix, int firstIndex, int secondIndex)
 {
     Matrix* ret = CreateEmptyMatrix(
             matrix->FirstCount - 1,
@@ -52,11 +52,11 @@ Matrix* GetMinor(Matrix* matrix, int row, int column)
         {
             int oldi = i;
             int oldj = j;
-            if (i >= row)
+            if (i >= firstIndex)
             {
                 oldi++;
             }
-            if (j >= column)
+            if (j >= secondIndex)
             {
                 oldj++;
             }

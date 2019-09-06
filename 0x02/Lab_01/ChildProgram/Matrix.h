@@ -12,7 +12,7 @@ Matrix* CreateEmptyMatrix(int firstCount, int secondCount);
 
 Matrix* SumMatrices(Matrix* MatrixA, Matrix* MatrixB);
 
-Matrix* GetMinor(Matrix* matrix, int row, int column);
+Matrix* GetMinor(Matrix* matrix, int firstIndex, int secondIndex);
 
 int CalculateDeterminant2x2(Matrix* matrix);
 
