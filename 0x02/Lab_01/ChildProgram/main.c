@@ -19,7 +19,7 @@ bool MatrixElementChecker(int n)
 /*! \brief Main function
  *  \return Integer 0 upon exit success
  */
-int main()
+int main(int argc, char** argv)
 {
     int rows = 0;
     int columns = 0;

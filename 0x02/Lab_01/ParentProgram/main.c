@@ -41,14 +41,18 @@ int spawn(char* program, char** argList)
 int main(int argc, char** argv)
 {
     char* child = NULL;
-    if (argc == 2)
+    char** arglist = NULL;
+    if (argc >= 2)
     {
         child = argv[1];
+        arglist = argv + 1;
     } else {
         child = "../ChildProgram/ChildProgram";
+        char* arglist1[] = {child, NULL};
+        arglist = arglist1;
     }
 
-    int childpid = spawn(child, NULL);
+    int childpid = spawn(child, arglist);
     waitpid(childpid, NULL, 0);
 
     return 0;
