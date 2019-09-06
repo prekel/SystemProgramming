@@ -3,6 +3,8 @@
 
 #include "Matrix.h"
 
+int CalculateDeterminant2x2(const Matrix* matrix);
+
 Matrix* CreateEmptyMatrix(int rowsCount, int columnsCount)
 {
     Matrix* ret = (Matrix*) malloc(sizeof(Matrix));
@@ -67,6 +69,15 @@ Matrix* GetMinor(Matrix* matrix, int row, int column)
     return ret;
 }
 
+int CalculateDeterminant2x2(const Matrix* matrix)
+{
+    int a = matrix->pData[0][0];
+    int b = matrix->pData[1][0];
+    int c = matrix->pData[0][1];
+    int d = matrix->pData[1][1];
+    return a * d - c * b;
+}
+
 int CalculateDeterminant(Matrix* matrix)
 {
     assert(matrix->ColumnsCount == matrix->RowsCount);
@@ -79,11 +90,7 @@ int CalculateDeterminant(Matrix* matrix)
     }
     if (n == 2)
     {
-        int a = matrix->pData[0][0];
-        int b = matrix->pData[1][0];
-        int c = matrix->pData[0][1];
-        int d = matrix->pData[1][1];
-        return a * d - c * b;
+        return CalculateDeterminant2x2(matrix);
     }
     if (n >= 3)
     {
