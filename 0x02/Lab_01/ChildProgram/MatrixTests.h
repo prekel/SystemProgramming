@@ -5,6 +5,8 @@
 
 #include "Matrix.h"
 
-void test1(void);
+void Empty3x2_MatrixTest(void);
+
+void Sum2x2_MatrixTest(void);
 
 #endif // MATRIXTESTS_H

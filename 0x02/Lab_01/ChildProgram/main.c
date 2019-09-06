@@ -28,7 +28,8 @@ int main(int argc, char** argv)
         CU_pSuite suite;
         CU_initialize_registry();
         suite = CU_add_suite("main_suite", NULL, NULL);
-        CU_ADD_TEST(suite, test1);
+        CU_ADD_TEST(suite, Empty3x2_MatrixTest);
+        CU_ADD_TEST(suite, Sum2x2_MatrixTest);
         CU_basic_run_tests();
 
         CU_cleanup_registry();

@@ -42,10 +42,9 @@ Matrix* SumMatrices(Matrix* MatrixA, Matrix* MatrixB)
 
 Matrix* GetMinor(Matrix* matrix, int row, int column)
 {
-    Matrix* ret
-            = CreateEmptyMatrix(
-                    matrix->FirstCount - 1,
-                    matrix->SecondCount - 1);
+    Matrix* ret = CreateEmptyMatrix(
+            matrix->FirstCount - 1,
+            matrix->SecondCount - 1);
 
     for (int i = 0; i < ret->FirstCount; i++)
     {
