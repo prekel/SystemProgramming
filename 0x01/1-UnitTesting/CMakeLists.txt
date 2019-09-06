@@ -5,8 +5,6 @@ project(set1 C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_subdirectory(../../cunit ./cunit)
-
 add_executable(assert-demo assert-demo.c)
 
 add_executable(set set.c)

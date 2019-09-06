@@ -3,16 +3,18 @@
 
 typedef struct Matrix
 {
-    int RowsCount;
-    int ColumnsCount;
+    int SecondCount;
+    int FirstCount;
     int** pData;
 } Matrix;
 
-Matrix* CreateEmptyMatrix(int rowsCount, int columnsCount);
+Matrix* CreateEmptyMatrix(int firstCount, int secondCount);
 
 Matrix* SumMatrices(Matrix* MatrixA, Matrix* MatrixB);
 
 Matrix* GetMinor(Matrix* matrix, int row, int column);
+
+int CalculateDeterminant2x2(Matrix* matrix);
 
 int CalculateDeterminant(Matrix* matrix);
 

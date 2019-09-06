@@ -48,8 +48,8 @@ int main(int argc, char** argv)
         arglist = argv + 1;
     } else {
         child = "../ChildProgram/ChildProgram";
-        char* arglist1[] = {child, NULL};
-        arglist = arglist1;
+        char* arglisttmp[] = {child, NULL};
+        arglist = arglisttmp;
     }
 
     int childpid = spawn(child, arglist);

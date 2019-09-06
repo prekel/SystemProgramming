@@ -3,19 +3,17 @@
 
 #include "Matrix.h"
 
-int CalculateDeterminant2x2(const Matrix* matrix);
-
-Matrix* CreateEmptyMatrix(int rowsCount, int columnsCount)
+Matrix* CreateEmptyMatrix(int firstCount, int secondCount)
 {
     Matrix* ret = (Matrix*) malloc(sizeof(Matrix));
-    ret->RowsCount = rowsCount;
-    ret->ColumnsCount = columnsCount;
-    ret->pData = (int**) malloc(ret->ColumnsCount * sizeof(int*));
+    ret->SecondCount = secondCount;
+    ret->FirstCount = firstCount;
+    ret->pData = (int**) malloc(ret->FirstCount * sizeof(int*));
 
-    for (int i = 0; i < ret->ColumnsCount; i++)
+    for (int i = 0; i < ret->FirstCount; i++)
     {
-        ret->pData[i] = (int*) malloc(ret->RowsCount * sizeof(int));
-        for (int j = 0; j < ret->RowsCount; j++)
+        ret->pData[i] = (int*) malloc(ret->SecondCount * sizeof(int));
+        for (int j = 0; j < ret->SecondCount; j++)
         {
             ret->pData[i][j] = 0;
         }
@@ -25,15 +23,15 @@ Matrix* CreateEmptyMatrix(int rowsCount, int columnsCount)
 
 Matrix* SumMatrices(Matrix* MatrixA, Matrix* MatrixB)
 {
-    assert(MatrixA->RowsCount == MatrixB->RowsCount);
-    assert(MatrixA->ColumnsCount == MatrixB->ColumnsCount);
+    assert(MatrixA->SecondCount == MatrixB->SecondCount);
+    assert(MatrixA->FirstCount == MatrixB->FirstCount);
 
     Matrix* ret =
-            CreateEmptyMatrix(MatrixA->RowsCount, MatrixA->ColumnsCount);
+            CreateEmptyMatrix(MatrixA->FirstCount, MatrixA->SecondCount);
 
-    for (int i = 0; i < ret->ColumnsCount; i++)
+    for (int i = 0; i < ret->FirstCount; i++)
     {
-        for (int j = 0; j < ret->RowsCount; j++)
+        for (int j = 0; j < ret->SecondCount; j++)
         {
             ret->pData[i][j] = MatrixA->pData[i][j] + MatrixB->pData[i][j];
         }
@@ -46,12 +44,12 @@ Matrix* GetMinor(Matrix* matrix, int row, int column)
 {
     Matrix* ret
             = CreateEmptyMatrix(
-                    matrix->RowsCount - 1,
-                    matrix->ColumnsCount - 1);
+                    matrix->FirstCount - 1,
+                    matrix->SecondCount - 1);
 
-    for (int i = 0; i < ret->ColumnsCount; i++)
+    for (int i = 0; i < ret->FirstCount; i++)
     {
-        for (int j = 0; j < ret->RowsCount; j++)
+        for (int j = 0; j < ret->SecondCount; j++)
         {
             int oldi = i;
             int oldj = j;
@@ -69,7 +67,7 @@ Matrix* GetMinor(Matrix* matrix, int row, int column)
     return ret;
 }
 
-int CalculateDeterminant2x2(const Matrix* matrix)
+int CalculateDeterminant2x2(Matrix* matrix)
 {
     int a = matrix->pData[0][0];
     int b = matrix->pData[1][0];
@@ -80,9 +78,9 @@ int CalculateDeterminant2x2(const Matrix* matrix)
 
 int CalculateDeterminant(Matrix* matrix)
 {
-    assert(matrix->ColumnsCount == matrix->RowsCount);
+    assert(matrix->FirstCount == matrix->SecondCount);
 
-    int n = matrix->ColumnsCount;
+    int n = matrix->FirstCount;
 
     if (n == 1)
     {
@@ -95,7 +93,7 @@ int CalculateDeterminant(Matrix* matrix)
     if (n >= 3)
     {
         int ret = 0;
-        for (int i = 0; i < matrix->ColumnsCount; i++)
+        for (int i = 0; i < matrix->FirstCount; i++)
         {
             int sign = (i % 2) ? -1 : 1;
             Matrix* minor = GetMinor(matrix, 0, i);
@@ -110,7 +108,7 @@ int CalculateDeterminant(Matrix* matrix)
 
 void FreeMatrix(Matrix* a)
 {
-    for (int i = 0; i < a->ColumnsCount; i++)
+    for (int i = 0; i < a->FirstCount; i++)
     {
         free(a->pData[i]);
     }
