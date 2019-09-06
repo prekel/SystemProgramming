@@ -79,8 +79,8 @@ int CalculateDeterminant(Matrix* matrix);
  *
  *  \details Frees up memory to destroy matrix
  *
- *  \param a Matrix to free.
+ *  \param matrix Matrix to free.
  */
-void FreeMatrix(Matrix* a);
+void FreeMatrix(Matrix* matrix);
 
 #endif // MATRIX_H

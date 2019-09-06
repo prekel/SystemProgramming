@@ -1,3 +1,8 @@
+/*! \file Matrix.c
+ *
+ *  \brief Implements functions of Matrix.h
+ */
+
 #include <malloc.h>
 #include <assert.h>
 
@@ -108,12 +113,12 @@ int CalculateDeterminant(Matrix* matrix)
     }
 }
 
-void FreeMatrix(Matrix* a)
+void FreeMatrix(Matrix* matrix)
 {
-    for (int i = 0; i < a->FirstCount; i++)
+    for (int i = 0; i < matrix->FirstCount; i++)
     {
-        free(a->pData[i]);
+        free(matrix->pData[i]);
     }
-    free(a->pData);
-    free(a);
+    free(matrix->pData);
+    free(matrix);
 }

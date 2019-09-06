@@ -1,3 +1,8 @@
+/*! \file MatrixTests.c
+ *
+ *  \brief Implements tests of MatrixTests.h
+ */
+
 #include "MatrixTests.h"
 
 void Empty3x2_MatrixTest(void)
