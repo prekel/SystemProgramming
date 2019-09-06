@@ -21,19 +21,19 @@ Matrix* CreateEmptyMatrix(int firstCount, int secondCount)
     return ret;
 }
 
-Matrix* SumMatrices(Matrix* MatrixA, Matrix* MatrixB)
+Matrix* SumMatrices(Matrix* matrixA, Matrix* matrixB)
 {
-    assert(MatrixA->SecondCount == MatrixB->SecondCount);
-    assert(MatrixA->FirstCount == MatrixB->FirstCount);
+    assert(matrixA->SecondCount == matrixB->SecondCount);
+    assert(matrixA->FirstCount == matrixB->FirstCount);
 
     Matrix* ret =
-            CreateEmptyMatrix(MatrixA->FirstCount, MatrixA->SecondCount);
+            CreateEmptyMatrix(matrixA->FirstCount, matrixA->SecondCount);
 
     for (int i = 0; i < ret->FirstCount; i++)
     {
         for (int j = 0; j < ret->SecondCount; j++)
         {
-            ret->pData[i][j] = MatrixA->pData[i][j] + MatrixB->pData[i][j];
+            ret->pData[i][j] = matrixA->pData[i][j] + matrixB->pData[i][j];
         }
     }
 
@@ -68,6 +68,9 @@ Matrix* GetMinor(Matrix* matrix, int firstIndex, int secondIndex)
 
 int CalculateDeterminant2x2(Matrix* matrix)
 {
+    assert(matrix->FirstCount == 2);
+    assert(matrix->SecondCount == 2);
+
     int a = matrix->pData[0][0];
     int b = matrix->pData[1][0];
     int c = matrix->pData[0][1];
