@@ -45,9 +45,10 @@ int main()
             ssize_t len = snprintf(NULL, 0, "matrix1[%d][%d] = ", i, j);
             char* s = malloc(len + 1);
             snprintf(s, len + 1, "matrix1[%d][%d] = ", i, j);
-            free(s);
 
             matrix1->pData[i][j] = CycleInputInt(s, MatrixElementChecker);
+            
+            free(s);
         }
     }
     printf("\n");
@@ -66,10 +67,11 @@ int main()
             ssize_t len = snprintf(NULL, 0, "matrix2[%d][%d] = ", i, j);
             char* s = malloc(len + 1);
             snprintf(s, len + 1, "matrix2[%d][%d] = ", i, j);
-            free(s);
 
             //sprintf(s, "matrix2[%d][%d] = ", i, j);
             matrix2->pData[i][j] = CycleInputInt(s, MatrixElementChecker);
+            
+            free(s);
         }
     }
     printf("\n");

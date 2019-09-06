@@ -16,7 +16,7 @@ int InputLine(char* str)
 int CycleInputInt(char* output, bool(* checker)(int))
 {
     int n;
-    char string_number[100];
+    char string_number[MAX_STRING_LENGTH];
     while (true)
     {
         printf("%s", output);
@@ -33,7 +33,7 @@ int CycleInputInt(char* output, bool(* checker)(int))
 double CycleInputDouble(char* output, bool(* checker)(double))
 {
     double n;
-    char string_number[100];
+    char string_number[MAX_STRING_LENGTH];
     while (true)
     {
         printf("%s", output);
