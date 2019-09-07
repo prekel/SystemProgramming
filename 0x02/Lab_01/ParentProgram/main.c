@@ -31,6 +31,7 @@ pid_t Spawn(char* program, char** argList)
         execvp(program, argList);
 
         fprintf(stderr, "Ошибка при выполнении execvp\n");
+        fflush(stderr);
         abort();
     }
 
