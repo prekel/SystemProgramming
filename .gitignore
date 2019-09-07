@@ -9,9 +9,16 @@ compile_commands.json
 CTestTestfile.cmake
 
 
-/.idea/
 cmake-build-debug
+
+
+/.idea/
+
 /.vs/
 /out/
 /CMakeSettings.json
+
 /CMakeLists.txt.user
+
+# Doxygen
+/0x02/Lab_01/html/

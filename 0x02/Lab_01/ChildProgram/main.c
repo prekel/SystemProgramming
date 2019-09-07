@@ -1,5 +1,5 @@
-/*! \file    main.c
- *  \brief   Main file in program
+/*! \file    ChildProgram/main.c
+ *  \brief   Main file of child program
  *
  *  \details Main file which contains the main function.
  */

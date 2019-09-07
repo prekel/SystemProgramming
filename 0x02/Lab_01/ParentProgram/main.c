@@ -1,3 +1,9 @@
+/*! \file    ParentProgram/main.c
+ *  \brief   Main file of parent program
+ *
+ *  \details Main file which contains the main function.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>

@@ -9,19 +9,25 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-/*! \brief Matrix struct
+/*! \struct Matrix
+ *  \brief Matrix struct
  *
  *  \details Matrix structure. Uses memory allocation, needs frees up memory.
- *
- *  \var FirstCount Maximum 1st index.
- *  \var SecondCount Maximum 2nd index.
- *  \var pData Matrix array. To get element use
- *       matrix->pData[firstindex][secondindex].
  */
 typedef struct
 {
+    /*!
+     * Maximum 1st index.
+     */
     int FirstCount;
+    /*!
+     * SecondCount Maximum 2nd index.
+     */
     int SecondCount;
+    /*!
+     * pData Matrix array. To get element use
+     * matrix->pData[firstindex][secondindex].
+     */
     int** pData;
 } Matrix;
 
