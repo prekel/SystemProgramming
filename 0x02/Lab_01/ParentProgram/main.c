@@ -20,7 +20,7 @@ int spawn(char* program, char** argList)
 
     /* Duplicate this process.  */
     childPid = fork();
-    if (0 != childPid)
+    if (childPid != 0)
     {
         /* This is the parent process.  */
         return childPid;
@@ -36,17 +36,26 @@ int spawn(char* program, char** argList)
 }
 
 /*! \brief Main function
- *  \return Integer 0 upon exit success
+ *
+ *  \details Main function. If no argument given, will be exec Child
+ *  program via relative path "../ChildProgram/ChildProgram". If arguments
+ *  given, will be exec program in argument. Then wait child for exit.
+ *
+ *  \param argc Count program arguments.
+ *  \param argv Array string which contains args.
+ *  \return Integer 0 upon exit success.
  */
 int main(int argc, char** argv)
 {
     char* child = NULL;
     char** arglist = NULL;
+
     if (argc >= 2)
     {
         child = argv[1];
         arglist = argv + 1;
-    } else {
+    } else
+    {
         child = "../ChildProgram/ChildProgram";
         char* arglisttmp[] = {child, NULL};
         arglist = arglisttmp;
