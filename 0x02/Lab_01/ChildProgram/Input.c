@@ -1,6 +1,12 @@
+/*! \file Input.c
+ *
+ *  \brief Implements functions of Input.h
+ */
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
+
 #include "Input.h"
 
 #define MAX_STRING_LENGTH 50
@@ -21,7 +27,7 @@ int CycleInputInt(char* output, bool(* checker)(int))
     {
         printf("%s", output);
         fflush(stdout);
-        //scanf("%s", string_number);
+
         InputLine(string_number);
         int code = sscanf(string_number, "%d", &n);
         if (!checker(n)) continue;
@@ -38,7 +44,7 @@ double CycleInputDouble(char* output, bool(* checker)(double))
     {
         printf("%s", output);
         fflush(stdout);
-        //scanf("%s", string_number);
+
         InputLine(string_number);
         int code = sscanf(string_number, "%lf", &n);
         if (!checker(n)) continue;

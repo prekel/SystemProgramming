@@ -1,3 +1,9 @@
+/*! \file    main.c
+ *  \brief   Main file in program
+ *
+ *  \details Main file which contains the main function.
+ */
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <malloc.h>
@@ -8,18 +14,39 @@
 #include "Input.h"
 #include "MatrixTests.h"
 
+/*! \brief Check number for matrix size
+ *
+ *  \details Check number for matrix size which must be great than 0.
+ *
+ *  \param n Number to check.
+ *  \return Bool.
+ */
 bool MatrixSizeChecker(int n)
 {
     return n >= 1;
 }
 
+/*! \brief Check number for matrix element
+ *
+ *  \details Check number for matrix element which may be any integer.
+ *
+ *  \param n Number to check.
+ *  \return Always true bool.
+ */
 bool MatrixElementChecker(int n)
 {
     return true;
 }
 
 /*! \brief Main function
- *  \return Integer 0 upon exit success
+ *
+ *  \details Main function. If one argument given, will be run unit tests.
+ *  Else will be program which reads two matrices, adds them and calculates
+ *  determinant of sum.
+ *
+ *  \param argc Count program arguments.
+ *  \param argv Array string which contains args.
+ *  \return Integer 0 upon exit success.
  */
 int main(int argc, char** argv)
 {
