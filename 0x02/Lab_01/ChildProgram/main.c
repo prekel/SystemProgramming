@@ -82,9 +82,10 @@ int main(int argc, char** argv)
     {
         for (int j = 0; j < secondcount; j++)
         {
-            ssize_t len = snprintf(NULL, 0, "matrix1[%d][%d] = ", i, j);
-            char* s = malloc(len + 1);
-            snprintf(s, len + 1, "matrix1[%d][%d] = ", i, j);
+            char* format = "matrix1[%d][%d] = ";
+            ssize_t len = snprintf(NULL, 0, format, i, j);
+            char* s = (char*) malloc(len + 1 * sizeof(char));
+            snprintf(s, len + 1, format, i, j);
 
             matrix1->pData[i][j] = CycleInputInt(s, MatrixElementChecker);
 
@@ -100,9 +101,10 @@ int main(int argc, char** argv)
     {
         for (int j = 0; j < secondcount; j++)
         {
-            ssize_t len = snprintf(NULL, 0, "matrix2[%d][%d] = ", i, j);
-            char* s = malloc(len + 1);
-            snprintf(s, len + 1, "matrix2[%d][%d] = ", i, j);
+            char* format = "matrix2[%d][%d] = ";
+            ssize_t len = snprintf(NULL, 0, format, i, j);
+            char* s = (char*) malloc(len + 1 * sizeof(char));
+            snprintf(s, len + 1, format, i, j);
 
             matrix2->pData[i][j] = CycleInputInt(s, MatrixElementChecker);
 
