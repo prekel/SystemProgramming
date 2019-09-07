@@ -7,3 +7,18 @@ cmake_install.cmake
 install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
+
+
+cmake-build-debug
+
+
+/.idea/
+
+/.vs/
+/out/
+/CMakeSettings.json
+
+/CMakeLists.txt.user
+
+# Doxygen
+/0x02/Lab_01/html/
