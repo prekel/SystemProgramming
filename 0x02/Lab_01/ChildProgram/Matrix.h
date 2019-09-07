@@ -33,7 +33,17 @@ typedef struct
 
 /*! \brief Create matrix filled with zeros
  *
- *  \details Allocate memory for new matrix filled zeros.
+ *  \details Allocate memory for new matrix and initialize with zeros.
+ *
+ *  \param firstCount Maximum 1st index.
+ *  \param secondCount Maximum 2nd index.
+ *  \return Pointer to new matrix.
+ */
+Matrix* CreateBlankMatrix(int firstCount, int secondCount);
+
+/*! \brief Create non-initialized matrix
+ *
+ *  \details Allocate memory for new matrix. Matrix filled with garbage.
  *
  *  \param firstCount Maximum 1st index.
  *  \param secondCount Maximum 2nd index.

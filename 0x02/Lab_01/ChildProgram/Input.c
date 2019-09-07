@@ -35,20 +35,3 @@ int CycleInputInt(char* output, bool(* checker)(int))
     }
     return n;
 }
-
-double CycleInputDouble(char* output, bool(* checker)(double))
-{
-    double n;
-    char string_number[MAX_STRING_LENGTH];
-    while (true)
-    {
-        printf("%s", output);
-        fflush(stdout);
-
-        InputLine(string_number);
-        int code = sscanf(string_number, "%lf", &n);
-        if (!checker(n)) continue;
-        if (code > 0) break;
-    }
-    return n;
-}

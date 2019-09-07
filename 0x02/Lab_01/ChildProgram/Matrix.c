@@ -8,7 +8,7 @@
 
 #include "Matrix.h"
 
-Matrix* CreateEmptyMatrix(int firstCount, int secondCount)
+Matrix* CreateBlankMatrix(int firstCount, int secondCount)
 {
     Matrix* ret = (Matrix*) malloc(sizeof(Matrix));
     ret->SecondCount = secondCount;
@@ -22,6 +22,25 @@ Matrix* CreateEmptyMatrix(int firstCount, int secondCount)
         {
             ret->pData[i][j] = 0;
         }
+    }
+
+    return ret;
+}
+
+Matrix* CreateEmptyMatrix(int firstCount, int secondCount)
+{
+    Matrix* ret = (Matrix*) malloc(sizeof(Matrix));
+    ret->SecondCount = secondCount;
+    ret->FirstCount = firstCount;
+    ret->pData = (int**) malloc(ret->FirstCount * sizeof(int*));
+
+    for (int i = 0; i < ret->FirstCount; i++)
+    {
+        ret->pData[i] = (int*) malloc(ret->SecondCount * sizeof(int));
+        //for (int j = 0; j < ret->SecondCount; j++)
+        //{
+            //ret->pData[i][j] = 0;
+        //}
     }
     return ret;
 }

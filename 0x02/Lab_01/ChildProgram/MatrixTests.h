@@ -13,7 +13,7 @@
 
 /*! \brief Test for create an empty 3x2 Matrix
  */
-void Empty3x2_MatrixTest(void);
+void Blank3x2_MatrixTest(void);
 
 /*! \brief Test for sum 2x2 Matrix
  */

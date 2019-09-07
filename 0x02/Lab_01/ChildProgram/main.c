@@ -55,7 +55,7 @@ int main(int argc, char** argv)
         CU_pSuite suite;
         CU_initialize_registry();
         suite = CU_add_suite("main_suite", NULL, NULL);
-        CU_ADD_TEST(suite, Empty3x2_MatrixTest);
+        CU_ADD_TEST(suite, Blank3x2_MatrixTest);
         CU_ADD_TEST(suite, Sum2x2_MatrixTest);
         CU_ADD_TEST(suite, Det2x2_MatrixTest);
         CU_ADD_TEST(suite, Det3x3_MatrixTest);
@@ -73,8 +73,8 @@ int main(int argc, char** argv)
     firstcount = secondcount = CycleInputInt("Введите порядок матриц: ",
                                              MatrixSizeChecker);
 
-    Matrix* matrix1 = CreateEmptyMatrix(firstcount, secondcount);
-    Matrix* matrix2 = CreateEmptyMatrix(firstcount, secondcount);
+    Matrix* matrix1 = CreateBlankMatrix(firstcount, secondcount);
+    Matrix* matrix2 = CreateBlankMatrix(firstcount, secondcount);
 
     printf("Введите матрицу matrix1:\n");
     fflush(stdout);

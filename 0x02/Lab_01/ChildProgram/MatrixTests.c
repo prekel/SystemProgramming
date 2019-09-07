@@ -5,9 +5,9 @@
 
 #include "MatrixTests.h"
 
-void Empty3x2_MatrixTest(void)
+void Blank3x2_MatrixTest(void)
 {
-    Matrix* matrix = CreateEmptyMatrix(3, 2);
+    Matrix* matrix = CreateBlankMatrix(3, 2);
 
     CU_ASSERT_EQUAL(matrix->FirstCount, 3);
     CU_ASSERT_EQUAL(matrix->SecondCount, 2);
@@ -24,8 +24,8 @@ void Empty3x2_MatrixTest(void)
 
 void Sum2x2_MatrixTest(void)
 {
-    Matrix* matrix1 = CreateEmptyMatrix(2, 2);
-    Matrix* matrix2 = CreateEmptyMatrix(2, 2);
+    Matrix* matrix1 = CreateBlankMatrix(2, 2);
+    Matrix* matrix2 = CreateBlankMatrix(2, 2);
 
     matrix1->pData[0][0] = 1;
     matrix1->pData[0][1] = -65;
@@ -50,7 +50,7 @@ void Sum2x2_MatrixTest(void)
 
 void Det2x2_MatrixTest(void)
 {
-    Matrix* matrix = CreateEmptyMatrix(2, 2);
+    Matrix* matrix = CreateBlankMatrix(2, 2);
 
     matrix->pData[0][0] = 1;
     matrix->pData[0][1] = -65;
@@ -69,7 +69,7 @@ void Det2x2_MatrixTest(void)
 
 void Det3x3_MatrixTest(void)
 {
-    Matrix* matrix = CreateEmptyMatrix(3, 3);
+    Matrix* matrix = CreateBlankMatrix(3, 3);
 
     matrix->pData[0][0] = 1;
     matrix->pData[0][1] = -65;
@@ -90,7 +90,7 @@ void Det3x3_MatrixTest(void)
 
 void Det7x7_MatrixTest(void)
 {
-    Matrix* matrix = CreateEmptyMatrix(7, 7);
+    Matrix* matrix = CreateBlankMatrix(7, 7);
 
     matrix->pData[0][0] = 1;
     matrix->pData[0][1] = 6;
@@ -157,7 +157,7 @@ void Det7x7_MatrixTest(void)
 
 void Minor3x4_MatrixTest(void)
 {
-    Matrix* matrix = CreateEmptyMatrix(3, 4);
+    Matrix* matrix = CreateBlankMatrix(3, 4);
 
     matrix->pData[0][0] = 1;
     matrix->pData[0][1] = 2;
