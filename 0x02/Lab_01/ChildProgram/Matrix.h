@@ -1,4 +1,4 @@
-/*! \file    Matrix.h
+/*! \file    ChildProgram/Matrix.h
  *  \brief   Matrix structure and functions to use it
  *
  *  \details Matrix structure and functions to calculate sum, determinant,

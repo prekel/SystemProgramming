@@ -1,4 +1,4 @@
-/*! \file Input.c
+/*! \file ChildProgram/Input.c
  *
  *  \brief Implements functions of Input.h
  */

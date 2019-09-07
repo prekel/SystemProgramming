@@ -1,4 +1,4 @@
-/*! \file    Input.h
+/*! \file    ChildProgram/Input.h
  *  \brief   Functions to input with checks
  *
  *  \details Functions to input with checker.

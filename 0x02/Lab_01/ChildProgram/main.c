@@ -60,6 +60,7 @@ int main(int argc, char** argv)
         CU_ADD_TEST(suite, Det2x2_MatrixTest);
         CU_ADD_TEST(suite, Det3x3_MatrixTest);
         CU_ADD_TEST(suite, Det7x7_MatrixTest);
+        CU_ADD_TEST(suite, Minor3x4_MatrixTest);
         CU_basic_run_tests();
 
         CU_cleanup_registry();

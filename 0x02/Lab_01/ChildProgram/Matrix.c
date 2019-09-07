@@ -1,4 +1,4 @@
-/*! \file Matrix.c
+/*! \file ChildProgram/Matrix.c
  *
  *  \brief Implements functions of Matrix.h
  */

@@ -1,4 +1,4 @@
-/*! \file MatrixTests.c
+/*! \file ChildProgram/MatrixTests.c
  *
  *  \brief Implements tests of MatrixTests.h
  */
@@ -90,7 +90,6 @@ void Det3x3_MatrixTest(void)
 
 void Det7x7_MatrixTest(void)
 {
-
     Matrix* matrix = CreateEmptyMatrix(7, 7);
 
     matrix->pData[0][0] = 1;
@@ -154,4 +153,74 @@ void Det7x7_MatrixTest(void)
     CU_ASSERT_EQUAL(det, 355968);
 
     FreeMatrix(matrix);
+}
+
+void Minor3x4_MatrixTest(void)
+{
+    Matrix* matrix = CreateEmptyMatrix(3, 4);
+
+    matrix->pData[0][0] = 1;
+    matrix->pData[0][1] = 2;
+    matrix->pData[0][2] = 3;
+    matrix->pData[0][3] = 4;
+
+    matrix->pData[1][0] = 5;
+    matrix->pData[1][1] = 6;
+    matrix->pData[1][2] = 7;
+    matrix->pData[1][3] = 8;
+
+    matrix->pData[2][0] = 9;
+    matrix->pData[2][1] = 10;
+    matrix->pData[2][2] = 11;
+    matrix->pData[2][3] = 12;
+
+    Matrix* minor1 = GetMinor(matrix, 0, 0);
+
+    CU_ASSERT_EQUAL(minor1->FirstCount, 2);
+    CU_ASSERT_EQUAL(minor1->SecondCount, 3);
+    CU_ASSERT_EQUAL(minor1->pData[0][0], 6);
+    CU_ASSERT_EQUAL(minor1->pData[0][1], 7);
+    CU_ASSERT_EQUAL(minor1->pData[0][2], 8);
+    CU_ASSERT_EQUAL(minor1->pData[1][0], 10);
+    CU_ASSERT_EQUAL(minor1->pData[1][1], 11);
+    CU_ASSERT_EQUAL(minor1->pData[1][2], 12);
+
+    Matrix* minor2 = GetMinor(matrix, 1, 1);
+
+    CU_ASSERT_EQUAL(minor2->FirstCount, 2);
+    CU_ASSERT_EQUAL(minor2->SecondCount, 3);
+    CU_ASSERT_EQUAL(minor2->pData[0][0], 1);
+    CU_ASSERT_EQUAL(minor2->pData[0][1], 3);
+    CU_ASSERT_EQUAL(minor2->pData[0][2], 4);
+    CU_ASSERT_EQUAL(minor2->pData[1][0], 9);
+    CU_ASSERT_EQUAL(minor2->pData[1][1], 11);
+    CU_ASSERT_EQUAL(minor2->pData[1][2], 12);
+
+    Matrix* minor3 = GetMinor(matrix, 2, 3);
+
+    CU_ASSERT_EQUAL(minor3->FirstCount, 2);
+    CU_ASSERT_EQUAL(minor3->SecondCount, 3);
+    CU_ASSERT_EQUAL(minor3->pData[0][0], 1);
+    CU_ASSERT_EQUAL(minor3->pData[0][1], 2);
+    CU_ASSERT_EQUAL(minor3->pData[0][2], 3);
+    CU_ASSERT_EQUAL(minor3->pData[1][0], 5);
+    CU_ASSERT_EQUAL(minor3->pData[1][1], 6);
+    CU_ASSERT_EQUAL(minor3->pData[1][2], 7);
+
+    Matrix* minor4 = GetMinor(matrix, 2, 1);
+
+    CU_ASSERT_EQUAL(minor4->FirstCount, 2);
+    CU_ASSERT_EQUAL(minor4->SecondCount, 3);
+    CU_ASSERT_EQUAL(minor4->pData[0][0], 1);
+    CU_ASSERT_EQUAL(minor4->pData[0][1], 3);
+    CU_ASSERT_EQUAL(minor4->pData[0][2], 4);
+    CU_ASSERT_EQUAL(minor4->pData[1][0], 5);
+    CU_ASSERT_EQUAL(minor4->pData[1][1], 7);
+    CU_ASSERT_EQUAL(minor4->pData[1][2], 8);
+
+    FreeMatrix(matrix);
+    FreeMatrix(minor1);
+    FreeMatrix(minor2);
+    FreeMatrix(minor3);
+    FreeMatrix(minor4);
 }

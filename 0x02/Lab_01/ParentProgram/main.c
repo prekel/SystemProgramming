@@ -20,7 +20,7 @@
  *                    passed as the program's argument list.
  *  \return           Identifier of the spawned process.
  */
-int spawn(char* program, char** argList)
+pid_t spawn(char* program, char** argList)
 {
     pid_t childPid;
 
