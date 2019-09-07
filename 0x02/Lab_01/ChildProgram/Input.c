@@ -1,4 +1,4 @@
-/*! \file ChildProgram/Input.c
+/*! \file
  *
  *  \brief Implements functions of Input.h
  */
@@ -19,18 +19,18 @@ int InputLine(char* str)
     return size;
 }
 
-int CycleInputInt(char* output, bool(* checker)(int))
+int CycleInputInt(char* output, bool(* pChecker)(int))
 {
     int n;
-    char string_number[MAX_STRING_LENGTH];
+    char stringNumber[MAX_STRING_LENGTH];
     while (true)
     {
         printf("%s", output);
         fflush(stdout);
 
-        InputLine(string_number);
-        int code = sscanf(string_number, "%d", &n);
-        if (!checker(n)) continue;
+        InputLine(stringNumber);
+        int code = sscanf(stringNumber, "%d", &n);
+        if (!pChecker(n)) continue;
         if (code > 0) break;
     }
     return n;

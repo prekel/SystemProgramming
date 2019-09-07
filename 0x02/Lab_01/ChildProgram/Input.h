@@ -1,4 +1,4 @@
-/*! \file    ChildProgram/Input.h
+/*! \file
  *  \brief   Functions to input with checks
  *
  *  \details Functions to input with checker.
@@ -25,10 +25,10 @@ int InputLine(char* str);
  *  \details Write output phrase and reads integer with checker and check for
  *  non-number chars at begin.
  *
- * @param output String to output before input.
- * @param checker Pointer to function which check value.
- * @return Read integer.
+ *  \param output String to output before input.
+ *  \param pChecker Pointer to function which check value.
+ *  \return Read integer.
  */
-int CycleInputInt(char* output, bool(* checker)(int));
+int CycleInputInt(char* output, bool(* pChecker)(int));
 
 #endif // INPUT_H

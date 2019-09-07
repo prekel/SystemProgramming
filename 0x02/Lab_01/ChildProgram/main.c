@@ -1,4 +1,4 @@
-/*! \file    ChildProgram/main.c
+/*! \file
  *  \brief   Main file of child program
  *
  *  \details Main file which contains the main function.
@@ -67,27 +67,27 @@ int main(int argc, char** argv)
         return CU_get_error();
     }
 
-    int secondcount = 0;
-    int firstcount = 0;
+    int firstCount = 0;
+    int secondCount = 0;
 
-    firstcount = secondcount = CycleInputInt("Введите порядок матриц: ",
-                                             MatrixSizeChecker);
+    firstCount = secondCount =
+            CycleInputInt("Введите порядок матриц: ", MatrixSizeChecker);
 
-    Matrix* matrix1 = CreateBlankMatrix(firstcount, secondcount);
-    Matrix* matrix2 = CreateBlankMatrix(firstcount, secondcount);
+    Matrix* pMatrix1 = CreateBlankMatrix(firstCount, secondCount);
+    Matrix* pMatrix2 = CreateBlankMatrix(firstCount, secondCount);
 
-    printf("Введите матрицу matrix1:\n");
+    printf("Введите матрицу pMatrix1:\n");
     fflush(stdout);
-    for (int i = 0; i < firstcount; i++)
+    for (int i = 0; i < firstCount; i++)
     {
-        for (int j = 0; j < secondcount; j++)
+        for (int j = 0; j < secondCount; j++)
         {
-            char* format = "matrix1[%d][%d] = ";
+            char* format = "pMatrix1[%d][%d] = ";
             ssize_t len = snprintf(NULL, 0, format, i, j);
             char* s = (char*) malloc(len + 1 * sizeof(char));
             snprintf(s, len + 1, format, i, j);
 
-            matrix1->pData[i][j] = CycleInputInt(s, MatrixElementChecker);
+            pMatrix1->pData[i][j] = CycleInputInt(s, MatrixElementChecker);
 
             free(s);
         }
@@ -95,18 +95,18 @@ int main(int argc, char** argv)
     printf("\n");
     fflush(stdout);
 
-    printf("Введите матрицу matrix2:\n");
+    printf("Введите матрицу pMatrix2:\n");
     fflush(stdout);
-    for (int i = 0; i < firstcount; i++)
+    for (int i = 0; i < firstCount; i++)
     {
-        for (int j = 0; j < secondcount; j++)
+        for (int j = 0; j < secondCount; j++)
         {
-            char* format = "matrix2[%d][%d] = ";
+            char* format = "pMatrix2[%d][%d] = ";
             ssize_t len = snprintf(NULL, 0, format, i, j);
             char* s = (char*) malloc(len + 1 * sizeof(char));
             snprintf(s, len + 1, format, i, j);
 
-            matrix2->pData[i][j] = CycleInputInt(s, MatrixElementChecker);
+            pMatrix2->pData[i][j] = CycleInputInt(s, MatrixElementChecker);
 
             free(s);
         }
@@ -114,14 +114,14 @@ int main(int argc, char** argv)
     printf("\n");
     fflush(stdout);
 
-    Matrix* sum = SumMatrices(matrix1, matrix2);
+    Matrix* pSum = SumMatrices(pMatrix1, pMatrix2);
 
-    printf("Матрица matrix1:\n");
-    for (int i = 0; i < firstcount; i++)
+    printf("Матрица pMatrix1:\n");
+    for (int i = 0; i < firstCount; i++)
     {
-        for (int j = 0; j < secondcount; j++)
+        for (int j = 0; j < secondCount; j++)
         {
-            printf("%d ", matrix1->pData[i][j]);
+            printf("%d ", pMatrix1->pData[i][j]);
             fflush(stdout);
         }
         printf("\n");
@@ -129,12 +129,12 @@ int main(int argc, char** argv)
     printf("\n");
     fflush(stdout);
 
-    printf("Матрица matrix2:\n");
-    for (int i = 0; i < firstcount; i++)
+    printf("Матрица pMatrix2:\n");
+    for (int i = 0; i < firstCount; i++)
     {
-        for (int j = 0; j < secondcount; j++)
+        for (int j = 0; j < secondCount; j++)
         {
-            printf("%d ", matrix2->pData[i][j]);
+            printf("%d ", pMatrix2->pData[i][j]);
             fflush(stdout);
         }
         printf("\n");
@@ -142,12 +142,12 @@ int main(int argc, char** argv)
     printf("\n");
     fflush(stdout);
 
-    printf("Сумма матриц matrix1 + matrix2:\n");
-    for (int i = 0; i < firstcount; i++)
+    printf("Сумма матриц pMatrix1 + pMatrix2:\n");
+    for (int i = 0; i < firstCount; i++)
     {
-        for (int j = 0; j < secondcount; j++)
+        for (int j = 0; j < secondCount; j++)
         {
-            printf("%d ", sum->pData[i][j]);
+            printf("%d ", pSum->pData[i][j]);
             fflush(stdout);
         }
         printf("\n");
@@ -155,13 +155,13 @@ int main(int argc, char** argv)
     printf("\n");
     fflush(stdout);
 
-    int det = CalculateDeterminant(sum);
+    int det = CalculateDeterminant(pSum);
     printf("Определитель суммы матриц det = %d\n", det);
     fflush(stdout);
 
-    FreeMatrix(matrix1);
-    FreeMatrix(matrix2);
-    FreeMatrix(sum);
+    FreeMatrix(pMatrix1);
+    FreeMatrix(pMatrix2);
+    FreeMatrix(pSum);
 
     return 0;
 }

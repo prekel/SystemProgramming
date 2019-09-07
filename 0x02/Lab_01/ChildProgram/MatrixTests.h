@@ -1,4 +1,4 @@
-/*! \file    ChildProgram/MatrixTests.h
+/*! \file
  *  \brief   Tests for matrix
  *
  *  \details Tests for matrix structure and functions.

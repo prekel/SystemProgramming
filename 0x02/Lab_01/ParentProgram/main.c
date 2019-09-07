@@ -1,4 +1,4 @@
-/*! \file    ParentProgram/main.c
+/*! \file
  *  \brief   Main file of parent program
  *
  *  \details Main file which contains the main function.
@@ -20,25 +20,21 @@
  *                    passed as the program's argument list.
  *  \return           Identifier of the spawned process.
  */
-pid_t spawn(char* program, char** argList)
+pid_t Spawn(char* program, char** argList)
 {
     pid_t childPid;
 
-    /* Duplicate this process.  */
     childPid = fork();
-    if (childPid != 0)
+
+    if (childPid == 0)
     {
-        /* This is the parent process.  */
-        return childPid;
-    } else
-    {
-        /* Now execute PROGRAM, searching for it in the path. */
         execvp(program, argList);
 
-        /* The execvp function returns only if an error occurs.  */
-        fprintf(stderr, "an error occurred in execvp\n");
+        fprintf(stderr, "Ошибка при выполнении execvp\n");
         abort();
     }
+
+    return childPid;
 }
 
 /*! \brief Main function
@@ -54,21 +50,21 @@ pid_t spawn(char* program, char** argList)
 int main(int argc, char** argv)
 {
     char* child = NULL;
-    char** arglist = NULL;
+    char** argList = NULL;
 
-    if (argc >= 2)
+    if (argc > 1)
     {
         child = argv[1];
-        arglist = argv + 1;
+        argList = argv + 1;
     } else
     {
         child = "../ChildProgram/ChildProgram";
-        char* arglisttmp[] = {child, NULL};
-        arglist = arglisttmp;
+        char* argListTmp[] = {child, NULL};
+        argList = argListTmp;
     }
 
-    int childpid = spawn(child, arglist);
-    waitpid(childpid, NULL, 0);
+    int childPid = Spawn(child, argList);
+    waitpid(childPid, NULL, 0);
 
     return 0;
 }

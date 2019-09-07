@@ -1,4 +1,4 @@
-/*! \file    ChildProgram/Matrix.h
+/*! \file
  *  \brief   Matrix structure and functions to use it
  *
  *  \details Matrix structure and functions to calculate sum, determinant,
@@ -55,48 +55,48 @@ Matrix* CreateEmptyMatrix(int firstCount, int secondCount);
  *
  *  \details Allocate memory for new matrix equals to matrixA + matrixB.
  *
- *  \param matrixA 1st matrix to add.
- *  \param matrixB 2nd matrix to add.
+ *  \param pMatrixA 1st matrix to add.
+ *  \param pMatrixB 2nd matrix to add.
  *  \return Pointer to sum.
  */
-Matrix* SumMatrices(Matrix* matrixA, Matrix* matrixB);
+Matrix* SumMatrices(Matrix* pMatrixA, Matrix* pMatrixB);
 
 /*! \brief Calculates minor of matrix
  *
  *  \details Allocate memory for new matrix which has't specified row and
  *           column.
  *
- *  \param matrix Matrix to create minor.
+ *  \param pMatrix Matrix to create minor.
  *  \param firstIndex 1st-dimension to exclude (column).
  *  \param secondIndex 2nd-dimension to exclude (row).
  *  \return Pointer to created minor.
  */
-Matrix* GetMinor(Matrix* matrix, int firstIndex, int secondIndex);
+Matrix* GetMinor(Matrix* pMatrix, int firstIndex, int secondIndex);
 
 /*! \brief Calculates determinant of 2x2 matrix
  *
  *  \details Calculates determinant only for 2x2 matrices.
  *
- *  \param matrix 2x2 matrix to calculate determinant.
+ *  \param pMatrix 2x2 matrix to calculate determinant.
  *  \return Determinant integer.
  */
-int CalculateDeterminant2x2(Matrix* matrix);
+int CalculateDeterminant2x2(Matrix* pMatrix);
 
 /*! \brief Calculates determinant matrix
  *
  *  \details Calculates matrix determinant.
  *
- *  \param matrix Matrix to calculate determinant.
+ *  \param pMatrix Matrix to calculate determinant.
  *  \return Determinant integer.
  */
-int CalculateDeterminant(Matrix* matrix);
+int CalculateDeterminant(Matrix* pMatrix);
 
 /*! \brief Frees up matrix memory
  *
  *  \details Frees up memory to destroy matrix
  *
- *  \param matrix Matrix to free.
+ *  \param pMatrix Matrix to free.
  */
-void FreeMatrix(Matrix* matrix);
+void FreeMatrix(Matrix* pMatrix);
 
 #endif // MATRIX_H
