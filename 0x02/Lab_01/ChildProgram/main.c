@@ -13,6 +13,7 @@
 #include "Matrix.h"
 #include "Input.h"
 #include "MatrixTests.h"
+#include "Macro.h"
 
 /*! \brief Check number for matrix size
  *
@@ -85,6 +86,7 @@ int main(int argc, char** argv)
             char* format = "pMatrix1[%d][%d] = ";
             ssize_t len = snprintf(NULL, 0, format, i, j);
             char* s = (char*) malloc(len + 1 * sizeof(char));
+            FAILURE_IF_NULLPTR(s);
             snprintf(s, len + 1, format, i, j);
 
             pMatrix1->pData[i][j] = CycleInputInt(s, MatrixElementChecker);
@@ -104,6 +106,7 @@ int main(int argc, char** argv)
             char* format = "pMatrix2[%d][%d] = ";
             ssize_t len = snprintf(NULL, 0, format, i, j);
             char* s = (char*) malloc(len + 1 * sizeof(char));
+            FAILURE_IF_NULLPTR(s);
             snprintf(s, len + 1, format, i, j);
 
             pMatrix2->pData[i][j] = CycleInputInt(s, MatrixElementChecker);
