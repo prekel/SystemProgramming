@@ -24,7 +24,7 @@
  */
 bool MatrixSizeChecker(int n)
 {
-    return n >= 1;
+    return n >= 1 && n < 11;
 }
 
 /*! \brief Check number for matrix element
@@ -72,7 +72,8 @@ int main(int argc, char** argv)
     int secondCount = 0;
 
     firstCount = secondCount =
-            CycleInputInt("Введите порядок матриц: ", MatrixSizeChecker);
+            CycleInputInt("Введите порядок матриц (больше 0 и меньше 11): ",
+                    MatrixSizeChecker);
 
     Matrix* pMatrix1 = CreateBlankMatrix(firstCount, secondCount);
     Matrix* pMatrix2 = CreateBlankMatrix(firstCount, secondCount);
