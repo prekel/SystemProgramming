@@ -24,7 +24,7 @@
  */
 bool MatrixSizeChecker(int n)
 {
-    return n >= 1 && n < 11;
+    return n >= 1 && n < 12;
 }
 
 /*! \brief Check number for matrix element
@@ -72,7 +72,7 @@ int main(int argc, char** argv)
     int secondCount = 0;
 
     firstCount = secondCount =
-            CycleInputInt("Введите порядок матриц (больше 0 и меньше 11): ",
+            CycleInputInt("Введите порядок матриц (больше 0 и меньше 12): ",
                     MatrixSizeChecker);
 
     Matrix* pMatrix1 = CreateBlankMatrix(firstCount, secondCount);
@@ -85,7 +85,7 @@ int main(int argc, char** argv)
         for (int j = 0; j < secondCount; j++)
         {
             char* format = "pMatrix1[%d][%d] = ";
-            ssize_t len = snprintf(NULL, 0, format, i, j);
+            int len = snprintf(NULL, 0, format, i, j);
             char* s = (char*) malloc(len + 1 * sizeof(char));
             FAILURE_IF_NULLPTR(s);
             snprintf(s, len + 1, format, i, j);
@@ -105,7 +105,7 @@ int main(int argc, char** argv)
         for (int j = 0; j < secondCount; j++)
         {
             char* format = "pMatrix2[%d][%d] = ";
-            ssize_t len = snprintf(NULL, 0, format, i, j);
+            int len = snprintf(NULL, 0, format, i, j);
             char* s = (char*) malloc(len + 1 * sizeof(char));
             FAILURE_IF_NULLPTR(s);
             snprintf(s, len + 1, format, i, j);
