@@ -62,8 +62,8 @@ int InputLine(char* stringToInput, int maxStringLength)
 int CycleInputInt(char* stringToOutput, int maxStringLength,
                   bool(* pChecker)(int))
 {
-    int number;
-    int position;
+    int number = -1;
+    int position = -1;
     char* stringNumber = (char*) malloc(maxStringLength * sizeof(char));
     FAILURE_IF_NULLPTR(stringNumber);
     while (true)

@@ -6,8 +6,8 @@
 
 typedef struct
 {
-    Philosopher Philosophers[5];
-    Fork Forks[5];
+    Philosopher** Philosophers;
+    Fork** Forks;
 } Table;
 
 Table* CreateTable();
