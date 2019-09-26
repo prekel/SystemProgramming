@@ -10,4 +10,5 @@ add_subdirectory(0x02/Lab_01)
 
 add_subdirectory(0x03/2-Threads)
 
-#add_subdirectory(0x03/3-Synchro)
+#add_subdirectory(0x04/3-Synchro)
+add_subdirectory(0x04/Lab_02)
