@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <malloc.h>
 
+#include "Macro.h"
 #include "Input.h"
 
 int InputLine(char* stringToInput, int maxStringLength)
@@ -64,6 +65,7 @@ int CycleInputInt(char* stringToOutput, int maxStringLength,
     int number;
     int position;
     char* stringNumber = (char*) malloc(maxStringLength * sizeof(char));
+    FAILURE_IF_NULLPTR(stringNumber);
     while (true)
     {
         printf("%s", stringToOutput);
