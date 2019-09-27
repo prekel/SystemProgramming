@@ -12,6 +12,9 @@ typedef struct
 
 Philosopher* CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork);
 
+void DoEatPhilosopher(Philosopher* pPhilosopher, struct timespec*
+        durationEat);
+
 void DestroyPhilosopher(Philosopher* pPhilosopher);
 
 #endif // PHILOSOPHER_H

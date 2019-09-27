@@ -1,6 +1,10 @@
-#include "Table.h"
+#include <malloc.h>
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-#include "malloc.h"
+#include "Table.h"
 
 #define PHILOSOPHERS_COUNT 5
 
@@ -24,6 +28,19 @@ Table* CreateTable()
     }
 
     return pTable;
+}
+
+void DoEatAll1()
+{
+    srand (time(NULL));
+
+
+    for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
+    {
+        int a = rand() % 10;
+        struct timespec tw = {a, 0};
+
+    }
 }
 
 void DestroyTable(Table* pTable)

@@ -12,6 +12,8 @@ typedef struct
 
 Table* CreateTable();
 
+void DoEatAll1();
+
 void DestroyTable(Table* pTable);
 
 #endif // TABLE_H

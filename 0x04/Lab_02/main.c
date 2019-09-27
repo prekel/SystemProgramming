@@ -28,17 +28,17 @@ int main(int argc, char** argv)
 
     DestroyTable(pTable);
 
-//    int a = 0;
-//    for (int i = 1; i <= 10; i++)
-//    {
-//        char* format = "%d:";
-//        int len = snprintf(NULL, 0, format, a);
-//        char* s = (char*) malloc(len + 1 * sizeof(char));
-//        //FAILURE_IF_NULLPTR(s);
-//        snprintf(s, len + 1, format, a);
-//
-//        a = CycleInputInt(s, 10, NULL);
-//    }
+    int a = 0;
+    for (int i = 1; i <= 10; i++)
+    {
+        char* format = "%d:";
+        int len = snprintf(NULL, 0, format, a);
+        char* s = (char*) malloc(len + 1 * sizeof(char));
+        //FAILURE_IF_NULLPTR(s);
+        snprintf(s, len + 1, format, a);
+
+        a = CycleInputInt(s, 10, NULL);
+    }
 //
 //    CycleInputInt("Ваыва: ", 50, NULL);
 //
