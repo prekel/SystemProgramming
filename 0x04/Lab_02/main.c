@@ -35,14 +35,19 @@ char PhToChar(Philosopher* fork)
 void* outinfo(void* _)
 {
     struct timespec tw = {0, 200000000};
-    while (true)
+    int k = 0;
+    while (k <= 10)
     {
         if (g_pTable->IsEatingEnded)
-            break;
+        {
+            k++;
+        }
         nanosleep(&tw, NULL);
+        fprintf(stderr, "[clock: %ld] ", clock());
         for (int i = 0; i < 5; i++)
         {
-            fprintf(stderr, "%c%c", PhToChar(g_pTable->Philosophers[i]),
+            fprintf(stderr, "%c%c", PhToChar
+            (g_pTable->Philosophers[i]),
                     ForkToChar(g_pTable->Forks[i]));
         }
         fprintf(stderr, "\n");
@@ -60,6 +65,8 @@ void* outinfo(void* _)
  */
 int main(int argc, char** argv)
 {
+    srand(time(NULL));
+
     Table* pTable = CreateTable();
 
     g_pTable = pTable;
@@ -67,6 +74,8 @@ int main(int argc, char** argv)
     pthread_create(&threadId, NULL, outinfo, NULL);
 
     DoEatAll1(pTable);
+
+    pthread_join(threadId, NULL);
 
     DestroyTable(pTable);
 

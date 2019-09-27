@@ -4,6 +4,7 @@
 #include <pthread.h>
 
 #include "Philosopher.h"
+#include "Utils.h"
 
 Philosopher* CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork)
 {
@@ -23,15 +24,18 @@ void* DoEatPhilosopher(void* pEatThreadOptions)
     struct timespec* durationEat = pEatOptions->durationEat;
     pthread_mutex_t* mutex = pEatOptions->Mutex;
 
-    printf("[pid: %lu, philosopherId: %d] Пришёл есть\n", pthread_self(),
+    printf("[clock: %ld][pid: %lu, philosopherId: %d] Пришёл есть\n", clock
+    (),
+            pthread_self(),
            ph->PhilosopherId);
     //pthread_mutex_lock(mutex);
     if (ph->LeftFork->IsInUse == false &&
         ph->RightFork->IsInUse == false)
     {
-        printf("[pid: %lu, philosopherId: %d] Вилки свободны, начинает "
-               "есть %ld секунд\n", pthread_self(), ph->PhilosopherId,
-               durationEat->tv_sec);
+        printf("[clock: %ld][pid: %lu, philosopherId: %d] Вилки свободны, "
+               "начинает "
+               "есть %lf сек.\n", clock(), pthread_self(), ph->PhilosopherId,
+               TimespecToDouble(durationEat));
         ph->IsEating = true;
         ph->LeftFork->IsInUse = true;
         ph->RightFork->IsInUse = true;
@@ -41,13 +45,15 @@ void* DoEatPhilosopher(void* pEatThreadOptions)
         ph->LeftFork->IsInUse = false;
         ph->RightFork->IsInUse = false;
         ph->IsEating = false;
-        printf("[pid: %lu, philosopherId: %d] Поел, уходит\n",
+        printf("[clock: %ld][pid: %lu, philosopherId: %d] Поел, уходит\n",
+                clock(),
                 pthread_self(), ph->PhilosopherId);
         //pthread_mutex_unlock(mutex);
     }
     else
     {
-        printf("[pid: %lu, philosopherId: %d] Вилки несвободны, уходит\n",
+        printf("[clock: %ld][pid: %lu, philosopherId: %d] Вилки несвободны,"
+               " уходит\n", clock(),
                pthread_self(), ph->PhilosopherId);
     }
 

@@ -5,6 +5,7 @@
 #include <time.h>
 
 #include "Table.h"
+#include "Utils.h"
 
 #define PHILOSOPHERS_COUNT 5
 
@@ -41,35 +42,39 @@ void DoEatAll1(Table* pTable)
     pthread_mutex_init(&pTable->Mutex, NULL);
 
     //for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 20; i++)
     {
         //int a = rand() % 10 + 1;
-        int a = 10;
+        //int a = ;
         int c = rand() % PHILOSOPHERS_COUNT;
-        struct timespec tw = {a, 0};
+        //struct timespec tw = {a, 0};
+        struct timespec tw = RandomTime(1, 3);
 
         Philosopher* ph = pTable->Philosophers[c];
 
         if (ph->IsEating == true)
         {
-            printf("[pid: %lu, philosopherId: %d, i: %d] Уже ест\n",
+            printf("[clock: %ld][pid: %lu, philosopherId: %d, i: %d] Уже "
+                   "ест\n", clock(),
                    pthread_self(), ph->PhilosopherId, i);
             continue;
         }
 
-        EatPhilosopherOptions* options = CreateEatPhilosopherOptions(ph, &pTable->Mutex, &tw);
+        EatPhilosopherOptions* options
+                = CreateEatPhilosopherOptions(ph, &pTable->Mutex, &tw);
 
         pthread_t threadId;
 
-        printf("[pid: %lu, philosopherId: %d, i: %d] Идёт есть\n",
+        printf("[clock: %ld][pid: %lu, philosopherId: %d, i: %d] Идёт "
+               "есть\n", clock(),
                pthread_self(), ph->PhilosopherId, i);
         pthread_create(&threadId, NULL, DoEatPhilosopher, options);
 
-        int b = rand() % 3 + 1;
-        struct timespec twb = {b, 0};
-        printf("[pid: %lu, philosopherId: %d, i: %d] Задержка перед отправкой "
-               "следующего %d секунд\n", pthread_self(), ph->PhilosopherId,
-               i, b);
+        struct timespec twb = RandomTime(1, 3);
+        printf("[clock: %ld][pid: %lu, philosopherId: %d, i: %d] Задержка "
+               "перед отправкой "
+               "следующего %lf сек.\n", clock(), pthread_self(), ph->PhilosopherId,
+               i, TimespecToDouble(&twb));
         nanosleep(&twb, NULL);
     }
 
