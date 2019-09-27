@@ -10,11 +10,23 @@ typedef struct
     Fork* LeftFork;
 } Philosopher;
 
+typedef struct
+{
+    Philosopher* pPhilosopher;
+    struct timespec* durationEat;
+} EatPhilosopherOptions;
+
+
 Philosopher* CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork);
 
-void DoEatPhilosopher(Philosopher* pPhilosopher, struct timespec*
-        durationEat);
+void DoEatPhilosopher(void* pEatThreadOptions);
 
 void DestroyPhilosopher(Philosopher* pPhilosopher);
+
+EatPhilosopherOptions* CreateEatPhilosopherOptions(Philosopher* pPhilosopher, struct timespec*
+durationEat);
+
+void DestroyEatPhilosopherOptions(EatPhilosopherOptions* pOptions);
+
 
 #endif // PHILOSOPHER_H
