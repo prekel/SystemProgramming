@@ -36,13 +36,15 @@ Table* CreateTable()
 void DoEatAll1(Table* pTable)
 {
     srand(time(NULL));
+    pTable->IsEatingStarted = true;
 
+    pthread_mutex_init(&pTable->Mutex, NULL);
 
     //for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 5; i++)
     {
         //int a = rand() % 10 + 1;
-        int a = 1;
+        int a = 10;
         int c = rand() % PHILOSOPHERS_COUNT;
         struct timespec tw = {a, 0};
 
@@ -55,7 +57,7 @@ void DoEatAll1(Table* pTable)
             continue;
         }
 
-        EatPhilosopherOptions* options = CreateEatPhilosopherOptions(ph, &tw);
+        EatPhilosopherOptions* options = CreateEatPhilosopherOptions(ph, &pTable->Mutex, &tw);
 
         pthread_t threadId;
 
@@ -63,13 +65,15 @@ void DoEatAll1(Table* pTable)
                pthread_self(), ph->PhilosopherId, i);
         pthread_create(&threadId, NULL, DoEatPhilosopher, options);
 
-        int b = rand() % 2 + 1;
+        int b = rand() % 3 + 1;
         struct timespec twb = {b, 0};
         printf("[pid: %lu, philosopherId: %d, i: %d] Задержка перед отправкой "
                "следующего %d секунд\n", pthread_self(), ph->PhilosopherId,
                i, b);
         nanosleep(&twb, NULL);
     }
+
+    pTable->IsEatingEnded = true;
 }
 
 void DestroyTable(Table* pTable)

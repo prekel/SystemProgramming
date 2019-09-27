@@ -16,9 +16,9 @@ typedef struct
 typedef struct
 {
     Philosopher* pPhilosopher;
+    pthread_mutex_t* Mutex;
     struct timespec* durationEat;
 } EatPhilosopherOptions;
-
 
 Philosopher* CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork);
 
@@ -26,8 +26,9 @@ void* DoEatPhilosopher(void* pEatThreadOptions);
 
 void DestroyPhilosopher(Philosopher* pPhilosopher);
 
-EatPhilosopherOptions* CreateEatPhilosopherOptions(Philosopher* pPhilosopher, struct timespec*
-durationEat);
+EatPhilosopherOptions*
+CreateEatPhilosopherOptions(Philosopher* pPhilosopher, pthread_mutex_t* mutex,
+                            struct timespec* durationEat);
 
 void DestroyEatPhilosopherOptions(EatPhilosopherOptions* pOptions);
 

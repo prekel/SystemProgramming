@@ -12,6 +12,7 @@ typedef struct
     Fork** Forks;
     bool IsEatingStarted;
     bool IsEatingEnded;
+    pthread_mutex_t Mutex;
 } Table;
 
 Table* CreateTable();

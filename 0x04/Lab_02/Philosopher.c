@@ -21,9 +21,11 @@ void* DoEatPhilosopher(void* pEatThreadOptions)
 
     Philosopher* ph = pEatOptions->pPhilosopher;
     struct timespec* durationEat = pEatOptions->durationEat;
+    pthread_mutex_t* mutex = pEatOptions->Mutex;
 
     printf("[pid: %lu, philosopherId: %d] Пришёл есть\n", pthread_self(),
            ph->PhilosopherId);
+    //pthread_mutex_lock(mutex);
     if (ph->LeftFork->IsInUse == false &&
         ph->RightFork->IsInUse == false)
     {
@@ -33,12 +35,15 @@ void* DoEatPhilosopher(void* pEatThreadOptions)
         ph->IsEating = true;
         ph->LeftFork->IsInUse = true;
         ph->RightFork->IsInUse = true;
+        //pthread_mutex_unlock(mutex);
         nanosleep(durationEat, NULL);
+        //pthread_mutex_lock(mutex);
         ph->LeftFork->IsInUse = false;
         ph->RightFork->IsInUse = false;
         ph->IsEating = false;
         printf("[pid: %lu, philosopherId: %d] Поел, уходит\n",
                 pthread_self(), ph->PhilosopherId);
+        //pthread_mutex_unlock(mutex);
     }
     else
     {
@@ -54,13 +59,13 @@ void DestroyPhilosopher(Philosopher* pPhilosopher)
     free(pPhilosopher);
 }
 
-EatPhilosopherOptions* CreateEatPhilosopherOptions(Philosopher* pPhilosopher, struct timespec*
-durationEat)
+EatPhilosopherOptions* CreateEatPhilosopherOptions(Philosopher* pPhilosopher, pthread_mutex_t* mutex, struct timespec* durationEat)
 {
     EatPhilosopherOptions* pEatPhilosopherOptions = (EatPhilosopherOptions*)malloc(
             sizeof(EatPhilosopherOptions));
     pEatPhilosopherOptions->pPhilosopher = pPhilosopher;
     pEatPhilosopherOptions->durationEat = durationEat;
+    pEatPhilosopherOptions->Mutex = mutex;
     return pEatPhilosopherOptions;
 }
 

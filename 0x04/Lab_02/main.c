@@ -35,8 +35,10 @@ char PhToChar(Philosopher* fork)
 void* outinfo(void* _)
 {
     struct timespec tw = {0, 200000000};
-    for (int k = 0; k < 100000; k++)
+    while (true)
     {
+        if (g_pTable->IsEatingEnded)
+            break;
         nanosleep(&tw, NULL);
         for (int i = 0; i < 5; i++)
         {
