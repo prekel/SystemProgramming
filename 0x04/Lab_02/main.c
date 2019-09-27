@@ -10,9 +10,43 @@
 #include <unistd.h>
 #include <wait.h>
 #include <time.h>
+#include <pthread.h>
 
 #include "Input.h"
 #include "Table.h"
+
+Table* g_pTable;
+
+char ForkToChar(Fork* fork)
+{
+    if (fork->IsInUse)
+        return ',';
+    else
+        return '.';
+}
+char PhToChar(Philosopher* fork)
+{
+    if (fork->IsEating)
+        return '=';
+    else
+        return '_';
+}
+
+void* outinfo(void* _)
+{
+    struct timespec tw = {0, 200000000};
+    for (int k = 0; k < 100000; k++)
+    {
+        nanosleep(&tw, NULL);
+        for (int i = 0; i < 5; i++)
+        {
+            fprintf(stderr, "%c%c", PhToChar(g_pTable->Philosophers[i]),
+                    ForkToChar(g_pTable->Forks[i]));
+        }
+        fprintf(stderr, "\n");
+    }
+    return NULL;
+}
 
 /*! \brief Главная функция
  *
@@ -26,19 +60,25 @@ int main(int argc, char** argv)
 {
     Table* pTable = CreateTable();
 
+    g_pTable = pTable;
+    pthread_t threadId;
+    pthread_create(&threadId, NULL, outinfo, NULL);
+
+    DoEatAll1(pTable);
+
     DestroyTable(pTable);
 
-    int a = 0;
-    for (int i = 1; i <= 10; i++)
-    {
-        char* format = "%d:";
-        int len = snprintf(NULL, 0, format, a);
-        char* s = (char*) malloc(len + 1 * sizeof(char));
-        //FAILURE_IF_NULLPTR(s);
-        snprintf(s, len + 1, format, a);
-
-        a = CycleInputInt(s, 10, NULL);
-    }
+//    int a = 0;
+//    for (int i = 1; i <= 10; i++)
+//    {
+//        char* format = "%d:";
+//        int len = snprintf(NULL, 0, format, a);
+//        char* s = (char*) malloc(len + 1 * sizeof(char));
+//        //FAILURE_IF_NULLPTR(s);
+//        snprintf(s, len + 1, format, a);
+//
+//        a = CycleInputInt(s, 10, NULL);
+//    }
 //
 //    CycleInputInt("Ваыва: ", 50, NULL);
 //

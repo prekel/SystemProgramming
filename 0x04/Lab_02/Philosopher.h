@@ -1,6 +1,8 @@
 #ifndef PHILOSOPHER_H
 #define PHILOSOPHER_H
 
+#include <stdbool.h>
+
 #include "Fork.h"
 
 typedef struct
@@ -8,6 +10,7 @@ typedef struct
     int PhilosopherId;
     Fork* RightFork;
     Fork* LeftFork;
+    bool IsEating;
 } Philosopher;
 
 typedef struct
@@ -19,7 +22,7 @@ typedef struct
 
 Philosopher* CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork);
 
-void DoEatPhilosopher(void* pEatThreadOptions);
+void* DoEatPhilosopher(void* pEatThreadOptions);
 
 void DestroyPhilosopher(Philosopher* pPhilosopher);
 

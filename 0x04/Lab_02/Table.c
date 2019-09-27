@@ -27,19 +27,48 @@ Table* CreateTable()
                 CreatePhilosopher(i + 1, lFork, pTable->Forks[i]);
     }
 
+    pTable->IsEatingStarted = false;
+    pTable->IsEatingEnded = false;
+
     return pTable;
 }
 
-void DoEatAll1()
+void DoEatAll1(Table* pTable)
 {
-    srand (time(NULL));
+    srand(time(NULL));
 
 
-    for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
+    //for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
+    for (int i = 0; i < 100; i++)
     {
-        int a = rand() % 10;
+        //int a = rand() % 10 + 1;
+        int a = 1;
+        int c = rand() % PHILOSOPHERS_COUNT;
         struct timespec tw = {a, 0};
 
+        Philosopher* ph = pTable->Philosophers[c];
+
+        if (ph->IsEating == true)
+        {
+            printf("[pid: %lu, philosopherId: %d, i: %d] Уже ест\n",
+                   pthread_self(), ph->PhilosopherId, i);
+            continue;
+        }
+
+        EatPhilosopherOptions* options = CreateEatPhilosopherOptions(ph, &tw);
+
+        pthread_t threadId;
+
+        printf("[pid: %lu, philosopherId: %d, i: %d] Идёт есть\n",
+               pthread_self(), ph->PhilosopherId, i);
+        pthread_create(&threadId, NULL, DoEatPhilosopher, options);
+
+        int b = rand() % 2 + 1;
+        struct timespec twb = {b, 0};
+        printf("[pid: %lu, philosopherId: %d, i: %d] Задержка перед отправкой "
+               "следующего %d секунд\n", pthread_self(), ph->PhilosopherId,
+               i, b);
+        nanosleep(&twb, NULL);
     }
 }
 

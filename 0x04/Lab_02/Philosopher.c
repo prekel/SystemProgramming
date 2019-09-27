@@ -11,10 +11,11 @@ Philosopher* CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork)
     pPhilosopher->PhilosopherId = id;
     pPhilosopher->LeftFork = leftFork;
     pPhilosopher->RightFork = rightFork;
+    pPhilosopher->IsEating = false;
     return pPhilosopher;
 }
 
-void DoEatPhilosopher(void* pEatThreadOptions)
+void* DoEatPhilosopher(void* pEatThreadOptions)
 {
     EatPhilosopherOptions* pEatOptions = (EatPhilosopherOptions*) pEatThreadOptions;
 
@@ -27,20 +28,25 @@ void DoEatPhilosopher(void* pEatThreadOptions)
         ph->RightFork->IsInUse == false)
     {
         printf("[pid: %lu, philosopherId: %d] Вилки свободны, начинает "
-               "есть\n", pthread_self(), ph->PhilosopherId);
+               "есть %ld секунд\n", pthread_self(), ph->PhilosopherId,
+               durationEat->tv_sec);
+        ph->IsEating = true;
         ph->LeftFork->IsInUse = true;
         ph->RightFork->IsInUse = true;
         nanosleep(durationEat, NULL);
         ph->LeftFork->IsInUse = false;
         ph->RightFork->IsInUse = false;
-        printf("[pid: %lu, philosopherId: %d] Поел, уходит "
-               "есть\n", pthread_self(), ph->PhilosopherId);
+        ph->IsEating = false;
+        printf("[pid: %lu, philosopherId: %d] Поел, уходит\n",
+                pthread_self(), ph->PhilosopherId);
     }
     else
     {
         printf("[pid: %lu, philosopherId: %d] Вилки несвободны, уходит\n",
                pthread_self(), ph->PhilosopherId);
     }
+
+    return NULL;
 }
 
 void DestroyPhilosopher(Philosopher* pPhilosopher)
