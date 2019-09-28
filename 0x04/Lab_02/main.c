@@ -14,6 +14,7 @@
 
 #include "Input.h"
 #include "Table.h"
+#include "Utils.h"
 
 Table* g_pTable;
 
@@ -66,6 +67,13 @@ void* outinfo(void* _)
 int main(int argc, char** argv)
 {
     srand(time(NULL));
+
+    for (int i = 0; i < 100; i++)
+    {
+        struct timespec tw1 = RandomTime(5, 10);
+        printf("%lf\n", TimespecToDouble(&tw1));
+    }
+
 
     Table* pTable = CreateTable();
 

@@ -3,10 +3,16 @@
 
 #include <time.h>
 
+/*!
+ *
+ * \param min
+ * \param max
+ * \return
+ */
+int RandomInterval(int min, int max);
+
 struct timespec RandomTime(int minSeconds, int maxSeconds);
 
 double TimespecToDouble(struct timespec* tw);
-
-char* CurrentTime();
 
 #endif // UTILS_H

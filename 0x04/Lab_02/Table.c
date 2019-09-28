@@ -48,7 +48,7 @@ void DoEatAll1(Table* pTable)
         //int a = ;
         int c = rand() % PHILOSOPHERS_COUNT;
         //struct timespec tw = {a, 0};
-        struct timespec tw = RandomTime(1, 3);
+        struct timespec tw = RandomTime(0, 1);
 
         Philosopher* ph = pTable->Philosophers[c];
 
@@ -70,7 +70,7 @@ void DoEatAll1(Table* pTable)
                pthread_self(), ph->PhilosopherId, i);
         pthread_create(&threadId, NULL, DoEatPhilosopher, options);
 
-        struct timespec twb = RandomTime(1, 3);
+        struct timespec twb = RandomTime(0, 1);
         printf("[clock: %ld][pid: %lu, philosopherId: %d, i: %d] Задержка "
                "перед отправкой "
                "следующего %lf сек.\n", clock(), pthread_self(), ph->PhilosopherId,

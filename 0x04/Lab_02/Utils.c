@@ -1,17 +1,30 @@
 #include <stdlib.h>
 #include <time.h>
+#include <assert.h>
 
 #include "Utils.h"
 
 int RandomInterval(int min, int max)
 {
+    assert(max >= min);
+    if (min == max)
+        return min;
     return rand() % (max - min) + min;
 }
 
 struct timespec RandomTime(int minSeconds, int maxSeconds)
 {
+    assert(maxSeconds >= minSeconds);
+
     struct timespec tw;
-    tw.tv_sec = RandomInterval(minSeconds, maxSeconds) + minSeconds;
+    if (maxSeconds - minSeconds == 1)
+    {
+        tw.tv_sec = minSeconds;
+    }
+    else
+    {
+        tw.tv_sec = RandomInterval(minSeconds, maxSeconds);
+    }
     tw.tv_nsec = RandomInterval(0, 1000) * 1000000ll +
             RandomInterval(0, 1000) % 1000 * 1000ll +
             RandomInterval(0, 1000) % 1000;
