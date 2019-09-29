@@ -8,9 +8,12 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <wait.h>
+//#include <wait.h>
 #include <time.h>
 #include <pthread.h>
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 #include "Input.h"
 #include "Table.h"
@@ -67,6 +70,10 @@ void* outinfo(void* _)
  */
 int main(int argc, char** argv)
 {
+#ifdef _WIN32
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+#endif
     srand(time(NULL));
 
 //    for (int i = 0; i < 100; i++)

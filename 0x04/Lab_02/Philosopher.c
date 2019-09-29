@@ -3,6 +3,7 @@
 #include <time.h>
 #include <pthread.h>
 #include <semaphore.h>
+#include <stdio.h>
 
 #include "Philosopher.h"
 #include "Utils.h"
