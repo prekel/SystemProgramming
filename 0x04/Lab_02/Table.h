@@ -2,17 +2,20 @@
 #define TABLE_H
 
 #include <stdbool.h>
+#include <pthread.h>
+#include <semaphore.h>
 
 #include "Philosopher.h"
 #include "Fork.h"
 
 typedef struct
 {
-    Philosopher** Philosophers;
-    Fork** Forks;
+    Philosopher** ppPhilosophers;
+    Fork** ppForks;
     bool IsEatingStarted;
     bool IsEatingEnded;
-    pthread_mutex_t Mutex;
+    pthread_mutex_t* pMutex;
+    sem_t* pArbitrator;
 } Table;
 
 Table* CreateTable();

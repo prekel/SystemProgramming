@@ -49,8 +49,8 @@ void* outinfo(void* _)
         for (int i = 0; i < 5; i++)
         {
             fprintf(stderr, "%c%c", PhToChar
-            (g_pTable->Philosophers[i]),
-                    ForkToChar(g_pTable->Forks[i]));
+            (g_pTable->ppPhilosophers[i]),
+                    ForkToChar(g_pTable->ppForks[i]));
         }
         fprintf(stderr, "\n");
     }
