@@ -33,8 +33,7 @@ void* DoEatPhilosopher(void* pEatThreadOptions)
         ph->RightFork->IsInUse == false)
     {
         printf("[pid: %lu, philosopherId: %d] Вилки свободны, "
-               "начинает "
-               "есть %lf сек.\n", pthread_self(), ph->PhilosopherId,
+               "начинает есть %lf сек.\n", pthread_self(), ph->PhilosopherId,
                TimespecToDouble(durationEat));
         ph->IsEating = true;
         ph->LeftFork->IsInUse = true;
@@ -43,7 +42,9 @@ void* DoEatPhilosopher(void* pEatThreadOptions)
         nanosleep(durationEat, NULL);
         pthread_mutex_lock(mutex);
         ph->LeftFork->IsInUse = false;
+        pthread_cond_signal(ph->LeftFork->CondSignalOnRelease);
         ph->RightFork->IsInUse = false;
+        pthread_cond_signal(ph->RightFork->CondSignalOnRelease);
         ph->IsEating = false;
         printf("[pid: %lu, philosopherId: %d] Поел, уходит\n",
                 pthread_self(), ph->PhilosopherId);
@@ -51,8 +52,49 @@ void* DoEatPhilosopher(void* pEatThreadOptions)
     }
     else
     {
-        printf("[pid: %lu, philosopherId: %d] Вилки несвободны,"
-               " уходит\n",
+        ph->IsWaiting = true;
+
+        if (ph->LeftFork->IsInUse)
+        {
+            printf("[pid: %lu, philosopherId: %d] Левая вилка несвободна, ожидание\n",
+                   pthread_self(), ph->PhilosopherId);
+
+            pthread_cond_wait(ph->LeftFork->CondSignalOnRelease, mutex);
+
+            printf("[pid: %lu, philosopherId: %d] Занятие левой вилки\n",
+                   pthread_self(), ph->PhilosopherId);
+            ph->LeftFork->IsInUse = true;
+        }
+
+        if (ph->RightFork->IsInUse)
+        {
+            printf("[pid: %lu, philosopherId: %d] Правая вилка несвободна, ожидание\n",
+                   pthread_self(), ph->PhilosopherId);
+
+            pthread_cond_wait(ph->RightFork->CondSignalOnRelease, mutex);
+
+            printf("[pid: %lu, philosopherId: %d] Занятие правой вилки\n",
+                   pthread_self(), ph->PhilosopherId);
+            ph->RightFork->IsInUse = true;
+        }
+
+        printf("[pid: %lu, philosopherId: %d] Начинает есть после ожидания\n",
+               pthread_self(), ph->PhilosopherId);
+        ph->IsWaiting = false;
+        ph->IsEating = true;
+
+        pthread_mutex_unlock(mutex);
+        nanosleep(durationEat, NULL);
+        pthread_mutex_lock(mutex);
+
+        ph->LeftFork->IsInUse = false;
+        pthread_cond_signal(ph->LeftFork->CondSignalOnRelease);
+        ph->RightFork->IsInUse = false;
+        pthread_cond_signal(ph->RightFork->CondSignalOnRelease);
+
+        ph->IsEating = false;
+
+        printf("[pid: %lu, philosopherId: %d] Поел после ожидания, уходит\n",
                pthread_self(), ph->PhilosopherId);
         pthread_mutex_unlock(mutex);
     }

@@ -48,7 +48,7 @@ void DoEatAll1(Table* pTable)
         //int a = ;
         int c = rand() % PHILOSOPHERS_COUNT;
         //struct timespec tw = {a, 0};
-        struct timespec tw = RandomTime(1, 7);
+        struct timespec tw = RandomTime(10, 20);
 
         Philosopher* ph = pTable->Philosophers[c];
 
@@ -56,7 +56,16 @@ void DoEatAll1(Table* pTable)
         if (ph->IsEating == true)
         {
             printf("[pid: %lu, philosopherId: %d, i: %d] Уже ест\n",
-                    pthread_self(), ph->PhilosopherId, i);
+                   pthread_self(), ph->PhilosopherId, i);
+            pthread_mutex_unlock(&pTable->Mutex);
+            continue;
+        }
+        pthread_mutex_unlock(&pTable->Mutex);
+        pthread_mutex_lock(&pTable->Mutex);
+        if (ph->IsWaiting == true)
+        {
+            printf("[pid: %lu, philosopherId: %d, i: %d] Уже ожидает\n",
+                   pthread_self(), ph->PhilosopherId, i);
             pthread_mutex_unlock(&pTable->Mutex);
             continue;
         }
