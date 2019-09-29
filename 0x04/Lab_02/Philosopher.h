@@ -11,6 +11,7 @@ typedef struct
     Fork* RightFork;
     Fork* LeftFork;
     bool IsEating;
+    bool IsWaiting;
 } Philosopher;
 
 typedef struct

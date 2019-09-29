@@ -13,6 +13,7 @@ Philosopher* CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork)
     pPhilosopher->LeftFork = leftFork;
     pPhilosopher->RightFork = rightFork;
     pPhilosopher->IsEating = false;
+    pPhilosopher->IsWaiting = false;
     return pPhilosopher;
 }
 
@@ -24,37 +25,36 @@ void* DoEatPhilosopher(void* pEatThreadOptions)
     struct timespec* durationEat = pEatOptions->durationEat;
     pthread_mutex_t* mutex = pEatOptions->Mutex;
 
-    printf("[clock: %ld][pid: %lu, philosopherId: %d] Пришёл есть\n", clock
-    (),
+    printf("[pid: %lu, philosopherId: %d] Пришёл есть\n",
             pthread_self(),
            ph->PhilosopherId);
-    //pthread_mutex_lock(mutex);
+    pthread_mutex_lock(mutex);
     if (ph->LeftFork->IsInUse == false &&
         ph->RightFork->IsInUse == false)
     {
-        printf("[clock: %ld][pid: %lu, philosopherId: %d] Вилки свободны, "
+        printf("[pid: %lu, philosopherId: %d] Вилки свободны, "
                "начинает "
-               "есть %lf сек.\n", clock(), pthread_self(), ph->PhilosopherId,
+               "есть %lf сек.\n", pthread_self(), ph->PhilosopherId,
                TimespecToDouble(durationEat));
         ph->IsEating = true;
         ph->LeftFork->IsInUse = true;
         ph->RightFork->IsInUse = true;
-        //pthread_mutex_unlock(mutex);
+        pthread_mutex_unlock(mutex);
         nanosleep(durationEat, NULL);
-        //pthread_mutex_lock(mutex);
+        pthread_mutex_lock(mutex);
         ph->LeftFork->IsInUse = false;
         ph->RightFork->IsInUse = false;
         ph->IsEating = false;
-        printf("[clock: %ld][pid: %lu, philosopherId: %d] Поел, уходит\n",
-                clock(),
+        printf("[pid: %lu, philosopherId: %d] Поел, уходит\n",
                 pthread_self(), ph->PhilosopherId);
-        //pthread_mutex_unlock(mutex);
+        pthread_mutex_unlock(mutex);
     }
     else
     {
-        printf("[clock: %ld][pid: %lu, philosopherId: %d] Вилки несвободны,"
-               " уходит\n", clock(),
+        printf("[pid: %lu, philosopherId: %d] Вилки несвободны,"
+               " уходит\n",
                pthread_self(), ph->PhilosopherId);
+        pthread_mutex_unlock(mutex);
     }
 
     return NULL;

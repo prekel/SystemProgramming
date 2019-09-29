@@ -29,6 +29,8 @@ char PhToChar(Philosopher* fork)
 {
     if (fork->IsEating)
         return '=';
+    if (fork->IsWaiting)
+        return '?';
     else
         return '_';
 }
@@ -44,7 +46,6 @@ void* outinfo(void* _)
             k++;
         }
         nanosleep(&tw, NULL);
-        fprintf(stderr, "[clock: %ld] ", clock());
         for (int i = 0; i < 5; i++)
         {
             fprintf(stderr, "%c%c", PhToChar
@@ -68,11 +69,11 @@ int main(int argc, char** argv)
 {
     srand(time(NULL));
 
-    for (int i = 0; i < 100; i++)
-    {
-        struct timespec tw1 = RandomTime(5, 10);
-        printf("%lf\n", TimespecToDouble(&tw1));
-    }
+//    for (int i = 0; i < 100; i++)
+//    {
+//        struct timespec tw1 = RandomTime(5, 10);
+//        printf("%lf\n", TimespecToDouble(&tw1));
+//    }
 
 
     Table* pTable = CreateTable();
