@@ -5,6 +5,7 @@
 #include <time.h>
 
 #include "Table.h"
+#include "Input.h"
 #include "Utils.h"
 
 #define PHILOSOPHERS_COUNT 5
@@ -51,11 +52,18 @@ void DoEatAll1(Table* pTable)
     {
         //int a = rand() % 10 + 1;
         //int a = ;
-        int c = RandomInterval(0, PHILOSOPHERS_COUNT);
         //struct timespec tw = {a, 0};
-        struct timespec tw = RandomTime(10, 20);
+        struct timespec tw = RandomTime(5, 15);
 
+        int c = RandomInterval(0, PHILOSOPHERS_COUNT);
         Philosopher* ph = pTable->ppPhilosophers[c];
+
+        //int c1 = CycleInputInt("!:", 5, NULL);
+        //int c2 = getchar() - '0' - 1;
+        //int c2 = getch() - '0' - 1;
+        //printf("[%d]", c2);
+        //if (!(0 <= c2 && c2 <= 4)) continue;
+        //Philosopher* ph = pTable->ppPhilosophers[c2];
 
         pthread_mutex_lock(pTable->pMutex);
         if (ph->IsEating == true)
@@ -89,7 +97,7 @@ void DoEatAll1(Table* pTable)
                pthread_self(), ph->PhilosopherId, i);
         pthread_create(&threadId, NULL, DoEatPhilosopher, options);
 
-        struct timespec twb = RandomTime(1, 4);
+        struct timespec twb = RandomTime(0, 2);
         printf("[pid: %lu, philosopherId: %d, i: %d] Задержка "
                "перед отправкой следующего %lf сек.\n",
                pthread_self(), ph->PhilosopherId, i, TimespecToDouble(&twb));

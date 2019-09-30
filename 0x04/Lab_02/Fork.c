@@ -17,6 +17,35 @@ Fork* CreateFork(int id)
     return pFork;
 }
 
+void TakeOnFork(Fork* pFork, pthread_mutex_t* pMutex, sem_t* pArbitrator)
+{
+    //pthread_mutex_lock(pMutex);
+    //pthread_mutex_unlock(pMutex);
+    //sem_wait(pArbitrator);
+    //pthread_mutex_lock(pMutex);
+    pFork->IsInUse = true;
+
+    printf("[pid: %lu, forkId: %d] Занятие вилки\n", pthread_self(), pFork->ForkId);
+
+    //int semValue;
+    //sem_getvalue(pArbitrator, &semValue);
+    //if (semValue == 0)
+    //{
+    //    printf("[pid: %lu, philosopherId: %d] ожидание2\n",
+     //          pthread_self(), pPh->PhilosopherId);
+    //}
+    //pthread_mutex_unlock(pMutex);
+}
+
+void TakeOffFork(Fork* pFork, pthread_mutex_t* pMutex, sem_t* pArbitrator)
+{
+    pFork->IsInUse = false;
+
+    pthread_cond_signal(pFork->CondSignalOnRelease);
+
+    printf("[pid: %lu, forkId: %d] Освобождение вилки\n", pthread_self(), pFork->ForkId);
+}
+
 void DestroyFork(Fork* pFork)
 {
     pthread_cond_destroy(pFork->CondSignalOnRelease);

@@ -29,8 +29,7 @@ void* DoEatPhilosopher(void* pEatThreadOptions)
     sem_t* pArbitrator = pEatOptions->pArbitrator;
 
     printf("[pid: %lu, philosopherId: %d] Пришёл есть\n",
-           pthread_self(),
-           pPh->PhilosopherId);
+           pthread_self(), pPh->PhilosopherId);
     pthread_mutex_lock(pMutex);
     if (pPh->pLeftFork->IsInUse == false &&
         pPh->pRightFork->IsInUse == false)
@@ -41,44 +40,51 @@ void* DoEatPhilosopher(void* pEatThreadOptions)
 
         pPh->IsEating = true;
 
-        int semValue;
-        sem_getvalue(pArbitrator, &semValue);
-        if (semValue == 0)
-        {
-            printf("[pid: %lu, philosopherId: %d] ожидание1\n",
-                   pthread_self(), pPh->PhilosopherId);
-        }
-        pthread_mutex_unlock(pMutex);
-        sem_wait(pArbitrator);
-        pthread_mutex_lock(pMutex);
-        pPh->pLeftFork->IsInUse = true;
+//        int semValue;
+//        sem_getvalue(pArbitrator, &semValue);
+//        if (semValue == 0)
+//        {
+//            printf("[pid: %lu, philosopherId: %d] ожидание1\n",
+//                   pthread_self(), pPh->PhilosopherId);
+//        }
+//        pthread_mutex_unlock(pMutex);
+//        sem_wait(pArbitrator);
+//        pthread_mutex_lock(pMutex);
+//        pPh->pLeftFork->IsInUse = true;
 
-        sem_getvalue(pArbitrator, &semValue);
-        if (semValue == 0)
-        {
-            printf("[pid: %lu, philosopherId: %d] ожидание2\n",
-                   pthread_self(), pPh->PhilosopherId);
-        }
-        pthread_mutex_unlock(pMutex);
-        sem_wait(pArbitrator);
-        pthread_mutex_lock(pMutex);
-        pPh->pRightFork->IsInUse = true;
+        TakeOnFork(pPh->pLeftFork, pMutex, pArbitrator);
 
-        pthread_mutex_unlock(pMutex);
+
+//        sem_getvalue(pArbitrator, &semValue);
+//        if (semValue == 0)
+//        {
+//            printf("[pid: %lu, philosopherId: %d] ожидание2\n",
+//                   pthread_self(), pPh->PhilosopherId);
+//        }
+//        pthread_mutex_unlock(pMutex);
+//        sem_wait(pArbitrator);
+//        pthread_mutex_lock(pMutex);
+//        pPh->pRightFork->IsInUse = true;
+
+        TakeOnFork(pPh->pRightFork, pMutex, pArbitrator);
+
         printf("[pid: %lu, philosopherId: %d] Начал есть\n",
                 pthread_self(), pPh->PhilosopherId);
+        pthread_mutex_unlock(pMutex);
         nanosleep(pDurationEat, NULL);
+        pthread_mutex_lock(pMutex);
         printf("[pid: %lu, philosopherId: %d] Закончил есть\n",
                pthread_self(), pPh->PhilosopherId);
-        pthread_mutex_lock(pMutex);
 
-        pPh->pLeftFork->IsInUse = false;
-        pthread_cond_signal(pPh->pLeftFork->CondSignalOnRelease);
-        sem_post(pArbitrator);
+        //pPh->pLeftFork->IsInUse = false;
+        //pthread_cond_signal(pPh->pLeftFork->CondSignalOnRelease);
+        //sem_post(pArbitrator);
+        TakeOffFork(pPh->pLeftFork, pMutex, pArbitrator);
 
-        pPh->pRightFork->IsInUse = false;
-        pthread_cond_signal(pPh->pRightFork->CondSignalOnRelease);
-        sem_post(pArbitrator);
+        //pPh->pRightFork->IsInUse = false;
+        //pthread_cond_signal(pPh->pRightFork->CondSignalOnRelease);
+        //sem_post(pArbitrator);
+        TakeOffFork(pPh->pRightFork, pMutex, pArbitrator);
 
         pPh->IsEating = false;
 
@@ -92,16 +98,18 @@ void* DoEatPhilosopher(void* pEatThreadOptions)
 
         if (pPh->pLeftFork->IsInUse)
         {
-            int semValue;
-            sem_getvalue(pArbitrator, &semValue);
-            if (semValue == 0)
-            {
-                printf("[pid: %lu, philosopherId: %d] Четыре вилки занято, ожидание\n",
-                       pthread_self(), pPh->PhilosopherId);
-            }
-            pthread_mutex_unlock(pMutex);
-            sem_wait(pArbitrator);
-            pthread_mutex_lock(pMutex);
+//            int semValue;
+//            sem_getvalue(pArbitrator, &semValue);
+//            if (semValue == 0)
+//            {
+//                printf("[pid: %lu, philosopherId: %d] Четыре вилки занято, ожидание\n",
+//                       pthread_self(), pPh->PhilosopherId);
+//            }
+//            pthread_mutex_unlock(pMutex);
+//            sem_wait(pArbitrator);
+//            pthread_mutex_lock(pMutex);
+
+
 
             printf("[pid: %lu, philosopherId: %d] Левая вилка несвободна, ожидание\n",
                    pthread_self(), pPh->PhilosopherId);
@@ -111,21 +119,23 @@ void* DoEatPhilosopher(void* pEatThreadOptions)
             printf("[pid: %lu, philosopherId: %d] Занятие левой вилки\n",
                    pthread_self(), pPh->PhilosopherId);
 
-            pPh->pLeftFork->IsInUse = true;
+            //pPh->pLeftFork->IsInUse = true;
+
         }
+        TakeOnFork(pPh->pLeftFork, pMutex, pArbitrator);
 
         if (pPh->pRightFork->IsInUse)
         {
-            int semValue;
-            sem_getvalue(pArbitrator, &semValue);
-            if (semValue == 0)
-            {
-                printf("[pid: %lu, philosopherId: %d] Четыре вилки занято, ожидание\n",
-                       pthread_self(), pPh->PhilosopherId);
-            }
-            pthread_mutex_unlock(pMutex);
-            sem_wait(pArbitrator);
-            pthread_mutex_lock(pMutex);
+//            int semValue;
+//            sem_getvalue(pArbitrator, &semValue);
+//            if (semValue == 0)
+//            {
+//                printf("[pid: %lu, philosopherId: %d] Четыре вилки занято, ожидание\n",
+//                       pthread_self(), pPh->PhilosopherId);
+//            }
+//            pthread_mutex_unlock(pMutex);
+//            sem_wait(pArbitrator);
+//            pthread_mutex_lock(pMutex);
 
             printf("[pid: %lu, philosopherId: %d] Правая вилка несвободна, ожидание\n",
                    pthread_self(), pPh->PhilosopherId);
@@ -135,28 +145,32 @@ void* DoEatPhilosopher(void* pEatThreadOptions)
             printf("[pid: %lu, philosopherId: %d] Занятие правой вилки\n",
                    pthread_self(), pPh->PhilosopherId);
 
-            pPh->pRightFork->IsInUse = true;
+            //pPh->pRightFork->IsInUse = true;
         }
+        TakeOnFork(pPh->pRightFork, pMutex, pArbitrator);
 
         printf("[pid: %lu, philosopherId: %d] Начинает есть после ожидания\n",
                pthread_self(), pPh->PhilosopherId);
         pPh->IsWaiting = false;
         pPh->IsEating = true;
 
-        pthread_mutex_unlock(pMutex);
         printf("[pid: %lu, philosopherId: %d] Начал есть\n",
                pthread_self(), pPh->PhilosopherId);
+        pthread_mutex_unlock(pMutex);
         nanosleep(pDurationEat, NULL);
+        pthread_mutex_lock(pMutex);
         printf("[pid: %lu, philosopherId: %d] Закончил есть\n",
                pthread_self(), pPh->PhilosopherId);
-        pthread_mutex_lock(pMutex);
 
-        sem_post(pArbitrator);
-        pPh->pLeftFork->IsInUse = false;
-        pthread_cond_signal(pPh->pLeftFork->CondSignalOnRelease);
-        sem_post(pArbitrator);
-        pPh->pRightFork->IsInUse = false;
-        pthread_cond_signal(pPh->pRightFork->CondSignalOnRelease);
+//        sem_post(pArbitrator);
+//        pPh->pLeftFork->IsInUse = false;
+//        pthread_cond_signal(pPh->pLeftFork->CondSignalOnRelease);
+        TakeOffFork(pPh->pLeftFork, pMutex, pArbitrator);
+
+//        sem_post(pArbitrator);
+//        pPh->pRightFork->IsInUse = false;
+//        pthread_cond_signal(pPh->pRightFork->CondSignalOnRelease);
+        TakeOffFork(pPh->pRightFork, pMutex, pArbitrator);
 
         pPh->IsEating = false;
 
