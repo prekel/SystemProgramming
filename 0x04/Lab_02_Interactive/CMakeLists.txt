@@ -8,8 +8,6 @@ if (UNIX)
     include_directories(${SDL2_INCLUDE_DIRS})
 endif (UNIX)
 
-#include_directories(${SDL2_INCLUDE_DIRS})
-
 add_executable(Lab_02_Interactive main.c)
 
 if (UNIX)

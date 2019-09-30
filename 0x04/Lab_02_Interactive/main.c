@@ -1,43 +1,87 @@
-/*! \file
- *  \brief Файл с функцией main
- *
- *  \details Главный файл содержащий главную функцию main.
- */
-
-//#include <stdio.h>
-//#include <stdlib.h>
-//#include <sys/types.h>
-//#include <time.h>
-//#include <pthread.h>
-//#ifdef _WIN32
-//#include <windows.h>
-//#endif
+//#include <SDL.h"
+#include <stdio.h>
+#include <stdbool.h>
 
 #include <SDL.h>
 
+const int SCREEN_WIDTH = 640;
+const int SCREEN_HEIGHT = 480;
 
-int main(int argc, char *argv[])
+SDL_Window* win = NULL;
+SDL_Surface* john = NULL;
+
+int Init()
 {
-    SDL_Init(SDL_INIT_VIDEO);
+    if (SDL_Init(SDL_INIT_VIDEO) != 0)
+    {
+        fprintf(stderr,"Can't init: %s\n", SDL_GetError());
+        return 1;
+    }
 
-    SDL_Window *window = SDL_CreateWindow(
-            "SDL2Test",
+    win = SDL_CreateWindow("Обедающие философы",
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
-            640,
-            480,
-            0
-    );
+            SCREEN_WIDTH,
+            SCREEN_HEIGHT,
+            SDL_WINDOW_SHOWN);
 
-    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-    SDL_RenderClear(renderer);
-    SDL_RenderPresent(renderer);
+    if (win == NULL)
+    {
+        fprintf(stderr,"Can't create window: %s\n", SDL_GetError());
+        return 1;
+    }
 
-    SDL_Delay(5000);
+    return 0;
+}
 
-    SDL_DestroyWindow(window);
+int Quit()
+{
+    SDL_FreeSurface(john);
+
+    SDL_DestroyWindow(win);
+
     SDL_Quit();
 
     return 0;
+}
+
+int main(int argc, char** args)
+{
+    if (Init() == 1)
+    {
+        return 1;
+
+    }
+
+    bool run = true;
+    SDL_Event e;
+
+    while (run)
+    {
+        while (SDL_PollEvent(&e) != 0)
+        {
+            if (e.type == SDL_QUIT)
+            {
+                run = false;
+            }
+
+            if (e.type == SDL_KEYDOWN)
+            {
+                printf("%d\n", e.key.keysym.scancode);
+                fflush(stdout);
+                if (e.key.keysym.sym == SDLK_UP)
+                {
+                    //printf("Up");
+                    //fflush(stdout);
+                }
+                if (e.key.keysym.sym == SDLK_DOWN)
+                {
+                    //printf("Down");
+                   // fflush(stdout);
+                }
+            }
+        }
+    }
+
+    return Quit();
 }
