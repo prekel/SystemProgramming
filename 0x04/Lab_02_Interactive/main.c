@@ -4,6 +4,11 @@
 
 #include <SDL.h>
 
+#include "Input.h"
+#include "Table.h"
+#include "Utils.h"
+#include "RealTimeTableState.h"
+
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 
@@ -50,8 +55,22 @@ int main(int argc, char** args)
     if (Init() == 1)
     {
         return 1;
-
     }
+
+    Table* pTable = CreateTable();
+
+    struct timespec tw = {0, 200000000};
+    RealTimeTableStateOptions* pRealTimeTableStateOptions =
+            CreateRealTimeTableStateOptions(pTable, tw);
+    pthread_t realTimeTableStateThreadId;
+    pthread_create(
+            &realTimeTableStateThreadId,
+            NULL,
+            RealTimeTableStateThread,
+            pRealTimeTableStateOptions);
+
+    DoEatAll1(pTable);
+
 
     bool run = true;
     SDL_Event e;
@@ -69,12 +88,11 @@ int main(int argc, char** args)
             {
                 printf("%d\n", e.key.keysym.scancode);
                 fflush(stdout);
-                if (e.key.keysym.sym == SDLK_UP)
+                if (e.key.keysym.sym == SDLK_1)
                 {
-                    //printf("Up");
-                    //fflush(stdout);
+
                 }
-                if (e.key.keysym.sym == SDLK_DOWN)
+                if (e.key.keysym.sym == SDLK_2)
                 {
                     //printf("Down");
                    // fflush(stdout);
@@ -82,6 +100,11 @@ int main(int argc, char** args)
             }
         }
     }
+
+    pthread_join(realTimeTableStateThreadId, NULL);
+    DestroyRealTimeTableStateOptions(pRealTimeTableStateOptions);
+
+    DestroyTable(pTable);
 
     return Quit();
 }

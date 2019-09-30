@@ -11,7 +11,7 @@ endif (UNIX)
 add_executable(Lab_02_Interactive main.c)
 
 if (UNIX)
-    target_link_libraries(Lab_02_Interactive ${SDL2_LIBRARIES})
+    target_link_libraries(Lab_02_Interactive PRIVATE ${SDL2_LIBRARIES})
 endif (UNIX)
 
-#target_link_libraries(Lab_02_Interactive PRIVATE pthread)
+target_link_libraries(Lab_02_Interactive PRIVATE Lab_02_Lib)
