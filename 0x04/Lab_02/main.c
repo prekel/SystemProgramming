@@ -18,47 +18,7 @@
 #include "Input.h"
 #include "Table.h"
 #include "Utils.h"
-
-Table* g_pTable;
-
-char ForkToChar(Fork* fork)
-{
-    if (fork->IsInUse)
-        return ',';
-    else
-        return '.';
-}
-char PhToChar(Philosopher* fork)
-{
-    if (fork->IsEating)
-        return '=';
-    if (fork->IsWaiting)
-        return '?';
-    else
-        return '_';
-}
-
-void* outinfo(void* _)
-{
-    struct timespec tw = {0, 200000000};
-    int k = 0;
-    while (k <= 10)
-    {
-        if (g_pTable->IsEatingEnded)
-        {
-            k++;
-        }
-        nanosleep(&tw, NULL);
-        for (int i = 0; i < 5; i++)
-        {
-            fprintf(stderr, "%c%c", PhToChar
-            (g_pTable->ppPhilosophers[i]),
-                    ForkToChar(g_pTable->ppForks[i]));
-        }
-        fprintf(stderr, "\n");
-    }
-    return NULL;
-}
+#include "RealTimeTableState.h"
 
 /*! \brief Главная функция
  *
@@ -85,15 +45,23 @@ int main(int argc, char** argv)
 
     Table* pTable = CreateTable();
 
-    g_pTable = pTable;
-    pthread_t threadId;
-    pthread_create(&threadId, NULL, outinfo, NULL);
+    struct timespec tw = {0, 200000000};
+    RealTimeTableStateOptions* pRealTimeTableStateOptions =
+            CreateRealTimeTableStateOptions(pTable, tw);
+    pthread_t realTimeTableStateThreadId;
+    pthread_create(
+            &realTimeTableStateThreadId,
+            NULL,
+            RealTimeTableStateThread,
+            pRealTimeTableStateOptions);
 
     DoEatAll1(pTable);
 
-    pthread_join(threadId, NULL);
+    pthread_join(realTimeTableStateThreadId, NULL);
+    DestroyRealTimeTableStateOptions(pRealTimeTableStateOptions);
 
     DestroyTable(pTable);
+
 
 //    int a = 0;
 //    for (int i = 1; i <= 10; i++)

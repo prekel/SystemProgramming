@@ -5,6 +5,7 @@
 #include <semaphore.h>
 #include <stdio.h>
 
+#include "RealTimeTableState.h"
 #include "Philosopher.h"
 #include "Utils.h"
 
@@ -19,7 +20,7 @@ Philosopher* CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork)
     return pPhilosopher;
 }
 
-void* DoEatPhilosopher(void* pEatThreadOptions)
+void* DoEatPhilosopherThread(void* pEatThreadOptions)
 {
     EatPhilosopherOptions* pEatOptions = (EatPhilosopherOptions*) pEatThreadOptions;
 
@@ -28,6 +29,7 @@ void* DoEatPhilosopher(void* pEatThreadOptions)
     pthread_mutex_t* pMutex = pEatOptions->pMutex;
     sem_t* pArbitrator = pEatOptions->pArbitrator;
 
+    //LogTableInfo()
     printf("[pid: %lu, philosopherId: %d] Пришёл есть\n",
            pthread_self(), pPh->PhilosopherId);
     pthread_mutex_lock(pMutex);

@@ -5,6 +5,8 @@
 
 #include "Fork.h"
 
+#define PHILOSOPHERS_COUNT 5
+
 typedef struct
 {
     int PhilosopherId;
@@ -24,7 +26,7 @@ typedef struct
 
 Philosopher* CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork);
 
-void* DoEatPhilosopher(void* pEatThreadOptions);
+void* DoEatPhilosopherThread(void* pEatThreadOptions);
 
 void DestroyPhilosopher(Philosopher* pPhilosopher);
 

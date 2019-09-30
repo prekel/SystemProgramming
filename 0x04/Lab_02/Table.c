@@ -8,8 +8,6 @@
 #include "Input.h"
 #include "Utils.h"
 
-#define PHILOSOPHERS_COUNT 5
-
 Table* CreateTable()
 {
     Table* pTable = (Table*) malloc(sizeof(Table));
@@ -95,7 +93,7 @@ void DoEatAll1(Table* pTable)
 
         printf("[pid: %lu, philosopherId: %d, i: %d] Идёт есть\n",
                pthread_self(), ph->PhilosopherId, i);
-        pthread_create(&threadId, NULL, DoEatPhilosopher, options);
+        pthread_create(&threadId, NULL, DoEatPhilosopherThread, options);
 
         struct timespec twb = RandomTime(0, 2);
         printf("[pid: %lu, philosopherId: %d, i: %d] Задержка "
