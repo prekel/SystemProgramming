@@ -7,6 +7,8 @@
 #include "Table.h"
 #include "Input.h"
 #include "Utils.h"
+#include "EatPhilosopherOptions.h"
+#include "RealTimeTableState.h"
 
 Table* CreateTable()
 {
@@ -66,6 +68,7 @@ void DoEatAll1(Table* pTable)
         pthread_mutex_lock(pTable->pMutex);
         if (ph->IsEating == true)
         {
+            LogTableInfo(pTable);
             printf("[pid: %lu, philosopherId: %d, i: %d] Уже ест\n",
                    pthread_self(), ph->PhilosopherId, i);
             pthread_mutex_unlock(pTable->pMutex);
@@ -77,6 +80,7 @@ void DoEatAll1(Table* pTable)
         pthread_mutex_lock(pTable->pMutex);
         if (ph->IsWaiting == true)
         {
+            LogTableInfo(pTable);
             printf("[pid: %lu, philosopherId: %d, i: %d] Уже ожидает\n",
                    pthread_self(), ph->PhilosopherId, i);
             pthread_mutex_unlock(pTable->pMutex);
@@ -87,17 +91,19 @@ void DoEatAll1(Table* pTable)
         pthread_mutex_unlock(pTable->pMutex);
 
         EatPhilosopherOptions* options
-                = CreateEatPhilosopherOptions(ph, pTable->pMutex, &tw, pTable->pArbitrator);
+                = CreateEatPhilosopherOptions(pTable, ph, pTable->pMutex, &tw,
+                                              pTable->pArbitrator);
 
         pthread_t threadId;
 
+        LogTableInfo(pTable);
         printf("[pid: %lu, philosopherId: %d, i: %d] Идёт есть\n",
                pthread_self(), ph->PhilosopherId, i);
         pthread_create(&threadId, NULL, DoEatPhilosopherThread, options);
 
         struct timespec twb = RandomTime(0, 2);
-        printf("[pid: %lu, philosopherId: %d, i: %d] Задержка "
-               "перед отправкой следующего %lf сек.\n",
+        LogTableInfo(pTable);
+        printf("[pid: %lu, philosopherId: %d, i: %d] Задержка перед отправкой следующего %lf сек.\n",
                pthread_self(), ph->PhilosopherId, i, TimespecToDouble(&twb));
         nanosleep(&twb, NULL);
     }
