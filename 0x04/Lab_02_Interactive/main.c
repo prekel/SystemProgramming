@@ -1,4 +1,3 @@
-//#include <SDL.h"
 #include <stdio.h>
 #include <stdbool.h>
 
@@ -9,8 +8,8 @@
 #include "Utils.h"
 #include "RealTimeTableState.h"
 
-const int SCREEN_WIDTH = 192;
-const int SCREEN_HEIGHT = 128;
+const int SCREEN_WIDTH = 256;
+const int SCREEN_HEIGHT = 192;
 
 SDL_Window* win = NULL;
 SDL_Surface* john = NULL;
@@ -75,56 +74,71 @@ int main(int argc, char** args)
     bool run = true;
     SDL_Event e;
 
-    struct timespec tw1 = RandomTime(5, 15);
-    int i = 0;
+    struct timespec tw1 = RandomTime(7, 7);
+    int k1 = 0;
 
     pTable->IsEatingStarted = true;
 
-    while (run)
+    while (SDL_WaitEvent(&e) != 0)
     {
-        //while (SDL_PollEvent(&e) != 0 )
-        while (SDL_WaitEvent(&e) != 0)
+        if (e.type == SDL_QUIT)
         {
-            if (e.type == SDL_QUIT)
+            return 2;
+        }
+
+        if (e.type == SDL_KEYDOWN)
+        {
+            if (e.key.keysym.sym == SDLK_ESCAPE)
             {
-                run = false;
                 break;
             }
-
-            if (e.type == SDL_KEYDOWN)
+            if (e.key.keysym.sym == SDLK_1)
             {
-                if (e.key.keysym.sym == SDLK_ESCAPE)
-                {
-                    run = false;
-                    break;
-                }
-                if (e.key.keysym.sym == SDLK_1)
-                {
-                    Eat(pTable, pTable->ppPhilosophers[0], tw1, i++);
-                }
-                if (e.key.keysym.sym == SDLK_2)
-                {
-                    Eat(pTable, pTable->ppPhilosophers[1], tw1, i++);
-                }
-                if (e.key.keysym.sym == SDLK_3)
-                {
-                    Eat(pTable, pTable->ppPhilosophers[2], tw1, i++);
-                }
-                if (e.key.keysym.sym == SDLK_4)
-                {
-                    Eat(pTable, pTable->ppPhilosophers[3], tw1, i++);
-                }
-                if (e.key.keysym.sym == SDLK_5)
-                {
-                    Eat(pTable, pTable->ppPhilosophers[4], tw1, i++);
-                }
+                Eat(pTable, pTable->ppPhilosophers[0], tw1, k1++);
+            }
+            if (e.key.keysym.sym == SDLK_2)
+            {
+                Eat(pTable, pTable->ppPhilosophers[1], tw1, k1++);
+            }
+            if (e.key.keysym.sym == SDLK_3)
+            {
+                Eat(pTable, pTable->ppPhilosophers[2], tw1, k1++);
+            }
+            if (e.key.keysym.sym == SDLK_4)
+            {
+                Eat(pTable, pTable->ppPhilosophers[3], tw1, k1++);
+            }
+            if (e.key.keysym.sym == SDLK_5)
+            {
+                Eat(pTable, pTable->ppPhilosophers[4], tw1, k1++);
             }
         }
+    }
+    //}
+
+
+    LogTableInfo(pTable);
+    printf("[pid: %lu] Завершение программы, ожидание завершения птооков...\n",
+           pthread_self());
+
+    for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
+    {
+        pthread_mutex_lock(pTable->pMutex);
+        if (pTable->ppPhilosophers[i]->IsThreadRunning)
+        {
+            LogTableInfo(pTable);
+            printf("[pid: %lu] Ожидание завершения потока философа %d\n",
+                   pthread_self(), pTable->ppPhilosophers[i]->PhilosopherId);
+            pthread_mutex_unlock(pTable->pMutex);
+            pthread_join(pTable->ppPhilosophers[i]->pThread, NULL);
+            continue;
+        }
+        pthread_mutex_unlock(pTable->pMutex);
     }
 
     pTable->IsEatingEnded = true;
 
-    //pthread_join(realTimeTableStateThreadId, NULL);
+    pthread_join(realTimeTableStateThreadId, NULL);
     DestroyRealTimeTableStateOptions(pRealTimeTableStateOptions);
 
     DestroyTable(pTable);
