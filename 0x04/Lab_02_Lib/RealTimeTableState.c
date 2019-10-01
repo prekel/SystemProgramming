@@ -51,9 +51,9 @@ char* TableInfo(Table* pTable)
 
 void LogTableInfo(Table* pTable)
 {
-    char* tableInfo = TableInfo(pTable);
-    fprintf(stdout, "[%s]", tableInfo);
-    free(tableInfo);
+    //char* tableInfo = TableInfo(pTable);
+    //fprintf(stdout, "[%s]", tableInfo);
+    //free(tableInfo);
 }
 
 void* RealTimeTableStateThread(void* pThreadOptions)
@@ -68,9 +68,9 @@ void* RealTimeTableStateThread(void* pThreadOptions)
             k++;
         }
         nanosleep(&pOptions->pWaitTime, NULL);
-        char* tableInfo = TableInfo(pOptions->pTable);
-        fprintf(stderr, "[%s]\n", tableInfo);
-        free(tableInfo);
+        //char* tableInfo = TableInfo(pOptions->pTable);
+        //fprintf(stderr, "[%s]\n", tableInfo);
+        //free(tableInfo);
     }
 
     return NULL;

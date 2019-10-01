@@ -14,4 +14,6 @@ add_library(Lab_02_Lib
 
 target_link_libraries(Lab_02_Lib PRIVATE pthread)
 
+target_link_libraries(Lab_02_Lib PRIVATE m)
+
 target_include_directories(Lab_02_Lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
