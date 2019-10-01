@@ -118,7 +118,7 @@ int main(int argc, char** args)
 
 
     LogTableInfo(pTable);
-    printf("[pid: %lu] Завершение программы, ожидание завершения птооков...\n",
+    printf("[pid: 0x%08lx] Завершение программы, ожидание завершения птооков...\n",
            pthread_self());
 
     for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
@@ -127,7 +127,7 @@ int main(int argc, char** args)
         if (pTable->ppPhilosophers[i]->IsThreadRunning)
         {
             LogTableInfo(pTable);
-            printf("[pid: %lu] Ожидание завершения потока философа %d\n",
+            printf("[pid: 0x%08lx] Ожидание завершения потока философа %d\n",
                    pthread_self(), pTable->ppPhilosophers[i]->PhilosopherId);
             pthread_mutex_unlock(pTable->pMutex);
             pthread_join(pTable->ppPhilosophers[i]->pThread, NULL);

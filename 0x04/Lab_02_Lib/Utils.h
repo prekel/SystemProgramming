@@ -15,4 +15,6 @@ struct timespec RandomTime(int minSeconds, int maxSeconds);
 
 double TimespecToDouble(struct timespec* tw);
 
+struct timespec TimespecFromDouble(double seconds);
+
 #endif // UTILS_H

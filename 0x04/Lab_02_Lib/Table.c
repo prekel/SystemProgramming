@@ -46,15 +46,15 @@ Table* CreateTable()
 int Eat(Table* pTable, Philosopher* pPhilosopher, struct timespec tw, int
 i)
 {
-    //pthread_mutex_lock(pTable->pMutex);
+    pthread_mutex_lock(pTable->pMutex);
     if (pPhilosopher->IsEating == true)
     {
         LogTableInfo(pTable);
-        printf("[pid: %lu, philosopherId: %d, i: %d] Уже ест\n",
+        printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Уже ест\n",
                pthread_self(), pPhilosopher->PhilosopherId, i);
         pthread_mutex_unlock(pTable->pMutex);
-        struct timespec tw1 = RandomTime(1, 2);
-        nanosleep(&tw1, NULL);
+        //struct timespec tw1 = RandomTime(1, 2);
+        //nanosleep(&tw1, NULL);
         return 1;
     }
     //pthread_mutex_unlock(pTable->pMutex);
@@ -62,14 +62,14 @@ i)
     if (pPhilosopher->IsWaiting == true)
     {
         LogTableInfo(pTable);
-        printf("[pid: %lu, philosopherId: %d, i: %d] Уже ожидает\n",
+        printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Уже ожидает\n",
                pthread_self(), pPhilosopher->PhilosopherId, i);
         pthread_mutex_unlock(pTable->pMutex);
-        struct timespec tw1 = RandomTime(1, 2);
-        nanosleep(&tw1, NULL);
+        //struct timespec tw1 = RandomTime(1, 2);
+        //nanosleep(&tw1, NULL);
         return 1;
     }
-    //pthread_mutex_unlock(pTable->pMutex);
+    pthread_mutex_unlock(pTable->pMutex);
 
     EatPhilosopherOptions* options
             = CreateEatPhilosopherOptions(pTable, pPhilosopher, pTable->pMutex, tw,
@@ -78,7 +78,7 @@ i)
     pthread_t threadId;
 
     LogTableInfo(pTable);
-    printf("[pid: %lu, philosopherId: %d, i: %d] Идёт есть\n",
+    printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Идёт есть\n",
            pthread_self(), pPhilosopher->PhilosopherId, i);
     pthread_create(&threadId, NULL, DoEatPhilosopherThread, options);
 
@@ -114,7 +114,7 @@ void DoEatAll1(Table* pTable)
 
         struct timespec twb = RandomTime(0, 2);
         LogTableInfo(pTable);
-        printf("[pid: %lu, philosopherId: %d, i: %d] Задержка перед отправкой следующего %lf сек.\n",
+        printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Задержка перед отправкой следующего %lf сек.\n",
                pthread_self(), ph->PhilosopherId, i, TimespecToDouble(&twb));
         nanosleep(&twb, NULL);
     }
