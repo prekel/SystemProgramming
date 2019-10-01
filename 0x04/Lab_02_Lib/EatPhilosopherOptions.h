@@ -10,15 +10,21 @@ typedef struct
     Philosopher* pPhilosopher;
     pthread_mutex_t* pMutex;
     sem_t* pArbitrator;
-    struct timespec pDurationEat;
+    int MinDurationEat;
+    int MaxDurationEat;
+    bool IsInfinityDuration;
 } EatPhilosopherOptions;
 
 void* DoEatPhilosopherThread(void* pEatThreadOptions);
 
+void* DoEatPhilosopherThread1(void* pEatThreadOptions);
+
 EatPhilosopherOptions*
 CreateEatPhilosopherOptions(Table* pTable, Philosopher* pPhilosopher,
                             pthread_mutex_t* mutex,
-                            struct timespec durationEat, sem_t* pArbitrator);
+                            int minDurationEat,
+                            int maxDurationEat,
+                            sem_t* pArbitrator, bool isInfinityDuration);
 
 void DestroyEatPhilosopherOptions(EatPhilosopherOptions* pOptions);
 

@@ -10,7 +10,7 @@ add_library(Lab_02_Lib
         Table.c Table.h
         Utils.c Utils.h
         RealTimeTableState.c RealTimeTableState.h
-        EatPhilosopherOptions.c EatPhilosopherOptions.h)
+        EatPhilosopherOptions.c EatPhilosopherOptions.h AutoEatThread.c AutoEatThread.h)
 
 target_link_libraries(Lab_02_Lib PRIVATE pthread)
 

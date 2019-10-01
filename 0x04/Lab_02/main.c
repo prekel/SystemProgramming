@@ -64,7 +64,7 @@ int main(int argc, char** argv)
             RealTimeTableStateThread,
             pRealTimeTableStateOptions);
 
-    DoEatAll1(pTable);
+    DoEatAll(pTable);
 
     pthread_join(realTimeTableStateThreadId, NULL);
     DestroyRealTimeTableStateOptions(pRealTimeTableStateOptions);

@@ -22,21 +22,26 @@ Philosopher* CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork)
     pPhilosopher->IsWaitingLeftFork = false;
     pPhilosopher->IsWaitingRightFork = false;
 
-    pPhilosopher->OnGoingToEat = (pthread_cond_t*)malloc(sizeof(pthread_cond_t));
-    pthread_cond_init(pPhilosopher->OnGoingToEat, NULL);
+    pPhilosopher->pSemOnGoingToEat = (sem_t*)malloc(sizeof(sem_t));
+    sem_init(pPhilosopher->pSemOnGoingToEat, 0, 0);
 
-    pPhilosopher->OnMustToStop = (pthread_cond_t*)malloc(sizeof(pthread_cond_t));
-    pthread_cond_init(pPhilosopher->OnMustToStop, NULL);
+//    pPhilosopher->OnGoingToEat = (pthread_cond_t*)malloc(sizeof(pthread_cond_t));
+//    pthread_cond_init(pPhilosopher->OnGoingToEat, NULL);
+//
+//    pPhilosopher->OnMustToStop = (pthread_cond_t*)malloc(sizeof(pthread_cond_t));
+//    pthread_cond_init(pPhilosopher->OnMustToStop, NULL);
 
     return pPhilosopher;
 }
 
 void DestroyPhilosopher(Philosopher* pPhilosopher)
 {
-    pthread_cond_destroy(pPhilosopher->OnGoingToEat);
-    free(pPhilosopher->OnGoingToEat);
-    pthread_cond_destroy(pPhilosopher->OnMustToStop);
-    free(pPhilosopher->OnMustToStop);
+    sem_destroy(pPhilosopher->pSemOnGoingToEat);
+    free(pPhilosopher->pSemOnGoingToEat);
+//    pthread_cond_destroy(pPhilosopher->OnGoingToEat);
+//    free(pPhilosopher->OnGoingToEat);
+//    pthread_cond_destroy(pPhilosopher->OnMustToStop);
+//    free(pPhilosopher->OnMustToStop);
     free(pPhilosopher);
 }
 

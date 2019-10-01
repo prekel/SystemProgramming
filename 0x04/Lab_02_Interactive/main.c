@@ -11,6 +11,7 @@
 #include "Table.h"
 #include "Utils.h"
 #include "RealTimeTableState.h"
+#include "AutoEatThread.h"
 
 const int SCREEN_WIDTH = 512;
 const int SCREEN_HEIGHT = 512;
@@ -63,7 +64,8 @@ int Quit()
 
 Table* g_pTable;
 
-void DrawRectangle(int x, int y, int w, int h, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+void
+DrawRectangle(int x, int y, int w, int h, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
     SDL_SetRenderDrawColor(ren, r, g, b, a);
     SDL_Rect rect = {x, y, w, h};
@@ -72,12 +74,12 @@ void DrawRectangle(int x, int y, int w, int h, Uint8 r, Uint8 g, Uint8 b, Uint8 
 
 int CenterCircleX(double angle, double r)
 {
-    return SCREEN_WIDTH / 2 + (int)(cos(angle * M_PI / 180) * r);
+    return SCREEN_WIDTH / 2 + (int) (cos(angle * M_PI / 180) * r);
 }
 
 int CenterCircleY(double angle, double r)
 {
-    return SCREEN_HEIGHT / 2 + (int)(sin(angle * M_PI / 180) * r);
+    return SCREEN_HEIGHT / 2 + (int) (sin(angle * M_PI / 180) * r);
 }
 
 void* Render(void* pOptions)
@@ -109,7 +111,11 @@ void* Render(void* pOptions)
             {
                 SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
             }
-            SDL_Rect rect = {CenterCircleX(360.0 / PHILOSOPHERS_COUNT * i - 90, 200) - 30, CenterCircleY(360.0 / PHILOSOPHERS_COUNT * i - 90, 200) - 30, 60, 60};
+            SDL_Rect rect = {
+                    CenterCircleX(360.0 / PHILOSOPHERS_COUNT * i - 90, 200) -
+                    30,
+                    CenterCircleY(360.0 / PHILOSOPHERS_COUNT * i - 90, 200) -
+                    30, 60, 60};
             SDL_RenderFillRect(ren, &rect);
         }
 
@@ -124,12 +130,16 @@ void* Render(void* pOptions)
             {
                 SDL_SetRenderDrawColor(ren, 200, 200, 200, 255);
             }
-            SDL_Rect rect = {CenterCircleX(360.0 / PHILOSOPHERS_COUNT * i - 54, 160) - 15, CenterCircleY(360.0 / PHILOSOPHERS_COUNT * i - 54, 160) - 15, 30, 30};
+            SDL_Rect rect = {
+                    CenterCircleX(360.0 / PHILOSOPHERS_COUNT * i - 54, 160) -
+                    15,
+                    CenterCircleY(360.0 / PHILOSOPHERS_COUNT * i - 54, 160) -
+                    15, 30, 30};
             SDL_RenderFillRect(ren, &rect);
         }
 
         Uint32 frameMs = SDL_GetTicks() - ticks1;
-        double avgFPS = countedFrames / ( (SDL_GetTicks() - ticks0) / 1000.f);
+        double avgFPS = countedFrames / ((SDL_GetTicks() - ticks0) / 1000.f);
         ticks1 = SDL_GetTicks();
 
 
@@ -178,6 +188,15 @@ int main(int argc, char** args)
     Table* pTable = CreateTable();
     g_pTable = pTable;
 
+
+    StartAllThreads(pTable);
+
+
+    AutoEatThreadOptions* pAutoEatThreadOptions = CreateAutoEatThreadOptions(pTable);
+    pthread_t autoEatThreadId;
+    pthread_create(&autoEatThreadId, NULL, AutoEatThread, pAutoEatThreadOptions);
+
+
     struct timespec tw = {0, 200000000};
     RealTimeTableStateOptions* pRealTimeTableStateOptions =
             CreateRealTimeTableStateOptions(pTable, tw);
@@ -188,7 +207,7 @@ int main(int argc, char** args)
             RealTimeTableStateThread,
             pRealTimeTableStateOptions);
 
-    //DoEatAll1(pTable);
+    //DoEatAll(pTable);
 
 
     int countedFrames = 0;
@@ -210,80 +229,85 @@ int main(int argc, char** args)
     sigemptyset(&sa.sa_mask);
     sigaction(SIGUSR1, &sa, 0);
 
+
     //while (run)
     //{
-        while (SDL_WaitEvent(&e) != 0)
-        {
-            if (e.type == SDL_QUIT)
-            {
-                return 2;
-            }
 
-            if (e.type == SDL_KEYDOWN)
+    while (SDL_WaitEvent(&e) != 0)
+    {
+        if (e.type == SDL_QUIT)
+        {
+            return 2;
+        }
+
+        if (e.type == SDL_KEYDOWN)
+        {
+            if (e.key.keysym.sym == SDLK_ESCAPE)
             {
-                if (e.key.keysym.sym == SDLK_ESCAPE)
+                break;
+            }
+            if (e.key.keysym.mod & KMOD_ALT)
+            {
+                if (e.key.keysym.sym == SDLK_1)
                 {
-                    break;
-                }
-                if (e.key.keysym.mod & KMOD_ALT)
-                {
-                    if (e.key.keysym.sym == SDLK_1)
+                    if (pTable->ppPhilosophers[0]->IsEating)
                     {
-                        if (pTable->ppPhilosophers[0]->IsEating)
-                        {
-                            pthread_kill(pTable->ppPhilosophers[0]->pThread, SIGUSR1);
-                        }
-                        else if (pTable->ppPhilosophers[0]->IsWaitingLeftFork)
-                        {
-                            pthread_cond_signal(pTable->ppPhilosophers[0]->pLeftFork->CondSignalOnRelease);
-                        }
-                        else if (pTable->ppPhilosophers[0]->IsWaitingRightFork)
-                        {
-                            pthread_cond_signal(pTable->ppPhilosophers[0]->pRightFork->CondSignalOnRelease);
-                        }
+                        pthread_kill(pTable->ppPhilosophers[0]->pThread,
+                                     SIGUSR1);
                     }
-                    if (e.key.keysym.sym == SDLK_2)
+                    else if (pTable->ppPhilosophers[0]->IsWaitingLeftFork)
                     {
-                        pthread_kill(pTable->ppPhilosophers[1]->pThread, SIGUSR1);
+                        pthread_cond_signal(
+                                pTable->ppPhilosophers[0]->pLeftFork->CondSignalOnRelease);
                     }
-                    if (e.key.keysym.sym == SDLK_3)
+                    else if (pTable->ppPhilosophers[0]->IsWaitingRightFork)
                     {
-                        pthread_kill(pTable->ppPhilosophers[2]->pThread, SIGUSR1);
-                    }
-                    if (e.key.keysym.sym == SDLK_4)
-                    {
-                        pthread_kill(pTable->ppPhilosophers[3]->pThread, SIGUSR1);
-                    }
-                    if (e.key.keysym.sym == SDLK_5)
-                    {
-                        pthread_kill(pTable->ppPhilosophers[4]->pThread, SIGUSR1);
+                        pthread_cond_signal(
+                                pTable->ppPhilosophers[0]->pRightFork->CondSignalOnRelease);
                     }
                 }
-                else
+                if (e.key.keysym.sym == SDLK_2)
                 {
-                    if (e.key.keysym.sym == SDLK_1)
-                    {
-                        Eat(pTable, pTable->ppPhilosophers[0], tw1, k1++);
-                    }
-                    if (e.key.keysym.sym == SDLK_2)
-                    {
-                        Eat(pTable, pTable->ppPhilosophers[1], tw1, k1++);
-                    }
-                    if (e.key.keysym.sym == SDLK_3)
-                    {
-                        Eat(pTable, pTable->ppPhilosophers[2], tw1, k1++);
-                    }
-                    if (e.key.keysym.sym == SDLK_4)
-                    {
-                        Eat(pTable, pTable->ppPhilosophers[3], tw1, k1++);
-                    }
-                    if (e.key.keysym.sym == SDLK_5)
-                    {
-                        Eat(pTable, pTable->ppPhilosophers[4], tw1, k1++);
-                    }
+                    pthread_kill(pTable->ppPhilosophers[1]->pThread, SIGUSR1);
+                }
+                if (e.key.keysym.sym == SDLK_3)
+                {
+                    pthread_kill(pTable->ppPhilosophers[2]->pThread, SIGUSR1);
+                }
+                if (e.key.keysym.sym == SDLK_4)
+                {
+                    pthread_kill(pTable->ppPhilosophers[3]->pThread, SIGUSR1);
+                }
+                if (e.key.keysym.sym == SDLK_5)
+                {
+                    pthread_kill(pTable->ppPhilosophers[4]->pThread, SIGUSR1);
+                }
+            }
+            else
+            {
+                if (e.key.keysym.sym == SDLK_1)
+                {
+                    Eat1(pTable, pTable->ppPhilosophers[0], tw1, k1++);
+                }
+                if (e.key.keysym.sym == SDLK_2)
+                {
+                    Eat1(pTable, pTable->ppPhilosophers[1], tw1, k1++);
+                }
+                if (e.key.keysym.sym == SDLK_3)
+                {
+                    Eat1(pTable, pTable->ppPhilosophers[2], tw1, k1++);
+                }
+                if (e.key.keysym.sym == SDLK_4)
+                {
+                    Eat1(pTable, pTable->ppPhilosophers[3], tw1, k1++);
+                }
+                if (e.key.keysym.sym == SDLK_5)
+                {
+                    Eat1(pTable, pTable->ppPhilosophers[4], tw1, k1++);
                 }
             }
         }
+    }
     //}
 
     LogTableInfo(pTable);

@@ -16,8 +16,9 @@ typedef struct
     bool IsWaiting;
     bool IsThreadRunning;
     pthread_t pThread;
-    pthread_cond_t* OnGoingToEat;
-    pthread_cond_t* OnMustToStop;
+    sem_t* pSemOnGoingToEat;
+    //pthread_cond_t* OnGoingToEat;
+    //pthread_cond_t* OnMustToStop;
     bool IsWaitingLeftFork;
     bool IsWaitingRightFork;
 } Philosopher;

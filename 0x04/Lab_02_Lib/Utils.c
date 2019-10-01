@@ -26,8 +26,8 @@ struct timespec RandomTime(int minSeconds, int maxSeconds)
         tw.tv_sec = RandomInterval(minSeconds, maxSeconds);
     }
     tw.tv_nsec =
-            RandomInterval(0, 1000) * 1000000ll +
-            RandomInterval(0, 1000) * 1000ll +
+            RandomInterval(0, 1000) * 1000000 +
+            RandomInterval(0, 1000) * 1000 +
             RandomInterval(0, 1000);
     return tw;
 }
