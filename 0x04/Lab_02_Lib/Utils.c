@@ -36,3 +36,13 @@ double TimespecToDouble(struct timespec* tw)
 {
     return tw->tv_sec * 1.0 + tw->tv_nsec / 1000000000.0;
 }
+
+struct timespec TimespecFromDouble(double seconds)
+{
+    struct timespec tw = {0,0};
+
+    tw.tv_sec = (int)seconds;
+    tw.tv_nsec = (long int)((seconds - (int)seconds) * 1000000000);
+
+    return tw;
+}

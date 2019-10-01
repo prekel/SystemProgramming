@@ -52,7 +52,7 @@ char* TableInfo(Table* pTable)
 void LogTableInfo(Table* pTable)
 {
     char* tableInfo = TableInfo(pTable);
-    fprintf(stderr, "[%s]", tableInfo);
+    fprintf(stdout, "[%s]", tableInfo);
     free(tableInfo);
 }
 
@@ -61,15 +61,16 @@ void* RealTimeTableStateThread(void* pThreadOptions)
     RealTimeTableStateOptions* pOptions = (RealTimeTableStateOptions*) pThreadOptions;
 
     int k = 0;
-    while (k <= 10)
+    while (k < 1)
     {
         if (pOptions->pTable->IsEatingEnded)
         {
             k++;
         }
         nanosleep(&pOptions->pWaitTime, NULL);
-        LogTableInfo(pOptions->pTable);
-        fputs("\n", stderr);
+        char* tableInfo = TableInfo(pOptions->pTable);
+        fprintf(stderr, "[%s]\n", tableInfo);
+        free(tableInfo);
     }
 
     return NULL;

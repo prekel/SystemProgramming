@@ -14,6 +14,8 @@ typedef struct
     Fork* pLeftFork;
     bool IsEating;
     bool IsWaiting;
+    bool IsThreadRunning;
+    pthread_t pThread;
 } Philosopher;
 
 Philosopher* CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork);

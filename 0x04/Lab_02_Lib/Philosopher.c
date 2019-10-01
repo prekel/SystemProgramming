@@ -18,6 +18,7 @@ Philosopher* CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork)
     pPhilosopher->pRightFork = rightFork;
     pPhilosopher->IsEating = false;
     pPhilosopher->IsWaiting = false;
+    pPhilosopher->IsThreadRunning = false;
     return pPhilosopher;
 }
 

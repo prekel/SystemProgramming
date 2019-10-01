@@ -42,6 +42,15 @@ int main(int argc, char** argv)
 //        printf("%lf\n", TimespecToDouble(&tw1));
 //    }
 
+    struct timespec twfd1 = TimespecFromDouble(1.23);
+    struct timespec twfd2 = TimespecFromDouble(1.233243242);
+    struct timespec twfd3 = TimespecFromDouble(0.1231);
+    struct timespec twfd4 = TimespecFromDouble(0.1111111111111111111);
+    struct timespec twfd5 = TimespecFromDouble(1.23456789012345);
+    struct timespec twfd6 = TimespecFromDouble(0);
+    struct timespec twfd7 = TimespecFromDouble(1.9999999999999999);
+    struct timespec twfd8 = TimespecFromDouble(1.999999999);
+
 
     Table* pTable = CreateTable();
 

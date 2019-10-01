@@ -42,17 +42,19 @@ Table* CreateTable()
     return pTable;
 }
 
-int Eat(Table* pTable, Philosopher* pPhilosopher, struct timespec tw, int i)
+
+int Eat(Table* pTable, Philosopher* pPhilosopher, struct timespec tw, int
+i)
 {
-    //pthread_mutex_lock(pTable->pMutex);
+    pthread_mutex_lock(pTable->pMutex);
     if (pPhilosopher->IsEating == true)
     {
         LogTableInfo(pTable);
-        printf("[pid: %lu, philosopherId: %d, i: %d] Уже ест\n",
+        printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Уже ест\n",
                pthread_self(), pPhilosopher->PhilosopherId, i);
-        //pthread_mutex_unlock(pTable->pMutex);
-        struct timespec tw1 = RandomTime(1, 2);
-        nanosleep(&tw1, NULL);
+        pthread_mutex_unlock(pTable->pMutex);
+        //struct timespec tw1 = RandomTime(1, 2);
+        //nanosleep(&tw1, NULL);
         return 1;
     }
     //pthread_mutex_unlock(pTable->pMutex);
@@ -60,14 +62,14 @@ int Eat(Table* pTable, Philosopher* pPhilosopher, struct timespec tw, int i)
     if (pPhilosopher->IsWaiting == true)
     {
         LogTableInfo(pTable);
-        printf("[pid: %lu, philosopherId: %d, i: %d] Уже ожидает\n",
+        printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Уже ожидает\n",
                pthread_self(), pPhilosopher->PhilosopherId, i);
-        //pthread_mutex_unlock(pTable->pMutex);
-        struct timespec tw1 = RandomTime(1, 2);
-        nanosleep(&tw1, NULL);
+        pthread_mutex_unlock(pTable->pMutex);
+        //struct timespec tw1 = RandomTime(1, 2);
+        //nanosleep(&tw1, NULL);
         return 1;
     }
-    //pthread_mutex_unlock(pTable->pMutex);
+    pthread_mutex_unlock(pTable->pMutex);
 
     EatPhilosopherOptions* options
             = CreateEatPhilosopherOptions(pTable, pPhilosopher, pTable->pMutex, tw,
@@ -76,9 +78,11 @@ int Eat(Table* pTable, Philosopher* pPhilosopher, struct timespec tw, int i)
     pthread_t threadId;
 
     LogTableInfo(pTable);
-    printf("[pid: %lu, philosopherId: %d, i: %d] Идёт есть\n",
+    printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Идёт есть\n",
            pthread_self(), pPhilosopher->PhilosopherId, i);
     pthread_create(&threadId, NULL, DoEatPhilosopherThread, options);
+
+    pPhilosopher->pThread = threadId;
 
     return 0;
 }
@@ -97,7 +101,7 @@ void DoEatAll1(Table* pTable)
         struct timespec tw = RandomTime(5, 15);
 
         int c = RandomInterval(0, PHILOSOPHERS_COUNT);
-        Philosopher* pPhilosopher = pTable->ppPhilosophers[c];
+        Philosopher* ph = pTable->ppPhilosophers[c];
 
         //int c1 = CycleInputInt("!:", 5, NULL);
         //int c2 = getchar() - '0' - 1;
@@ -106,11 +110,12 @@ void DoEatAll1(Table* pTable)
         //if (!(0 <= c2 && c2 <= 4)) continue;
         //Philosopher* ph = pTable->ppPhilosophers[c2];
 
-        if (Eat(pTable, pPhilosopher, tw, i) == 1) continue;
+        if (Eat(pTable, ph, tw, i) == 1) continue;
+
         struct timespec twb = RandomTime(0, 2);
         LogTableInfo(pTable);
-        printf("[pid: %lu, philosopherId: %d, i: %d] Задержка перед отправкой следующего %lf сек.\n",
-               pthread_self(), pPhilosopher->PhilosopherId, i, TimespecToDouble(&twb));
+        printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Задержка перед отправкой следующего %lf сек.\n",
+               pthread_self(), ph->PhilosopherId, i, TimespecToDouble(&twb));
         nanosleep(&twb, NULL);
     }
 
