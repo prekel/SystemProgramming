@@ -14,7 +14,7 @@
 
 #define FILE_NAME "Table"
 
-Table* CreateTable()
+Table* CreateTable(int minDurationEat, int maxDurationEat, bool isInfinityDuration)
 {
     Table* pTable = (Table*) malloc(sizeof(Table));
     pTable->ppForks = (Fork**) malloc(PHILOSOPHERS_COUNT * sizeof(Fork*));
@@ -30,13 +30,12 @@ Table* CreateTable()
     {
         Fork* lFork = pTable->ppForks[i == 0 ? PHILOSOPHERS_COUNT - 1 : i - 1];
         pTable->ppPhilosophers[i] =
-                CreatePhilosopher(i + 1, lFork, pTable->ppForks[i]);
+                CreatePhilosopher(i + 1, lFork, pTable->ppForks[i], minDurationEat, maxDurationEat, isInfinityDuration);
     }
 
     pTable->IsEatingStarted = false;
     pTable->IsEatingEnded = false;
     pTable->IsEatingMustEnd = false;
-
 
     pTable->pMutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
     pthread_mutex_init(pTable->pMutex, NULL);
@@ -44,11 +43,8 @@ Table* CreateTable()
     pTable->pArbitrator = (sem_t*) malloc(sizeof(sem_t));
     sem_init(pTable->pArbitrator, 0, PHILOSOPHERS_COUNT);
 
-    pTable->MinDurationEat = 3;
-    pTable->MaxDurationEat = 15;
-
-    pTable->MinSendIntervalDuration = 1;
-    pTable->MaxSendIntervalDuration = 6;
+    //pTable->MinDurationEat = 3;
+    //pTable->MaxDurationEat = 15;
 
     return pTable;
 }
@@ -84,9 +80,7 @@ int Eat(Table* pTable, Philosopher* pPhilosopher, struct timespec tw, int i)
     PhilosopherEatingThreadOptions* options
             = CreatePhilosopherEatingThreadOptions(pTable, pPhilosopher,
                                                    pTable->pMutex,
-                                                   pTable->MinDurationEat,
-                                                   pTable->MaxDurationEat,
-                                                   pTable->pArbitrator, 0);
+                                                   pTable->pArbitrator);
 
     pthread_t threadId;
 
@@ -109,10 +103,7 @@ void StartAllThreads(Table* pTable)
                         pTable,
                         pTable->ppPhilosophers[i],
                         pTable->pMutex,
-                        pTable->MinDurationEat,
-                        pTable->MaxDurationEat,
-                        pTable->pArbitrator,
-                        false);
+                        pTable->pArbitrator);
 
         LogPrefix(FILE_NAME);
         printf("Создан поток для философа %d\n", pTable->ppPhilosophers[i]->PhilosopherId);
@@ -167,7 +158,7 @@ void DoEatAll1(Table* pTable)
 
     for (int i = 0; i < 20000000; i++)
     {
-        struct timespec twb = RandomTime(pTable->MinSendIntervalDuration, pTable->MaxSendIntervalDuration);
+        struct timespec twb = RandomTime(10, 10);
 
         int c = RandomInterval(0, PHILOSOPHERS_COUNT);
         Philosopher* ph = pTable->ppPhilosophers[c];

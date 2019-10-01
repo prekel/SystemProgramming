@@ -8,10 +8,12 @@
 typedef struct
 {
     Table* pTable;
-    //bool IsMustStop;
+    int MinSendIntervalDuration;
+    int MaxSendIntervalDuration;
 } AutoEatThreadOptions;
 
-AutoEatThreadOptions* CreateAutoEatThreadOptions(Table* pTable);
+AutoEatThreadOptions*
+CreateAutoEatThreadOptions(Table* pTable, int minSendIntervalDuration, int maxSendIntervalDuration);
 
 void DestroyAutoEatThreadOptions(AutoEatThreadOptions* pOptions);
 

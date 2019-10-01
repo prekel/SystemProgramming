@@ -21,9 +21,14 @@ typedef struct
     //pthread_cond_t* OnMustToStop;
     bool IsWaitingLeftFork;
     bool IsWaitingRightFork;
+    int MinDurationEat;
+    int MaxDurationEat;
+    bool IsInfinityDuration;
 } Philosopher;
 
-Philosopher* CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork);
+Philosopher*
+CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork, int minDurationEat,
+                  int maxDurationEat, bool isInfinityDuration);
 
 void DestroyPhilosopher(Philosopher* pPhilosopher);
 

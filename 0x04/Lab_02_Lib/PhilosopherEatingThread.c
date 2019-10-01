@@ -280,8 +280,8 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
             break;
         }
 
-        struct timespec pDurationEat = RandomTime(pEatOptions->MinDurationEat,
-                                                  pEatOptions->MaxDurationEat);
+        struct timespec pDurationEat = RandomTime(pPhilosopher->MinDurationEat,
+                                                  pPhilosopher->MaxDurationEat);
 
 
         LogPrefix(FILE_NAME);
@@ -572,19 +572,14 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
 PhilosopherEatingThreadOptions*
 CreatePhilosopherEatingThreadOptions(Table* pTable, Philosopher* pPhilosopher,
                                      pthread_mutex_t* mutex,
-                                     int minDurationEat,
-                                     int maxDurationEat,
-                                     sem_t* pArbitrator, bool isInfinityDuration)
+                                     sem_t* pArbitrator)
 {
     PhilosopherEatingThreadOptions* pOptions = (PhilosopherEatingThreadOptions*) malloc(
             sizeof(PhilosopherEatingThreadOptions));
     pOptions->pTable = pTable;
     pOptions->pPhilosopher = pPhilosopher;
-    pOptions->MinDurationEat = minDurationEat;
-    pOptions->MaxDurationEat = maxDurationEat;
     pOptions->pMutex = mutex;
     pOptions->pArbitrator = pArbitrator;
-    pOptions->IsInfinityDuration = isInfinityDuration;
     return pOptions;
 }
 

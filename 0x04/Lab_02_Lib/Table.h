@@ -17,13 +17,11 @@ typedef struct
     bool IsEatingMustEnd;
     pthread_mutex_t* pMutex;
     sem_t* pArbitrator;
-    int MinDurationEat;
-    int MaxDurationEat;
-    int MinSendIntervalDuration;
-    int MaxSendIntervalDuration;
+    //int MinDurationEat;
+    //int MaxDurationEat;
 } Table;
 
-Table* CreateTable();
+Table* CreateTable(int minDurationEat, int maxDurationEat, bool isInfinityDuration);
 
 int Eat(Table* pTable, Philosopher* pPhilosopher, struct timespec tw1, int i);
 

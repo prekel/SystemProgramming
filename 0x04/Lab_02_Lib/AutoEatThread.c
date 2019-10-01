@@ -10,12 +10,14 @@
 
 #define FILE_NAME "AutoEatThread"
 
-AutoEatThreadOptions* CreateAutoEatThreadOptions(Table* pTable)
+AutoEatThreadOptions*
+CreateAutoEatThreadOptions(Table* pTable, int minSendIntervalDuration, int maxSendIntervalDuration)
 {
     AutoEatThreadOptions* pOptions = (AutoEatThreadOptions*) malloc(
             sizeof(AutoEatThreadOptions));
     pOptions->pTable = pTable;
-    //pOptions->IsMustStop = false;
+    pOptions->MinSendIntervalDuration = minSendIntervalDuration;
+    pOptions->MaxSendIntervalDuration = maxSendIntervalDuration;
     return pOptions;
 }
 
@@ -61,8 +63,8 @@ void* AutoEatThread(void* pAutoEatThreadOptions)
     while (!pOptions->pTable->IsEatingMustEnd)
     {
         struct timespec twb = RandomTime(
-                pOptions->pTable->MinSendIntervalDuration,
-                pOptions->pTable->MaxSendIntervalDuration);
+                pOptions->MinSendIntervalDuration,
+                pOptions->MaxSendIntervalDuration);
 
         int c = RandomInterval(0, PHILOSOPHERS_COUNT);
         Philosopher* pPhilosopher = pOptions->pTable->ppPhilosophers[c];

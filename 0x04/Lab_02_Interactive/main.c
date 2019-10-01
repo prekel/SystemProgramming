@@ -14,6 +14,8 @@
 #include "AutoEatThread.h"
 #include "Log.h"
 
+#define FILE_NAME "Main_Interactive"
+
 const int SCREEN_WIDTH = 512;
 const int SCREEN_HEIGHT = 512;
 
@@ -151,8 +153,11 @@ void* Render(void* pOptions)
         if (frameMs < vsyncms) SDL_Delay(vsyncms - frameMs);
     }
 
-    LogTableInfo(g_pLoggingTable);
-    printf("[pid: 0x%08lx][Render] Завершение потока\n", pthread_self());
+    LogPrefix("Render");
+    printf("Завершение потока\n");
+
+    //LogTableInfo(g_pLoggingTable);
+    //printf("[pid: 0x%08lx][Render] Завершение потока\n", pthread_self());
 
     return NULL;
 }
@@ -190,7 +195,7 @@ int main(int argc, char** args)
 
     //SDL_Delay(5000);
 
-    Table* pTable = CreateTable();
+    Table* pTable = CreateTable(1, 15, false);
     g_pLoggingTable = pTable;
 
 
@@ -198,7 +203,7 @@ int main(int argc, char** args)
 
 
     AutoEatThreadOptions* pAutoEatThreadOptions = CreateAutoEatThreadOptions(
-            pTable);
+            pTable, 2, 5);
     pthread_t autoEatThreadId;
     pthread_create(&autoEatThreadId, NULL, AutoEatThread,
                    pAutoEatThreadOptions);
@@ -333,10 +338,12 @@ int main(int argc, char** args)
     }
 
     //pAutoEatThreadOptions->IsMustStop = true;
+    LogPrefix(FILE_NAME);
+    printf("Завершение программы, ожидание завершения потоков\n");
 
-    LogTableInfo(pTable);
-    printf("[pid: 0x%08lx] Завершение программы, ожидание завершения потоков...\n",
-           pthread_self());
+    //LogTableInfo(pTable);
+    //printf("[pid: 0x%08lx] Завершение программы, ожидание завершения потоков...\n",
+    //       pthread_self());
 
     pTable->IsEatingMustEnd = true;
 
@@ -345,9 +352,13 @@ int main(int argc, char** args)
         pthread_mutex_lock(pTable->pMutex);
         if (pTable->ppPhilosophers[i]->IsThreadRunning)
         {
-            LogTableInfo(pTable);
-            printf("[pid: 0x%08lx] Ожидание завершения потока философа %d\n",
-                   pthread_self(), pTable->ppPhilosophers[i]->PhilosopherId);
+            LogPrefix(FILE_NAME);
+            printf("Ожидание завершения потока философа %d\n", pTable->ppPhilosophers[i]->PhilosopherId);
+
+            //LogTableInfo(pTable);
+            //printf("[pid: 0x%08lx] Ожидание завершения потока философа %d\n",
+            //       pthread_self(), pTable->ppPhilosophers[i]->PhilosopherId);
+            sem_post(pTable->ppPhilosophers[i]->pSemOnGoingToEat);
             pthread_mutex_unlock(pTable->pMutex);
             pthread_join(pTable->ppPhilosophers[i]->pThread, NULL);
             continue;
