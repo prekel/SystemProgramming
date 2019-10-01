@@ -1,10 +1,13 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <math.h>
+#include <pthread.h>
 
 #include <SDL.h>
+#include <signal.h>
 
 #include "Input.h"
+
 #include "Table.h"
 #include "Utils.h"
 #include "RealTimeTableState.h"
@@ -139,6 +142,11 @@ void* Render(void* pOptions)
     return NULL;
 }
 
+void your_handler()
+{
+
+}
+
 int main(int argc, char** args)
 {
     if (Init() == 1)
@@ -196,6 +204,12 @@ int main(int argc, char** args)
     pthread_t rendererThreadId;
     pthread_create(&rendererThreadId, NULL, Render, NULL);
 
+    struct sigaction sa;
+    sa.sa_handler = your_handler;
+    sa.sa_flags = SA_RESTART;
+    sigemptyset(&sa.sa_mask);
+    sigaction(SIGUSR1, &sa, 0);
+
     //while (run)
     //{
         while (SDL_WaitEvent(&e) != 0)
@@ -211,25 +225,62 @@ int main(int argc, char** args)
                 {
                     break;
                 }
-                if (e.key.keysym.sym == SDLK_1)
+                if (e.key.keysym.mod & KMOD_ALT)
                 {
-                    Eat(pTable, pTable->ppPhilosophers[0], tw1, k1++);
+                    if (e.key.keysym.sym == SDLK_1)
+                    {
+                        if (pTable->ppPhilosophers[0]->IsEating)
+                        {
+                            pthread_kill(pTable->ppPhilosophers[0]->pThread, SIGUSR1);
+                        }
+                        else if (pTable->ppPhilosophers[0]->IsWaitingLeftFork)
+                        {
+                            pthread_cond_signal(pTable->ppPhilosophers[0]->pLeftFork->CondSignalOnRelease);
+                        }
+                        else if (pTable->ppPhilosophers[0]->IsWaitingRightFork)
+                        {
+                            pthread_cond_signal(pTable->ppPhilosophers[0]->pRightFork->CondSignalOnRelease);
+                        }
+                    }
+                    if (e.key.keysym.sym == SDLK_2)
+                    {
+                        pthread_kill(pTable->ppPhilosophers[1]->pThread, SIGUSR1);
+                    }
+                    if (e.key.keysym.sym == SDLK_3)
+                    {
+                        pthread_kill(pTable->ppPhilosophers[2]->pThread, SIGUSR1);
+                    }
+                    if (e.key.keysym.sym == SDLK_4)
+                    {
+                        pthread_kill(pTable->ppPhilosophers[3]->pThread, SIGUSR1);
+                    }
+                    if (e.key.keysym.sym == SDLK_5)
+                    {
+                        pthread_kill(pTable->ppPhilosophers[4]->pThread, SIGUSR1);
+                    }
                 }
-                if (e.key.keysym.sym == SDLK_2)
+                else
                 {
-                    Eat(pTable, pTable->ppPhilosophers[1], tw1, k1++);
-                }
-                if (e.key.keysym.sym == SDLK_3)
-                {
-                    Eat(pTable, pTable->ppPhilosophers[2], tw1, k1++);
-                }
-                if (e.key.keysym.sym == SDLK_4)
-                {
-                    Eat(pTable, pTable->ppPhilosophers[3], tw1, k1++);
-                }
-                if (e.key.keysym.sym == SDLK_5)
-                {
-                    Eat(pTable, pTable->ppPhilosophers[4], tw1, k1++);
+                    if (e.key.keysym.sym == SDLK_1)
+                    {
+                        Eat(pTable, pTable->ppPhilosophers[0], tw1, k1++);
+                    }
+                    if (e.key.keysym.sym == SDLK_2)
+                    {
+                        Eat(pTable, pTable->ppPhilosophers[1], tw1, k1++);
+                    }
+                    if (e.key.keysym.sym == SDLK_3)
+                    {
+                        Eat(pTable, pTable->ppPhilosophers[2], tw1, k1++);
+                    }
+                    if (e.key.keysym.sym == SDLK_4)
+                    {
+                        Eat(pTable, pTable->ppPhilosophers[3], tw1, k1++);
+                    }
+                    if (e.key.keysym.sym == SDLK_5)
+                    {
+                        Eat(pTable, pTable->ppPhilosophers[4], tw1, k1++);
+                    }
                 }
             }
         }

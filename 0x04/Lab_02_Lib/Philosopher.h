@@ -16,6 +16,10 @@ typedef struct
     bool IsWaiting;
     bool IsThreadRunning;
     pthread_t pThread;
+    pthread_cond_t* OnGoingToEat;
+    pthread_cond_t* OnMustToStop;
+    bool IsWaitingLeftFork;
+    bool IsWaitingRightFork;
 } Philosopher;
 
 Philosopher* CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork);

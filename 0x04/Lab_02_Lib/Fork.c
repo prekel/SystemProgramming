@@ -49,5 +49,6 @@ void TakeOffFork(Fork* pFork, pthread_mutex_t* pMutex, sem_t* pArbitrator)
 void DestroyFork(Fork* pFork)
 {
     pthread_cond_destroy(pFork->CondSignalOnRelease);
+    free(pFork->CondSignalOnRelease);
     free(pFork);
 }

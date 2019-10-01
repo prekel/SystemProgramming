@@ -43,8 +43,7 @@ Table* CreateTable()
 }
 
 
-int Eat(Table* pTable, Philosopher* pPhilosopher, struct timespec tw, int
-i)
+int Eat(Table* pTable, Philosopher* pPhilosopher, struct timespec tw, int i)
 {
     pthread_mutex_lock(pTable->pMutex);
     if (pPhilosopher->IsEating == true)
@@ -86,6 +85,8 @@ i)
 
     return 0;
 }
+
+
 
 void DoEatAll1(Table* pTable)
 {

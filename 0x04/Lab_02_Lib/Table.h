@@ -20,8 +20,9 @@ typedef struct
 
 Table* CreateTable();
 
-int Eat(Table* pTable, Philosopher* pPhilosopher, struct timespec tw1, int
-i);
+int Eat(Table* pTable, Philosopher* pPhilosopher, struct timespec tw1, int i);
+
+
 
 void DoEatAll1(Table* pTable);
 
