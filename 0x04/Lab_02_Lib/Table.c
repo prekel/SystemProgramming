@@ -10,6 +10,9 @@
 #include "PhilosopherEatingThread.h"
 #include "RealTimeTableStateThread.h"
 #include "Log.h"
+#include "AutoEatThread.h"
+
+#define FILE_NAME "Table"
 
 Table* CreateTable()
 {
@@ -42,10 +45,10 @@ Table* CreateTable()
     sem_init(pTable->pArbitrator, 0, PHILOSOPHERS_COUNT);
 
     pTable->MinDurationEat = 3;
-    pTable->MaxDurationEat = 10;
+    pTable->MaxDurationEat = 15;
 
     pTable->MinSendIntervalDuration = 1;
-    pTable->MaxSendIntervalDuration = 2;
+    pTable->MaxSendIntervalDuration = 6;
 
     return pTable;
 }
@@ -97,33 +100,6 @@ int Eat(Table* pTable, Philosopher* pPhilosopher, struct timespec tw, int i)
     return 0;
 }
 
-int Eat1(Table* pTable, Philosopher* pPhilosopher, struct timespec tw1, int i)
-{
-    pthread_mutex_lock(pTable->pMutex);
-    if (pPhilosopher->IsEating == true)
-    {
-        LogTableInfo(pTable);
-        printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Уже ест\n",
-               pthread_self(), pPhilosopher->PhilosopherId, i);
-        pthread_mutex_unlock(pTable->pMutex);
-        return 1;
-    }
-    if (pPhilosopher->IsWaiting == true)
-    {
-        LogTableInfo(pTable);
-        printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Уже ожидает\n",
-               pthread_self(), pPhilosopher->PhilosopherId, i);
-        pthread_mutex_unlock(pTable->pMutex);
-        return 1;
-    }
-    pthread_mutex_unlock(pTable->pMutex);
-
-
-    sem_post(pPhilosopher->pSemOnGoingToEat);
-    //pthread_cond_signal(pPhilosopher->OnGoingToEat);
-    return 0;
-}
-
 void StartAllThreads(Table* pTable)
 {
     for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
@@ -138,9 +114,12 @@ void StartAllThreads(Table* pTable)
                         pTable->pArbitrator,
                         false);
 
-        LogTableInfo(pTable);
-        printf("[pid: 0x%08lx] Создан поток для философа %d\n",
-               pthread_self(), pTable->ppPhilosophers[i]->PhilosopherId);
+        LogPrefix(FILE_NAME);
+        printf("Создан поток для философа %d\n", pTable->ppPhilosophers[i]->PhilosopherId);
+
+        //LogTableInfo(pTable);
+        //printf("[pid: 0x%08lx] Создан поток для философа %d\n",
+        //       pthread_self(), pTable->ppPhilosophers[i]->PhilosopherId);
         pthread_create(&pTable->ppPhilosophers[i]->pThread, NULL,
                        PhilosopherEatingThread1, options);
     }

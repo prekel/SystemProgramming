@@ -15,6 +15,8 @@ AutoEatThreadOptions* CreateAutoEatThreadOptions(Table* pTable);
 
 void DestroyAutoEatThreadOptions(AutoEatThreadOptions* pOptions);
 
+int Eat1(Table* pTable, Philosopher* pPhilosopher, struct timespec tw1, int i);
+
 void* AutoEatThread(void* pAutoEatThreadOptions);
 
 #endif // AUTOEATTHREAD_H

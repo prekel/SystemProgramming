@@ -333,11 +333,12 @@ int main(int argc, char** args)
     }
 
     //pAutoEatThreadOptions->IsMustStop = true;
-    pTable->IsEatingMustEnd = true;
 
     LogTableInfo(pTable);
     printf("[pid: 0x%08lx] Завершение программы, ожидание завершения потоков...\n",
            pthread_self());
+
+    pTable->IsEatingMustEnd = true;
 
     for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
     {
