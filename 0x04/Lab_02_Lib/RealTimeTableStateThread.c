@@ -3,6 +3,7 @@
 #include <malloc.h>
 
 #include "RealTimeTableStateThread.h"
+#include "Log.h"
 
 RealTimeTableStateThreadOptions* CreateRealTimeTableStateThreadOptions(Table* pTable, struct timespec pWaitTime)
 {
@@ -22,9 +23,9 @@ void DestroyRealTimeTableStateThreadOptions(RealTimeTableStateThreadOptions* pOp
 
 void* RealTimeTableStateThread(void* pThreadOptions)
 {
-#ifdef LOGLEVEL_REALTIMESTATE
     RealTimeTableStateThreadOptions* pOptions = (RealTimeTableStateThreadOptions*) pThreadOptions;
 
+#ifdef LOGLEVEL_REALTIMESTATE
     int k = 0;
     while (k < 1)
     {
@@ -39,5 +40,7 @@ void* RealTimeTableStateThread(void* pThreadOptions)
     }
 
 #endif
+    LogTableInfo(pOptions->pTable);
+    printf("[pid: 0x%08lx][RealTimeTableStateThread] Завершение потока\n", pthread_self());
     return NULL;
 }

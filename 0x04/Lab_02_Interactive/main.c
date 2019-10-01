@@ -12,6 +12,7 @@
 #include "Utils.h"
 #include "RealTimeTableStateThread.h"
 #include "AutoEatThread.h"
+#include "Log.h"
 
 const int SCREEN_WIDTH = 512;
 const int SCREEN_HEIGHT = 512;
@@ -84,9 +85,9 @@ int CenterCircleY(double angle, double r)
 
 void* Render(void* pOptions)
 {
-    Uint32 ticks0 = SDL_GetTicks();
+    //Uint32 ticks0 = SDL_GetTicks();
     Uint32 ticks1 = SDL_GetTicks();
-    int countedFrames = 0;
+    //int countedFrames = 0;
     bool run = true;
     while (run)
     {
@@ -139,16 +140,20 @@ void* Render(void* pOptions)
         }
 
         Uint32 frameMs = SDL_GetTicks() - ticks1;
-        double avgFPS = countedFrames / ((SDL_GetTicks() - ticks0) / 1000.f);
+        //double avgFPS = countedFrames / ((SDL_GetTicks() - ticks0) / 1000.f);
         ticks1 = SDL_GetTicks();
 
 
         SDL_RenderPresent(ren);
-        ++countedFrames;
+        //++countedFrames;
 
         int vsyncms = 17;
         if (frameMs < vsyncms) SDL_Delay(vsyncms - frameMs);
     }
+
+    LogTableInfo(g_pTable);
+    printf("[pid: 0x%08lx][Render] Завершение потока\n", pthread_self());
+
     return NULL;
 }
 
@@ -192,9 +197,11 @@ int main(int argc, char** args)
     StartAllThreads(pTable);
 
 
-    AutoEatThreadOptions* pAutoEatThreadOptions = CreateAutoEatThreadOptions(pTable);
+    AutoEatThreadOptions* pAutoEatThreadOptions = CreateAutoEatThreadOptions(
+            pTable);
     pthread_t autoEatThreadId;
-    pthread_create(&autoEatThreadId, NULL, AutoEatThread, pAutoEatThreadOptions);
+    pthread_create(&autoEatThreadId, NULL, AutoEatThread,
+                   pAutoEatThreadOptions);
 
 
     struct timespec tw = {0, 200000000};
@@ -268,19 +275,35 @@ int main(int argc, char** args)
                 }
                 if (e.key.keysym.sym == SDLK_2)
                 {
-                    pthread_kill(pTable->ppPhilosophers[1]->pThread, SIGUSR1);
+                    if (pTable->ppPhilosophers[1]->IsEating)
+                    {
+                        pthread_kill(pTable->ppPhilosophers[1]->pThread,
+                                     SIGUSR1);
+                    }
                 }
                 if (e.key.keysym.sym == SDLK_3)
                 {
-                    pthread_kill(pTable->ppPhilosophers[2]->pThread, SIGUSR1);
+                    if (pTable->ppPhilosophers[2]->IsEating)
+                    {
+                        pthread_kill(pTable->ppPhilosophers[2]->pThread,
+                                     SIGUSR1);
+                    }
                 }
                 if (e.key.keysym.sym == SDLK_4)
                 {
-                    pthread_kill(pTable->ppPhilosophers[3]->pThread, SIGUSR1);
+                    if (pTable->ppPhilosophers[3]->IsEating)
+                    {
+                        pthread_kill(pTable->ppPhilosophers[3]->pThread,
+                                     SIGUSR1);
+                    }
                 }
                 if (e.key.keysym.sym == SDLK_5)
                 {
-                    pthread_kill(pTable->ppPhilosophers[4]->pThread, SIGUSR1);
+                    if (pTable->ppPhilosophers[4]->IsEating)
+                    {
+                        pthread_kill(pTable->ppPhilosophers[4]->pThread,
+                                     SIGUSR1);
+                    }
                 }
             }
             else
@@ -308,10 +331,12 @@ int main(int argc, char** args)
             }
         }
     }
-    //}
+
+    //pAutoEatThreadOptions->IsMustStop = true;
+    pTable->IsEatingMustEnd = true;
 
     LogTableInfo(pTable);
-    printf("[pid: 0x%08lx] Завершение программы, ожидание завершения птооков...\n",
+    printf("[pid: 0x%08lx] Завершение программы, ожидание завершения потоков...\n",
            pthread_self());
 
     for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
@@ -330,6 +355,9 @@ int main(int argc, char** args)
     }
 
     pTable->IsEatingEnded = true;
+
+    pthread_join(autoEatThreadId, NULL);
+    DestroyAutoEatThreadOptions(pAutoEatThreadOptions);
 
     pthread_join(realTimeTableStateThreadId, NULL);
     DestroyRealTimeTableStateThreadOptions(pRealTimeTableStateOptions);

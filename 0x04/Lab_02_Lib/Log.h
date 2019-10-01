@@ -15,4 +15,6 @@ char* TableInfo(Table* pTable);
 
 void LogTableInfo(Table* pTable);
 
+void LogPrefix(Table* pTable, pthread_t threadId, char* name);
+
 #endif // LOG_H

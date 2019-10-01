@@ -14,6 +14,7 @@ typedef struct
     Fork** ppForks;
     bool IsEatingStarted;
     bool IsEatingEnded;
+    bool IsEatingMustEnd;
     pthread_mutex_t* pMutex;
     sem_t* pArbitrator;
     int MinDurationEat;

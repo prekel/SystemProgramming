@@ -1,9 +1,11 @@
 #include <malloc.h>
 #include <errno.h>
+#include <stdio.h>
 
 #include "RealTimeTableStateThread.h"
 #include "Utils.h"
 #include "PhilosopherEatingThread.h"
+#include "Log.h"
 
 int SleepOrWaitSignal(struct timespec tw)
 {
@@ -262,7 +264,7 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
     pthread_mutex_t* pMutex = pEatOptions->pMutex;
     sem_t* pArbitrator = pEatOptions->pArbitrator;
 
-    while (true)
+    while (!pEatOptions->pTable->IsEatingMustEnd)
     {
         sem_wait(pPh->pSemOnGoingToEat);
 
@@ -495,6 +497,9 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
     pthread_mutex_lock(pMutex);
     pPh->IsThreadRunning = false;
     pthread_mutex_unlock(pMutex);
+
+    LogTableInfo(pEatOptions->pTable);
+    printf("[pid: 0x%08lx][PhilosopherEatingThread1] Завершение потока\n", pthread_self());
 
     return NULL;
 }

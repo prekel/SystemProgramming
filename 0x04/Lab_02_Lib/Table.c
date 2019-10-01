@@ -9,6 +9,7 @@
 #include "Utils.h"
 #include "PhilosopherEatingThread.h"
 #include "RealTimeTableStateThread.h"
+#include "Log.h"
 
 Table* CreateTable()
 {
@@ -31,6 +32,7 @@ Table* CreateTable()
 
     pTable->IsEatingStarted = false;
     pTable->IsEatingEnded = false;
+    pTable->IsEatingMustEnd = false;
 
 
     pTable->pMutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
