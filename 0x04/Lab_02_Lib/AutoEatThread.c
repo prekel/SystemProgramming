@@ -5,7 +5,7 @@
 
 #include "AutoEatThread.h"
 #include "Utils.h"
-#include "RealTimeTableState.h"
+#include "RealTimeTableStateThread.h"
 
 AutoEatThreadOptions* CreateAutoEatThreadOptions(Table* pTable)
 {

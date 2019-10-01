@@ -9,8 +9,8 @@ add_library(Lab_02_Lib
         Fork.c Fork.h
         Table.c Table.h
         Utils.c Utils.h
-        RealTimeTableState.c RealTimeTableState.h
-        EatPhilosopherOptions.c EatPhilosopherOptions.h AutoEatThread.c AutoEatThread.h)
+        RealTimeTableStateThread.c RealTimeTableStateThread.h
+        PhilosopherEatingThread.c PhilosopherEatingThread.h AutoEatThread.c AutoEatThread.h Log.c Log.h)
 
 target_link_libraries(Lab_02_Lib PRIVATE pthread)
 

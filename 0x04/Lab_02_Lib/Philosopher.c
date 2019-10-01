@@ -5,10 +5,10 @@
 #include <semaphore.h>
 #include <stdio.h>
 
-#include "RealTimeTableState.h"
+#include "RealTimeTableStateThread.h"
 #include "Philosopher.h"
 #include "Utils.h"
-#include "EatPhilosopherOptions.h"
+#include "PhilosopherEatingThread.h"
 
 Philosopher* CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork)
 {

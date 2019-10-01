@@ -1,9 +1,9 @@
 #include <malloc.h>
 #include <errno.h>
 
-#include "RealTimeTableState.h"
+#include "RealTimeTableStateThread.h"
 #include "Utils.h"
-#include "EatPhilosopherOptions.h"
+#include "PhilosopherEatingThread.h"
 
 int SleepOrWaitSignal(struct timespec tw)
 {
@@ -16,9 +16,9 @@ int SleepOrWaitSignal(struct timespec tw)
     return 0;
 }
 
-void* DoEatPhilosopherThread(void* pEatThreadOptions)
+void* PhilosopherEatingThread(void* pEatThreadOptions)
 {
-    EatPhilosopherOptions* pEatOptions = (EatPhilosopherOptions*) pEatThreadOptions;
+    PhilosopherEatingThreadOptions* pEatOptions = (PhilosopherEatingThreadOptions*) pEatThreadOptions;
 
     Philosopher* pPh = pEatOptions->pPhilosopher;
     struct timespec pDurationEat = RandomTime(10,10);
@@ -253,9 +253,9 @@ void* DoEatPhilosopherThread(void* pEatThreadOptions)
     return NULL;
 }
 
-void* DoEatPhilosopherThread1(void* pEatThreadOptions)
+void* PhilosopherEatingThread1(void* pEatThreadOptions)
 {
-    EatPhilosopherOptions* pEatOptions = (EatPhilosopherOptions*) pEatThreadOptions;
+    PhilosopherEatingThreadOptions* pEatOptions = (PhilosopherEatingThreadOptions*) pEatThreadOptions;
 
     Philosopher* pPh = pEatOptions->pPhilosopher;
     //struct timespec pDurationEat = pEatOptions->pDurationEat;
@@ -499,15 +499,15 @@ void* DoEatPhilosopherThread1(void* pEatThreadOptions)
     return NULL;
 }
 
-EatPhilosopherOptions*
-CreateEatPhilosopherOptions(Table* pTable, Philosopher* pPhilosopher,
-                            pthread_mutex_t* mutex,
-                            int minDurationEat,
-                            int maxDurationEat,
-                            sem_t* pArbitrator, bool isInfinityDuration)
+PhilosopherEatingThreadOptions*
+CreatePhilosopherEatingThreadOptions(Table* pTable, Philosopher* pPhilosopher,
+                                     pthread_mutex_t* mutex,
+                                     int minDurationEat,
+                                     int maxDurationEat,
+                                     sem_t* pArbitrator, bool isInfinityDuration)
 {
-    EatPhilosopherOptions* pOptions = (EatPhilosopherOptions*) malloc(
-            sizeof(EatPhilosopherOptions));
+    PhilosopherEatingThreadOptions* pOptions = (PhilosopherEatingThreadOptions*) malloc(
+            sizeof(PhilosopherEatingThreadOptions));
     pOptions->pTable = pTable;
     pOptions->pPhilosopher = pPhilosopher;
     pOptions->MinDurationEat = minDurationEat;
@@ -518,7 +518,7 @@ CreateEatPhilosopherOptions(Table* pTable, Philosopher* pPhilosopher,
     return pOptions;
 }
 
-void DestroyEatPhilosopherOptions(EatPhilosopherOptions* pOptions)
+void DestroyPhilosopherEatingThreadOptions(PhilosopherEatingThreadOptions* pOptions)
 {
     free(pOptions);
 }

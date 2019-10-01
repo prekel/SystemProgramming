@@ -18,7 +18,7 @@
 #include "Input.h"
 #include "Table.h"
 #include "Utils.h"
-#include "RealTimeTableState.h"
+#include "RealTimeTableStateThread.h"
 
 /*! \brief Главная функция
  *
@@ -55,8 +55,8 @@ int main(int argc, char** argv)
     Table* pTable = CreateTable();
 
     struct timespec tw = {0, 200000000};
-    RealTimeTableStateOptions* pRealTimeTableStateOptions =
-            CreateRealTimeTableStateOptions(pTable, tw);
+    RealTimeTableStateThreadOptions* pRealTimeTableStateOptions =
+            CreateRealTimeTableStateThreadOptions(pTable, tw);
     pthread_t realTimeTableStateThreadId;
     pthread_create(
             &realTimeTableStateThreadId,
@@ -67,7 +67,7 @@ int main(int argc, char** argv)
     DoEatAll(pTable);
 
     pthread_join(realTimeTableStateThreadId, NULL);
-    DestroyRealTimeTableStateOptions(pRealTimeTableStateOptions);
+    DestroyRealTimeTableStateThreadOptions(pRealTimeTableStateOptions);
 
     DestroyTable(pTable);
 

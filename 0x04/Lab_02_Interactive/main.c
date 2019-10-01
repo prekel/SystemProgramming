@@ -10,7 +10,7 @@
 
 #include "Table.h"
 #include "Utils.h"
-#include "RealTimeTableState.h"
+#include "RealTimeTableStateThread.h"
 #include "AutoEatThread.h"
 
 const int SCREEN_WIDTH = 512;
@@ -198,8 +198,8 @@ int main(int argc, char** args)
 
 
     struct timespec tw = {0, 200000000};
-    RealTimeTableStateOptions* pRealTimeTableStateOptions =
-            CreateRealTimeTableStateOptions(pTable, tw);
+    RealTimeTableStateThreadOptions* pRealTimeTableStateOptions =
+            CreateRealTimeTableStateThreadOptions(pTable, tw);
     pthread_t realTimeTableStateThreadId;
     pthread_create(
             &realTimeTableStateThreadId,
@@ -332,7 +332,7 @@ int main(int argc, char** args)
     pTable->IsEatingEnded = true;
 
     pthread_join(realTimeTableStateThreadId, NULL);
-    DestroyRealTimeTableStateOptions(pRealTimeTableStateOptions);
+    DestroyRealTimeTableStateThreadOptions(pRealTimeTableStateOptions);
 
     pthread_join(rendererThreadId, NULL);
 

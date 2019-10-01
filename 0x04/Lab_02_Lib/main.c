@@ -18,7 +18,7 @@
 #include "Input.h"
 #include "Table.h"
 #include "Utils.h"
-#include "RealTimeTableState.h"
+#include "RealTimeTableStateThread.h"
 
 /*! \brief Главная функция
  *
