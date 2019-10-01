@@ -39,9 +39,9 @@ void LogTableInfo(Table* pTable)
     free(tableInfo);
 }
 
-void LogPrefix(Table* pTable, pthread_t threadId, char* name)
+void LogPrefix(char* fileName)
 {
-    char* info = TableInfo(pTable);
-    printf("[%s][pid: 0x%08lx][%30s] ", info, threadId, name);
+    char* info = TableInfo(g_pLoggingTable);
+    printf("[%s][pid: 0x%08lx][%30s] ", info, pthread_self(), fileName);
     free(info);
 }

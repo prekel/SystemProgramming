@@ -45,7 +45,7 @@ void* AutoEatThread(void* pAutoEatThreadOptions)
             //continue;
         }
 
-        LogPrefix(pOptions->pTable, pthread_self(), "AutoEatThread");
+        LogPrefix("AutoEatThread");
         printf("Задержка перед отправкой следующего %lf сек.\n", TimespecToDouble(&twb));
 
         //LogTableInfo(pOptions->pTable);

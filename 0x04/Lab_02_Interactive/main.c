@@ -63,7 +63,7 @@ int Quit()
     return 0;
 }
 
-Table* g_pTable;
+Table* g_pLoggingTable;
 
 void
 DrawRectangle(int x, int y, int w, int h, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
@@ -91,7 +91,7 @@ void* Render(void* pOptions)
     bool run = true;
     while (run)
     {
-        if (g_pTable->IsEatingEnded) break;
+        if (g_pLoggingTable->IsEatingEnded) break;
 
         SDL_SetRenderDrawColor(ren, 0x00, 0x00, 0x00, 0x00);
         SDL_RenderClear(ren);
@@ -100,15 +100,15 @@ void* Render(void* pOptions)
 
         for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
         {
-            if (g_pTable->ppPhilosophers[i]->IsEating)
+            if (g_pLoggingTable->ppPhilosophers[i]->IsEating)
             {
                 SDL_SetRenderDrawColor(ren, 255, 64, 64, 255);
             }
-            else if (g_pTable->ppPhilosophers[i]->IsWaiting)
+            else if (g_pLoggingTable->ppPhilosophers[i]->IsWaiting)
             {
                 SDL_SetRenderDrawColor(ren, 32, 255, 64, 255);
             }
-            else if (!g_pTable->ppPhilosophers[i]->IsEating)
+            else if (!g_pLoggingTable->ppPhilosophers[i]->IsEating)
             {
                 SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
             }
@@ -123,7 +123,7 @@ void* Render(void* pOptions)
 
         for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
         {
-            if (g_pTable->ppForks[i]->IsInUse)
+            if (g_pLoggingTable->ppForks[i]->IsInUse)
             {
                 SDL_SetRenderDrawColor(ren, 255, 128, 64, 255);
             }
@@ -151,7 +151,7 @@ void* Render(void* pOptions)
         if (frameMs < vsyncms) SDL_Delay(vsyncms - frameMs);
     }
 
-    LogTableInfo(g_pTable);
+    LogTableInfo(g_pLoggingTable);
     printf("[pid: 0x%08lx][Render] Завершение потока\n", pthread_self());
 
     return NULL;
@@ -191,7 +191,7 @@ int main(int argc, char** args)
     //SDL_Delay(5000);
 
     Table* pTable = CreateTable();
-    g_pTable = pTable;
+    g_pLoggingTable = pTable;
 
 
     StartAllThreads(pTable);

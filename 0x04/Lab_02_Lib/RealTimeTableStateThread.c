@@ -5,6 +5,8 @@
 #include "RealTimeTableStateThread.h"
 #include "Log.h"
 
+#define FILE_NAME "RealTimeTableStateThread"
+
 RealTimeTableStateThreadOptions* CreateRealTimeTableStateThreadOptions(Table* pTable, struct timespec pWaitTime)
 {
     RealTimeTableStateThreadOptions* pOptions = (RealTimeTableStateThreadOptions*) malloc(
@@ -40,7 +42,12 @@ void* RealTimeTableStateThread(void* pThreadOptions)
     }
 
 #endif
-    LogTableInfo(pOptions->pTable);
-    printf("[pid: 0x%08lx][RealTimeTableStateThread] Завершение потока\n", pthread_self());
+
+    LogPrefix(FILE_NAME);
+    printf("Завершение потока\n");
+
+    //LogTableInfo(pOptions->pTable);
+    //printf("[pid: 0x%08lx][RealTimeTableStateThread] Завершение потока\n", pthread_self());
+
     return NULL;
 }

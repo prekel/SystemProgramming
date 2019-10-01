@@ -7,6 +7,8 @@
 #include "PhilosopherEatingThread.h"
 #include "Log.h"
 
+#define FILE_NAME "PhilosopherEatingThread"
+
 int SleepOrWaitSignal(struct timespec tw)
 {
     struct timespec rem;
@@ -271,19 +273,17 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
         struct timespec pDurationEat = RandomTime(pEatOptions->MinDurationEat,
                                                   pEatOptions->MaxDurationEat);
 
-        LogTableInfo(pEatOptions->pTable);
-        printf("[pid: 0x%08lx, philosopherId: %d] Пришёл есть\n",
-               pthread_self(), pPh->PhilosopherId);
+
+        LogPrefix(FILE_NAME);
+        printf("Начинает есть\n");
+
         pthread_mutex_lock(pMutex);
         pPh->IsThreadRunning = true;
         if (pPh->pLeftFork->IsInUse == false &&
             pPh->pRightFork->IsInUse == false)
         {
-            LogTableInfo(pEatOptions->pTable);
-            printf("[pid: 0x%08lx, philosopherId: %d] Вилки свободны, "
-                   "начинает есть %lf сек.\n", pthread_self(),
-                   pPh->PhilosopherId,
-                   TimespecToDouble(&pDurationEat));
+            LogPrefix(FILE_NAME);
+            printf("Вилки свободны, начинает есть %lf сек.\n", TimespecToDouble(&pDurationEat));
 
             pPh->IsEating = true;
 
@@ -299,7 +299,7 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
 //        pthread_mutex_lock(pMutex);
 //        pPh->pLeftFork->IsInUse = true;
 
-            LogTableInfo(pEatOptions->pTable);
+            //LogTableInfo(pEatOptions->pTable);
             TakeOnFork(pPh->pLeftFork, pMutex, pArbitrator);
 
 
@@ -314,44 +314,56 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
 //        pthread_mutex_lock(pMutex);
 //        pPh->pRightFork->IsInUse = true;
 
-            LogTableInfo(pEatOptions->pTable);
+            //LogTableInfo(pEatOptions->pTable);
             TakeOnFork(pPh->pRightFork, pMutex, pArbitrator);
 
-            LogTableInfo(pEatOptions->pTable);
-            printf("[pid: 0x%08lx, philosopherId: %d] Начал есть\n",
-                   pthread_self(), pPh->PhilosopherId);
+            LogPrefix(FILE_NAME);
+            printf("Начал есть философ с номером %d\n", pPh->PhilosopherId);
+
+           // LogTableInfo(pEatOptions->pTable);
+            //printf("[pid: 0x%08lx, philosopherId: %d] Начал есть\n",
+            //       pthread_self(), pPh->PhilosopherId);
             pthread_mutex_unlock(pMutex);
 
             if (SleepOrWaitSignal(pDurationEat))
             {
-                LogTableInfo(pEatOptions->pTable);
-                printf("[pid: 0x%08lx, philosopherId: %d] Приём пищи завершён заранее сигналом\n",
-                       pthread_self(), pPh->PhilosopherId);
+
+                LogPrefix(FILE_NAME);
+                printf("Приём пищи завершён заранее сигналом\n");
+                //LogTableInfo(pEatOptions->pTable);
+                //printf("[pid: 0x%08lx, philosopherId: %d] Приём пищи завершён заранее сигналом\n",
+                //       pthread_self(), pPh->PhilosopherId);
             }
 
             //nanosleep(&pDurationEat, NULL);
             pthread_mutex_lock(pMutex);
-            LogTableInfo(pEatOptions->pTable);
-            printf("[pid: 0x%08lx, philosopherId: %d] Закончил есть\n",
-                   pthread_self(), pPh->PhilosopherId);
+            LogPrefix(FILE_NAME);
+            printf("Закончил есть философ с номером %d\n", pPh->PhilosopherId);
+            //LogTableInfo(pEatOptions->pTable);
+            //printf("[pid: 0x%08lx, philosopherId: %d] Закончил есть\n",
+            //       pthread_self(), pPh->PhilosopherId);
 
             //pPh->pLeftFork->IsInUse = false;
             //pthread_cond_signal(pPh->pLeftFork->CondSignalOnRelease);
             //sem_post(pArbitrator);
-            LogTableInfo(pEatOptions->pTable);
+            //LogTableInfo(pEatOptions->pTable);
             TakeOffFork(pPh->pLeftFork, pMutex, pArbitrator);
 
             //pPh->pRightFork->IsInUse = false;
             //pthread_cond_signal(pPh->pRightFork->CondSignalOnRelease);
             //sem_post(pArbitrator);
-            LogTableInfo(pEatOptions->pTable);
+            //LogTableInfo(pEatOptions->pTable);
             TakeOffFork(pPh->pRightFork, pMutex, pArbitrator);
 
             pPh->IsEating = false;
 
-            LogTableInfo(pEatOptions->pTable);
-            printf("[pid: 0x%08lx, philosopherId: %d] Поел, уходит\n",
-                   pthread_self(), pPh->PhilosopherId);
+
+            LogPrefix(FILE_NAME);
+            printf("Поел, уходит философ с номером %d\n", pPh->PhilosopherId);
+
+            //LogTableInfo(pEatOptions->pTable);
+            //printf("[pid: 0x%08lx, philosopherId: %d] Поел, уходит\n",
+            //       pthread_self(), pPh->PhilosopherId);
             pthread_mutex_unlock(pMutex);
         }
         else
@@ -372,6 +384,7 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
 //            pthread_mutex_lock(pMutex);
 
                 pPh->IsWaitingLeftFork = true;
+
 
                 LogTableInfo(pEatOptions->pTable);
                 printf("[pid: 0x%08lx, philosopherId: %d] Левая вилка несвободна, ожидание\n",

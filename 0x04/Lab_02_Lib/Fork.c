@@ -3,6 +3,9 @@
 #include <stdio.h>
 
 #include "Fork.h"
+#include "Log.h"
+
+#define FILE_NAME "Fork"
 
 Fork* CreateFork(int id)
 {
@@ -23,7 +26,9 @@ void TakeOnFork(Fork* pFork, pthread_mutex_t* pMutex, sem_t* pArbitrator)
     //pthread_mutex_lock(pMutex);
     pFork->IsInUse = true;
 
-    printf("[pid: 0x%08lx, forkId: %d] Занятие вилки\n", pthread_self(), pFork->ForkId);
+
+    LogPrefix(FILE_NAME);
+    printf("Занятие вилки с номером %d\n", pFork->ForkId);
 
     //int semValue;
     //sem_getvalue(pArbitrator, &semValue);
@@ -41,7 +46,11 @@ void TakeOffFork(Fork* pFork, pthread_mutex_t* pMutex, sem_t* pArbitrator)
 
     pthread_cond_signal(pFork->CondSignalOnRelease);
 
-    printf("[pid: 0x%08lx, forkId: %d] Освобождение вилки\n", pthread_self(), pFork->ForkId);
+
+    LogPrefix(FILE_NAME);
+    printf("Освобождение вилки с номером %d\n", pFork->ForkId);
+
+    //printf("[pid: 0x%08lx, forkId: %d] Освобождение вилки\n", pthread_self(), pFork->ForkId);
 }
 
 void DestroyFork(Fork* pFork)
