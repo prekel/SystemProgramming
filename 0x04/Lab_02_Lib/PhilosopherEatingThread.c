@@ -20,18 +20,17 @@ int SleepOrWaitSignal(struct timespec duration, bool isInfinityDuration)
         while (true)
         {
             errno = 0;
-            nanosleep(&tenSeconds, &rem);
-            if (errno == EINTR)
+            int res = nanosleep(&tenSeconds, &rem);
+            if (rem.tv_sec != 0 || rem.tv_nsec != 0 || errno == EINTR || res != 0)
             {
-
                 return 1;
             }
         }
     }
     else
     {
-        nanosleep(&duration, &rem);
-        if (errno == EINTR)
+        int res = nanosleep(&duration, &rem);
+        if (rem.tv_sec != 0 || rem.tv_nsec != 0 || errno == EINTR || res != 0)
         {
             return 1;
         }

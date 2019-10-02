@@ -14,4 +14,8 @@ if (UNIX)
     target_link_libraries(Lab_02_Interactive PRIVATE ${SDL2_LIBRARIES})
 endif (UNIX)
 
+if (MINGW)
+    target_link_libraries(Lab_02_Interactive PRIVATE mingw32 SDL2main SDL2)
+endif (MINGW)
+
 target_link_libraries(Lab_02_Interactive PRIVATE Lab_02_Lib)
