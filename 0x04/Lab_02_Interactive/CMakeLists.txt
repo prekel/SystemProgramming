@@ -8,7 +8,7 @@ if (UNIX)
     include_directories(${SDL2_INCLUDE_DIRS})
 endif (UNIX)
 
-add_executable(Lab_02_Interactive main.c RendererThread.c RendererThread.h ProgramQuitThread.c ProgramQuitThread.h)
+add_executable(Lab_02_Interactive main.c RendererThread.c RendererThread.h ProgramQuitThread.c ProgramQuitThread.h MainWindow.c MainWindow.h)
 
 if (UNIX)
     target_link_libraries(Lab_02_Interactive PRIVATE ${SDL2_LIBRARIES})
