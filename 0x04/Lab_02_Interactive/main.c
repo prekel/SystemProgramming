@@ -12,6 +12,7 @@
 #include "RealTimeTableStateThread.h"
 #include "AutoEatThread.h"
 #include "Log.h"
+#include "PhilosopherEatingThread.h"
 
 #include "RendererThread.h"
 
@@ -98,7 +99,7 @@ int main(int argc, char** args)
 
     //SDL_Delay(5000);
 
-    Table* pTable = CreateTable(0, 25, false);
+    Table* pTable = CreateTable(0, 9, false);
 
     InitLogger(pTable);
 
@@ -106,7 +107,7 @@ int main(int argc, char** args)
 
 
     AutoEatThreadOptions* pAutoEatThreadOptions = CreateAutoEatThreadOptions(
-            pTable, 0, 1234);
+            pTable, 0, 2);
     pthread_t autoEatThreadId;
     pthread_create(&autoEatThreadId, NULL, AutoEatThread,
                    pAutoEatThreadOptions);
@@ -296,7 +297,11 @@ int main(int argc, char** args)
             //       pthread_self(), pTable->ppPhilosophers[i]->PhilosopherId);
             sem_post(pTable->ppPhilosophers[i]->pSemOnGoingToEat);
             pthread_mutex_unlock(pTable->pMutex);
-            pthread_join(pTable->ppPhilosophers[i]->pThread, NULL);
+            void* pReturned;
+            pthread_join(pTable->ppPhilosophers[i]->pThread, &pReturned);
+            PhilosopherEatingThreadOptions* pReturnedOptions =
+                    (PhilosopherEatingThreadOptions*)pReturned;
+            DestroyPhilosopherEatingThreadOptions(pReturnedOptions);
             continue;
         }
         pthread_mutex_unlock(pTable->pMutex);
