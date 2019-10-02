@@ -22,6 +22,9 @@ int SleepOrWaitSignal(struct timespec tw)
 
 void* PhilosopherEatingThread(void* pEatThreadOptions)
 {
+    LogPrefix(FILE_NAME);
+    printf("Запуск потока\n");
+
     PhilosopherEatingThreadOptions* pEatOptions = (PhilosopherEatingThreadOptions*) pEatThreadOptions;
 
     Philosopher* pPh = pEatOptions->pPhilosopher;
@@ -259,6 +262,9 @@ void* PhilosopherEatingThread(void* pEatThreadOptions)
 
 void* PhilosopherEatingThread1(void* pEatThreadOptions)
 {
+    LogPrefix(FILE_NAME);
+    printf("Запуск потока\n");
+
     PhilosopherEatingThreadOptions* pEatOptions = (PhilosopherEatingThreadOptions*) pEatThreadOptions;
 
     Philosopher* pPhilosopher = pEatOptions->pPhilosopher;

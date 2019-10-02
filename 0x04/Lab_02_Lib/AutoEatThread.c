@@ -54,6 +54,9 @@ int Eat1(Table* pTable, Philosopher* pPhilosopher, struct timespec tw1, int i)
 
 void* AutoEatThread(void* pAutoEatThreadOptions)
 {
+    LogPrefix(FILE_NAME);
+    printf("Запуск потока\n");
+
     AutoEatThreadOptions* pOptions = (AutoEatThreadOptions*) pAutoEatThreadOptions;
 
     srand(time(NULL));

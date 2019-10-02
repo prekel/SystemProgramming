@@ -39,6 +39,9 @@ int CenterCircleY(int screenHeight, double angle, double r)
 
 void* RendererThread(void* pRendererThreadOptions)
 {
+    LogPrefix(FILE_NAME);
+    printf("Запуск потока\n");
+
     RendererThreadOptions* pOptions = (RendererThreadOptions*)
             pRendererThreadOptions;
 

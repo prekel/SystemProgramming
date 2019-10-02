@@ -25,6 +25,9 @@ void DestroyRealTimeTableStateThreadOptions(RealTimeTableStateThreadOptions* pOp
 
 void* RealTimeTableStateThread(void* pThreadOptions)
 {
+    LogPrefix(FILE_NAME);
+    printf("Запуск потока\n");
+
     RealTimeTableStateThreadOptions* pOptions = (RealTimeTableStateThreadOptions*) pThreadOptions;
 
 #ifdef LOGLEVEL_REALTIMESTATE
