@@ -8,6 +8,7 @@
 #define MACRO_H
 
 #include <stdlib.h>
+#include <stdio.h>
 
 /*! \brief Macro for pointer checking for null
  *
