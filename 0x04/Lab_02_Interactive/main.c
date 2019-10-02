@@ -116,12 +116,10 @@ int main(int argc, char** args)
     //DoEatAll(pTable);
 
 
-    int countedFrames = 0;
-    bool run = true;
-    SDL_Event e;
-
-    struct timespec tw1 = RandomTime(7, 7);
-    int k1 = 0;
+    //int countedFrames = 0;
+    //bool run = true;
+    //struct timespec tw1 = RandomTime(7, 7);
+    //int k1 = 0;
 
     pTable->IsEatingStarted = true;
 
@@ -136,6 +134,8 @@ int main(int argc, char** args)
 
     //while (run)
     //{
+
+    SDL_Event e;
 
     while (SDL_WaitEvent(&e) != 0)
     {
@@ -274,8 +274,7 @@ int main(int argc, char** args)
                                "\n",
                                pTable->ppPhilosophers[philosopherId -1]->PhilosopherId);
                         Eat1(pTable,
-                             pTable->ppPhilosophers[philosopherId - 1], tw1,
-                             k1++);
+                             pTable->ppPhilosophers[philosopherId - 1]);
                     }
                 }
 

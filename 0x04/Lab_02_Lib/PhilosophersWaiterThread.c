@@ -6,6 +6,7 @@
 #include "PhilosophersWaiterThread.h"
 #include "Log.h"
 #include "PhilosopherEatingThread.h"
+#include "Macro.h"
 
 #define FILE_NAME "PhilosophersWaiterThread"
 
@@ -15,6 +16,7 @@ PhilosophersWaiterThreadOptions* CreatePhilosophersWaiterThreadOptions
     PhilosophersWaiterThreadOptions* pOptions =
             (PhilosophersWaiterThreadOptions*)malloc(sizeof
             (PhilosophersWaiterThreadOptions));
+    FAILURE_IF_NULLPTR(pOptions);
 
     pOptions->pTable = pTable;
 

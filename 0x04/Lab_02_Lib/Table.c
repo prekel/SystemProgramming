@@ -168,7 +168,7 @@ void DoEatAll1(Table* pTable)
         int c = RandomInterval(0, PHILOSOPHERS_COUNT);
         Philosopher* ph = pTable->ppPhilosophers[c];
 
-        if (Eat1(pTable, ph, twb, i) == 1) continue;
+        if (Eat1(pTable, ph) == 1) continue;
 
         LogTableInfo(pTable);
         printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Задержка перед отправкой следующего %lf сек.\n",

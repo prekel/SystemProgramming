@@ -27,7 +27,7 @@ void DestroyAutoEatThreadOptions(AutoEatThreadOptions* pOptions)
     free(pOptions);
 }
 
-int Eat1(Table* pTable, Philosopher* pPhilosopher, struct timespec tw1, int i)
+int Eat1(Table* pTable, Philosopher* pPhilosopher)
 {
     pthread_mutex_lock(pTable->pMutex);
     if (pPhilosopher->IsEating == true)
@@ -75,7 +75,7 @@ void* AutoEatThread(void* pAutoEatThreadOptions)
         LogPrefix(FILE_NAME);
         printf("Философ с номером %d отправлен есть\n", pPhilosopher->PhilosopherId);
 
-        if (Eat1(pOptions->pTable, pPhilosopher, twb, i) == 1)
+        if (Eat1(pOptions->pTable, pPhilosopher) == 1)
         {
             //continue;
         }

@@ -5,8 +5,12 @@
 #include <pthread.h>
 #include <stdbool.h>
 #include <time.h>
+#include <RealTimeTableStateThread.h>
 
 #include "Table.h"
+#include "AutoEatThread.h"
+
+#include "RendererThread.h"
 
 typedef  struct
 {
@@ -16,27 +20,37 @@ typedef  struct
     SDL_Window* pWindow;
     SDL_Renderer* pRenderer;
 
+    AutoEatThreadOptions* pAutoEatThreadOptions;
+    pthread_t AutoEatThreadId;
+
+    RendererThreadOptions* pRendererThreadOptions;
     pthread_t RendererThreadId;
 
     bool IsRealTimeTableStateEnabled;
     struct timespec RealTimeTableStateInterval;
+    RealTimeTableStateThreadOptions* pRealTimeTableStateThreadOptions;
+    pthread_t RealTimeTableStateThreadId;
 
     Table* pTable;
+
+    int MinSendIntervalDuration;
+    int MaxSendIntervalDuration;
 } MainWindow;
 
-MainWindow* CreateMainWindow(int screenWidth, int screenHeight, Table*
-pTable);
+MainWindow* CreateMainWindow(int screenWidth, int screenHeight, Table* pTable,
+                             int minSendIntervalDuration,
+                             int maxSendIntervalDuration);
+
+void DestroyMainWindow(MainWindow* pMainWindow);
 
 int InitVideoMainWindow(MainWindow* pMainWindow);
 
-void StartThreadsMainWindow(MainWindow* pMainWindow);
+void InitAndStartThreadsMainWindow(MainWindow* pMainWindow);
 
-void MainCycleMainWindow(MainWindow* pMainWindow);
+int MainCycleMainWindow(MainWindow* pMainWindow);
 
 void QuitMainWindow(MainWindow* pMainWindow);
 
 int QuitVideoMainWindow(MainWindow* pMainWindow);
-
-void DestroyMainWindow(MainWindow* pMainWindow);
 
 #endif //MAINWINDOW_H
