@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdbool.h>
-#include <math.h>
 #include <pthread.h>
 
 #include <SDL.h>
@@ -21,9 +20,8 @@
 const int SCREEN_WIDTH = 512;
 const int SCREEN_HEIGHT = 512;
 
-SDL_Window* win = NULL;
-SDL_Surface* john = NULL;
-SDL_Renderer* ren = NULL;
+SDL_Window* g_pWindow = NULL;
+SDL_Renderer* g_pRenderer = NULL;
 
 int Init()
 {
@@ -33,21 +31,21 @@ int Init()
         return 1;
     }
 
-    win = SDL_CreateWindow("Обедающие философы",
-                           SDL_WINDOWPOS_UNDEFINED,
-                           SDL_WINDOWPOS_UNDEFINED,
-                           SCREEN_WIDTH,
-                           SCREEN_HEIGHT,
-                           SDL_WINDOW_SHOWN);
+    g_pWindow = SDL_CreateWindow("Обедающие философы",
+                                 SDL_WINDOWPOS_UNDEFINED,
+                                 SDL_WINDOWPOS_UNDEFINED,
+                                 SCREEN_WIDTH,
+                                 SCREEN_HEIGHT,
+                                 SDL_WINDOW_SHOWN);
 
-    if (win == NULL)
+    if (g_pWindow == NULL)
     {
         fprintf(stderr, "Can't create window: %s\n", SDL_GetError());
         return 1;
     }
 
-    ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
-    if (ren == NULL)
+    g_pRenderer = SDL_CreateRenderer(g_pWindow, -1, SDL_RENDERER_ACCELERATED);
+    if (g_pRenderer == NULL)
     {
         fprintf(stderr, "Can't create renderer: %s\n", SDL_GetError());
         return 1;
@@ -58,20 +56,14 @@ int Init()
 
 int Quit()
 {
-    SDL_FreeSurface(john);
-
-    SDL_DestroyWindow(win);
+    SDL_DestroyWindow(g_pWindow);
 
     SDL_Quit();
 
     return 0;
 }
 
-Table* g_pLoggingTable;
-
-
-
-
+//Table* g_pLoggingTable;
 
 void your_handler()
 {
@@ -106,15 +98,15 @@ int main(int argc, char** args)
 
     //SDL_Delay(5000);
 
-    Table* pTable = CreateTable(0, 4, false);
-    g_pLoggingTable = pTable;
+    Table* pTable = CreateTable(0, 25, false);
 
+    InitLogger(pTable);
 
     StartAllThreads(pTable);
 
 
     AutoEatThreadOptions* pAutoEatThreadOptions = CreateAutoEatThreadOptions(
-            pTable, 0, 2);
+            pTable, 0, 1234);
     pthread_t autoEatThreadId;
     pthread_create(&autoEatThreadId, NULL, AutoEatThread,
                    pAutoEatThreadOptions);
@@ -144,8 +136,8 @@ int main(int argc, char** args)
 
 
     RendererThreadOptions* pRendererThreadOptions =
-            CreateRendererThreadOptions(pTable, ren, SCREEN_WIDTH,
-                    SCREEN_HEIGHT);
+            CreateRendererThreadOptions(pTable, g_pRenderer, SCREEN_WIDTH,
+                                        SCREEN_HEIGHT);
     pthread_t rendererThreadId;
     pthread_create(&rendererThreadId, NULL, RendererThread, pRendererThreadOptions);
 
@@ -286,6 +278,11 @@ int main(int argc, char** args)
 
     pTable->IsEatingMustEnd = true;
 
+    LogPrefix(FILE_NAME);
+    printf("Принудительная отмена потока-спавнера\n");
+    pthread_cancel(autoEatThreadId);
+    DestroyAutoEatThreadOptions(pAutoEatThreadOptions);
+
     for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
     {
         pthread_mutex_lock(pTable->pMutex);
@@ -307,12 +304,13 @@ int main(int argc, char** args)
 
     pTable->IsEatingEnded = true;
 
-    pthread_join(autoEatThreadId, NULL);
-    DestroyAutoEatThreadOptions(pAutoEatThreadOptions);
-
+    LogPrefix(FILE_NAME);
+    printf("Ожидание завершения потока-наблюдателя\n");
     pthread_join(realTimeTableStateThreadId, NULL);
     DestroyRealTimeTableStateThreadOptions(pRealTimeTableStateOptions);
 
+    LogPrefix(FILE_NAME);
+    printf("Ожидание завершения отрисовщика\n");
     pthread_join(rendererThreadId, NULL);
     DestroyRendererThreadOptions(pRendererThreadOptions);
 

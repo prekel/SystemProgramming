@@ -39,6 +39,13 @@ void LogTableInfo(Table* pTable)
     free(tableInfo);
 }
 
+Table* g_pLoggingTable;
+
+void InitLogger(Table* pTable)
+{
+    g_pLoggingTable = pTable;
+}
+
 void LogPrefix(char* fileName)
 {
     char* info = TableInfo(g_pLoggingTable);

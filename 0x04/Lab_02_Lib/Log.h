@@ -15,7 +15,7 @@ char* TableInfo(Table* pTable);
 
 void LogTableInfo(Table* pTable);
 
-Table* g_pLoggingTable;
+void InitLogger(Table* pTable);
 
 void LogPrefix(char* fileName);
 

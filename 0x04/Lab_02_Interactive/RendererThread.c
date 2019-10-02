@@ -51,7 +51,7 @@ void* RendererThread(void* pRendererThreadOptions)
     bool run = true;
     while (run)
     {
-        if (g_pLoggingTable->IsEatingEnded) break;
+        if (pOptions->pTable->IsEatingEnded) break;
 
         SDL_SetRenderDrawColor(pOptions->pRenderer, 0x00, 0x00, 0x00, 0x00);
         SDL_RenderClear(pOptions->pRenderer);
@@ -60,15 +60,15 @@ void* RendererThread(void* pRendererThreadOptions)
 
         for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
         {
-            if (g_pLoggingTable->ppPhilosophers[i]->IsEating)
+            if (pOptions->pTable->ppPhilosophers[i]->IsEating)
             {
                 SDL_SetRenderDrawColor(pOptions->pRenderer, 255, 64, 64, 255);
             }
-            else if (g_pLoggingTable->ppPhilosophers[i]->IsWaiting)
+            else if (pOptions->pTable->ppPhilosophers[i]->IsWaiting)
             {
                 SDL_SetRenderDrawColor(pOptions->pRenderer, 32, 255, 64, 255);
             }
-            else if (!g_pLoggingTable->ppPhilosophers[i]->IsEating)
+            else if (!pOptions->pTable->ppPhilosophers[i]->IsEating)
             {
                 SDL_SetRenderDrawColor(pOptions->pRenderer, 255, 255, 255, 255);
             }
@@ -87,7 +87,7 @@ void* RendererThread(void* pRendererThreadOptions)
 
         for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
         {
-            if (g_pLoggingTable->ppForks[i]->IsInUse)
+            if (pOptions->pTable->ppForks[i]->IsInUse)
             {
                 SDL_SetRenderDrawColor(pOptions->pRenderer, 255, 128, 64, 255);
             }
