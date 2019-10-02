@@ -195,7 +195,7 @@ int main(int argc, char** args)
 
     //SDL_Delay(5000);
 
-    Table* pTable = CreateTable(1, 15, false);
+    Table* pTable = CreateTable(0, 4, false);
     g_pLoggingTable = pTable;
 
 
@@ -203,7 +203,7 @@ int main(int argc, char** args)
 
 
     AutoEatThreadOptions* pAutoEatThreadOptions = CreateAutoEatThreadOptions(
-            pTable, 2, 5);
+            pTable, 0, 2);
     pthread_t autoEatThreadId;
     pthread_create(&autoEatThreadId, NULL, AutoEatThread,
                    pAutoEatThreadOptions);

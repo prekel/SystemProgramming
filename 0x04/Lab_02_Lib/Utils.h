@@ -13,7 +13,7 @@ int RandomInterval(int min, int max);
 
 struct timespec RandomTime(int minSeconds, int maxSeconds);
 
-double TimespecToDouble(struct timespec* tw);
+double TimespecToDouble(struct timespec tw);
 
 struct timespec TimespecFromDouble(double seconds);
 

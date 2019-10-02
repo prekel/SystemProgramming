@@ -78,7 +78,7 @@ void* AutoEatThread(void* pAutoEatThreadOptions)
         }
 
         LogPrefix(FILE_NAME);
-        printf("После отправки философа с номером %d задержка перед отправкой следующего %lf сек.\n", pPhilosopher->PhilosopherId, TimespecToDouble(&twb));
+        printf("После отправки философа с номером %d задержка перед отправкой следующего %lf сек.\n", pPhilosopher->PhilosopherId, TimespecToDouble(twb));
 
         //LogTableInfo(pOptions->pTable);
         //printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Задержка перед отправкой следующего %lf сек.\n",

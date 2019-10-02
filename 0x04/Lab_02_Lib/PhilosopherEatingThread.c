@@ -42,7 +42,7 @@ void* PhilosopherEatingThread(void* pEatThreadOptions)
         LogTableInfo(pEatOptions->pTable);
         printf("[pid: 0x%08lx, philosopherId: %d] Вилки свободны, "
                "начинает есть %lf сек.\n", pthread_self(), pPh->PhilosopherId,
-               TimespecToDouble(&pDurationEat));
+               TimespecToDouble(pDurationEat));
 
         pPh->IsEating = true;
 
@@ -292,7 +292,7 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
             pPhilosopher->pRightFork->IsInUse == false)
         {
             LogPrefix(FILE_NAME);
-            printf("Вилки свободны для философа с номером %d, начинает есть %lf сек.\n", pPhilosopher->PhilosopherId, TimespecToDouble(&pDurationEat));
+            printf("Вилки свободны для философа с номером %d, начинает есть %lf сек.\n", pPhilosopher->PhilosopherId, TimespecToDouble(pDurationEat));
 
             pPhilosopher->IsEating = true;
 
@@ -327,7 +327,7 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
             TakeOnFork(pPhilosopher->pRightFork, pMutex, pArbitrator);
 
             LogPrefix(FILE_NAME);
-            printf("Философ с номером %d начал есть %lf секунд\n", pPhilosopher->PhilosopherId, TimespecToDouble(&pDurationEat));
+            printf("Философ с номером %d начал есть %lf секунд\n", pPhilosopher->PhilosopherId, TimespecToDouble(pDurationEat));
 
            // LogTableInfo(pEatOptions->pTable);
             //printf("[pid: 0x%08lx, philosopherId: %d] Начал есть\n",
@@ -501,7 +501,7 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
             TakeOnFork(pPhilosopher->pRightFork, pMutex, pArbitrator);
 
             LogPrefix(FILE_NAME);
-            printf("Философ с номером %d начинает есть после ожидания %lf сек.\n", pPhilosopher->PhilosopherId, TimespecToDouble(&pDurationEat));
+            printf("Философ с номером %d начинает есть после ожидания %lf сек.\n", pPhilosopher->PhilosopherId, TimespecToDouble(pDurationEat));
             //LogTableInfo(pEatOptions->pTable);
             //printf("[pid: 0x%08lx, philosopherId: %d] Начинает есть после ожидания\n",
             //       pthread_self(), pPhilosopher->PhilosopherId);

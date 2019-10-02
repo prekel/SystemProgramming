@@ -32,9 +32,9 @@ struct timespec RandomTime(int minSeconds, int maxSeconds)
     return tw;
 }
 
-double TimespecToDouble(struct timespec* tw)
+double TimespecToDouble(struct timespec tw)
 {
-    return tw->tv_sec * 1.0 + tw->tv_nsec / 1000000000.0;
+    return tw.tv_sec * 1.0 + tw.tv_nsec / 1000000000.0;
 }
 
 struct timespec TimespecFromDouble(double seconds)
