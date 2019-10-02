@@ -1,12 +1,15 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <pthread.h>
-
-#include <SDL.h>
 #include <signal.h>
 
-#include "Input.h"
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
+#include <SDL.h>
+
+#include "Input.h"
 #include "Table.h"
 #include "Utils.h"
 #include "RealTimeTableStateThread.h"
@@ -59,45 +62,30 @@ int Quit()
 {
     SDL_DestroyWindow(g_pWindow);
 
+    SDL_DestroyRenderer(g_pRenderer);
+
     SDL_Quit();
 
     return 0;
 }
 
-//Table* g_pLoggingTable;
-
-void your_handler()
+void SigUsr1Handler()
 {
-
+    LogPrefix(FILE_NAME);
+    printf("Отправка/получение/обработка сигнала SIGUSR1\n");
 }
 
 int main(int argc, char** args)
 {
+#ifdef _WIN32
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+#endif //_WIN32
+
     if (Init() == 1)
     {
         return 1;
     }
-
-    //SDL_SetRenderDrawColor(ren, 0x00, 0x00, 0x00, 0x00);
-    //SDL_RenderClear(ren);
-    //SDL_SetRenderDrawColor(ren, 0xFF, 0xFF, 0xFF, 0xFF);
-
-    //SDL_Rect rect1 = {10, 10, 50, 50};
-    //SDL_RenderFillRect(ren, &rect1);
-
-//    SDL_Rect rect2 = {70, 10, 50, 50};
-//    SDL_RenderDrawRect(ren, &rect2);
-//
-//    SDL_RenderDrawLine(ren, 10, 70, 640 - 10, 70);
-
-    //for (int i = 10; i <= 640 - 10; i += 4)
-    //{
-    //    SDL_RenderDrawPoint(ren, i, 90);
-    //}
-
-    //SDL_RenderPresent(ren);
-
-    //SDL_Delay(5000);
 
     Table* pTable = CreateTable(0, 9, false);
 
@@ -143,7 +131,7 @@ int main(int argc, char** args)
     pthread_create(&rendererThreadId, NULL, RendererThread, pRendererThreadOptions);
 
     struct sigaction sa;
-    sa.sa_handler = your_handler;
+    sa.sa_handler = SigUsr1Handler;
     sa.sa_flags = SA_RESTART;
     sigemptyset(&sa.sa_mask);
     sigaction(SIGUSR1, &sa, 0);
