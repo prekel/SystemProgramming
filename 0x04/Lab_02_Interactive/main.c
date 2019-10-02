@@ -17,6 +17,7 @@
 #include "Log.h"
 #include "PhilosopherEatingThread.h"
 #include "EatingInterrupter.h"
+#include "PhilosophersWaiterThread.h"
 
 #include "RendererThread.h"
 
@@ -147,7 +148,27 @@ int main(int argc, char** args)
         {
             if (e.key.keysym.sym == SDLK_ESCAPE)
             {
-                break;
+                LogPrefix(FILE_NAME);
+                printf("Завершение программы\n");
+
+                LogPrefix(FILE_NAME);
+                printf("Принудительная отмена потока-спавнера\n");
+                pthread_cancel(autoEatThreadId);
+                DestroyAutoEatThreadOptions(pAutoEatThreadOptions);
+
+                LogPrefix(FILE_NAME);
+                printf("Запуск потока, ожидающий "
+                       "завершения потоков философов\n");
+
+                pTable->IsEatingMustEnd = true;
+
+                PhilosophersWaiterThreadOptions*
+                pPhilosophersWaiterThreadOptions =
+                        CreatePhilosophersWaiterThreadOptions(pTable);
+                pthread_t philosophersWaiterThreadId;
+                pthread_create(&philosophersWaiterThreadId, NULL,
+                        PhilosophersWaiterThread,
+                        pPhilosophersWaiterThreadOptions);
             }
             if (e.key.keysym.mod & KMOD_ALT)
             {
@@ -240,7 +261,7 @@ int main(int argc, char** args)
 //                    //}
 //                }
             }
-            else
+            else if (!pTable->IsEatingMustEnd)
             {
                 char button = e.key.keysym.sym;
                 if ('1' <= button && button <='9')
@@ -294,43 +315,38 @@ int main(int argc, char** args)
 
     //pAutoEatThreadOptions->IsMustStop = true;
     LogPrefix(FILE_NAME);
-    printf("Завершение программы, ожидание завершения потоков\n");
+    printf("Завершение программы, завершение остальных потоков\n");
 
     //LogTableInfo(pTable);
     //printf("[pid: 0x%08lx] Завершение программы, ожидание завершения потоков...\n",
     //       pthread_self());
 
-    pTable->IsEatingMustEnd = true;
+    //pTable->IsEatingMustEnd = true;
 
-    LogPrefix(FILE_NAME);
-    printf("Принудительная отмена потока-спавнера\n");
-    pthread_cancel(autoEatThreadId);
-    DestroyAutoEatThreadOptions(pAutoEatThreadOptions);
 
-    for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
-    {
-        pthread_mutex_lock(pTable->pMutex);
-        if (pTable->ppPhilosophers[i]->IsThreadRunning)
-        {
-            LogPrefix(FILE_NAME);
-            printf("Ожидание завершения потока философа %d\n", pTable->ppPhilosophers[i]->PhilosopherId);
+//    for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
+//    {
+//        pthread_mutex_lock(pTable->pMutex);
+//        if (pTable->ppPhilosophers[i]->IsThreadRunning)
+//        {
+//            LogPrefix(FILE_NAME);
+//            printf("Ожидание завершения потока философа %d\n", pTable->ppPhilosophers[i]->PhilosopherId);
+//
+//            //LogTableInfo(pTable);
+//            //printf("[pid: 0x%08lx] Ожидание завершения потока философа %d\n",
+//            //       pthread_self(), pTable->ppPhilosophers[i]->PhilosopherId);
+//            sem_post(pTable->ppPhilosophers[i]->pSemOnGoingToEat);
+//            pthread_mutex_unlock(pTable->pMutex);
+//            void* pReturned;
+//            pthread_join(pTable->ppPhilosophers[i]->pThread, &pReturned);
+//            PhilosopherEatingThreadOptions* pReturnedOptions =
+//                    (PhilosopherEatingThreadOptions*)pReturned;
+//            DestroyPhilosopherEatingThreadOptions(pReturnedOptions);
+//            continue;
+//        }
+//        pthread_mutex_unlock(pTable->pMutex);
+//    }
 
-            //LogTableInfo(pTable);
-            //printf("[pid: 0x%08lx] Ожидание завершения потока философа %d\n",
-            //       pthread_self(), pTable->ppPhilosophers[i]->PhilosopherId);
-            sem_post(pTable->ppPhilosophers[i]->pSemOnGoingToEat);
-            pthread_mutex_unlock(pTable->pMutex);
-            void* pReturned;
-            pthread_join(pTable->ppPhilosophers[i]->pThread, &pReturned);
-            PhilosopherEatingThreadOptions* pReturnedOptions =
-                    (PhilosopherEatingThreadOptions*)pReturned;
-            DestroyPhilosopherEatingThreadOptions(pReturnedOptions);
-            continue;
-        }
-        pthread_mutex_unlock(pTable->pMutex);
-    }
-
-    pTable->IsEatingEnded = true;
 
     LogPrefix(FILE_NAME);
     printf("Ожидание завершения потока-наблюдателя\n");
