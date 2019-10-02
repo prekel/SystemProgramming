@@ -174,24 +174,24 @@ int main(int argc, char** args)
         return 1;
     }
 
-    SDL_SetRenderDrawColor(ren, 0x00, 0x00, 0x00, 0x00);
-    SDL_RenderClear(ren);
-    SDL_SetRenderDrawColor(ren, 0xFF, 0xFF, 0xFF, 0xFF);
+    //SDL_SetRenderDrawColor(ren, 0x00, 0x00, 0x00, 0x00);
+    //SDL_RenderClear(ren);
+    //SDL_SetRenderDrawColor(ren, 0xFF, 0xFF, 0xFF, 0xFF);
 
-    SDL_Rect rect1 = {10, 10, 50, 50};
-    SDL_RenderFillRect(ren, &rect1);
+    //SDL_Rect rect1 = {10, 10, 50, 50};
+    //SDL_RenderFillRect(ren, &rect1);
 
 //    SDL_Rect rect2 = {70, 10, 50, 50};
 //    SDL_RenderDrawRect(ren, &rect2);
 //
 //    SDL_RenderDrawLine(ren, 10, 70, 640 - 10, 70);
 
-    for (int i = 10; i <= 640 - 10; i += 4)
-    {
-        SDL_RenderDrawPoint(ren, i, 90);
-    }
+    //for (int i = 10; i <= 640 - 10; i += 4)
+    //{
+    //    SDL_RenderDrawPoint(ren, i, 90);
+    //}
 
-    SDL_RenderPresent(ren);
+    //SDL_RenderPresent(ren);
 
     //SDL_Delay(5000);
 
@@ -264,24 +264,30 @@ int main(int argc, char** args)
                 {
                     if (pTable->ppPhilosophers[0]->IsEating)
                     {
+                        LogPrefix(FILE_NAME);
+                        printf("Приём пищи философа с номером 1 прерван "
+                               "вручную\n");
                         pthread_kill(pTable->ppPhilosophers[0]->pThread,
                                      SIGUSR1);
                     }
-                    else if (pTable->ppPhilosophers[0]->IsWaitingLeftFork)
-                    {
-                        pthread_cond_signal(
-                                pTable->ppPhilosophers[0]->pLeftFork->CondSignalOnRelease);
-                    }
-                    else if (pTable->ppPhilosophers[0]->IsWaitingRightFork)
-                    {
-                        pthread_cond_signal(
-                                pTable->ppPhilosophers[0]->pRightFork->CondSignalOnRelease);
-                    }
+//                    else if (pTable->ppPhilosophers[0]->IsWaitingLeftFork)
+//                    {
+//                        pthread_cond_signal(
+//                                pTable->ppPhilosophers[0]->pLeftFork->CondSignalOnRelease);
+//                    }
+//                    else if (pTable->ppPhilosophers[0]->IsWaitingRightFork)
+//                    {
+//                        pthread_cond_signal(
+//                                pTable->ppPhilosophers[0]->pRightFork->CondSignalOnRelease);
+//                    }
                 }
                 if (e.key.keysym.sym == SDLK_2)
                 {
                     if (pTable->ppPhilosophers[1]->IsEating)
                     {
+                        LogPrefix(FILE_NAME);
+                        printf("Приём пищи философа с номером 2 прерван "
+                               "вручную\n");
                         pthread_kill(pTable->ppPhilosophers[1]->pThread,
                                      SIGUSR1);
                     }
@@ -290,6 +296,9 @@ int main(int argc, char** args)
                 {
                     if (pTable->ppPhilosophers[2]->IsEating)
                     {
+                        LogPrefix(FILE_NAME);
+                        printf("Приём пищи философа с номером 3 прерван "
+                               "вручную\n");
                         pthread_kill(pTable->ppPhilosophers[2]->pThread,
                                      SIGUSR1);
                     }
@@ -298,6 +307,9 @@ int main(int argc, char** args)
                 {
                     if (pTable->ppPhilosophers[3]->IsEating)
                     {
+                        LogPrefix(FILE_NAME);
+                        printf("Приём пищи философа с номером 4 прерван "
+                               "вручную\n");
                         pthread_kill(pTable->ppPhilosophers[3]->pThread,
                                      SIGUSR1);
                     }
@@ -306,6 +318,9 @@ int main(int argc, char** args)
                 {
                     if (pTable->ppPhilosophers[4]->IsEating)
                     {
+                        LogPrefix(FILE_NAME);
+                        printf("Приём пищи философа с номером 5 прерван "
+                               "вручную\n");
                         pthread_kill(pTable->ppPhilosophers[4]->pThread,
                                      SIGUSR1);
                     }
@@ -315,22 +330,32 @@ int main(int argc, char** args)
             {
                 if (e.key.keysym.sym == SDLK_1)
                 {
+                    LogPrefix(FILE_NAME);
+                    printf("Философ с номером 1 отправлен есть вручную\n");
                     Eat1(pTable, pTable->ppPhilosophers[0], tw1, k1++);
                 }
                 if (e.key.keysym.sym == SDLK_2)
                 {
+                    LogPrefix(FILE_NAME);
+                    printf("Философ с номером 2 отправлен есть вручную\n");
                     Eat1(pTable, pTable->ppPhilosophers[1], tw1, k1++);
                 }
                 if (e.key.keysym.sym == SDLK_3)
                 {
+                    LogPrefix(FILE_NAME);
+                    printf("Философ с номером 3 отправлен есть вручную\n");
                     Eat1(pTable, pTable->ppPhilosophers[2], tw1, k1++);
                 }
                 if (e.key.keysym.sym == SDLK_4)
                 {
+                    LogPrefix(FILE_NAME);
+                    printf("Философ с номером 4 отправлен есть вручную\n");
                     Eat1(pTable, pTable->ppPhilosophers[3], tw1, k1++);
                 }
                 if (e.key.keysym.sym == SDLK_5)
                 {
+                    LogPrefix(FILE_NAME);
+                    printf("Философ с номером 5 отправлен есть вручную\n");
                     Eat1(pTable, pTable->ppPhilosophers[4], tw1, k1++);
                 }
             }
