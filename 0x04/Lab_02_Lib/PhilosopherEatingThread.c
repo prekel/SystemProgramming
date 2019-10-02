@@ -6,6 +6,7 @@
 #include "Utils.h"
 #include "PhilosopherEatingThread.h"
 #include "Log.h"
+#include "Macro.h"
 
 #define FILE_NAME "PhilosopherEatingThread"
 
@@ -582,6 +583,7 @@ CreatePhilosopherEatingThreadOptions(Table* pTable, Philosopher* pPhilosopher,
 {
     PhilosopherEatingThreadOptions* pOptions = (PhilosopherEatingThreadOptions*) malloc(
             sizeof(PhilosopherEatingThreadOptions));
+    FAILURE_IF_NULLPTR(pOptions);
     pOptions->pTable = pTable;
     pOptions->pPhilosopher = pPhilosopher;
     pOptions->pMutex = mutex;

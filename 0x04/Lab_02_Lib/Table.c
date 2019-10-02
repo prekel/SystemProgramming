@@ -8,16 +8,18 @@
 #include "Input.h"
 #include "Utils.h"
 #include "PhilosopherEatingThread.h"
-#include "RealTimeTableStateThread.h"
 #include "Log.h"
 #include "AutoEatThread.h"
+#include "Macro.h"
 
 #define FILE_NAME "Table"
 
 Table* CreateTable(int minDurationEat, int maxDurationEat, bool isInfinityDuration)
 {
     Table* pTable = (Table*) malloc(sizeof(Table));
+    FAILURE_IF_NULLPTR(pTable);
     pTable->ppForks = (Fork**) malloc(PHILOSOPHERS_COUNT * sizeof(Fork*));
+    FAILURE_IF_NULLPTR(pTable->ppForks);
     for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
     {
         pTable->ppForks[i] = CreateFork(i + 1);
@@ -25,6 +27,7 @@ Table* CreateTable(int minDurationEat, int maxDurationEat, bool isInfinityDurati
 
     pTable->ppPhilosophers = (Philosopher**) malloc(
             PHILOSOPHERS_COUNT * sizeof(Philosopher*));
+    FAILURE_IF_NULLPTR(pTable->ppPhilosophers);
 
     for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
     {
@@ -38,9 +41,11 @@ Table* CreateTable(int minDurationEat, int maxDurationEat, bool isInfinityDurati
     pTable->IsEatingMustEnd = false;
 
     pTable->pMutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
+    FAILURE_IF_NULLPTR(pTable->pMutex);
     pthread_mutex_init(pTable->pMutex, NULL);
 
     pTable->pArbitrator = (sem_t*) malloc(sizeof(sem_t));
+    FAILURE_IF_NULLPTR(pTable->pArbitrator);
     sem_init(pTable->pArbitrator, 0, PHILOSOPHERS_COUNT);
 
     //pTable->MinDurationEat = 3;

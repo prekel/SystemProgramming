@@ -9,12 +9,14 @@
 #include "Philosopher.h"
 #include "Utils.h"
 #include "PhilosopherEatingThread.h"
+#include "Macro.h"
 
 Philosopher*
 CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork, int minDurationEat,
                   int maxDurationEat, bool isInfinityDuration)
 {
     Philosopher* pPhilosopher = (Philosopher*) malloc(sizeof(Philosopher));
+    FAILURE_IF_NULLPTR(pPhilosopher);
     pPhilosopher->PhilosopherId = id;
     pPhilosopher->pLeftFork = leftFork;
     pPhilosopher->pRightFork = rightFork;
@@ -25,6 +27,7 @@ CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork, int minDurationEat,
     pPhilosopher->IsWaitingRightFork = false;
 
     pPhilosopher->pSemOnGoingToEat = (sem_t*)malloc(sizeof(sem_t));
+    FAILURE_IF_NULLPTR(pPhilosopher->pSemOnGoingToEat);
     sem_init(pPhilosopher->pSemOnGoingToEat, 0, 0);
 
     pPhilosopher->MinDurationEat = minDurationEat;

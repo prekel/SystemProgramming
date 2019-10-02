@@ -4,16 +4,19 @@
 
 #include "Fork.h"
 #include "Log.h"
+#include "Macro.h"
 
 #define FILE_NAME "Fork"
 
 Fork* CreateFork(int id)
 {
     Fork* pFork = (Fork*) malloc(sizeof(Fork));
+    FAILURE_IF_NULLPTR(pFork);
     pFork->ForkId = id;
     pFork->IsInUse = false;
     pFork->CondSignalOnRelease = (pthread_cond_t*) malloc(
             sizeof(pthread_cond_t));
+    FAILURE_IF_NULLPTR(pFork->CondSignalOnRelease);
     pthread_cond_init(pFork->CondSignalOnRelease, NULL);
     return pFork;
 }

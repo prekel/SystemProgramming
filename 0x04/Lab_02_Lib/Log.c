@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include "Log.h"
+#include "Macro.h"
 
 char ForkToChar(Fork* fork)
 {
@@ -23,6 +24,7 @@ char PhToChar(Philosopher* fork)
 char* TableInfo(Table* pTable)
 {
     char* result = (char*)malloc((PHILOSOPHERS_COUNT * 2 + 1) * sizeof(char));
+    FAILURE_IF_NULLPTR(result);
     for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
     {
         result[i * 2] = PhToChar(pTable->ppPhilosophers[i]);

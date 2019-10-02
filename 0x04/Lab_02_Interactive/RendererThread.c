@@ -3,6 +3,8 @@
 #include <SDL.h>
 
 #include "Log.h"
+#include "Macro.h"
+
 #include "RendererThread.h"
 
 #define FILE_NAME "RendererThread"
@@ -13,6 +15,7 @@ CreateRendererThreadOptions(Table* pTable, SDL_Renderer* pRenderer,
 {
     RendererThreadOptions* pOptions = (RendererThreadOptions*)malloc(sizeof
             (RendererThreadOptions));
+    FAILURE_IF_NULLPTR(pOptions);
 
     pOptions->pTable = pTable;
     pOptions->pRenderer = pRenderer;

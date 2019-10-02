@@ -4,6 +4,7 @@
 
 #include "RealTimeTableStateThread.h"
 #include "Log.h"
+#include "Macro.h"
 
 #define FILE_NAME "RealTimeTableStateThread"
 
@@ -11,6 +12,7 @@ RealTimeTableStateThreadOptions* CreateRealTimeTableStateThreadOptions(Table* pT
 {
     RealTimeTableStateThreadOptions* pOptions = (RealTimeTableStateThreadOptions*) malloc(
             sizeof(RealTimeTableStateThreadOptions));
+    FAILURE_IF_NULLPTR(pOptions);
 
     pOptions->pTable = pTable;
     pOptions->pWaitTime = pWaitTime;
