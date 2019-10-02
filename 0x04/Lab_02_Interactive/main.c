@@ -14,6 +14,8 @@
 #include "AutoEatThread.h"
 #include "Log.h"
 
+#include "RendererThread.h"
+
 #define FILE_NAME "Main_Interactive"
 
 const int SCREEN_WIDTH = 512;
@@ -67,100 +69,9 @@ int Quit()
 
 Table* g_pLoggingTable;
 
-void
-DrawRectangle(int x, int y, int w, int h, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
-{
-    SDL_SetRenderDrawColor(ren, r, g, b, a);
-    SDL_Rect rect = {x, y, w, h};
-    SDL_RenderFillRect(ren, &rect);
-}
-
-int CenterCircleX(double angle, double r)
-{
-    return SCREEN_WIDTH / 2 + (int) (cos(angle * M_PI / 180) * r);
-}
-
-int CenterCircleY(double angle, double r)
-{
-    return SCREEN_HEIGHT / 2 + (int) (sin(angle * M_PI / 180) * r);
-}
-
-void* Render(void* pOptions)
-{
-    //Uint32 ticks0 = SDL_GetTicks();
-    Uint32 ticks1 = SDL_GetTicks();
-    //int countedFrames = 0;
-    bool run = true;
-    while (run)
-    {
-        if (g_pLoggingTable->IsEatingEnded) break;
-
-        SDL_SetRenderDrawColor(ren, 0x00, 0x00, 0x00, 0x00);
-        SDL_RenderClear(ren);
-        SDL_SetRenderDrawColor(ren, 0xFF, 0xFF, 0xFF, 0xFF);
 
 
-        for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
-        {
-            if (g_pLoggingTable->ppPhilosophers[i]->IsEating)
-            {
-                SDL_SetRenderDrawColor(ren, 255, 64, 64, 255);
-            }
-            else if (g_pLoggingTable->ppPhilosophers[i]->IsWaiting)
-            {
-                SDL_SetRenderDrawColor(ren, 32, 255, 64, 255);
-            }
-            else if (!g_pLoggingTable->ppPhilosophers[i]->IsEating)
-            {
-                SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
-            }
-            SDL_Rect rect = {
-                    CenterCircleX(360.0 / PHILOSOPHERS_COUNT * i - 90, 200) -
-                    30,
-                    CenterCircleY(360.0 / PHILOSOPHERS_COUNT * i - 90, 200) -
-                    30, 60, 60};
-            SDL_RenderFillRect(ren, &rect);
-        }
 
-
-        for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
-        {
-            if (g_pLoggingTable->ppForks[i]->IsInUse)
-            {
-                SDL_SetRenderDrawColor(ren, 255, 128, 64, 255);
-            }
-            else
-            {
-                SDL_SetRenderDrawColor(ren, 200, 200, 200, 255);
-            }
-            SDL_Rect rect = {
-                    CenterCircleX(360.0 / PHILOSOPHERS_COUNT * i - 54, 160) -
-                    15,
-                    CenterCircleY(360.0 / PHILOSOPHERS_COUNT * i - 54, 160) -
-                    15, 30, 30};
-            SDL_RenderFillRect(ren, &rect);
-        }
-
-        Uint32 frameMs = SDL_GetTicks() - ticks1;
-        //double avgFPS = countedFrames / ((SDL_GetTicks() - ticks0) / 1000.f);
-        ticks1 = SDL_GetTicks();
-
-
-        SDL_RenderPresent(ren);
-        //++countedFrames;
-
-        int vsyncms = 17;
-        if (frameMs < vsyncms) SDL_Delay(vsyncms - frameMs);
-    }
-
-    LogPrefix("Render");
-    printf("Завершение потока\n");
-
-    //LogTableInfo(g_pLoggingTable);
-    //printf("[pid: 0x%08lx][Render] Завершение потока\n", pthread_self());
-
-    return NULL;
-}
 
 void your_handler()
 {
@@ -232,8 +143,11 @@ int main(int argc, char** args)
     pTable->IsEatingStarted = true;
 
 
+    RendererThreadOptions* pRendererThreadOptions =
+            CreateRendererThreadOptions(pTable, ren, SCREEN_WIDTH,
+                    SCREEN_HEIGHT);
     pthread_t rendererThreadId;
-    pthread_create(&rendererThreadId, NULL, Render, NULL);
+    pthread_create(&rendererThreadId, NULL, RendererThread, pRendererThreadOptions);
 
     struct sigaction sa;
     sa.sa_handler = your_handler;
@@ -400,6 +314,7 @@ int main(int argc, char** args)
     DestroyRealTimeTableStateThreadOptions(pRealTimeTableStateOptions);
 
     pthread_join(rendererThreadId, NULL);
+    DestroyRendererThreadOptions(pRendererThreadOptions);
 
     DestroyTable(pTable);
 
