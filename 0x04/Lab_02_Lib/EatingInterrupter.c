@@ -27,7 +27,7 @@ void InitEatingInterrupter()
 #ifdef _WIN32
     LogPrefix(FILE_NAME);
     printf("Прерывание приёма пищи на Windows не реализовано\n");
-#elif
+#else
     g_SignalAction.sa_handler = SigUsr1Handler;
     g_SignalAction.sa_flags = SA_RESTART;
     sigemptyset(&g_SignalAction.sa_mask);
@@ -50,7 +50,7 @@ int InterruptEating(Philosopher* pPhilosopher, pthread_mutex_t* pMutex)
     LogPrefix(FILE_NAME);
     printf("Прерывание приёма пищи на Windows не реализовано\n");
     return 2;
-#elif
+#else
     pthread_mutex_lock(pMutex);
     if (pPhilosopher->IsEating)
     {
