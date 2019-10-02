@@ -19,9 +19,11 @@ int SleepOrWaitSignal(struct timespec duration, bool isInfinityDuration)
         struct timespec tenSeconds = {10, 0};
         while (true)
         {
+            errno = 0;
             nanosleep(&tenSeconds, &rem);
             if (errno == EINTR)
             {
+
                 return 1;
             }
         }
@@ -62,7 +64,8 @@ void* PhilosopherEatingThread(void* pEatThreadOptions)
         LogTableInfo(pEatOptions->pTable);
         printf("[pid: 0x%08lx, philosopherId: %d] Вилки свободны, "
                "начинает есть %lf сек.\n", pthread_self(), pPh->PhilosopherId,
-               TimespecToDouble(pDurationEat));
+               TimespecToDouble(pDurationEat,
+                       pEatOptions->pPhilosopher->IsInfinityDuration));
 
         pPh->IsEating = true;
 
@@ -319,7 +322,8 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
             LogPrefix(FILE_NAME);
             printf("Вилки свободны для философа с номером %d, начинает есть %lf сек.\n",
                    pPhilosopher->PhilosopherId,
-                   TimespecToDouble(pDurationEat));
+                   TimespecToDouble(pDurationEat,
+                           pOptions->pPhilosopher->IsInfinityDuration));
 
             pPhilosopher->IsEating = true;
 
@@ -356,7 +360,7 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
             LogPrefix(FILE_NAME);
             printf("Философ с номером %d начал есть %lf секунд\n",
                    pPhilosopher->PhilosopherId,
-                   TimespecToDouble(pDurationEat));
+                   TimespecToDouble(pDurationEat, pOptions->pPhilosopher->IsInfinityDuration));
 
             // LogTableInfo(pOptions->pTable);
             //printf("[pid: 0x%08lx, philosopherId: %d] Начал есть\n",
@@ -546,7 +550,7 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
             LogPrefix(FILE_NAME);
             printf("Философ с номером %d начинает есть после ожидания %lf сек.\n",
                    pPhilosopher->PhilosopherId,
-                   TimespecToDouble(pDurationEat));
+                   TimespecToDouble(pDurationEat, pOptions->pPhilosopher->IsInfinityDuration));
             //LogTableInfo(pOptions->pTable);
             //printf("[pid: 0x%08lx, philosopherId: %d] Начинает есть после ожидания\n",
             //       pthread_self(), pPhilosopher->PhilosopherId);
@@ -560,7 +564,7 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
             //       pthread_self(), pPhilosopher->PhilosopherId);
             pthread_mutex_unlock(pMutex);
 
-            if (SleepOrWaitSignal(pDurationEat, 0))
+            if (SleepOrWaitSignal(pDurationEat, pOptions->pPhilosopher->IsInfinityDuration))
             {
 
                 LogPrefix(FILE_NAME);

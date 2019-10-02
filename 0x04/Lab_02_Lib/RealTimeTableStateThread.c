@@ -32,7 +32,7 @@ void* RealTimeTableStateThread(void* pThreadOptions)
 
     RealTimeTableStateThreadOptions* pOptions = (RealTimeTableStateThreadOptions*) pThreadOptions;
 
-#ifdef LOGLEVEL_REALTIMESTATE
+#ifdef IS_REALTIMETABLESTATETHREAD_ENABLED
     int k = 0;
     while (k < 1)
     {

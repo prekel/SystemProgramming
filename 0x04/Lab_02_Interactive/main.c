@@ -88,7 +88,7 @@ int main(int argc, char** args)
         return 1;
     }
 
-    Table* pTable = CreateTable(0, 9, false);
+    Table* pTable = CreateTable(0, 9, true);
 
     InitLogger(pTable);
 
@@ -96,7 +96,7 @@ int main(int argc, char** args)
 
 
     AutoEatThreadOptions* pAutoEatThreadOptions = CreateAutoEatThreadOptions(
-            pTable, 0, 2);
+            pTable, 10000, 10000);
     pthread_t autoEatThreadId;
     pthread_create(&autoEatThreadId, NULL, AutoEatThread,
                    pAutoEatThreadOptions);
@@ -151,114 +151,143 @@ int main(int argc, char** args)
             }
             if (e.key.keysym.mod & KMOD_ALT)
             {
-                if (e.key.keysym.sym == SDLK_1)
+                char button = e.key.keysym.sym;
+                if ('1' <= button && button <='9')
                 {
-                    if (pTable->ppPhilosophers[0]->IsEating)
+                    int philosopherId = (int)(button - '0');
+                    if (philosopherId <= PHILOSOPHERS_COUNT)
                     {
-                        LogPrefix(FILE_NAME);
-                        printf("Приём пищи философа с номером 1 прерван "
-                               "вручную\n");
-                        InterruptEating(pTable->ppPhilosophers[0],
+                        InterruptEating(
+                                pTable->ppPhilosophers[philosopherId - 1],
                                 pTable->pMutex);
-                        //pthread_kill(pTable->ppPhilosophers[0]->pThread,
-                        //             SIGUSR1);
                     }
-//                    else if (pTable->ppPhilosophers[0]->IsWaitingLeftFork)
-//                    {
-//                        pthread_cond_signal(
-//                                pTable->ppPhilosophers[0]->pLeftFork->CondSignalOnRelease);
-//                    }
-//                    else if (pTable->ppPhilosophers[0]->IsWaitingRightFork)
-//                    {
-//                        pthread_cond_signal(
-//                                pTable->ppPhilosophers[0]->pRightFork->CondSignalOnRelease);
-//                    }
                 }
-                if (e.key.keysym.sym == SDLK_2)
-                {
-                    //if (pTable->ppPhilosophers[1]->IsEating)
-                    //{
-                        //LogPrefix(FILE_NAME);
-                        //printf("Приём пищи философа с номером 2 прерван "
-                        //       "вручную\n");
-                        InterruptEating(pTable->ppPhilosophers[1],
-                                        pTable->pMutex);
-                        //pthread_kill(pTable->ppPhilosophers[1]->pThread,
-                        //             SIGUSR1);
-                    //}
-                }
-                if (e.key.keysym.sym == SDLK_3)
-                {
-                    //if (pTable->ppPhilosophers[2]->IsEating)
-                    //{
-                    //    LogPrefix(FILE_NAME);
-                   //     printf("Приём пищи философа с номером 3 прерван "
-                    //           "вручную\n");
-                        InterruptEating(pTable->ppPhilosophers[2],
-                                        pTable->pMutex);
-                        //pthread_kill(pTable->ppPhilosophers[2]->pThread,
-                        //             SIGUSR1);
-                    //}
-                }
-                if (e.key.keysym.sym == SDLK_4)
-                {
-                    //if (pTable->ppPhilosophers[3]->IsEating)
-                    //{
-                    //    LogPrefix(FILE_NAME);
-                     //   printf("Приём пищи философа с номером 4 прерван "
-                     //          "вручную\n");
-                        InterruptEating(pTable->ppPhilosophers[3],
-                                        pTable->pMutex);
-                        //pthread_kill(pTable->ppPhilosophers[3]->pThread,
-                         //            SIGUSR1);
-                    //}
-                }
-                if (e.key.keysym.sym == SDLK_5)
-                {
-                    //if (pTable->ppPhilosophers[4]->IsEating)
-                    //{
-                    //    LogPrefix(FILE_NAME);
-                    //    printf("Приём пищи философа с номером 5 прерван "
-                     //          "вручную\n");
-                        InterruptEating(pTable->ppPhilosophers[4],
-                                        pTable->pMutex);
-                    //    pthread_kill(pTable->ppPhilosophers[4]->pThread,
-                    //                 SIGUSR1);
-                    //}
-                }
+
+
+//                if (e.key.keysym.sym == SDLK_1)
+//                {
+//                    //i/f (pTable->ppPhilosophers[0]->IsEating)
+//                    //{
+//                    //    LogPrefix(FILE_NAME);
+//                    //    printf("Приём пищи философа с номером 1 прерван "
+//                    //           "вручную\n");
+//                        InterruptEating(pTable->ppPhilosophers[0],
+//                                pTable->pMutex);
+//                        //pthread_kill(pTable->ppPhilosophers[0]->pThread,
+//                        //             SIGUSR1);
+//                    //}
+////                    else if (pTable->ppPhilosophers[0]->IsWaitingLeftFork)
+////                    {
+////                        pthread_cond_signal(
+////                                pTable->ppPhilosophers[0]->pLeftFork->CondSignalOnRelease);
+////                    }
+////                    else if (pTable->ppPhilosophers[0]->IsWaitingRightFork)
+////                    {
+////                        pthread_cond_signal(
+////                                pTable->ppPhilosophers[0]->pRightFork->CondSignalOnRelease);
+////                    }
+//                }
+//                if (e.key.keysym.sym == SDLK_2)
+//                {
+//                    //if (pTable->ppPhilosophers[1]->IsEating)
+//                    //{
+//                        //LogPrefix(FILE_NAME);
+//                        //printf("Приём пищи философа с номером 2 прерван "
+//                        //       "вручную\n");
+//                        InterruptEating(pTable->ppPhilosophers[1],
+//                                        pTable->pMutex);
+//                        //pthread_kill(pTable->ppPhilosophers[1]->pThread,
+//                        //             SIGUSR1);
+//                    //}
+//                }
+//                if (e.key.keysym.sym == SDLK_3)
+//                {
+//                    //if (pTable->ppPhilosophers[2]->IsEating)
+//                    //{
+//                    //    LogPrefix(FILE_NAME);
+//                   //     printf("Приём пищи философа с номером 3 прерван "
+//                    //           "вручную\n");
+//                        InterruptEating(pTable->ppPhilosophers[2],
+//                                        pTable->pMutex);
+//                        //pthread_kill(pTable->ppPhilosophers[2]->pThread,
+//                        //             SIGUSR1);
+//                    //}
+//                }
+//                if (e.key.keysym.sym == SDLK_4)
+//                {
+//                    //if (pTable->ppPhilosophers[3]->IsEating)
+//                    //{
+//                    //    LogPrefix(FILE_NAME);
+//                     //   printf("Приём пищи философа с номером 4 прерван "
+//                     //          "вручную\n");
+//                        InterruptEating(pTable->ppPhilosophers[3],
+//                                        pTable->pMutex);
+//                        //pthread_kill(pTable->ppPhilosophers[3]->pThread,
+//                         //            SIGUSR1);
+//                    //}
+//                }
+//                if (e.key.keysym.sym == SDLK_5)
+//                {
+//                    //if (pTable->ppPhilosophers[4]->IsEating)
+//                    //{
+//                    //    LogPrefix(FILE_NAME);
+//                    //    printf("Приём пищи философа с номером 5 прерван "
+//                     //          "вручную\n");
+//                        InterruptEating(pTable->ppPhilosophers[4],
+//                                        pTable->pMutex);
+//                    //    pthread_kill(pTable->ppPhilosophers[4]->pThread,
+//                    //                 SIGUSR1);
+//                    //}
+//                }
             }
             else
             {
-                if (e.key.keysym.sym == SDLK_1)
+                char button = e.key.keysym.sym;
+                if ('1' <= button && button <='9')
                 {
-                    LogPrefix(FILE_NAME);
-                    printf("Философ с номером 1 отправлен есть вручную\n");
-                    Eat1(pTable, pTable->ppPhilosophers[0], tw1, k1++);
+                    int philosopherId = (int)(button - '0');
+                    if (philosopherId <= PHILOSOPHERS_COUNT)
+                    {
+                        LogPrefix(FILE_NAME);
+                        printf("Философ с номером %d вручную отправлен есть"
+                               "\n",
+                               pTable->ppPhilosophers[philosopherId -1]->PhilosopherId);
+                        Eat1(pTable,
+                             pTable->ppPhilosophers[philosopherId - 1], tw1,
+                             k1++);
+                    }
                 }
-                if (e.key.keysym.sym == SDLK_2)
-                {
-                    LogPrefix(FILE_NAME);
-                    printf("Философ с номером 2 отправлен есть вручную\n");
-                    Eat1(pTable, pTable->ppPhilosophers[1], tw1, k1++);
-                }
-                if (e.key.keysym.sym == SDLK_3)
-                {
-                    LogPrefix(FILE_NAME);
-                    printf("Философ с номером 3 отправлен есть вручную\n");
-                    Eat1(pTable, pTable->ppPhilosophers[2], tw1, k1++);
-                }
-                if (e.key.keysym.sym == SDLK_4)
-                {
-                    LogPrefix(FILE_NAME);
-                    printf("Философ с номером 4 отправлен есть вручную\n");
-                    Eat1(pTable, pTable->ppPhilosophers[3], tw1, k1++);
-                }
-                if (e.key.keysym.sym == SDLK_5)
-                {
-                    LogPrefix(FILE_NAME);
-                    printf("Философ с номером 5 отправлен есть вручную\n");
-                    Eat1(pTable, pTable->ppPhilosophers[4], tw1, k1++);
-                }
+
+//                if (e.key.keysym.sym == SDLK_1)
+//                {
+//                    LogPrefix(FILE_NAME);
+//                    printf("Философ с номером 1 отправлен есть вручную\n");
+//                    Eat1(pTable, pTable->ppPhilosophers[0], tw1, k1++);
+//                }
+//                if (e.key.keysym.sym == SDLK_2)
+//                {
+//                    LogPrefix(FILE_NAME);
+//                    printf("Философ с номером 2 отправлен есть вручную\n");
+//                    Eat1(pTable, pTable->ppPhilosophers[1], tw1, k1++);
+//                }
+//                if (e.key.keysym.sym == SDLK_3)
+//                {
+//                    LogPrefix(FILE_NAME);
+//                    printf("Философ с номером 3 отправлен есть вручную\n");
+//                    Eat1(pTable, pTable->ppPhilosophers[2], tw1, k1++);
+//                }
+//                if (e.key.keysym.sym == SDLK_4)
+//                {
+//                    LogPrefix(FILE_NAME);
+//                    printf("Философ с номером 4 отправлен есть вручную\n");
+//                    Eat1(pTable, pTable->ppPhilosophers[3], tw1, k1++);
+//                }
+//                if (e.key.keysym.sym == SDLK_5)
+//                {
+//                    LogPrefix(FILE_NAME);
+//                    printf("Философ с номером 5 отправлен есть вручную\n");
+//                    Eat1(pTable, pTable->ppPhilosophers[4], tw1, k1++);
+//                }
             }
         }
     }
@@ -313,10 +342,10 @@ int main(int argc, char** args)
     pthread_join(rendererThreadId, NULL);
     DestroyRendererThreadOptions(pRendererThreadOptions);
 
-    DestroyTable(pTable);
-
     LogPrefix(FILE_NAME);
     printf("Завершение программы\n");
+
+    DestroyTable(pTable);
 
     return Quit();
 }

@@ -149,7 +149,7 @@ void DoEatAll(Table* pTable)
         struct timespec twb = RandomTime(0, 2);
         LogTableInfo(pTable);
         printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Задержка перед отправкой следующего %lf сек.\n",
-               pthread_self(), ph->PhilosopherId, i, TimespecToDouble(twb));
+               pthread_self(), ph->PhilosopherId, i, TimespecToDouble(twb, 0));
         nanosleep(&twb, NULL);
     }
 
@@ -172,7 +172,7 @@ void DoEatAll1(Table* pTable)
 
         LogTableInfo(pTable);
         printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Задержка перед отправкой следующего %lf сек.\n",
-               pthread_self(), ph->PhilosopherId, i, TimespecToDouble(twb));
+               pthread_self(), ph->PhilosopherId, i, TimespecToDouble(twb, 0));
         nanosleep(&twb, NULL);
     }
 

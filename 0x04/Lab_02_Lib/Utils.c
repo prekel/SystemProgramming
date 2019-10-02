@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <assert.h>
+#include <stdbool.h>
+#include <math.h>
 
 #include "Utils.h"
 
@@ -32,9 +34,13 @@ struct timespec RandomTime(int minSeconds, int maxSeconds)
     return tw;
 }
 
-double TimespecToDouble(struct timespec tw)
+double TimespecToDouble(struct timespec duration, bool isInfinityDuration)
 {
-    return tw.tv_sec * 1.0 + tw.tv_nsec / 1000000000.0;
+    if (isInfinityDuration)
+    {
+        return INFINITY;
+    }
+    return duration.tv_sec * 1.0 + duration.tv_nsec / 1000000000.0;
 }
 
 struct timespec TimespecFromDouble(double seconds)
