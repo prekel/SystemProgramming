@@ -3,12 +3,14 @@
 
 #include <pthread.h>
 
+#include "MainWindow.h"
+
 typedef struct {
-    pthread_t RealTimeTableStateThreadId;
-    pthread_t RendererThreadId;
+    MainWindow* pMainWindow;
 } ProgramQuitThreadOptions;
 
-ProgramQuitThreadOptions* CreateProgramQuitThreadOptions();
+ProgramQuitThreadOptions*
+CreateProgramQuitThreadOptions(MainWindow* pMainWindow);
 
 void DestroyProgramQuitThreadOptions
         (ProgramQuitThreadOptions* pOptions);

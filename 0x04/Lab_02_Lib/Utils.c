@@ -19,18 +19,19 @@ struct timespec RandomTime(int minSeconds, int maxSeconds)
     assert(maxSeconds >= minSeconds);
 
     struct timespec tw;
-    if (maxSeconds - minSeconds == 1)
+    if (maxSeconds == minSeconds)
     {
         tw.tv_sec = minSeconds;
+        tw.tv_nsec = 0;
     }
     else
     {
         tw.tv_sec = RandomInterval(minSeconds, maxSeconds);
+        tw.tv_nsec =
+                RandomInterval(0, 1000) * 1000000 +
+                RandomInterval(0, 1000) * 1000 +
+                RandomInterval(0, 1000);
     }
-    tw.tv_nsec =
-            RandomInterval(0, 1000) * 1000000 +
-            RandomInterval(0, 1000) * 1000 +
-            RandomInterval(0, 1000);
     return tw;
 }
 

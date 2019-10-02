@@ -62,7 +62,7 @@ void* AutoEatThread(void* pAutoEatThreadOptions)
     srand(time(NULL));
     pOptions->pTable->IsEatingStarted = true;
 
-    int i = 0;
+    //int i = 0;
     while (!pOptions->pTable->IsEatingMustEnd)
     {
         struct timespec twb = RandomTime(

@@ -12,6 +12,7 @@
 
 #include "RendererThread.h"
 
+
 typedef  struct
 {
     int ScreenWidth;
@@ -31,6 +32,10 @@ typedef  struct
     RealTimeTableStateThreadOptions* pRealTimeTableStateThreadOptions;
     pthread_t RealTimeTableStateThreadId;
 
+    pthread_t MainThreadId;
+
+    bool IsAutoSpawnDisabled;
+
     Table* pTable;
 
     int MinSendIntervalDuration;
@@ -39,9 +44,8 @@ typedef  struct
 
 MainWindow* CreateMainWindow(int screenWidth, int screenHeight, Table* pTable,
                              int minSendIntervalDuration,
-                             int maxSendIntervalDuration);
-
-void DestroyMainWindow(MainWindow* pMainWindow);
+                             int maxSendIntervalDuration,
+                             bool isAutoSpawnDisabled);
 
 int InitVideoMainWindow(MainWindow* pMainWindow);
 
@@ -52,5 +56,7 @@ int MainCycleMainWindow(MainWindow* pMainWindow);
 void QuitMainWindow(MainWindow* pMainWindow);
 
 int QuitVideoMainWindow(MainWindow* pMainWindow);
+
+void DestroyMainWindow(MainWindow* pMainWindow);
 
 #endif //MAINWINDOW_H

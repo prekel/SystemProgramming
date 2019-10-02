@@ -68,7 +68,5 @@ void* PhilosophersWaiterThread(void* pPhilosophersWaiterThreadOptions)
     LogPrefix(FILE_NAME);
     printf("Завершение потока\n");
 
-    exit(0);
-
     return NULL;
 }

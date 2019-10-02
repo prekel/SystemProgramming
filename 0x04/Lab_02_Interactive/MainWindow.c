@@ -2,18 +2,20 @@
 
 #include "Macro.h"
 #include "Log.h"
-#include "PhilosophersWaiterThread.h"
 #include "EatingInterrupter.h"
 
 #include "MainWindow.h"
+
+#include "ProgramQuitThread.h"
 
 #define FILE_NAME "MainWindow"
 
 MainWindow* CreateMainWindow(int screenWidth, int screenHeight, Table* pTable,
                              int minSendIntervalDuration,
-                             int maxSendIntervalDuration)
+                             int maxSendIntervalDuration,
+                             bool isAutoSpawnDisabled)
 {
-    MainWindow* pMainWindow = (MainWindow*) malloc(sizeof(MainWindow*));
+    MainWindow* pMainWindow = (MainWindow*) malloc(sizeof(MainWindow));
     FAILURE_IF_NULLPTR(pMainWindow);
 
     pMainWindow->ScreenWidth = screenWidth;
@@ -26,12 +28,11 @@ MainWindow* CreateMainWindow(int screenWidth, int screenHeight, Table* pTable,
     pMainWindow->MinSendIntervalDuration = minSendIntervalDuration;
     pMainWindow->MaxSendIntervalDuration = maxSendIntervalDuration;
 
-    return pMainWindow;
-}
+    pMainWindow->IsAutoSpawnDisabled = isAutoSpawnDisabled;
 
-void DestroyMainWindow(MainWindow* pMainWindow)
-{
-    free(pMainWindow);
+    pMainWindow->MainThreadId = pthread_self();
+
+    return pMainWindow;
 }
 
 int InitVideoMainWindow(MainWindow* pMainWindow)
@@ -42,6 +43,8 @@ int InitVideoMainWindow(MainWindow* pMainWindow)
                 ());
         return 1;
     }
+
+    //atexit(SDL_Quit);
 
     pMainWindow->pWindow = SDL_CreateWindow("Обедающие философы",
                                             SDL_WINDOWPOS_UNDEFINED,
@@ -70,11 +73,8 @@ int InitVideoMainWindow(MainWindow* pMainWindow)
 
 void InitAndStartThreadsMainWindow(MainWindow* pMainWindow)
 {
-    InitLogger(pMainWindow->pTable);
-
     if (pMainWindow->IsRealTimeTableStateEnabled)
     {
-        //struct timespec tw = {0, 200000000};
         pMainWindow->pRealTimeTableStateThreadOptions =
                 CreateRealTimeTableStateThreadOptions(pMainWindow->pTable,
                                                       pMainWindow->RealTimeTableStateInterval);
@@ -93,11 +93,14 @@ void InitAndStartThreadsMainWindow(MainWindow* pMainWindow)
     pthread_create(&pMainWindow->RendererThreadId, NULL, RendererThread,
                    pMainWindow->pRendererThreadOptions);
 
-    pMainWindow->pAutoEatThreadOptions = CreateAutoEatThreadOptions(
-            pMainWindow->pTable, pMainWindow->MinSendIntervalDuration,
-            pMainWindow->MaxSendIntervalDuration);
-    pthread_create(&pMainWindow->AutoEatThreadId, NULL, AutoEatThread,
-                   pMainWindow->pAutoEatThreadOptions);
+    if (!pMainWindow->IsAutoSpawnDisabled)
+    {
+        pMainWindow->pAutoEatThreadOptions = CreateAutoEatThreadOptions(
+                pMainWindow->pTable, pMainWindow->MinSendIntervalDuration,
+                pMainWindow->MaxSendIntervalDuration);
+        pthread_create(&pMainWindow->AutoEatThreadId, NULL, AutoEatThread,
+                       pMainWindow->pAutoEatThreadOptions);
+    }
 
     StartAllThreads(pMainWindow->pTable);
 
@@ -106,44 +109,49 @@ void InitAndStartThreadsMainWindow(MainWindow* pMainWindow)
 
 int MainCycleMainWindow(MainWindow* pMainWindow)
 {
-    SDL_Event e;
+    LogPrefix(FILE_NAME);
+    printf("Запуск главного цикла\n");
 
-    while (SDL_WaitEvent(&e) != 0)
+    SDL_Event event;
+
+    while (SDL_WaitEvent(&event) != 0)
     {
-        if (e.type == SDL_QUIT)
+        if (event.type == SDL_QUIT)
         {
+            LogPrefix(FILE_NAME);
+            printf("Главный цикл завершён принудительно\n");
             return 2;
         }
 
-        if (e.type == SDL_KEYDOWN)
+        if (event.type == SDL_KEYDOWN)
         {
-            if (e.key.keysym.sym == SDLK_ESCAPE)
+            if (event.key.keysym.sym == SDLK_ESCAPE && !pMainWindow->pTable->IsEatingMustEnd)
             {
                 LogPrefix(FILE_NAME);
                 printf("Завершение программы\n");
 
-                LogPrefix(FILE_NAME);
-                printf("Принудительная отмена потока-спавнера\n");
-                pthread_cancel(pMainWindow->AutoEatThreadId);
-                DestroyAutoEatThreadOptions(pMainWindow->pAutoEatThreadOptions);
+
+                if (!pMainWindow->IsAutoSpawnDisabled)
+                {
+                    LogPrefix(FILE_NAME);
+                    printf("Принудительная отмена потока-спавнера\n");
+                    pthread_cancel(pMainWindow->AutoEatThreadId);
+                    DestroyAutoEatThreadOptions(
+                            pMainWindow->pAutoEatThreadOptions);
+                }
 
                 LogPrefix(FILE_NAME);
-                printf("Запуск потока, ожидающий "
-                       "завершения потоков философов\n");
+                printf("Запуск потока, который завершает потоки\n");
 
                 pMainWindow->pTable->IsEatingMustEnd = true;
 
-                PhilosophersWaiterThreadOptions*
-                        pPhilosophersWaiterThreadOptions =
-                        CreatePhilosophersWaiterThreadOptions(pMainWindow->pTable);
-                pthread_t philosophersWaiterThreadId;
-                pthread_create(&philosophersWaiterThreadId, NULL,
-                               PhilosophersWaiterThread,
-                               pPhilosophersWaiterThreadOptions);
+                ProgramQuitThreadOptions* pProgramQuitThreadOptions = CreateProgramQuitThreadOptions(pMainWindow);
+                pthread_t programQuitThreadId;
+                pthread_create(&programQuitThreadId, NULL, ProgramQuitThread, pProgramQuitThreadOptions);
             }
-            if (e.key.keysym.mod & KMOD_ALT)
+            if (event.key.keysym.mod & KMOD_ALT)
             {
-                char button = e.key.keysym.sym;
+                char button = event.key.keysym.sym;
                 if ('1' <= button && button <='9')
                 {
                     int philosopherId = (int)(button - '0');
@@ -157,7 +165,7 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
             }
             else if (!pMainWindow->pTable->IsEatingMustEnd)
             {
-                char button = e.key.keysym.sym;
+                char button = event.key.keysym.sym;
                 if ('1' <= button && button <='9')
                 {
                     int philosopherId = (int)(button - '0');
@@ -174,6 +182,11 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
             }
         }
     }
+
+    LogPrefix(FILE_NAME);
+    printf("Главный цикл завершён по неизвестной ошибке\n");
+
+    return 1;
 }
 
 void QuitMainWindow(MainWindow* pMainWindow)
@@ -197,8 +210,6 @@ void QuitMainWindow(MainWindow* pMainWindow)
 
     LogPrefix(FILE_NAME);
     printf("Завершение программы\n");
-
-    DestroyTable(pMainWindow->pTable);
 }
 
 int QuitVideoMainWindow(MainWindow* pMainWindow)
@@ -210,4 +221,9 @@ int QuitVideoMainWindow(MainWindow* pMainWindow)
     SDL_Quit();
 
     return 0;
+}
+
+void DestroyMainWindow(MainWindow* pMainWindow)
+{
+    free(pMainWindow);
 }
