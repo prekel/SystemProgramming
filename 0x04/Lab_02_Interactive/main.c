@@ -130,11 +130,6 @@ int main(int argc, char** args)
     pthread_t rendererThreadId;
     pthread_create(&rendererThreadId, NULL, RendererThread, pRendererThreadOptions);
 
-    struct sigaction sa;
-    sa.sa_handler = SigUsr1Handler;
-    sa.sa_flags = SA_RESTART;
-    sigemptyset(&sa.sa_mask);
-    sigaction(SIGUSR1, &sa, 0);
 
 
     //while (run)
@@ -308,6 +303,9 @@ int main(int argc, char** args)
     DestroyRendererThreadOptions(pRendererThreadOptions);
 
     DestroyTable(pTable);
+
+    LogPrefix(FILE_NAME);
+    printf("Завершение программы\n");
 
     return Quit();
 }
