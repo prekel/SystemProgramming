@@ -36,13 +36,22 @@ int InterruptEating(Philosopher* pPhilosopher, pthread_mutex_t* pMutex)
     {
         InitEatingInterrupter();
     }
+    LogPrefix(FILE_NAME);
+    printf("Попытка прервать приём пищи философа с номером %d\n",
+            pPhilosopher->PhilosopherId);
     pthread_mutex_lock(pMutex);
     if (pPhilosopher->IsEating)
     {
         pthread_kill(pPhilosopher->pThread, SIGUSR1);
         pthread_mutex_unlock(pMutex);
+        LogPrefix(FILE_NAME);
+        printf("Приём пищи философа с номером %d прерван\n",
+               pPhilosopher->PhilosopherId);
         return 0;
     }
     pthread_mutex_unlock(pMutex);
+    LogPrefix(FILE_NAME);
+    printf("Философ с номером %d не ест\n",
+           pPhilosopher->PhilosopherId);
     return 1;
 }

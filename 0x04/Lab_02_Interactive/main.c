@@ -16,6 +16,7 @@
 #include "AutoEatThread.h"
 #include "Log.h"
 #include "PhilosopherEatingThread.h"
+#include "EatingInterrupter.h"
 
 #include "RendererThread.h"
 
@@ -69,11 +70,11 @@ int Quit()
     return 0;
 }
 
-void SigUsr1Handler()
-{
-    LogPrefix(FILE_NAME);
-    printf("Отправка/получение/обработка сигнала SIGUSR1\n");
-}
+//void SigUsr1Handler()
+//{
+//    LogPrefix(FILE_NAME);
+//    printf("Отправка/получение/обработка сигнала SIGUSR1\n");
+//}
 
 int main(int argc, char** args)
 {
@@ -157,8 +158,10 @@ int main(int argc, char** args)
                         LogPrefix(FILE_NAME);
                         printf("Приём пищи философа с номером 1 прерван "
                                "вручную\n");
-                        pthread_kill(pTable->ppPhilosophers[0]->pThread,
-                                     SIGUSR1);
+                        InterruptEating(pTable->ppPhilosophers[0],
+                                pTable->pMutex);
+                        //pthread_kill(pTable->ppPhilosophers[0]->pThread,
+                        //             SIGUSR1);
                     }
 //                    else if (pTable->ppPhilosophers[0]->IsWaitingLeftFork)
 //                    {
@@ -173,47 +176,55 @@ int main(int argc, char** args)
                 }
                 if (e.key.keysym.sym == SDLK_2)
                 {
-                    if (pTable->ppPhilosophers[1]->IsEating)
-                    {
-                        LogPrefix(FILE_NAME);
-                        printf("Приём пищи философа с номером 2 прерван "
-                               "вручную\n");
-                        pthread_kill(pTable->ppPhilosophers[1]->pThread,
-                                     SIGUSR1);
-                    }
+                    //if (pTable->ppPhilosophers[1]->IsEating)
+                    //{
+                        //LogPrefix(FILE_NAME);
+                        //printf("Приём пищи философа с номером 2 прерван "
+                        //       "вручную\n");
+                        InterruptEating(pTable->ppPhilosophers[1],
+                                        pTable->pMutex);
+                        //pthread_kill(pTable->ppPhilosophers[1]->pThread,
+                        //             SIGUSR1);
+                    //}
                 }
                 if (e.key.keysym.sym == SDLK_3)
                 {
-                    if (pTable->ppPhilosophers[2]->IsEating)
-                    {
-                        LogPrefix(FILE_NAME);
-                        printf("Приём пищи философа с номером 3 прерван "
-                               "вручную\n");
-                        pthread_kill(pTable->ppPhilosophers[2]->pThread,
-                                     SIGUSR1);
-                    }
+                    //if (pTable->ppPhilosophers[2]->IsEating)
+                    //{
+                    //    LogPrefix(FILE_NAME);
+                   //     printf("Приём пищи философа с номером 3 прерван "
+                    //           "вручную\n");
+                        InterruptEating(pTable->ppPhilosophers[2],
+                                        pTable->pMutex);
+                        //pthread_kill(pTable->ppPhilosophers[2]->pThread,
+                        //             SIGUSR1);
+                    //}
                 }
                 if (e.key.keysym.sym == SDLK_4)
                 {
-                    if (pTable->ppPhilosophers[3]->IsEating)
-                    {
-                        LogPrefix(FILE_NAME);
-                        printf("Приём пищи философа с номером 4 прерван "
-                               "вручную\n");
-                        pthread_kill(pTable->ppPhilosophers[3]->pThread,
-                                     SIGUSR1);
-                    }
+                    //if (pTable->ppPhilosophers[3]->IsEating)
+                    //{
+                    //    LogPrefix(FILE_NAME);
+                     //   printf("Приём пищи философа с номером 4 прерван "
+                     //          "вручную\n");
+                        InterruptEating(pTable->ppPhilosophers[3],
+                                        pTable->pMutex);
+                        //pthread_kill(pTable->ppPhilosophers[3]->pThread,
+                         //            SIGUSR1);
+                    //}
                 }
                 if (e.key.keysym.sym == SDLK_5)
                 {
-                    if (pTable->ppPhilosophers[4]->IsEating)
-                    {
-                        LogPrefix(FILE_NAME);
-                        printf("Приём пищи философа с номером 5 прерван "
-                               "вручную\n");
-                        pthread_kill(pTable->ppPhilosophers[4]->pThread,
-                                     SIGUSR1);
-                    }
+                    //if (pTable->ppPhilosophers[4]->IsEating)
+                    //{
+                    //    LogPrefix(FILE_NAME);
+                    //    printf("Приём пищи философа с номером 5 прерван "
+                     //          "вручную\n");
+                        InterruptEating(pTable->ppPhilosophers[4],
+                                        pTable->pMutex);
+                    //    pthread_kill(pTable->ppPhilosophers[4]->pThread,
+                    //                 SIGUSR1);
+                    //}
                 }
             }
             else
