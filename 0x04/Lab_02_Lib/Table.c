@@ -14,24 +14,29 @@
 
 #define FILE_NAME "Table"
 
-Table* CreateTable(int minDurationEat, int maxDurationEat, bool isInfinityDuration)
+Table*
+CreateTable(int philosophersCount, int minDurationEat, int maxDurationEat,
+            bool isInfinityDuration)
 {
     Table* pTable = (Table*) malloc(sizeof(Table));
     FAILURE_IF_NULLPTR(pTable);
-    pTable->ppForks = (Fork**) malloc(PHILOSOPHERS_COUNT * sizeof(Fork*));
+
+    pTable->PhilosophersCount = philosophersCount;
+
+    pTable->ppForks = (Fork**) malloc(pTable->PhilosophersCount * sizeof(Fork*));
     FAILURE_IF_NULLPTR(pTable->ppForks);
-    for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
+    for (int i = 0; i < pTable->PhilosophersCount; i++)
     {
         pTable->ppForks[i] = CreateFork(i + 1);
     }
 
     pTable->ppPhilosophers = (Philosopher**) malloc(
-            PHILOSOPHERS_COUNT * sizeof(Philosopher*));
+            pTable->PhilosophersCount * sizeof(Philosopher*));
     FAILURE_IF_NULLPTR(pTable->ppPhilosophers);
 
-    for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
+    for (int i = 0; i < pTable->PhilosophersCount; i++)
     {
-        Fork* lFork = pTable->ppForks[i == 0 ? PHILOSOPHERS_COUNT - 1 : i - 1];
+        Fork* lFork = pTable->ppForks[i == 0 ? pTable->PhilosophersCount - 1 : i - 1];
         pTable->ppPhilosophers[i] =
                 CreatePhilosopher(i + 1, lFork, pTable->ppForks[i], minDurationEat, maxDurationEat, isInfinityDuration);
     }
@@ -46,7 +51,7 @@ Table* CreateTable(int minDurationEat, int maxDurationEat, bool isInfinityDurati
 
     pTable->pArbitrator = (sem_t*) malloc(sizeof(sem_t));
     FAILURE_IF_NULLPTR(pTable->pArbitrator);
-    sem_init(pTable->pArbitrator, 0, PHILOSOPHERS_COUNT);
+    sem_init(pTable->pArbitrator, 0, pTable->PhilosophersCount);
 
     //pTable->MinDurationEat = 3;
     //pTable->MaxDurationEat = 15;
@@ -101,7 +106,7 @@ int Eat(Table* pTable, Philosopher* pPhilosopher, struct timespec tw, int i)
 
 void StartAllThreads(Table* pTable)
 {
-    for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
+    for (int i = 0; i < pTable->PhilosophersCount; i++)
     {
         PhilosopherEatingThreadOptions* options
                 = CreatePhilosopherEatingThreadOptions(
@@ -134,7 +139,7 @@ void DoEatAll(Table* pTable)
         //struct timespec tw = {a, 0};
         struct timespec tw = RandomTime(5, 15);
 
-        int c = RandomInterval(0, PHILOSOPHERS_COUNT);
+        int c = RandomInterval(0, pTable->PhilosophersCount);
         Philosopher* ph = pTable->ppPhilosophers[c];
 
         //int c1 = CycleInputInt("!:", 5, NULL);
@@ -165,7 +170,7 @@ void DoEatAll1(Table* pTable)
     {
         struct timespec twb = RandomTime(10, 10);
 
-        int c = RandomInterval(0, PHILOSOPHERS_COUNT);
+        int c = RandomInterval(0, pTable->PhilosophersCount);
         Philosopher* ph = pTable->ppPhilosophers[c];
 
         if (Eat1(pTable, ph) == 1) continue;
@@ -181,7 +186,7 @@ void DoEatAll1(Table* pTable)
 
 void DestroyTable(Table* pTable)
 {
-    for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
+    for (int i = 0; i < pTable->PhilosophersCount; i++)
     {
         DestroyFork(pTable->ppForks[i]);
         DestroyPhilosopher(pTable->ppPhilosophers[i]);

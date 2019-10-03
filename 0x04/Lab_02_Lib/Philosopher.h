@@ -5,7 +5,7 @@
 
 #include "Fork.h"
 
-#define PHILOSOPHERS_COUNT 5
+//#define PHILOSOPHERS_COUNT 5
 
 typedef struct
 {
@@ -17,6 +17,7 @@ typedef struct
     bool IsThreadRunning;
     pthread_t pThread;
     sem_t* pSemOnGoingToEat;
+    sem_t* pSemOnInfinityWaitingEnding;
     //pthread_cond_t* OnGoingToEat;
     //pthread_cond_t* OnMustToStop;
     bool IsWaitingLeftFork;

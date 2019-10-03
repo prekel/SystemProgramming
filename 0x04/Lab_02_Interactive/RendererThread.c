@@ -41,6 +41,16 @@ int CenterCircleY(int screenHeight, double angle, double r)
     return screenHeight / 2 + (int) (sin(angle * M_PI / 180) * r);
 }
 
+void DrawSquare(SDL_Renderer* pRenderer, int screenWidth, int screenHeight, int width, int r, double angle)
+{
+    SDL_Rect rect = {
+            CenterCircleX(screenWidth, angle, r) - width / 2,
+            CenterCircleY(screenHeight, angle, r) - width / 2,
+            width,
+            width};
+    SDL_RenderFillRect(pRenderer, &rect);
+}
+
 void* RendererThread(void* pRendererThreadOptions)
 {
     LogPrefix(FILE_NAME);
@@ -62,7 +72,7 @@ void* RendererThread(void* pRendererThreadOptions)
         SDL_SetRenderDrawColor(pOptions->pRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
 
-        for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
+        for (int i = 0; i < pOptions->pTable->PhilosophersCount; i++)
         {
             if (pOptions->pTable->ppPhilosophers[i]->IsEating)
             {
@@ -76,20 +86,20 @@ void* RendererThread(void* pRendererThreadOptions)
             {
                 SDL_SetRenderDrawColor(pOptions->pRenderer, 255, 255, 255, 255);
             }
-            SDL_Rect rect = {
-                    CenterCircleX(pOptions->ScreenWidth, 360.0 /
-                    PHILOSOPHERS_COUNT * i -
-                    90,
-                            200) -
-                    30,
-                    CenterCircleY(pOptions->ScreenHeight, 360.0 / PHILOSOPHERS_COUNT *
-                    i - 90, 200) -
-                    30, 60, 60};
-            SDL_RenderFillRect(pOptions->pRenderer, &rect);
+
+            double angle =
+                    360.0 / pOptions->pTable->PhilosophersCount * i - 90;
+
+            DrawSquare(pOptions->pRenderer,
+                       pOptions->ScreenWidth,
+                       pOptions->ScreenHeight,
+                       60,
+                       200,
+                       angle);
         }
 
 
-        for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
+        for (int i = 0; i < pOptions->pTable->PhilosophersCount; i++)
         {
             if (pOptions->pTable->ppForks[i]->IsInUse)
             {
@@ -99,13 +109,15 @@ void* RendererThread(void* pRendererThreadOptions)
             {
                 SDL_SetRenderDrawColor(pOptions->pRenderer, 200, 200, 200, 255);
             }
-            SDL_Rect rect = {
-                    CenterCircleX(pOptions->ScreenWidth, 360.0 /
-                    PHILOSOPHERS_COUNT * i - 54, 160) -
-                    15,
-                    CenterCircleY(pOptions->ScreenHeight, 360.0 / PHILOSOPHERS_COUNT * i - 54, 160) -
-                    15, 30, 30};
-            SDL_RenderFillRect(pOptions->pRenderer, &rect);
+
+            double angle = 360.0 / pOptions->pTable->PhilosophersCount * i - (90 - (360.0 / (pOptions->pTable->PhilosophersCount * 2)));
+
+            DrawSquare(pOptions->pRenderer,
+                       pOptions->ScreenWidth,
+                       pOptions->ScreenHeight,
+                       30,
+                       160,
+                       angle);
         }
 
         Uint32 frameMs = SDL_GetTicks() - ticks1;

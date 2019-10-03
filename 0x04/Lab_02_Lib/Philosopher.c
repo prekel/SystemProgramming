@@ -30,6 +30,10 @@ CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork, int minDurationEat,
     FAILURE_IF_NULLPTR(pPhilosopher->pSemOnGoingToEat);
     sem_init(pPhilosopher->pSemOnGoingToEat, 0, 0);
 
+    pPhilosopher->pSemOnInfinityWaitingEnding = (sem_t*)malloc(sizeof(sem_t));
+    FAILURE_IF_NULLPTR(pPhilosopher->pSemOnInfinityWaitingEnding);
+    sem_init(pPhilosopher->pSemOnInfinityWaitingEnding, 0, 0);
+
     pPhilosopher->MinDurationEat = minDurationEat;
     pPhilosopher->MaxDurationEat = maxDurationEat;
     pPhilosopher->IsInfinityDuration = isInfinityDuration;
@@ -47,6 +51,8 @@ void DestroyPhilosopher(Philosopher* pPhilosopher)
 {
     sem_destroy(pPhilosopher->pSemOnGoingToEat);
     free(pPhilosopher->pSemOnGoingToEat);
+    sem_destroy(pPhilosopher->pSemOnInfinityWaitingEnding);
+    free(pPhilosopher->pSemOnInfinityWaitingEnding);
 //    pthread_cond_destroy(pPhilosopher->OnGoingToEat);
 //    free(pPhilosopher->OnGoingToEat);
 //    pthread_cond_destroy(pPhilosopher->OnMustToStop);

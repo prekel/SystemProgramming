@@ -11,6 +11,7 @@
 typedef struct
 {
     Philosopher** ppPhilosophers;
+    int PhilosophersCount;
     Fork** ppForks;
     bool IsEatingStarted;
     bool IsEatingEnded;
@@ -21,7 +22,9 @@ typedef struct
     //int MaxDurationEat;
 } Table;
 
-Table* CreateTable(int minDurationEat, int maxDurationEat, bool isInfinityDuration);
+Table*
+CreateTable(int philosophersCount, int minDurationEat, int maxDurationEat,
+            bool isInfinityDuration);
 
 int Eat(Table* pTable, Philosopher* pPhilosopher, struct timespec tw1, int i);
 

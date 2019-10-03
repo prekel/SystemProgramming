@@ -56,20 +56,19 @@ void* AutoEatThread(void* pAutoEatThreadOptions)
 {
     LogPrefix(FILE_NAME);
     printf("Запуск потока\n");
+    srand(time(NULL));
 
     AutoEatThreadOptions* pOptions = (AutoEatThreadOptions*) pAutoEatThreadOptions;
 
-    srand(time(NULL));
     pOptions->pTable->IsEatingStarted = true;
 
-    //int i = 0;
     while (!pOptions->pTable->IsEatingMustEnd)
     {
         struct timespec twb = RandomTime(
                 pOptions->MinSendIntervalDuration,
                 pOptions->MaxSendIntervalDuration);
 
-        int c = RandomInterval(0, PHILOSOPHERS_COUNT);
+        int c = RandomInterval(0, pOptions->pTable->PhilosophersCount);
         Philosopher* pPhilosopher = pOptions->pTable->ppPhilosophers[c];
 
         LogPrefix(FILE_NAME);

@@ -37,6 +37,8 @@ MainWindow* CreateMainWindow(int screenWidth, int screenHeight, Table* pTable,
 
 int InitVideoMainWindow(MainWindow* pMainWindow)
 {
+    LogPrefix(FILE_NAME);
+    printf("Инициализация SDL\n");
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
     {
         fprintf(stderr, "Не удаётся проинициализировать: %s\n", SDL_GetError
@@ -44,8 +46,21 @@ int InitVideoMainWindow(MainWindow* pMainWindow)
         return 1;
     }
 
+    SDL_version compiledVersion;
+    SDL_version linkedVersion;
+    SDL_VERSION(&compiledVersion);
+    SDL_GetVersion(&linkedVersion);
+    LogPrefix(FILE_NAME);
+    printf("Скомпилированная версия SDL %d.%d.%d\n",
+           compiledVersion.major, compiledVersion.minor, compiledVersion.patch);
+    LogPrefix(FILE_NAME);
+    printf("Скомпонованная версия SDL %d.%d.%d\n",
+           linkedVersion.major, linkedVersion.minor, linkedVersion.patch);
+
     //atexit(SDL_Quit);
 
+    LogPrefix(FILE_NAME);
+    printf("Создание окна\n");
     pMainWindow->pWindow = SDL_CreateWindow("Обедающие философы",
                                             SDL_WINDOWPOS_UNDEFINED,
                                             SDL_WINDOWPOS_UNDEFINED,
@@ -59,6 +74,8 @@ int InitVideoMainWindow(MainWindow* pMainWindow)
         return 1;
     }
 
+    LogPrefix(FILE_NAME);
+    printf("Создание отрисовщика\n");
     pMainWindow->pRenderer = SDL_CreateRenderer(pMainWindow->pWindow, -1,
                                                 SDL_RENDERER_ACCELERATED);
     if (pMainWindow->pRenderer == NULL)
@@ -75,6 +92,9 @@ void InitAndStartThreadsMainWindow(MainWindow* pMainWindow)
 {
     if (pMainWindow->IsRealTimeTableStateEnabled)
     {
+        LogPrefix(FILE_NAME);
+        printf("Запуск потока, котрый выводит состояние стола в поток "
+               "ошибок\n");
         pMainWindow->pRealTimeTableStateThreadOptions =
                 CreateRealTimeTableStateThreadOptions(pMainWindow->pTable,
                                                       pMainWindow->RealTimeTableStateInterval);
@@ -85,6 +105,8 @@ void InitAndStartThreadsMainWindow(MainWindow* pMainWindow)
                 pMainWindow->pRealTimeTableStateThreadOptions);
     }
 
+    LogPrefix(FILE_NAME);
+    printf("Запуск потока отрисовщика\n");
     pMainWindow->pRendererThreadOptions =
             CreateRendererThreadOptions(pMainWindow->pTable,
                                         pMainWindow->pRenderer,
@@ -93,16 +115,20 @@ void InitAndStartThreadsMainWindow(MainWindow* pMainWindow)
     pthread_create(&pMainWindow->RendererThreadId, NULL, RendererThread,
                    pMainWindow->pRendererThreadOptions);
 
+    LogPrefix(FILE_NAME);
+    printf("Запуск потоков-философов\n");
+    StartAllThreads(pMainWindow->pTable);
+
     if (!pMainWindow->IsAutoSpawnDisabled)
     {
+        LogPrefix(FILE_NAME);
+        printf("Запуск потока, отправляющий философов есть\n");
         pMainWindow->pAutoEatThreadOptions = CreateAutoEatThreadOptions(
                 pMainWindow->pTable, pMainWindow->MinSendIntervalDuration,
                 pMainWindow->MaxSendIntervalDuration);
         pthread_create(&pMainWindow->AutoEatThreadId, NULL, AutoEatThread,
                        pMainWindow->pAutoEatThreadOptions);
     }
-
-    StartAllThreads(pMainWindow->pTable);
 
     pMainWindow->pTable->IsEatingStarted = true;
 }
@@ -128,8 +154,7 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
             if (event.key.keysym.sym == SDLK_ESCAPE && !pMainWindow->pTable->IsEatingMustEnd)
             {
                 LogPrefix(FILE_NAME);
-                printf("Завершение программы\n");
-
+                printf("Начато завершение программы\n");
 
                 if (!pMainWindow->IsAutoSpawnDisabled)
                 {
@@ -149,13 +174,37 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
                 pthread_t programQuitThreadId;
                 pthread_create(&programQuitThreadId, NULL, ProgramQuitThread, pProgramQuitThreadOptions);
             }
-            if (event.key.keysym.mod & KMOD_ALT)
+            if (event.key.keysym.mod & KMOD_CTRL)
             {
                 char button = event.key.keysym.sym;
                 if ('1' <= button && button <='9')
                 {
                     int philosopherId = (int)(button - '0');
-                    if (philosopherId <= PHILOSOPHERS_COUNT)
+                    pthread_mutex_lock(pMainWindow->pTable->pMutex);
+                    if (!pMainWindow->pTable->ppPhilosophers[philosopherId - 1]->IsEating)
+                    {
+                        LogPrefix(FILE_NAME);
+                        printf("Переключение метки бесконечного времени приёма пищи для философа с номером %d\n",
+                               pMainWindow->pTable->ppPhilosophers[philosopherId - 1]->PhilosopherId);
+                        pMainWindow->pTable->ppPhilosophers[philosopherId - 1]->IsInfinityDuration =
+                                !pMainWindow->pTable->ppPhilosophers[philosopherId - 1]->IsInfinityDuration;
+                    }
+                    else
+                    {
+                        LogPrefix(FILE_NAME);
+                        printf("Неваозможно переключение метки бесконечного времени приёма пищи для философа с номером %d\n",
+                               pMainWindow->pTable->ppPhilosophers[philosopherId - 1]->PhilosopherId);
+                    }
+                    pthread_mutex_unlock(pMainWindow->pTable->pMutex);
+                }
+            }
+            else if (event.key.keysym.mod & KMOD_ALT)
+            {
+                char button = event.key.keysym.sym;
+                if ('1' <= button && button <='9')
+                {
+                    int philosopherId = (int)(button - '0');
+                    if (philosopherId <= pMainWindow->pTable->PhilosophersCount)
                     {
                         InterruptEating(
                                 pMainWindow->pTable->ppPhilosophers[philosopherId - 1],
@@ -169,7 +218,7 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
                 if ('1' <= button && button <='9')
                 {
                     int philosopherId = (int)(button - '0');
-                    if (philosopherId <= PHILOSOPHERS_COUNT)
+                    if (philosopherId <= pMainWindow->pTable->PhilosophersCount)
                     {
                         LogPrefix(FILE_NAME);
                         printf("Философ с номером %d вручную отправлен есть"
@@ -184,7 +233,7 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
     }
 
     LogPrefix(FILE_NAME);
-    printf("Главный цикл завершён по неизвестной ошибке\n");
+    printf("Главный цикл завершён по неизвестной ошибке: %s\n", SDL_GetError());
 
     return 1;
 }
@@ -214,9 +263,12 @@ void QuitMainWindow(MainWindow* pMainWindow)
 
 int QuitVideoMainWindow(MainWindow* pMainWindow)
 {
-    SDL_DestroyWindow(pMainWindow->pWindow);
+    LogPrefix(FILE_NAME);
+    printf("Очистка и завершение отрисовщика, окна и SDL\n");
 
     SDL_DestroyRenderer(pMainWindow->pRenderer);
+
+    SDL_DestroyWindow(pMainWindow->pWindow);
 
     SDL_Quit();
 
