@@ -38,6 +38,12 @@ CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork, int minDurationEat,
     pPhilosopher->MaxDurationEat = maxDurationEat;
     pPhilosopher->IsInfinityDuration = isInfinityDuration;
 
+
+    pPhilosopher->pCondOnWaitingEnding = (pthread_cond_t*)malloc(
+             sizeof(pthread_cond_t));
+    FAILURE_IF_NULLPTR(pPhilosopher->pCondOnWaitingEnding);
+    pthread_cond_init(pPhilosopher->pCondOnWaitingEnding, NULL);
+
 //    pPhilosopher->OnGoingToEat = (pthread_cond_t*)malloc(sizeof(pthread_cond_t));
 //    pthread_cond_init(pPhilosopher->OnGoingToEat, NULL);
 //

@@ -18,6 +18,7 @@ typedef struct
     pthread_t pThread;
     sem_t* pSemOnGoingToEat;
     sem_t* pSemOnInfinityWaitingEnding;
+    pthread_cond_t* pCondOnWaitingEnding;
     //pthread_cond_t* OnGoingToEat;
     //pthread_cond_t* OnMustToStop;
     bool IsWaitingLeftFork;

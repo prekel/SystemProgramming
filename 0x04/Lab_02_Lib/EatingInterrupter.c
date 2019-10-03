@@ -50,35 +50,12 @@ int InterruptEating(Philosopher* pPhilosopher, pthread_mutex_t* pMutex)
     pthread_mutex_lock(pMutex);
     if (pPhilosopher->IsEating)
     {
-        if (pPhilosopher->IsInfinityDuration)
-        {
-            LogPrefix(FILE_NAME);
-            printf("Бесконечный приём пищи философа с номером %d прерван\n",
-                   pPhilosopher->PhilosopherId);
-            sem_post(pPhilosopher->pSemOnInfinityWaitingEnding);
-            pthread_mutex_unlock(pMutex);
-            return 0;
-        }
-        else
-        {
-#ifdef __MINGW32__
-            LogPrefix(FILE_NAME);
-            printf("Прерывание небесконечного приёма пищи на Windows не реализовано\n");
-            pthread_mutex_unlock(pMutex);
-            return 2;
-#else
-            //pthread_mutex_lock(pMutex);
-            //if (pPhilosopher->IsEating)
-            //{
-            pthread_kill(pPhilosopher->pThread, SIGUSR1);
-            pthread_mutex_unlock(pMutex);
-            LogPrefix(FILE_NAME);
-            printf("Приём пищи философа с номером %d прерван\n",
-                   pPhilosopher->PhilosopherId);
-            return 0;
-            //}
-#endif
-        }
+        LogPrefix(FILE_NAME);
+        printf("Приём пищи философа с номером %d прерван\n",
+               pPhilosopher->PhilosopherId);
+        pthread_cond_signal(pPhilosopher->pCondOnWaitingEnding);
+        pthread_mutex_unlock(pMutex);
+        return 0;
     }
     LogPrefix(FILE_NAME);
     printf("Философ с номером %d не ест\n",

@@ -2,6 +2,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <signal.h>
+#include <limits.h>
 
 #include "RealTimeTableStateThread.h"
 #include "Utils.h"
@@ -11,32 +12,45 @@
 
 #define FILE_NAME "PhilosopherEatingThread"
 
+const int NANOSEC_IN_SEC = 1000000000;
+
 int SleepOrWaitSignal(Philosopher* pPhilosopher, struct timespec duration,
-                      bool isInfinityDuration)
+                      bool isInfinityDuration, pthread_mutex_t* pMutex)
 {
-    struct timespec rem = {0, 0};
+    //struct timespec rem = {0, 0};
     if (isInfinityDuration)
     {
-        sem_wait(pPhilosopher->pSemOnInfinityWaitingEnding);
+        pthread_mutex_lock(pMutex);
+        struct timespec infinityTime = {INT_MAX, NANOSEC_IN_SEC - 1};
+        int timedwaitReturns = pthread_cond_timedwait(
+                pPhilosopher->pCondOnWaitingEnding, pMutex,
+                &infinityTime);
+        //LogPrefix(FILE_NAME);
+        //printf("pthread_cond_timedwait вернул %d\n", timedwaitReturns);
+        pthread_mutex_unlock(pMutex);
         return 1;
-//        struct timespec tenSeconds = {10, 0};
-//        while (true)
-//        {
-//            errno = 0;
-//            int res = nanosleep(&tenSeconds, &rem);
-//            if (rem.tv_sec != 0 || rem.tv_nsec != 0 || errno == EINTR || res != 0)
-//            {
-//                return 1;
-//            }
-//        }
     }
     else
     {
-        int res = nanosleep(&duration, &rem);
-        if (rem.tv_sec != 0 || rem.tv_nsec != 0 || errno == EINTR || res != 0)
+        pthread_mutex_lock(pMutex);
+
+        struct timespec currentTime;
+        clock_gettime(CLOCK_REALTIME, &currentTime);
+
+        struct timespec endTime = {currentTime.tv_sec + duration.tv_sec, currentTime.tv_nsec + duration.tv_nsec};
+        if (endTime.tv_nsec >= NANOSEC_IN_SEC)
         {
-            return 1;
+            endTime.tv_sec++;
+            endTime.tv_nsec -= NANOSEC_IN_SEC;
         }
+
+        int timedwaitReturns = pthread_cond_timedwait(
+                pPhilosopher->pCondOnWaitingEnding, pMutex,
+                &endTime);
+        //LogPrefix(FILE_NAME);
+        //printf("pthread_cond_timedwait вернул %d\n", timedwaitReturns);
+        pthread_mutex_unlock(pMutex);
+        return 0;
     }
     return 0;
 }
@@ -109,7 +123,8 @@ void* PhilosopherEatingThread(void* pEatThreadOptions)
         pthread_mutex_unlock(pMutex);
 
         if (SleepOrWaitSignal(pEatOptions->pPhilosopher, pDurationEat,
-                              pEatOptions->pPhilosopher->IsInfinityDuration))
+                              pEatOptions->pPhilosopher->IsInfinityDuration,
+                              pEatOptions->pMutex))
         {
             LogTableInfo(pEatOptions->pTable);
             printf("[pid: 0x%08lx, philosopherId: %d] Приём пищи завершён заранее сигналом\n",
@@ -246,7 +261,9 @@ void* PhilosopherEatingThread(void* pEatThreadOptions)
                pthread_self(), pPh->PhilosopherId);
         pthread_mutex_unlock(pMutex);
 
-        if (SleepOrWaitSignal(pEatOptions->pPhilosopher, pDurationEat, pEatOptions->pPhilosopher->IsInfinityDuration))
+        if (SleepOrWaitSignal(pEatOptions->pPhilosopher, pDurationEat,
+                              pEatOptions->pPhilosopher->IsInfinityDuration,
+                              pEatOptions->pMutex))
         {
             LogTableInfo(pEatOptions->pTable);
             printf("[pid: 0x%08lx, philosopherId: %d] Приём пищи после ожидания завершён заранее сигналом\n",
@@ -375,7 +392,8 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
             pthread_mutex_unlock(pMutex);
 
             if (SleepOrWaitSignal(pOptions->pPhilosopher, pDurationEat,
-                                  pOptions->pPhilosopher->IsInfinityDuration))
+                                  pOptions->pPhilosopher->IsInfinityDuration,
+                                  pOptions->pMutex))
             {
 
                 LogPrefix(FILE_NAME);
@@ -573,7 +591,8 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
             pthread_mutex_unlock(pMutex);
 
             if (SleepOrWaitSignal(pOptions->pPhilosopher, pDurationEat,
-                                  pOptions->pPhilosopher->IsInfinityDuration))
+                                  pOptions->pPhilosopher->IsInfinityDuration,
+                                  pOptions->pMutex))
             {
 
                 LogPrefix(FILE_NAME);
