@@ -46,6 +46,8 @@ void* PhilosopherEatingThread(void* pEatThreadOptions)
     LogPrefix(FILE_NAME);
     printf("Запуск потока\n");
 
+    srand(time(NULL));
+
     PhilosopherEatingThreadOptions* pEatOptions = (PhilosopherEatingThreadOptions*) pEatThreadOptions;
 
     Philosopher* pPh = pEatOptions->pPhilosopher;
@@ -287,6 +289,8 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
 {
     LogPrefix(FILE_NAME);
     printf("Запуск потока\n");
+
+    srand(time(NULL));
 
     PhilosopherEatingThreadOptions* pOptions = (PhilosopherEatingThreadOptions*) pEatThreadOptions;
 

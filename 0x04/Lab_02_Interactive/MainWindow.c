@@ -160,13 +160,15 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
                     {
                         LogPrefix(FILE_NAME);
                         printf("Переключение метки бесконечного времени приёма пищи для философа с номером %d\n",
-                               pMainWindow->pTable->ppPhilosophers[
-                                       philosopherId - 1]->PhilosopherId);
-                        pMainWindow->pTable->ppPhilosophers[philosopherId -
-                                                            1]->IsInfinityDuration =
-                                !pMainWindow->pTable->ppPhilosophers[
-                                        philosopherId -
-                                        1]->IsInfinityDuration;
+                               pMainWindow->pTable->ppPhilosophers[philosopherId - 1]->PhilosopherId);
+                        pMainWindow->pTable->ppPhilosophers[philosopherId - 1]->IsInfinityDuration =
+                                !pMainWindow->pTable->ppPhilosophers[philosopherId - 1]->IsInfinityDuration;
+                    }
+                    else
+                    {
+                        LogPrefix(FILE_NAME);
+                        printf("Неваозможно переключение метки бесконечного времени приёма пищи для философа с номером %d\n",
+                               pMainWindow->pTable->ppPhilosophers[philosopherId - 1]->PhilosopherId);
                     }
                     pthread_mutex_unlock(pMainWindow->pTable->pMutex);
                 }
