@@ -237,9 +237,9 @@ void QuitMainWindow(MainWindow* pMainWindow)
 
 int QuitVideoMainWindow(MainWindow* pMainWindow)
 {
-    SDL_DestroyWindow(pMainWindow->pWindow);
-
     SDL_DestroyRenderer(pMainWindow->pRenderer);
+
+    SDL_DestroyWindow(pMainWindow->pWindow);
 
     SDL_Quit();
 

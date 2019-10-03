@@ -10,6 +10,8 @@ project(SystemProgramming)
 
 #add_subdirectory(0x03/2-Threads)
 
+add_subdirectory(SDL)
+
 #add_subdirectory(0x04/3-Synchro)
 add_subdirectory(0x04/Lab_02)
 add_subdirectory(0x04/Lab_02_Lib)
