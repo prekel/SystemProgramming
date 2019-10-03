@@ -56,13 +56,12 @@ void* AutoEatThread(void* pAutoEatThreadOptions)
 {
     LogPrefix(FILE_NAME);
     printf("Запуск потока\n");
+    srand(time(NULL));
 
     AutoEatThreadOptions* pOptions = (AutoEatThreadOptions*) pAutoEatThreadOptions;
 
-    srand(time(NULL));
     pOptions->pTable->IsEatingStarted = true;
 
-    //int i = 0;
     while (!pOptions->pTable->IsEatingMustEnd)
     {
         struct timespec twb = RandomTime(
