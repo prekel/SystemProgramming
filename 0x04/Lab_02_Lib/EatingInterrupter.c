@@ -56,12 +56,21 @@ int InterruptEating(Philosopher* pPhilosopher, pthread_mutex_t* pMutex)
         pthread_mutex_unlock(pMutex);
         return 0;
     }
-    if (pPhilosopher->IsWaitingLeftFork)
+    else if (pPhilosopher->IsWaitingLeftFork)
     {
         LogPrefix(FILE_NAME);
         printf("Ожидание левой вилки философом с номером %d прервано\n",
                pPhilosopher->PhilosopherId);
         pthread_cond_signal(pPhilosopher->pLeftFork->CondSignalOnRelease);
+        pthread_mutex_unlock(pMutex);
+        return 0;
+    }
+    else if (pPhilosopher->IsWaitingRightFork)
+    {
+        LogPrefix(FILE_NAME);
+        printf("Ожидание правой вилки философом с номером %d прервано\n",
+               pPhilosopher->PhilosopherId);
+        pthread_cond_signal(pPhilosopher->pRightFork->CondSignalOnRelease);
         pthread_mutex_unlock(pMutex);
         return 0;
     }
