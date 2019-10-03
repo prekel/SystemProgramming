@@ -155,7 +155,7 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
                 if ('1' <= button && button <='9')
                 {
                     int philosopherId = (int)(button - '0');
-                    if (philosopherId <= PHILOSOPHERS_COUNT)
+                    if (philosopherId <= pMainWindow->pTable->PhilosophersCount)
                     {
                         InterruptEating(
                                 pMainWindow->pTable->ppPhilosophers[philosopherId - 1],
@@ -169,7 +169,7 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
                 if ('1' <= button && button <='9')
                 {
                     int philosopherId = (int)(button - '0');
-                    if (philosopherId <= PHILOSOPHERS_COUNT)
+                    if (philosopherId <= pMainWindow->pTable->PhilosophersCount)
                     {
                         LogPrefix(FILE_NAME);
                         printf("Философ с номером %d вручную отправлен есть"

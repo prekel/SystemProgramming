@@ -5,7 +5,7 @@
 
 #include "Fork.h"
 
-#define PHILOSOPHERS_COUNT 5
+//#define PHILOSOPHERS_COUNT 5
 
 typedef struct
 {

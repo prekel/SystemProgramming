@@ -52,7 +52,7 @@ int main(int argc, char** argv)
     struct timespec twfd8 = TimespecFromDouble(1.999999999);
 
 
-    Table* pTable = CreateTable(1, 7, false);
+    Table* pTable = CreateTable(0, 1, 7, false);
 
     struct timespec tw = {0, 200000000};
     RealTimeTableStateThreadOptions* pRealTimeTableStateOptions =

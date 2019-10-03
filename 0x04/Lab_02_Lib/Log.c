@@ -23,14 +23,14 @@ char PhToChar(Philosopher* fork)
 
 char* TableInfo(Table* pTable)
 {
-    char* result = (char*)malloc((PHILOSOPHERS_COUNT * 2 + 1) * sizeof(char));
+    char* result = (char*)malloc((pTable->PhilosophersCount * 2 + 1) * sizeof(char));
     FAILURE_IF_NULLPTR(result);
-    for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
+    for (int i = 0; i < pTable->PhilosophersCount; i++)
     {
         result[i * 2] = PhToChar(pTable->ppPhilosophers[i]);
         result[i * 2 + 1] = ForkToChar(pTable->ppForks[i]);
     }
-    result[PHILOSOPHERS_COUNT * 2] = '\0';
+    result[pTable->PhilosophersCount * 2] = '\0';
     return result;
 }
 

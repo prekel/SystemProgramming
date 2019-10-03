@@ -69,7 +69,7 @@ void* AutoEatThread(void* pAutoEatThreadOptions)
                 pOptions->MinSendIntervalDuration,
                 pOptions->MaxSendIntervalDuration);
 
-        int c = RandomInterval(0, PHILOSOPHERS_COUNT);
+        int c = RandomInterval(0, pOptions->pTable->PhilosophersCount);
         Philosopher* pPhilosopher = pOptions->pTable->ppPhilosophers[c];
 
         LogPrefix(FILE_NAME);

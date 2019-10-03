@@ -23,12 +23,20 @@ bool TimeChecker(int time)
     return 0 <= time && time <= 60 * 60 * 24;
 }
 
+bool PhilosophersCountChecker(int philosophersCount)
+{
+    return 2 <= philosophersCount && philosophersCount <= 10000;
+}
+
 int main(int argc, char** args)
 {
 #ifdef _WIN32
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
 #endif //_WIN32
+
+    printf("Минимальное количество философов 2, рекумендуется 5\n");
+    int philosophersCount = CycleInputInt("Введите кол-во философов: ", MAX_INT_LENGTH, PhilosophersCountChecker);
 
     printf("Для того, чтобы время приёма пищы было бесконечным, введите 0 минимальное и максимальное\n");
     printf("Для того, чтобы было постоянным, введите одинаковое максимальное и минимальное\n");
@@ -43,7 +51,8 @@ int main(int argc, char** args)
     bool isAutoSpawnDisabled = minSendIntervalDuration == 0 && maxSendIntervalDuration == 0;
 
 
-    Table* pTable = CreateTable(minDurationEat, maxDurationEat, isInfinityDuration);
+    Table* pTable = CreateTable(philosophersCount, minDurationEat, maxDurationEat,
+                                isInfinityDuration);
 
     InitLogger(pTable);
 

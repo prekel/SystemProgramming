@@ -62,7 +62,7 @@ void* RendererThread(void* pRendererThreadOptions)
         SDL_SetRenderDrawColor(pOptions->pRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
 
-        for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
+        for (int i = 0; i < pOptions->pTable->PhilosophersCount; i++)
         {
             if (pOptions->pTable->ppPhilosophers[i]->IsEating)
             {
@@ -78,18 +78,18 @@ void* RendererThread(void* pRendererThreadOptions)
             }
             SDL_Rect rect = {
                     CenterCircleX(pOptions->ScreenWidth, 360.0 /
-                    PHILOSOPHERS_COUNT * i -
+                                                                 pOptions->pTable->PhilosophersCount * i -
                     90,
                             200) -
                     30,
-                    CenterCircleY(pOptions->ScreenHeight, 360.0 / PHILOSOPHERS_COUNT *
+                    CenterCircleY(pOptions->ScreenHeight, 360.0 / pOptions->pTable->PhilosophersCount *
                     i - 90, 200) -
                     30, 60, 60};
             SDL_RenderFillRect(pOptions->pRenderer, &rect);
         }
 
 
-        for (int i = 0; i < PHILOSOPHERS_COUNT; i++)
+        for (int i = 0; i < pOptions->pTable->PhilosophersCount; i++)
         {
             if (pOptions->pTable->ppForks[i]->IsInUse)
             {
@@ -101,9 +101,9 @@ void* RendererThread(void* pRendererThreadOptions)
             }
             SDL_Rect rect = {
                     CenterCircleX(pOptions->ScreenWidth, 360.0 /
-                    PHILOSOPHERS_COUNT * i - 54, 160) -
+                                                                 pOptions->pTable->PhilosophersCount * i - 54, 160) -
                     15,
-                    CenterCircleY(pOptions->ScreenHeight, 360.0 / PHILOSOPHERS_COUNT * i - 54, 160) -
+                    CenterCircleY(pOptions->ScreenHeight, 360.0 / pOptions->pTable->PhilosophersCount * i - 54, 160) -
                     15, 30, 30};
             SDL_RenderFillRect(pOptions->pRenderer, &rect);
         }
