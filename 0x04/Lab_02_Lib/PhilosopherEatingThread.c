@@ -14,7 +14,7 @@
 int SleepOrWaitSignal(Philosopher* pPhilosopher, struct timespec duration,
                       bool isInfinityDuration)
 {
-    struct timespec rem;
+    struct timespec rem = {0, 0};
     if (isInfinityDuration)
     {
         sem_wait(pPhilosopher->pSemOnInfinityWaitingEnding);

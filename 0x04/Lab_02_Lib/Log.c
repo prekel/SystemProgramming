@@ -54,7 +54,7 @@ void LogPrefix(char* fileName)
 #ifdef __MINGW32__
     printf("[%s][pid: 0x%08llx][%24s] ", info, pthread_self(), fileName);
 #else
-    printf("[%s][pid: 0x%08lx][%24s] ", info, pthread_self(), fileName);
+    printf("[%s][tid: 0x%08lx][%24s] ", info, pthread_self(), fileName);
 #endif
     free(info);
 }

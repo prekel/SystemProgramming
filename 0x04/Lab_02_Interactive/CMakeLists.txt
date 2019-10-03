@@ -10,17 +10,15 @@ if (UNIX)
     endif (NOT TARGET SDL2)
 endif (UNIX)
 
-add_executable(Lab_02_Interactive main.c RendererThread.c RendererThread.h ProgramQuitThread.c ProgramQuitThread.h MainWindow.c MainWindow.h)
-
-#if (UNIX)
-#    target_link_libraries(Lab_02_Interactive PRIVATE ${SDL2_LIBRARIES})
-#endif (UNIX)
-
-#include_directories("SDL2")
+add_executable(Lab_02_Interactive main.c
+        RendererThread.c RendererThread.h
+        ProgramQuitThread.c ProgramQuitThread.h
+        MainWindow.c MainWindow.h)
 
 if (UNIX)
     target_link_libraries(Lab_02_Interactive PRIVATE SDL2main SDL2)
 endif (UNIX)
+
 if (MINGW)
     target_link_libraries(Lab_02_Interactive PRIVATE mingw32 SDL2main SDL2)
 endif (MINGW)
