@@ -11,7 +11,7 @@
 //#include <wait.h>
 #include <time.h>
 #include <pthread.h>
-#ifdef _WIN32
+#ifdef __MINGW32__
 #include <windows.h>
 #endif
 
@@ -30,7 +30,7 @@
  */
 int main(int argc, char** argv)
 {
-#ifdef _WIN32
+#ifdef __MINGW32__
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
 #endif

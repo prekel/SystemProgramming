@@ -128,8 +128,7 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
             if (event.key.keysym.sym == SDLK_ESCAPE && !pMainWindow->pTable->IsEatingMustEnd)
             {
                 LogPrefix(FILE_NAME);
-                printf("Завершение программы\n");
-
+                printf("Начато завершение программы\n");
 
                 if (!pMainWindow->IsAutoSpawnDisabled)
                 {

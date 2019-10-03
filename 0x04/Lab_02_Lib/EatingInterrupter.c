@@ -8,9 +8,9 @@
 
 #define FILE_NAME "EatingInterrupter"
 
-#ifndef _WIN32
+#ifndef __MINGW32__
 struct sigaction g_SignalAction;
-#endif //_WIN32
+#endif
 bool g_IsEatingInterrupterInit = false;
 
 void SigUsr1Handler()
@@ -24,7 +24,7 @@ void InitEatingInterrupter()
     LogPrefix(FILE_NAME);
     printf("Инициализация прерывателя приёма пищи\n");
 
-#ifdef _WIN32
+#ifdef __MINGW32__
     LogPrefix(FILE_NAME);
     printf("Прерывание небесконечного приёма пищи на Windows не реализовано\n");
 #else
@@ -61,7 +61,7 @@ int InterruptEating(Philosopher* pPhilosopher, pthread_mutex_t* pMutex)
         }
         else
         {
-#ifdef _WIN32
+#ifdef __MINGW32__
             LogPrefix(FILE_NAME);
             printf("Прерывание небесконечного приёма пищи на Windows не реализовано\n");
             pthread_mutex_unlock(pMutex);

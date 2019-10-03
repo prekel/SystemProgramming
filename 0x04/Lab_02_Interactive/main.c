@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#ifdef _WIN32
+#ifdef __MINGW32__
 #include <windows.h>
 #endif
 
@@ -30,10 +30,10 @@ bool PhilosophersCountChecker(int philosophersCount)
 
 int main(int argc, char** args)
 {
-#ifdef _WIN32
+#ifdef __MINGW32__
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
-#endif //_WIN32
+#endif
 
     printf("Минимальное количество философов 2, рекумендуется 5\n");
     int philosophersCount = CycleInputInt("Введите кол-во философов: ", MAX_INT_LENGTH, PhilosophersCountChecker);
