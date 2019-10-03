@@ -51,6 +51,10 @@ void InitLogger(Table* pTable)
 void LogPrefix(char* fileName)
 {
     char* info = TableInfo(g_pLoggingTable);
+#ifdef _WIN32
+    printf("[%s][pid: 0x%08llx][%24s] ", info, pthread_self(), fileName);
+#else
     printf("[%s][pid: 0x%08lx][%24s] ", info, pthread_self(), fileName);
+#endif
     free(info);
 }

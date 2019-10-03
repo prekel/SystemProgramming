@@ -184,7 +184,7 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
     }
 
     LogPrefix(FILE_NAME);
-    printf("Главный цикл завершён по неизвестной ошибке\n");
+    printf("Главный цикл завершён по неизвестной ошибке: %s\n", SDL_GetError());
 
     return 1;
 }
