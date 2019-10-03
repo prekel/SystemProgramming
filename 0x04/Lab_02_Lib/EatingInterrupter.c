@@ -56,6 +56,15 @@ int InterruptEating(Philosopher* pPhilosopher, pthread_mutex_t* pMutex)
         pthread_mutex_unlock(pMutex);
         return 0;
     }
+    if (pPhilosopher->IsWaitingLeftFork)
+    {
+        LogPrefix(FILE_NAME);
+        printf("Ожидание левой вилки философом с номером %d прервано\n",
+               pPhilosopher->PhilosopherId);
+        pthread_cond_signal(pPhilosopher->pLeftFork->CondSignalOnRelease);
+        pthread_mutex_unlock(pMutex);
+        return 0;
+    }
     LogPrefix(FILE_NAME);
     printf("Философ с номером %d не ест\n",
            pPhilosopher->PhilosopherId);

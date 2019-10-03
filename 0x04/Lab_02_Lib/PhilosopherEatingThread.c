@@ -472,7 +472,24 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
                     printf("Ожидание левой вилки для философа с номером %d принудительно прервано\n",
                            pPhilosopher->PhilosopherId);
 
+                    //LogPrefix(FILE_NAME);
+                    //printf("Философ с номером %d закончил есть\n",
+                    //       pPhilosopher->PhilosopherId);
 
+                    //TakeOffFork(pPhilosopher->pLeftFork, pMutex, pArbitrator);
+
+                    //TakeOffFork(pPhilosopher->pRightFork, pMutex, pArbitrator);
+
+                    pPhilosopher->IsEating = false;
+                    pPhilosopher->IsWaiting = false;
+                    pPhilosopher->IsWaitingLeftFork = false;
+                    pPhilosopher->IsWaitingRightFork = false;
+
+                    LogPrefix(FILE_NAME);
+                    printf("Философ с номером %d принудительно уходит после ожидания левой вилки\n",
+                           pPhilosopher->PhilosopherId);
+                    pthread_mutex_unlock(pMutex);
+                    continue;
 
                     //LogTableInfo(pOptions->pTable);
                     //printf("[pid: 0x%08lx, philosopherId: %d] Ожидание принудительно прервано (левая)\n",
