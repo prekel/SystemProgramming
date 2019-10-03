@@ -149,7 +149,29 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
                 pthread_t programQuitThreadId;
                 pthread_create(&programQuitThreadId, NULL, ProgramQuitThread, pProgramQuitThreadOptions);
             }
-            if (event.key.keysym.mod & KMOD_ALT)
+            if (event.key.keysym.mod & KMOD_CTRL)
+            {
+                char button = event.key.keysym.sym;
+                if ('1' <= button && button <='9')
+                {
+                    int philosopherId = (int)(button - '0');
+                    pthread_mutex_lock(pMainWindow->pTable->pMutex);
+                    if (!pMainWindow->pTable->ppPhilosophers[philosopherId - 1]->IsEating)
+                    {
+                        LogPrefix(FILE_NAME);
+                        printf("Переключение метки бесконечного времени приёма пищи для философа с номером %d\n",
+                               pMainWindow->pTable->ppPhilosophers[
+                                       philosopherId - 1]->PhilosopherId);
+                        pMainWindow->pTable->ppPhilosophers[philosopherId -
+                                                            1]->IsInfinityDuration =
+                                !pMainWindow->pTable->ppPhilosophers[
+                                        philosopherId -
+                                        1]->IsInfinityDuration;
+                    }
+                    pthread_mutex_unlock(pMainWindow->pTable->pMutex);
+                }
+            }
+            else if (event.key.keysym.mod & KMOD_ALT)
             {
                 char button = event.key.keysym.sym;
                 if ('1' <= button && button <='9')
