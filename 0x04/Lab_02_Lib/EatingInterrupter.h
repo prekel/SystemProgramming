@@ -2,7 +2,6 @@
 #define EATINGINTERRUPTER_H
 
 #include <pthread.h>
-#include <signal.h>
 
 #include "Philosopher.h"
 

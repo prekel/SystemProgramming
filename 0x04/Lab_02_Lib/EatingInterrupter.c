@@ -1,5 +1,4 @@
 #include <pthread.h>
-#include <signal.h>
 #include <stdio.h>
 
 #include "Philosopher.h"
@@ -8,31 +7,31 @@
 
 #define FILE_NAME "EatingInterrupter"
 
-#ifndef __MINGW32__
-struct sigaction g_SignalAction;
-#endif
+//#ifndef __MINGW32__
+//struct sigaction g_SignalAction;
+//#endif
 bool g_IsEatingInterrupterInit = false;
-
-void SigUsr1Handler()
-{
-    LogPrefix(FILE_NAME);
-    printf("Отправка/получение/обработка сигнала SIGUSR1\n");
-}
+//
+//void SigUsr1Handler()
+//{
+//    LogPrefix(FILE_NAME);
+//    printf("Отправка/получение/обработка сигнала SIGUSR1\n");
+//}
 
 void InitEatingInterrupter()
 {
     LogPrefix(FILE_NAME);
     printf("Инициализация прерывателя приёма пищи\n");
 
-#ifdef __MINGW32__
-    LogPrefix(FILE_NAME);
-    printf("Прерывание небесконечного приёма пищи на Windows не реализовано\n");
-#else
-    g_SignalAction.sa_handler = SigUsr1Handler;
-    g_SignalAction.sa_flags = SA_RESTART;
-    sigemptyset(&g_SignalAction.sa_mask);
-    sigaction(SIGUSR1, &g_SignalAction, 0);
-#endif
+//#ifdef __MINGW32__
+//    LogPrefix(FILE_NAME);
+//    printf("Прерывание небесконечного приёма пищи на Windows не реализовано\n");
+//#else
+//    g_SignalAction.sa_handler = SigUsr1Handler;
+//    g_SignalAction.sa_flags = SA_RESTART;
+//    sigemptyset(&g_SignalAction.sa_mask);
+//    sigaction(SIGUSR1, &g_SignalAction, 0);
+//#endif
 
     g_IsEatingInterrupterInit = true;
 }
