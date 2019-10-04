@@ -20,6 +20,7 @@ if (UNIX)
 endif (UNIX)
 
 if (MINGW)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mconsole -mwindows")
     target_link_libraries(Lab_02_Interactive PRIVATE mingw32 SDL2main SDL2)
 endif (MINGW)
 
