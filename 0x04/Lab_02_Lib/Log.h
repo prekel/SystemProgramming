@@ -21,4 +21,6 @@ void LogPrefix(char* fileName);
 
 void Log(char* fileName, char* format, ...);
 
+void Log2(char* format, ...);
+
 #endif // LOG_H

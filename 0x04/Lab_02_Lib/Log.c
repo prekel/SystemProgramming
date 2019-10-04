@@ -89,3 +89,34 @@ void Log(char* fileName, char* format, ...)
 
     pthread_mutex_unlock(&g_pLogMutex);
 }
+
+
+void LogPrefix1()
+{
+    char* info = TableInfo(g_pLoggingTable);
+#ifdef __MINGW32__
+    printf("[%s][tid: 0x%08llx][%24s] ", info, pthread_self(), fileName);
+#else
+    printf("[%s][tid: 0x%08lx]", info, pthread_self());
+#endif
+    free(info);
+}
+
+void Log2(char* format, ...)
+{
+    if (!g_IsLoggerInitialized)
+    {
+        return;
+    }
+    pthread_mutex_lock(&g_pLogMutex);
+
+    LogPrefix1();
+
+    va_list argptr;
+    va_start(argptr, format);
+    vfprintf(LOG_OUTPUT_STREAM, format, argptr);
+    fprintf(LOG_OUTPUT_STREAM, "\n");
+    va_end(argptr);
+
+    pthread_mutex_unlock(&g_pLogMutex);
+}
