@@ -19,4 +19,6 @@ void InitLogger(Table* pTable);
 
 void LogPrefix(char* fileName);
 
+void Log(char* fileName, char* format, ...);
+
 #endif // LOG_H

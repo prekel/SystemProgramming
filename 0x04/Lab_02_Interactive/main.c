@@ -59,6 +59,8 @@ int main(int argc, char** args)
 
     InitLogger(pTable);
 
+    Log(FILE_NAME, "Qwerty %d %d", 1, 2);
+
     LogPrefix(FILE_NAME);
     printf("Введены данные, создание объектов, запуск потоков...\n");
 
