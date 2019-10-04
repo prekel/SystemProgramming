@@ -12,7 +12,6 @@
 
 #include "RendererThread.h"
 
-
 typedef  struct
 {
     int ScreenWidth;

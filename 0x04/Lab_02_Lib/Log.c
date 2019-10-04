@@ -52,7 +52,7 @@ void LogPrefix(char* fileName)
 {
     char* info = TableInfo(g_pLoggingTable);
 #ifdef __MINGW32__
-    printf("[%s][pid: 0x%08llx][%24s] ", info, pthread_self(), fileName);
+    printf("[%s][tid: 0x%08llx][%24s] ", info, pthread_self(), fileName);
 #else
     printf("[%s][tid: 0x%08lx][%24s] ", info, pthread_self(), fileName);
 #endif

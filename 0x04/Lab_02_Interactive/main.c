@@ -31,6 +31,10 @@ bool PhilosophersCountChecker(int philosophersCount)
 int main(int argc, char** args)
 {
 #ifdef __MINGW32__
+    AllocConsole();
+    freopen("CONIN$", "r", stdin);
+    freopen("CONOUT$", "w", stdout);
+    freopen("CONOUT$", "w", stderr);
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
 #endif
