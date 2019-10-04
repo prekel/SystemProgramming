@@ -55,8 +55,7 @@ void DrawSquare(SDL_Renderer* pRenderer, int screenWidth, int screenHeight, int 
 
 void* RendererThread(void* pRendererThreadOptions)
 {
-    LogPrefix(FILE_NAME);
-    printf("Запуск потока\n");
+    Log(FILE_NAME, "Запуск потока");
 
     RendererThreadOptions* pOptions = (RendererThreadOptions*)
             pRendererThreadOptions;
@@ -134,8 +133,7 @@ void* RendererThread(void* pRendererThreadOptions)
         if (frameMs < vsyncms) SDL_Delay(vsyncms - frameMs);
     }
 
-    LogPrefix(FILE_NAME);
-    printf("Завершение потока\n");
+    Log(FILE_NAME, "Завершение потока");
 
     //LogTableInfo(g_pLoggingTable);
     //printf("[pid: 0x%08lx][Render] Завершение потока\n", pthread_self());

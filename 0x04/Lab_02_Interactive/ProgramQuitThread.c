@@ -32,8 +32,7 @@ void* ProgramQuitThread(void* pProgramQuitThreadOptions)
     ProgramQuitThreadOptions* pOptions = (ProgramQuitThreadOptions*)pProgramQuitThreadOptions;
 
     pthread_mutex_lock(pOptions->pMutex);
-    LogPrefix(FILE_NAME);
-    printf("Запуск потока\n");
+    Log(FILE_NAME, "Запуск потока");
     pthread_mutex_unlock(pOptions->pMutex);
 
     PhilosophersWaiterThreadOptions*
@@ -49,8 +48,7 @@ void* ProgramQuitThread(void* pProgramQuitThreadOptions)
     DestroyPhilosophersWaiterThreadOptions(pPhilosophersWaiterThreadOptions);
 
     pthread_mutex_lock(pOptions->pMutex);
-    LogPrefix(FILE_NAME);
-    printf("Принудительная отмена главного потока\n");
+    Log(FILE_NAME, "Принудительная отмена главного потока");
     pthread_cancel(pOptions->pMainWindow->MainThreadId);
     pthread_mutex_unlock(pOptions->pMutex);
 

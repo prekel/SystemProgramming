@@ -37,15 +37,13 @@ int Eat1(Table* pTable, Philosopher* pPhilosopher)
     pthread_mutex_lock(pTable->pMutex);
     if (pPhilosopher->IsEating == true)
     {
-        LogPrefix(FILE_NAME);
-        printf("Философ с номером %d уже ест\n", pPhilosopher->PhilosopherId);
+        Log(FILE_NAME, "Философ с номером %d уже ест", pPhilosopher->PhilosopherId);
         pthread_mutex_unlock(pTable->pMutex);
         return 1;
     }
     if (pPhilosopher->IsWaiting == true)
     {
-        LogPrefix(FILE_NAME);
-        printf("Философ с номером %d ещё ожидает\n", pPhilosopher->PhilosopherId);
+        Log(FILE_NAME, "Философ с номером %d ещё ожидает", pPhilosopher->PhilosopherId);
         pthread_mutex_unlock(pTable->pMutex);
         return 1;
     }
@@ -59,8 +57,7 @@ int Eat1(Table* pTable, Philosopher* pPhilosopher)
 
 void* AutoEatThread(void* pAutoEatThreadOptions)
 {
-    LogPrefix(FILE_NAME);
-    printf("Запуск потока\n");
+    Log(FILE_NAME, "Запуск потока");
     srand(time(NULL));
 
     AutoEatThreadOptions* pOptions = (AutoEatThreadOptions*) pAutoEatThreadOptions;
@@ -76,16 +73,14 @@ void* AutoEatThread(void* pAutoEatThreadOptions)
         int c = RandomInterval(0, pOptions->pTable->PhilosophersCount);
         Philosopher* pPhilosopher = pOptions->pTable->ppPhilosophers[c];
 
-        LogPrefix(FILE_NAME);
-        printf("Философ с номером %d отправлен есть\n", pPhilosopher->PhilosopherId);
+        Log(FILE_NAME, "Философ с номером %d отправлен есть", pPhilosopher->PhilosopherId);
 
         if (Eat1(pOptions->pTable, pPhilosopher) == 1)
         {
             //continue;
         }
 
-        LogPrefix(FILE_NAME);
-        printf("После отправки философа с номером %d задержка перед отправкой следующего %lf сек.\n", pPhilosopher->PhilosopherId,
+        Log(FILE_NAME, "После отправки философа с номером %d задержка перед отправкой следующего %lf сек.", pPhilosopher->PhilosopherId,
                TimespecToDouble(
                        twb, pPhilosopher->IsInfinityDuration));
 
@@ -97,8 +92,7 @@ void* AutoEatThread(void* pAutoEatThreadOptions)
 
     //pOptions->pTable->IsEatingEnded = true;
 
-    LogPrefix(FILE_NAME);
-    printf("Завершение потока\n");
+    Log(FILE_NAME, "Завершение потока");
 
 
     //LogTableInfo(pOptions->pTable);

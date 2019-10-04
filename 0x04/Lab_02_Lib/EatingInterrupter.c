@@ -20,8 +20,7 @@ bool g_IsEatingInterrupterInit = false;
 
 void InitEatingInterrupter()
 {
-    LogPrefix(FILE_NAME);
-    printf("Инициализация прерывателя приёма пищи\n");
+    Log(FILE_NAME, "Инициализация прерывателя приёма пищи");
 
 //#ifdef __MINGW32__
 //    LogPrefix(FILE_NAME);
@@ -42,15 +41,13 @@ int InterruptEating(Philosopher* pPhilosopher, pthread_mutex_t* pMutex)
     {
         InitEatingInterrupter();
     }
-    LogPrefix(FILE_NAME);
-    printf("Попытка прервать приём пищи философа с номером %d\n",
+    Log(FILE_NAME, "Попытка прервать приём пищи философа с номером %d",
            pPhilosopher->PhilosopherId);
 
     pthread_mutex_lock(pMutex);
     if (pPhilosopher->IsEating)
     {
-        LogPrefix(FILE_NAME);
-        printf("Приём пищи философа с номером %d прерван\n",
+        Log(FILE_NAME, "Приём пищи философа с номером %d прерван",
                pPhilosopher->PhilosopherId);
         pthread_cond_signal(pPhilosopher->pCondOnWaitingEnding);
         pthread_mutex_unlock(pMutex);
@@ -58,8 +55,7 @@ int InterruptEating(Philosopher* pPhilosopher, pthread_mutex_t* pMutex)
     }
     else if (pPhilosopher->IsWaitingLeftFork)
     {
-        LogPrefix(FILE_NAME);
-        printf("Ожидание левой вилки философом с номером %d прервано\n",
+        Log(FILE_NAME, "Ожидание левой вилки философом с номером %d прервано",
                pPhilosopher->PhilosopherId);
         pthread_cond_signal(pPhilosopher->pLeftFork->CondSignalOnRelease);
         pthread_mutex_unlock(pMutex);
@@ -67,15 +63,13 @@ int InterruptEating(Philosopher* pPhilosopher, pthread_mutex_t* pMutex)
     }
     else if (pPhilosopher->IsWaitingRightFork)
     {
-        LogPrefix(FILE_NAME);
-        printf("Ожидание правой вилки философом с номером %d прервано\n",
+        Log(FILE_NAME, "Ожидание правой вилки философом с номером %d прервано",
                pPhilosopher->PhilosopherId);
         pthread_cond_signal(pPhilosopher->pRightFork->CondSignalOnRelease);
         pthread_mutex_unlock(pMutex);
         return 0;
     }
-    LogPrefix(FILE_NAME);
-    printf("Философ с номером %d не ест\n",
+    Log(FILE_NAME, "Философ с номером %d не ест",
            pPhilosopher->PhilosopherId);
     pthread_mutex_unlock(pMutex);
     return 1;

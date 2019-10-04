@@ -59,10 +59,9 @@ int main(int argc, char** args)
 
     InitLogger(pTable);
 
-    Log(FILE_NAME, "Qwerty %d %d", 1, 2);
+    //Log(FILE_NAME, "Qwerty %d %d", 1, 2);
 
-    LogPrefix(FILE_NAME);
-    printf("Введены данные, создание объектов, запуск потоков...\n");
+    Log(FILE_NAME, "Введены данные, создание объектов, запуск потоков");
 
     MainWindow* pMainWindow = CreateMainWindow(
             SCREEN_WIDTH,
@@ -76,7 +75,6 @@ int main(int argc, char** args)
 
     InitAndStartThreadsMainWindow(pMainWindow);
 
-    LogPrefix(FILE_NAME);
-    printf("Запуск главного цикла\n");
+    Log(FILE_NAME, "Запуск главного цикла");
     return MainCycleMainWindow(pMainWindow);
 }
