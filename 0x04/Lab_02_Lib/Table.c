@@ -65,7 +65,7 @@ int Eat(Table* pTable, Philosopher* pPhilosopher, struct timespec tw, int i)
     pthread_mutex_lock(pTable->pMutex);
     if (pPhilosopher->IsEating == true)
     {
-        LogTableInfo(pTable);
+        //LogTableInfo(pTable);
         printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Уже ест\n",
                pthread_self(), pPhilosopher->PhilosopherId, i);
         pthread_mutex_unlock(pTable->pMutex);
@@ -77,7 +77,7 @@ int Eat(Table* pTable, Philosopher* pPhilosopher, struct timespec tw, int i)
     //pthread_mutex_lock(pTable->pMutex);
     if (pPhilosopher->IsWaiting == true)
     {
-        LogTableInfo(pTable);
+        //LogTableInfo(pTable);
         printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Уже ожидает\n",
                pthread_self(), pPhilosopher->PhilosopherId, i);
         pthread_mutex_unlock(pTable->pMutex);
@@ -94,7 +94,7 @@ int Eat(Table* pTable, Philosopher* pPhilosopher, struct timespec tw, int i)
 
     pthread_t threadId;
 
-    LogTableInfo(pTable);
+    //LogTableInfo(pTable);
     printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Идёт есть\n",
            pthread_self(), pPhilosopher->PhilosopherId, i);
     pthread_create(&threadId, NULL, PhilosopherEatingThread1, options);
@@ -151,7 +151,7 @@ void DoEatAll(Table* pTable)
         if (Eat(pTable, ph, tw, i) == 1) continue;
 
         struct timespec twb = RandomTime(0, 2);
-        LogTableInfo(pTable);
+        //LogTableInfo(pTable);
         printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Задержка перед отправкой следующего %lf сек.\n",
                pthread_self(), ph->PhilosopherId, i, TimespecToDouble(twb, 0));
         nanosleep(&twb, NULL);
@@ -174,7 +174,7 @@ void DoEatAll1(Table* pTable)
 
         if (Eat1(pTable, ph) == 1) continue;
 
-        LogTableInfo(pTable);
+        //LogTableInfo(pTable);
         printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Задержка перед отправкой следующего %lf сек.\n",
                pthread_self(), ph->PhilosopherId, i, TimespecToDouble(twb, 0));
         nanosleep(&twb, NULL);
