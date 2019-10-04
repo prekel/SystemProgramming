@@ -42,13 +42,18 @@ void LogTableInfo(Table* pTable)
     free(tableInfo);
 }
 
-Table* g_pLoggingTable;
-pthread_mutex_t g_pLogMutex;
+#define LOG_OUTPUT_STREAM stdout
+
+static Table* g_pLoggingTable;
+static pthread_mutex_t g_pLogMutex;
+static bool g_IsLoggerInitialized = false;
 
 void InitLogger(Table* pTable)
 {
     g_pLoggingTable = pTable;
     pthread_mutex_init(&g_pLogMutex, NULL);
+
+	g_IsLoggerInitialized = true;
 }
 
 void LogPrefix(char* fileName)
@@ -64,23 +69,23 @@ void LogPrefix(char* fileName)
 
 void Log(char* fileName, char* format, ...)
 {
-    pthread_mutex_lock(&g_pLogMutex);
+	if (!g_IsLoggerInitialized)
+	{
+		return;
+	}
+	pthread_mutex_lock(&g_pLogMutex);
 
-    char* info = TableInfo(g_pLoggingTable);
-    printf("[%s][tid: 0x%08lx][%24s] ", info, pthread_self(), fileName);
-    free(info);
+	LogPrefix(fileName);
+
+	//char* info = TableInfo(g_pLoggingTable);
+	//fprintf(LOG_OUTPUT_STREAM, "[%s][tid: 0x%08lx][%24s] ", info, pthread_self(), fileName);
+	//free(info);
 
     va_list argptr;
     va_start(argptr, format);
-    vfprintf(stdout, format, argptr);
-    fprintf(stdout, "\n");
+	vfprintf(LOG_OUTPUT_STREAM, format, argptr);
+	fprintf(LOG_OUTPUT_STREAM, "\n");
     va_end(argptr);
-
-
-    //va_list ap;
-    //va_start(ap, format);
-    //printf(format, ap);
-    //va_end(ap);
 
     pthread_mutex_unlock(&g_pLogMutex);
 }
