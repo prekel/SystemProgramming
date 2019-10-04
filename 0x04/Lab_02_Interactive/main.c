@@ -14,16 +14,6 @@
 
 #define FILE_NAME "main"
 
-
-#define _FILE strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__
-
-#define LOG_HELPER(format, ...)      Log2(format, __VA_ARGS__)
-
-#define LOG_FMT             "[%20s:%d] "
-#define LOG_ARGS    _FILE, __LINE__
-
-#define LOG(message, args...)     LOG_HELPER(LOG_FMT message, LOG_ARGS, ## args)
-
 const int SCREEN_WIDTH = 512;
 const int SCREEN_HEIGHT = 512;
 
@@ -73,7 +63,7 @@ int main(int argc, char** args)
     LOG("123");
     LOG("123 %d", 12);
 
-    Log(FILE_NAME, "Введены данные, создание объектов, запуск потоков");
+    LOG("Введены данные, создание объектов, запуск потоков");
 
     MainWindow* pMainWindow = CreateMainWindow(
             SCREEN_WIDTH,
@@ -87,6 +77,6 @@ int main(int argc, char** args)
 
     InitAndStartThreadsMainWindow(pMainWindow);
 
-    Log(FILE_NAME, "Запуск главного цикла");
+    LOG("Запуск главного цикла");
     return MainCycleMainWindow(pMainWindow);
 }

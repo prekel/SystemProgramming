@@ -30,7 +30,7 @@ void TakeOnFork(Fork* pFork, pthread_mutex_t* pMutex, sem_t* pArbitrator)
     pFork->IsInUse = true;
 
 
-    Log(FILE_NAME, "Занятие вилки с номером %d", pFork->ForkId);
+    LOG("Занятие вилки с номером %d", pFork->ForkId);
 
     //int semValue;
     //sem_getvalue(pArbitrator, &semValue);
@@ -49,7 +49,7 @@ void TakeOffFork(Fork* pFork, pthread_mutex_t* pMutex, sem_t* pArbitrator)
     pthread_cond_signal(pFork->CondSignalOnRelease);
 
 
-    Log(FILE_NAME, "Освобождение вилки с номером %d", pFork->ForkId);
+    LOG("Освобождение вилки с номером %d", pFork->ForkId);
 
     //printf("[pid: 0x%08lx, forkId: %d] Освобождение вилки\n", pthread_self(), pFork->ForkId);
 }

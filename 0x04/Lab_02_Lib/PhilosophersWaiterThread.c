@@ -33,7 +33,7 @@ void DestroyPhilosophersWaiterThreadOptions
 
 void* PhilosophersWaiterThread(void* pPhilosophersWaiterThreadOptions)
 {
-    Log(FILE_NAME, "Запуск потока");
+    LOG("Запуск потока");
 
     PhilosophersWaiterThreadOptions* pOptions =
             (PhilosophersWaiterThreadOptions*)
@@ -44,7 +44,7 @@ void* PhilosophersWaiterThread(void* pPhilosophersWaiterThreadOptions)
         pthread_mutex_lock(pOptions->pTable->pMutex);
         if (pOptions->pTable->ppPhilosophers[i]->IsThreadRunning)
         {
-            Log(FILE_NAME, "Ожидание завершения потока философа %d", pOptions->pTable->ppPhilosophers[i]->PhilosopherId);
+            LOG("Ожидание завершения потока философа %d", pOptions->pTable->ppPhilosophers[i]->PhilosopherId);
 
             //LogTableInfo(pTable);
             //printf("[pid: 0x%08lx] Ожидание завершения потока философа %d\n",
@@ -65,7 +65,7 @@ void* PhilosophersWaiterThread(void* pPhilosophersWaiterThreadOptions)
     pOptions->pTable->IsEatingEnded = true;
     pthread_mutex_unlock(pOptions->pTable->pMutex);
 
-    Log(FILE_NAME, "Завершение потока");
+    LOG("Завершение потока");
 
     return NULL;
 }

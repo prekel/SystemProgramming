@@ -29,7 +29,7 @@ void DestroyRealTimeTableStateThreadOptions(RealTimeTableStateThreadOptions* pOp
 
 void* RealTimeTableStateThread(void* pThreadOptions)
 {
-    Log(FILE_NAME, "Запуск потока");
+    LOG("Запуск потока");
 
     RealTimeTableStateThreadOptions* pOptions = (RealTimeTableStateThreadOptions*) pThreadOptions;
 
@@ -49,7 +49,7 @@ void* RealTimeTableStateThread(void* pThreadOptions)
 
 #endif
 
-    Log(FILE_NAME, "Завершение потока");
+    LOG("Завершение потока");
 
     //LogTableInfo(pOptions->pTable);
     //printf("[pid: 0x%08lx][RealTimeTableStateThread] Завершение потока\n", pthread_self());

@@ -115,7 +115,7 @@ void StartAllThreads(Table* pTable)
                         pTable->pMutex,
                         pTable->pArbitrator);
 
-        Log(FILE_NAME, "Создан поток для философа %d", pTable->ppPhilosophers[i]->PhilosopherId);
+        LOG("Создан поток для философа %d", pTable->ppPhilosophers[i]->PhilosopherId);
 
         //LogTableInfo(pTable);
         //printf("[pid: 0x%08lx] Создан поток для философа %d\n",

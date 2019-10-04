@@ -20,7 +20,7 @@ bool g_IsEatingInterrupterInit = false;
 
 void InitEatingInterrupter()
 {
-    Log(FILE_NAME, "Инициализация прерывателя приёма пищи");
+    LOG("Инициализация прерывателя приёма пищи");
 
 //#ifdef __MINGW32__
 //    LogPrefix(FILE_NAME);
@@ -41,13 +41,13 @@ int InterruptEating(Philosopher* pPhilosopher, pthread_mutex_t* pMutex)
     {
         InitEatingInterrupter();
     }
-    Log(FILE_NAME, "Попытка прервать приём пищи философа с номером %d",
+    LOG("Попытка прервать приём пищи философа с номером %d",
            pPhilosopher->PhilosopherId);
 
     pthread_mutex_lock(pMutex);
     if (pPhilosopher->IsEating)
     {
-        Log(FILE_NAME, "Приём пищи философа с номером %d прерван",
+        LOG("Приём пищи философа с номером %d прерван",
                pPhilosopher->PhilosopherId);
         pthread_cond_signal(pPhilosopher->pCondOnWaitingEnding);
         pthread_mutex_unlock(pMutex);
@@ -55,7 +55,7 @@ int InterruptEating(Philosopher* pPhilosopher, pthread_mutex_t* pMutex)
     }
     else if (pPhilosopher->IsWaitingLeftFork)
     {
-        Log(FILE_NAME, "Ожидание левой вилки философом с номером %d прервано",
+        LOG("Ожидание левой вилки философом с номером %d прервано",
                pPhilosopher->PhilosopherId);
         pthread_cond_signal(pPhilosopher->pLeftFork->CondSignalOnRelease);
         pthread_mutex_unlock(pMutex);
@@ -63,13 +63,13 @@ int InterruptEating(Philosopher* pPhilosopher, pthread_mutex_t* pMutex)
     }
     else if (pPhilosopher->IsWaitingRightFork)
     {
-        Log(FILE_NAME, "Ожидание правой вилки философом с номером %d прервано",
+        LOG("Ожидание правой вилки философом с номером %d прервано",
                pPhilosopher->PhilosopherId);
         pthread_cond_signal(pPhilosopher->pRightFork->CondSignalOnRelease);
         pthread_mutex_unlock(pMutex);
         return 0;
     }
-    Log(FILE_NAME, "Философ с номером %d не ест",
+    LOG("Философ с номером %d не ест",
            pPhilosopher->PhilosopherId);
     pthread_mutex_unlock(pMutex);
     return 1;

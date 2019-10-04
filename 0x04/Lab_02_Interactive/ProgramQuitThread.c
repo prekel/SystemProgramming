@@ -32,7 +32,7 @@ void* ProgramQuitThread(void* pProgramQuitThreadOptions)
     ProgramQuitThreadOptions* pOptions = (ProgramQuitThreadOptions*)pProgramQuitThreadOptions;
 
     pthread_mutex_lock(pOptions->pMutex);
-    Log(FILE_NAME, "Запуск потока");
+    LOG("Запуск потока");
     pthread_mutex_unlock(pOptions->pMutex);
 
     PhilosophersWaiterThreadOptions*
@@ -48,7 +48,7 @@ void* ProgramQuitThread(void* pProgramQuitThreadOptions)
     DestroyPhilosophersWaiterThreadOptions(pPhilosophersWaiterThreadOptions);
 
     pthread_mutex_lock(pOptions->pMutex);
-    Log(FILE_NAME, "Принудительная отмена главного потока");
+    LOG("Принудительная отмена главного потока");
     pthread_cancel(pOptions->pMainWindow->MainThreadId);
     pthread_mutex_unlock(pOptions->pMutex);
 
@@ -56,11 +56,12 @@ void* ProgramQuitThread(void* pProgramQuitThreadOptions)
 
     QuitVideoMainWindow(pOptions->pMainWindow);
 
-    LogPrefix(FILE_NAME);
+    LOG("Завершение потока и программы");
+
     DestroyTable(pOptions->pMainWindow->pTable);
     DestroyMainWindow(pOptions->pMainWindow);
     DestroyProgramQuitThreadOptions(pOptions);
-    printf("Завершение потока и программы\n");
+
     fflush(stdout);
 
     exit(EXIT_SUCCESS);

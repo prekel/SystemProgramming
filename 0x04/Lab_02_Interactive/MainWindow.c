@@ -37,7 +37,7 @@ MainWindow* CreateMainWindow(int screenWidth, int screenHeight, Table* pTable,
 
 int InitVideoMainWindow(MainWindow* pMainWindow)
 {
-	Log(FILE_NAME, "Инициализация SDL");
+	LOG("Инициализация SDL");
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
     {
         fprintf(stderr, "Не удаётся проинициализировать: %s\n", SDL_GetError
@@ -49,14 +49,14 @@ int InitVideoMainWindow(MainWindow* pMainWindow)
     SDL_version linkedVersion;
     SDL_VERSION(&compiledVersion);
     SDL_GetVersion(&linkedVersion);
-	Log(FILE_NAME, "Скомпилированная версия SDL %d.%d.%d",
+	LOG("Скомпилированная версия SDL %d.%d.%d",
            compiledVersion.major, compiledVersion.minor, compiledVersion.patch);
-    Log(FILE_NAME, "Скомпонованная версия SDL %d.%d.%d",
+    LOG("Скомпонованная версия SDL %d.%d.%d",
            linkedVersion.major, linkedVersion.minor, linkedVersion.patch);
 
     //atexit(SDL_Quit);
 
-    Log(FILE_NAME, "Создание окна");
+    LOG("Создание окна");
     pMainWindow->pWindow = SDL_CreateWindow("Обедающие философы",
                                             SDL_WINDOWPOS_UNDEFINED,
                                             SDL_WINDOWPOS_UNDEFINED,
@@ -70,7 +70,7 @@ int InitVideoMainWindow(MainWindow* pMainWindow)
         return 1;
     }
 
-    Log(FILE_NAME, "Создание отрисовщика");
+    LOG("Создание отрисовщика");
     pMainWindow->pRenderer = SDL_CreateRenderer(pMainWindow->pWindow, -1,
                                                 SDL_RENDERER_ACCELERATED);
     if (pMainWindow->pRenderer == NULL)
@@ -87,7 +87,7 @@ void InitAndStartThreadsMainWindow(MainWindow* pMainWindow)
 {
     if (pMainWindow->IsRealTimeTableStateEnabled)
     {
-        Log(FILE_NAME, "Запуск потока, котрый выводит состояние стола в поток "
+        LOG("Запуск потока, котрый выводит состояние стола в поток "
                "ошибок");
         pMainWindow->pRealTimeTableStateThreadOptions =
                 CreateRealTimeTableStateThreadOptions(pMainWindow->pTable,
@@ -99,7 +99,7 @@ void InitAndStartThreadsMainWindow(MainWindow* pMainWindow)
                 pMainWindow->pRealTimeTableStateThreadOptions);
     }
 
-    Log(FILE_NAME, "Запуск потока отрисовщика");
+    LOG("Запуск потока отрисовщика");
     pMainWindow->pRendererThreadOptions =
             CreateRendererThreadOptions(pMainWindow->pTable,
                                         pMainWindow->pRenderer,
@@ -108,12 +108,12 @@ void InitAndStartThreadsMainWindow(MainWindow* pMainWindow)
     pthread_create(&pMainWindow->RendererThreadId, NULL, RendererThread,
                    pMainWindow->pRendererThreadOptions);
 
-    Log(FILE_NAME, "Запуск потоков-философов");
+    LOG("Запуск потоков-философов");
     StartAllThreads(pMainWindow->pTable);
 
     if (!pMainWindow->IsAutoSpawnDisabled)
     {
-        Log(FILE_NAME, "Запуск потока, отправляющий философов есть");
+        LOG("Запуск потока, отправляющий философов есть");
         pMainWindow->pAutoEatThreadOptions = CreateAutoEatThreadOptions(
                 pMainWindow->pTable, pMainWindow->MinSendIntervalDuration,
                 pMainWindow->MaxSendIntervalDuration);
@@ -126,7 +126,7 @@ void InitAndStartThreadsMainWindow(MainWindow* pMainWindow)
 
 int MainCycleMainWindow(MainWindow* pMainWindow)
 {
-    Log(FILE_NAME, "Запуск главного цикла");
+    LOG("Запуск главного цикла");
 
     SDL_Event event;
 
@@ -134,7 +134,7 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
     {
         if (event.type == SDL_QUIT)
         {
-            Log(FILE_NAME, "Главный цикл завершён принудительно");
+            LOG("Главный цикл завершён принудительно");
             return 2;
         }
 
@@ -142,17 +142,17 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
         {
             if (event.key.keysym.sym == SDLK_ESCAPE && !pMainWindow->pTable->IsEatingMustEnd)
             {
-                Log(FILE_NAME, "Начато завершение программы");
+                LOG("Начато завершение программы");
 
                 if (!pMainWindow->IsAutoSpawnDisabled)
                 {
-                    Log(FILE_NAME, "Принудительная отмена потока-спавнера");
+                    LOG("Принудительная отмена потока-спавнера");
                     pthread_cancel(pMainWindow->AutoEatThreadId);
                     DestroyAutoEatThreadOptions(
                             pMainWindow->pAutoEatThreadOptions);
                 }
 
-                Log(FILE_NAME, "Запуск потока, который завершает потоки");
+                LOG("Запуск потока, который завершает потоки");
 
                 pMainWindow->pTable->IsEatingMustEnd = true;
 
@@ -169,14 +169,14 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
                     pthread_mutex_lock(pMainWindow->pTable->pMutex);
                     if (!pMainWindow->pTable->ppPhilosophers[philosopherId - 1]->IsEating)
                     {
-                        Log(FILE_NAME, "Переключение метки бесконечного времени приёма пищи для философа с номером %d",
+                        LOG("Переключение метки бесконечного времени приёма пищи для философа с номером %d",
                                pMainWindow->pTable->ppPhilosophers[philosopherId - 1]->PhilosopherId);
                         pMainWindow->pTable->ppPhilosophers[philosopherId - 1]->IsInfinityDuration =
                                 !pMainWindow->pTable->ppPhilosophers[philosopherId - 1]->IsInfinityDuration;
                     }
                     else
                     {
-                        Log(FILE_NAME, "Неваозможно переключение метки бесконечного времени приёма пищи для философа с номером %d",
+                        LOG("Неваозможно переключение метки бесконечного времени приёма пищи для философа с номером %d",
                                pMainWindow->pTable->ppPhilosophers[philosopherId - 1]->PhilosopherId);
                     }
                     pthread_mutex_unlock(pMainWindow->pTable->pMutex);
@@ -204,7 +204,7 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
                     int philosopherId = (int)(button - '0');
                     if (philosopherId <= pMainWindow->pTable->PhilosophersCount)
                     {
-                        Log(FILE_NAME, "Философ с номером %d вручную отправлен есть",
+                        LOG("Философ с номером %d вручную отправлен есть",
                                pMainWindow->pTable->ppPhilosophers[philosopherId -1]->PhilosopherId);
                         Eat1(pMainWindow->pTable,
                              pMainWindow->pTable->ppPhilosophers[philosopherId - 1]);
@@ -214,33 +214,33 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
         }
     }
 
-    Log(FILE_NAME, "Главный цикл завершён по неизвестной ошибке: %s", SDL_GetError());
+    LOG("Главный цикл завершён по неизвестной ошибке: %s", SDL_GetError());
 
     return 1;
 }
 
 void QuitMainWindow(MainWindow* pMainWindow)
 {
-    Log(FILE_NAME, "Завершение программы, завершение остальных потоков");
+    LOG("Завершение программы, завершение остальных потоков");
 
     if (pMainWindow->IsRealTimeTableStateEnabled)
     {
-        Log(FILE_NAME, "Ожидание завершения потока-наблюдателя");
+        LOG("Ожидание завершения потока-наблюдателя");
         pthread_join(pMainWindow->RealTimeTableStateThreadId, NULL);
         DestroyRealTimeTableStateThreadOptions
         (pMainWindow->pRealTimeTableStateThreadOptions);
     }
 
-    Log(FILE_NAME, "Ожидание завершения отрисовщика");
+    LOG("Ожидание завершения отрисовщика");
     pthread_join(pMainWindow->RendererThreadId, NULL);
     DestroyRendererThreadOptions(pMainWindow->pRendererThreadOptions);
 
-    Log(FILE_NAME, "Завершение программы");
+    LOG("Завершение программы");
 }
 
 int QuitVideoMainWindow(MainWindow* pMainWindow)
 {
-    Log(FILE_NAME, "Очистка и завершение отрисовщика, окна и SDL");
+    LOG("Очистка и завершение отрисовщика, окна и SDL");
 
     SDL_DestroyRenderer(pMainWindow->pRenderer);
 

@@ -37,13 +37,13 @@ int Eat1(Table* pTable, Philosopher* pPhilosopher)
     pthread_mutex_lock(pTable->pMutex);
     if (pPhilosopher->IsEating == true)
     {
-        Log(FILE_NAME, "Философ с номером %d уже ест", pPhilosopher->PhilosopherId);
+        LOG("Философ с номером %d уже ест", pPhilosopher->PhilosopherId);
         pthread_mutex_unlock(pTable->pMutex);
         return 1;
     }
     if (pPhilosopher->IsWaiting == true)
     {
-        Log(FILE_NAME, "Философ с номером %d ещё ожидает", pPhilosopher->PhilosopherId);
+        LOG("Философ с номером %d ещё ожидает", pPhilosopher->PhilosopherId);
         pthread_mutex_unlock(pTable->pMutex);
         return 1;
     }
@@ -57,7 +57,7 @@ int Eat1(Table* pTable, Philosopher* pPhilosopher)
 
 void* AutoEatThread(void* pAutoEatThreadOptions)
 {
-    Log(FILE_NAME, "Запуск потока");
+    LOG("Запуск потока");
     srand(time(NULL));
 
     AutoEatThreadOptions* pOptions = (AutoEatThreadOptions*) pAutoEatThreadOptions;
@@ -73,14 +73,15 @@ void* AutoEatThread(void* pAutoEatThreadOptions)
         int c = RandomInterval(0, pOptions->pTable->PhilosophersCount);
         Philosopher* pPhilosopher = pOptions->pTable->ppPhilosophers[c];
 
-        Log(FILE_NAME, "Философ с номером %d отправлен есть", pPhilosopher->PhilosopherId);
+        LOG("Философ с номером %d отправлен есть",
+        pPhilosopher->PhilosopherId);
 
         if (Eat1(pOptions->pTable, pPhilosopher) == 1)
         {
             //continue;
         }
 
-        Log(FILE_NAME, "После отправки философа с номером %d задержка перед отправкой следующего %lf сек.", pPhilosopher->PhilosopherId,
+        LOG("После отправки философа с номером %d задержка перед отправкой следующего %lf сек.", pPhilosopher->PhilosopherId,
                TimespecToDouble(
                        twb, pPhilosopher->IsInfinityDuration));
 
@@ -92,7 +93,7 @@ void* AutoEatThread(void* pAutoEatThreadOptions)
 
     //pOptions->pTable->IsEatingEnded = true;
 
-    Log(FILE_NAME, "Завершение потока");
+    LOG("Завершение потока");
 
 
     //LogTableInfo(pOptions->pTable);
