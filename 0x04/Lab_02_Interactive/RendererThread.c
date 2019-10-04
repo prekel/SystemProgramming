@@ -23,6 +23,8 @@ CreateRendererThreadOptions(Table* pTable, SDL_Renderer* pRenderer,
     pOptions->ScreenWidth = screenWidth;
     pOptions->ScreenHeight = screenHeight;
 
+    pOptions->pMutex = pTable->pMutex;
+
     return pOptions;
 }
 

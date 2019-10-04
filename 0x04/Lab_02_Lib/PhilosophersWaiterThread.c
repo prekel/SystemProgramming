@@ -20,6 +20,8 @@ PhilosophersWaiterThreadOptions* CreatePhilosophersWaiterThreadOptions
 
     pOptions->pTable = pTable;
 
+    pOptions->pMutex = pTable->pMutex;
+
     return pOptions;
 }
 

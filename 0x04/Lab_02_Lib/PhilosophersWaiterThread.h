@@ -5,6 +5,7 @@
 
 typedef struct {
     Table* pTable;
+    pthread_mutex_t* pMutex;
 } PhilosophersWaiterThreadOptions;
 
 PhilosophersWaiterThreadOptions* CreatePhilosophersWaiterThreadOptions

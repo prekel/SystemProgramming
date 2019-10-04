@@ -17,6 +17,8 @@ RealTimeTableStateThreadOptions* CreateRealTimeTableStateThreadOptions(Table* pT
     pOptions->pTable = pTable;
     pOptions->pWaitTime = pWaitTime;
 
+    pOptions->pMutex = pTable->pMutex;
+
     return pOptions;
 }
 

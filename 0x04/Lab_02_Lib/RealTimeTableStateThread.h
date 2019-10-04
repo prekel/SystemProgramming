@@ -10,6 +10,7 @@
 typedef struct {
     struct timespec pWaitTime;
     Table* pTable;
+    pthread_mutex_t* pMutex;
 } RealTimeTableStateThreadOptions;
 
 RealTimeTableStateThreadOptions* CreateRealTimeTableStateThreadOptions(Table* pTable, struct timespec pWaitTime);

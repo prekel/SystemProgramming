@@ -10,6 +10,7 @@ typedef struct {
     SDL_Renderer* pRenderer;
     int ScreenWidth;
     int ScreenHeight;
+    pthread_mutex_t* pMutex;
 } RendererThreadOptions;
 
 RendererThreadOptions*

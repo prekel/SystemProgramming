@@ -16,6 +16,8 @@ CreateProgramQuitThreadOptions(MainWindow* pMainWindow)
 
     pOptions->pMainWindow = pMainWindow;
 
+    pOptions->pMutex = pMainWindow->pTable->pMutex;
+
     return pOptions;
 }
 

@@ -18,14 +18,16 @@ const int SCREEN_HEIGHT = 512;
 
 const int MAX_INT_LENGTH = 10;
 
+const int SEC_IN_DAY = 60 * 60 * 24;
+
 bool TimeChecker(int time)
 {
-    return 0 <= time && time <= 60 * 60 * 24;
+    return 0 <= time && time <= SEC_IN_DAY;
 }
 
 bool PhilosophersCountChecker(int philosophersCount)
 {
-    return 2 <= philosophersCount && philosophersCount <= 10000;
+    return 2 <= philosophersCount;// && philosophersCount <= 10000;
 }
 
 int main(int argc, char** args)
@@ -35,7 +37,8 @@ int main(int argc, char** args)
     SetConsoleCP(CP_UTF8);
 #endif
 
-    printf("Минимальное количество философов 2, рекумендуется 5\n");
+    printf("Минимальное количество философов 2, желательно не больше 9, "
+           "рекомендуется 5\n");
     int philosophersCount = CycleInputInt("Введите кол-во философов: ", MAX_INT_LENGTH, PhilosophersCountChecker);
 
     printf("Для того, чтобы время приёма пищы было бесконечным, введите 0 минимальное и максимальное\n");

@@ -10,6 +10,7 @@ typedef struct
     Table* pTable;
     int MinSendIntervalDuration;
     int MaxSendIntervalDuration;
+    pthread_mutex_t* pMutex;
 } AutoEatThreadOptions;
 
 AutoEatThreadOptions*

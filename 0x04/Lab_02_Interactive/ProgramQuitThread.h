@@ -7,6 +7,7 @@
 
 typedef struct {
     MainWindow* pMainWindow;
+    pthread_mutex_t* pMutex;
 } ProgramQuitThreadOptions;
 
 ProgramQuitThreadOptions*

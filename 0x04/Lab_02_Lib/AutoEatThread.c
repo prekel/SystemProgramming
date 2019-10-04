@@ -16,9 +16,14 @@ CreateAutoEatThreadOptions(Table* pTable, int minSendIntervalDuration, int maxSe
     AutoEatThreadOptions* pOptions = (AutoEatThreadOptions*) malloc(
             sizeof(AutoEatThreadOptions));
     FAILURE_IF_NULLPTR(pOptions);
+
     pOptions->pTable = pTable;
+
     pOptions->MinSendIntervalDuration = minSendIntervalDuration;
     pOptions->MaxSendIntervalDuration = maxSendIntervalDuration;
+
+    pOptions->pMutex = pTable->pMutex;
+
     return pOptions;
 }
 
