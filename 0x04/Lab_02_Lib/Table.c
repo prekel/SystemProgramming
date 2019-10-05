@@ -69,7 +69,7 @@ int Eat(Table* pTable, Philosopher* pPhilosopher, struct timespec tw, int i)
         printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Уже ест\n",
                pthread_self(), pPhilosopher->PhilosopherId, i);
         pthread_mutex_unlock(pTable->pMutex);
-        //struct timespec tw1 = RandomTime(1, 2);
+        //struct timespec tw1 = RandomTimeFromSec(1, 2);
         //nanosleep(&tw1, NULL);
         return 1;
     }
@@ -81,7 +81,7 @@ int Eat(Table* pTable, Philosopher* pPhilosopher, struct timespec tw, int i)
         printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Уже ожидает\n",
                pthread_self(), pPhilosopher->PhilosopherId, i);
         pthread_mutex_unlock(pTable->pMutex);
-        //struct timespec tw1 = RandomTime(1, 2);
+        //struct timespec tw1 = RandomTimeFromSec(1, 2);
         //nanosleep(&tw1, NULL);
         return 1;
     }
@@ -136,7 +136,7 @@ void DoEatAll(Table* pTable)
         //int a = rand() % 10 + 1;
         //int a = ;
         //struct timespec tw = {a, 0};
-        struct timespec tw = RandomTime(5, 15);
+        struct timespec tw = RandomTimeFromSec(5, 15);
 
         int c = RandomInterval(0, pTable->PhilosophersCount);
         Philosopher* ph = pTable->ppPhilosophers[c];
@@ -150,7 +150,7 @@ void DoEatAll(Table* pTable)
 
         if (Eat(pTable, ph, tw, i) == 1) continue;
 
-        struct timespec twb = RandomTime(0, 2);
+        struct timespec twb = RandomTimeFromSec(0, 2);
         //LogTableInfo(pTable);
         printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Задержка перед отправкой следующего %lf сек.\n",
                pthread_self(), ph->PhilosopherId, i, TimespecToDouble(twb, 0));
@@ -167,7 +167,7 @@ void DoEatAll1(Table* pTable)
 
     for (int i = 0; i < 20000000; i++)
     {
-        struct timespec twb = RandomTime(10, 10);
+        struct timespec twb = RandomTimeFromSec(10, 10);
 
         int c = RandomInterval(0, pTable->PhilosophersCount);
         Philosopher* ph = pTable->ppPhilosophers[c];

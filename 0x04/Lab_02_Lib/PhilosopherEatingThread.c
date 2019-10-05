@@ -64,7 +64,7 @@ void* PhilosopherEatingThread(void* pEatThreadOptions)
     PhilosopherEatingThreadOptions* pEatOptions = (PhilosopherEatingThreadOptions*) pEatThreadOptions;
 
     Philosopher* pPh = pEatOptions->pPhilosopher;
-    struct timespec pDurationEat = RandomTime(10, 10);
+    struct timespec pDurationEat = RandomTimeFromSec(10, 10);
     pthread_mutex_t* pMutex = pEatOptions->pMutex;
     sem_t* pArbitrator = pEatOptions->pArbitrator;
 
@@ -328,21 +328,19 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
             break;
         }
 
-        struct timespec pDurationEat = RandomTime(
+        struct timespec pDurationEat = RandomTimeFromSec(
                 pPhilosopher->MinDurationEat,
                 pPhilosopher->MaxDurationEat);
 
 
-        LOG("Начинает есть");
+        LOG("Философ с номером %d начинает есть, смотрит на вилки", pPhilosopher->PhilosopherId);
 
         pthread_mutex_lock(pMutex);
         if (pPhilosopher->pLeftFork->IsInUse == false &&
             pPhilosopher->pRightFork->IsInUse == false)
         {
-            LOG("Вилки свободны для философа с номером %d, начинает есть %lf сек.",
-                   pPhilosopher->PhilosopherId,
-                   TimespecToDouble(pDurationEat,
-                           pOptions->pPhilosopher->IsInfinityDuration));
+            LOG("Вилки свободны для философа с номером %d, начинает есть",
+                   pPhilosopher->PhilosopherId);
 
             pPhilosopher->IsEating = true;
 
@@ -592,7 +590,7 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
             //LogTableInfo(pOptions->pTable);
             TakeOnFork(pPhilosopher->pRightFork, pMutex, pArbitrator);
 
-            LOG("Философ с номером %d начинает есть после ожидания %lf сек.",
+            LOG("Философ с номером %d ест после ожидания %lf сек.",
                    pPhilosopher->PhilosopherId,
                    TimespecToDouble(pDurationEat, pOptions->pPhilosopher->IsInfinityDuration));
             //LogTableInfo(pOptions->pTable);

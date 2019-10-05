@@ -66,7 +66,7 @@ void* AutoEatThread(void* pAutoEatThreadOptions)
 
     while (!pOptions->pTable->IsEatingMustEnd)
     {
-        struct timespec twb = RandomTime(
+        struct timespec twb = RandomTimeFromSec(
                 pOptions->MinSendIntervalDuration,
                 pOptions->MaxSendIntervalDuration);
 
@@ -83,7 +83,7 @@ void* AutoEatThread(void* pAutoEatThreadOptions)
 
         LOG("После отправки философа с номером %d задержка перед отправкой следующего %lf сек.", pPhilosopher->PhilosopherId,
                TimespecToDouble(
-                       twb, pPhilosopher->IsInfinityDuration));
+                       twb, false));
 
         //LogTableInfo(pOptions->pTable);
         //printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Задержка перед отправкой следующего %lf сек.\n",

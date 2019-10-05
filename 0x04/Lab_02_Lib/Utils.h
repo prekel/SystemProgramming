@@ -12,7 +12,7 @@
  */
 int RandomInterval(int min, int max);
 
-struct timespec RandomTime(int minSeconds, int maxSeconds);
+struct timespec RandomTimeFromSec(int minSeconds, int maxSeconds);
 
 double TimespecToDouble(struct timespec duration, bool isInfinityDuration);
 

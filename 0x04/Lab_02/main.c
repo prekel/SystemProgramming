@@ -38,7 +38,7 @@ int main(int argc, char** argv)
 
 //    for (int i = 0; i < 100; i++)
 //    {
-//        struct timespec tw1 = RandomTime(5, 10);
+//        struct timespec tw1 = RandomTimeFromSec(5, 10);
 //        printf("%lf\n", TimespecToDouble(&tw1));
 //    }
 
