@@ -24,4 +24,9 @@
     } \
 } while(0)
 
+#define _FILE strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__
+
+#define STRINGIZE_NX(A) #A
+#define STRINGIZE(A) STRINGIZE_NX(A)
+
 #endif // MACRO_H
