@@ -12,47 +12,6 @@
 
 #define FILE_NAME "PhilosopherEatingThread"
 
-int SleepOrWaitSignal(Philosopher* pPhilosopher, struct timespec duration,
-                      bool isInfinityDuration, pthread_mutex_t* pMutex)
-{
-    //struct timespec rem = {0, 0};
-    if (isInfinityDuration)
-    {
-        pthread_mutex_lock(pMutex);
-        struct timespec infinityTime = {INT_MAX, NS_IN_S - 1};
-        int timedwaitReturns = pthread_cond_timedwait(
-                pPhilosopher->pCondOnWaitingEnding, pMutex,
-                &infinityTime);
-        //LogPrefix(FILE_NAME);
-        //printf("pthread_cond_timedwait вернул %d\n", timedwaitReturns);
-        pthread_mutex_unlock(pMutex);
-        return 1;
-    }
-    else
-    {
-        pthread_mutex_lock(pMutex);
-
-        struct timespec currentTime;
-        clock_gettime(CLOCK_REALTIME, &currentTime);
-
-        struct timespec endTime = {currentTime.tv_sec + duration.tv_sec, currentTime.tv_nsec + duration.tv_nsec};
-        if (endTime.tv_nsec >= NS_IN_S)
-        {
-            endTime.tv_sec++;
-            endTime.tv_nsec -= NS_IN_S;
-        }
-
-        int timedwaitReturns = pthread_cond_timedwait(
-                pPhilosopher->pCondOnWaitingEnding, pMutex,
-                &endTime);
-        //LogPrefix(FILE_NAME);
-        //printf("pthread_cond_timedwait вернул %d\n", timedwaitReturns);
-        pthread_mutex_unlock(pMutex);
-        return 0;
-    }
-    return 0;
-}
-
 void* PhilosopherEatingThread(void* pEatThreadOptions)
 {
     LOG("Запуск потока");
@@ -119,7 +78,7 @@ void* PhilosopherEatingThread(void* pEatThreadOptions)
                pthread_self(), pPh->PhilosopherId);
         pthread_mutex_unlock(pMutex);
 
-        if (SleepOrWaitSignal(pEatOptions->pPhilosopher, pDurationEat,
+        if (SleepOrWaitSignal(pEatOptions->pPhilosopher->pCondOnWaitingEnding, pDurationEat,
                               pEatOptions->pPhilosopher->IsInfinityDuration,
                               pEatOptions->pMutex))
         {
@@ -258,7 +217,7 @@ void* PhilosopherEatingThread(void* pEatThreadOptions)
                pthread_self(), pPh->PhilosopherId);
         pthread_mutex_unlock(pMutex);
 
-        if (SleepOrWaitSignal(pEatOptions->pPhilosopher, pDurationEat,
+        if (SleepOrWaitSignal(pEatOptions->pPhilosopher->pCondOnWaitingEnding, pDurationEat,
                               pEatOptions->pPhilosopher->IsInfinityDuration,
                               pEatOptions->pMutex))
         {
@@ -383,7 +342,7 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
             //       pthread_self(), pPhilosopher->PhilosopherId);
             pthread_mutex_unlock(pMutex);
 
-            if (SleepOrWaitSignal(pOptions->pPhilosopher, pDurationEat,
+            if (SleepOrWaitSignal(pOptions->pPhilosopher->pCondOnWaitingEnding, pDurationEat,
                                   pOptions->pPhilosopher->IsInfinityDuration,
                                   pOptions->pMutex))
             {
@@ -606,7 +565,7 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
             //       pthread_self(), pPhilosopher->PhilosopherId);
             pthread_mutex_unlock(pMutex);
 
-            if (SleepOrWaitSignal(pOptions->pPhilosopher, pDurationEat,
+            if (SleepOrWaitSignal(pOptions->pPhilosopher->pCondOnWaitingEnding, pDurationEat,
                                   pOptions->pPhilosopher->IsInfinityDuration,
                                   pOptions->pMutex))
             {

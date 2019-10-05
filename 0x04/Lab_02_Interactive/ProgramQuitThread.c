@@ -39,8 +39,10 @@ void* ProgramQuitThread(void* pProgramQuitThreadOptions)
 
     if (!pOptions->pMainWindow->IsAutoSpawnDisabled)
     {
-        LOG("Принудительная отмена потока-спавнера");
-        pthread_cancel(pOptions->pMainWindow->AutoEatThreadId);
+        LOG("Принудительная остановка потока-спавнера");
+        //pthread_cancel(pOptions->pMainWindow->AutoEatThreadId);
+        pthread_cond_signal(pOptions->pMainWindow->pAutoEatThreadOptions->OnCondQuit);
+        pthread_join(pOptions->pMainWindow->AutoEatThreadId, NULL);
         DestroyAutoEatThreadOptions(
                 pOptions->pMainWindow->pAutoEatThreadOptions);
     }
