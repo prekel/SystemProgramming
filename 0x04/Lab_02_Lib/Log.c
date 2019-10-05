@@ -32,11 +32,13 @@ char* TableInfo(Table* pTable)
 {
     char* result = (char*)malloc((pTable->PhilosophersCount * 2 + 1) * sizeof(char));
     FAILURE_IF_NULLPTR(result);
+    pthread_mutex_lock(pTable->pMutex);
     for (int i = 0; i < pTable->PhilosophersCount; i++)
     {
         result[i * 2] = PhilosopherToChar(pTable->ppPhilosophers[i]);
         result[i * 2 + 1] = ForkToChar(pTable->ppForks[i]);
     }
+    pthread_mutex_unlock(pTable->pMutex);
     result[pTable->PhilosophersCount * 2] = '\0';
     return result;
 }
@@ -75,6 +77,8 @@ void Log(char* format, ...)
     vfprintf(LOG_OUTPUT_STREAM, format, argPtr);
     fprintf(LOG_OUTPUT_STREAM, "\n");
     va_end(argPtr);
+
+    fflush(LOG_OUTPUT_STREAM);
 
     pthread_mutex_unlock(&g_pLogMutex);
 }

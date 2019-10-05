@@ -75,7 +75,11 @@ void* RendererThread(void* pRendererThreadOptions)
 
         for (int i = 0; i < pOptions->pTable->PhilosophersCount; i++)
         {
-            if (pOptions->pTable->ppPhilosophers[i]->IsEating)
+            if (!pOptions->pTable->ppPhilosophers[i]->IsThreadRunning)
+            {
+                SDL_SetRenderDrawColor(pOptions->pRenderer, 64, 64, 64, 255);
+            }
+            else if (pOptions->pTable->ppPhilosophers[i]->IsEating)
             {
                 SDL_SetRenderDrawColor(pOptions->pRenderer, 255, 64, 64, 255);
             }

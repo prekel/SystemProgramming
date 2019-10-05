@@ -41,28 +41,44 @@ int main(int argc, char** args)
     printf("Минимальное количество философов 2, желательно не больше 9, "
            "рекомендуется 5\n");
     int philosophersCount = CycleInputInt("Введите кол-во философов: ", MAX_INT_LENGTH, PhilosophersCountChecker);
+    printf("\n");
 
-    printf("Для того, чтобы время приёма пищы было бесконечным, введите 0 минимальное и максимальное\n");
-    printf("Для того, чтобы было постоянным, введите одинаковое максимальное и минимальное\n");
-    int minDurationEat = CycleInputInt("Введите минимальное время приёма пищи (например 1000): ", MAX_INT_LENGTH, TimeChecker);
-    int maxDurationEat = CycleInputInt("Введите максимальное время приёма пищи (например 9000): ", MAX_INT_LENGTH, TimeChecker);
+    int minDurationEat;
+    int maxDurationEat;
+    do
+    {
+        printf("Для того, чтобы время приёма пищы было бесконечным, введите 0 минимальное и максимальное\n");
+        printf("Для того, чтобы было постоянным, введите одинаковое максимальное и минимальное\n");
+        minDurationEat = CycleInputInt(
+                "Введите минимальное время приёма пищи (например 1000): ",
+                MAX_INT_LENGTH, TimeChecker);
+        maxDurationEat = CycleInputInt(
+                "Введите максимальное время приёма пищи (например 9000): ",
+                MAX_INT_LENGTH, TimeChecker);
+    } while (maxDurationEat < minDurationEat);
     bool isInfinityDuration = minDurationEat == 0 && maxDurationEat == 0;
+    printf("\n");
 
-    printf("Для того, философы не появлялись автоматически, введите 0 и 0\n");
-    printf("Для того, чтобы было постоянным, введите одинаковое максимальное и минимальное\n");
-    int minSendIntervalDuration = CycleInputInt("Введите минимальное время между появлениями (например 1000): ", MAX_INT_LENGTH, TimeChecker);
-    int maxSendIntervalDuration = CycleInputInt("Введите максимальное время между появлениями (например 3000): ", MAX_INT_LENGTH, TimeChecker);
+    int minSendIntervalDuration;
+    int maxSendIntervalDuration;
+    do
+    {
+        printf("Для того, философы не появлялись автоматически, введите 0 и 0\n");
+        printf("Для того, чтобы было постоянным, введите одинаковое максимальное и минимальное\n");
+        minSendIntervalDuration = CycleInputInt(
+                "Введите минимальное время между появлениями (например 1000): ",
+                MAX_INT_LENGTH, TimeChecker);
+        maxSendIntervalDuration = CycleInputInt(
+                "Введите максимальное время между появлениями (например 3000): ",
+                MAX_INT_LENGTH, TimeChecker);
+    } while (maxSendIntervalDuration < minSendIntervalDuration);
     bool isAutoSpawnDisabled = minSendIntervalDuration == 0 && maxSendIntervalDuration == 0;
-
+    printf("\n");
 
     Table* pTable = CreateTable(philosophersCount, minDurationEat, maxDurationEat,
                                 isInfinityDuration);
 
     InitLogger(pTable);
-
-    LOG("123");
-    LOG("123 %d", 12);
-
     LOG("Введены данные, создание объектов, запуск потоков");
 
     MainWindow* pMainWindow = CreateMainWindow(
