@@ -67,6 +67,7 @@ void Log(char* format, ...)
         return;
     }
     //pthread_mutex_lock(&g_pLogMutex);
+    //pthread_mutex_lock(g_pLoggingTable->pMutex);
 
     LogPrefix();
 
@@ -79,4 +80,5 @@ void Log(char* format, ...)
     fflush(LOG_OUTPUT_STREAM);
 
     //pthread_mutex_unlock(&g_pLogMutex);
+    //pthread_mutex_unlock(g_pLoggingTable->pMutex);
 }
