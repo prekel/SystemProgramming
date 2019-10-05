@@ -50,7 +50,8 @@ int Eat1(Table* pTable, Philosopher* pPhilosopher)
     pthread_mutex_unlock(pTable->pMutex);
 
 
-    sem_post(pPhilosopher->pSemOnGoingToEat);
+    pthread_cond_signal(pPhilosopher->pCondOnGoingToEat);
+    //sem_post(pPhilosopher->pSemOnGoingToEat);
     //pthread_cond_signal(pPhilosopher->OnGoingToEat);
     return 0;
 }

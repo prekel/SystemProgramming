@@ -16,8 +16,9 @@ typedef struct
     bool IsWaiting;
     bool IsThreadRunning;
     pthread_t pThread;
-    sem_t* pSemOnGoingToEat;
-    sem_t* pSemOnInfinityWaitingEnding;
+    //sem_t* pSemOnGoingToEat;
+    pthread_cond_t* pCondOnGoingToEat;
+    //sem_t* pSemOnInfinityWaitingEnding;
     pthread_cond_t* pCondOnWaitingEnding;
     //pthread_cond_t* OnGoingToEat;
     //pthread_cond_t* OnMustToStop;
