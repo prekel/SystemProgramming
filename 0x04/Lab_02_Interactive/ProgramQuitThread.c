@@ -37,15 +37,15 @@ void* ProgramQuitThread(void* pProgramQuitThreadOptions)
     pthread_mutex_lock(pOptions->pMainWindow->pTable->pMutex);
     pOptions->pMainWindow->pTable->IsEatingMustEnd = true;
 
-    if (!pOptions->pMainWindow->IsAutoSpawnDisabled)
-    {
-        LOG("Принудительная остановка потока-спавнера");
-        pthread_cancel(pOptions->pMainWindow->AutoEatThreadId);
-        //pthread_cond_signal(pOptions->pMainWindow->pAutoEatThreadOptions->OnCondQuit);
-        //pthread_join(pOptions->pMainWindow->AutoEatThreadId, NULL);
-        DestroyAutoEatThreadOptions(
-                pOptions->pMainWindow->pAutoEatThreadOptions);
-    }
+//    if (!pOptions->pMainWindow->IsAutoSpawnDisabled)
+//    {
+//        LOG("Принудительная остановка потока-спавнера");
+//        pthread_cancel(pOptions->pMainWindow->AutoEatThreadId);
+//        //pthread_cond_signal(pOptions->pMainWindow->pAutoEatThreadOptions->OnCondQuit);
+//        //pthread_join(pOptions->pMainWindow->AutoEatThreadId, NULL);
+//        DestroyAutoEatThreadOptions(
+//                pOptions->pMainWindow->pAutoEatThreadOptions);
+//    }
     pthread_mutex_unlock(pOptions->pMainWindow->pTable->pMutex);
 
     //pOptions->pMainWindow->pTable->IsEatingMustEnd = true;
@@ -63,6 +63,16 @@ void* ProgramQuitThread(void* pProgramQuitThreadOptions)
     pthread_join(philosophersWaiterThreadId, NULL);
 
     DestroyPhilosophersWaiterThreadOptions(pPhilosophersWaiterThreadOptions);
+
+    if (!pOptions->pMainWindow->IsAutoSpawnDisabled)
+    {
+        LOG("Принудительная остановка потока-спавнера");
+        //pthread_cancel(pOptions->pMainWindow->AutoEatThreadId);
+        pthread_cond_signal(pOptions->pMainWindow->pAutoEatThreadOptions->OnCondQuit);
+        pthread_join(pOptions->pMainWindow->AutoEatThreadId, NULL);
+        DestroyAutoEatThreadOptions(
+                pOptions->pMainWindow->pAutoEatThreadOptions);
+    }
 
     pthread_mutex_lock(pOptions->pMutex);
     LOG("Принудительная отмена главного потока");
