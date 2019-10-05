@@ -18,11 +18,13 @@ char ForkToChar(Fork* fork)
     else
         return '.';
 }
-char PhilosopherToChar(Philosopher* fork)
+char PhilosopherToChar(Philosopher* philosopher)
 {
-    if (fork->IsEating)
+    if (!philosopher->IsThreadRunning)
+        return '-';
+    else if (philosopher->IsEating)
         return '=';
-    if (fork->IsWaiting)
+    else if (philosopher->IsWaiting)
         return '?';
     else
         return '_';
