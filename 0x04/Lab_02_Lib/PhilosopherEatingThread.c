@@ -12,8 +12,6 @@
 
 #define FILE_NAME "PhilosopherEatingThread"
 
-const int NANOSEC_IN_SEC = 1000000000;
-
 int SleepOrWaitSignal(Philosopher* pPhilosopher, struct timespec duration,
                       bool isInfinityDuration, pthread_mutex_t* pMutex)
 {
@@ -21,7 +19,7 @@ int SleepOrWaitSignal(Philosopher* pPhilosopher, struct timespec duration,
     if (isInfinityDuration)
     {
         pthread_mutex_lock(pMutex);
-        struct timespec infinityTime = {INT_MAX, NANOSEC_IN_SEC - 1};
+        struct timespec infinityTime = {INT_MAX, NS_IN_S - 1};
         int timedwaitReturns = pthread_cond_timedwait(
                 pPhilosopher->pCondOnWaitingEnding, pMutex,
                 &infinityTime);
@@ -38,10 +36,10 @@ int SleepOrWaitSignal(Philosopher* pPhilosopher, struct timespec duration,
         clock_gettime(CLOCK_REALTIME, &currentTime);
 
         struct timespec endTime = {currentTime.tv_sec + duration.tv_sec, currentTime.tv_nsec + duration.tv_nsec};
-        if (endTime.tv_nsec >= NANOSEC_IN_SEC)
+        if (endTime.tv_nsec >= NS_IN_S)
         {
             endTime.tv_sec++;
-            endTime.tv_nsec -= NANOSEC_IN_SEC;
+            endTime.tv_nsec -= NS_IN_S;
         }
 
         int timedwaitReturns = pthread_cond_timedwait(

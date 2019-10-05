@@ -35,10 +35,6 @@ struct timespec RandomTimeFromSec(int minSeconds, int maxSeconds)
     return tw;
 }
 
-static const int MS_IN_S = 1000;
-static const int NS_IN_MS = 1000000;
-static const int NS_IN_S = 1000000000;
-
 struct timespec RandomTimeFromMs(int minMs, int maxMs)
 {
     assert(maxMs >= minMs);
