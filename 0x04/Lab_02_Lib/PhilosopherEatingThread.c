@@ -314,11 +314,11 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
 
     pthread_mutex_lock(pMutex);
     pPhilosopher->IsThreadRunning = true;
-    pthread_mutex_unlock(pMutex);
+    //pthread_mutex_unlock(pMutex);
 
     while (!pOptions->pTable->IsEatingMustEnd)
     {
-        pthread_mutex_lock(pMutex);
+        //pthread_mutex_lock(pMutex);
         pthread_cond_wait(pPhilosopher->pCondOnGoingToEat, pMutex);
 
         if (pOptions->pTable->IsEatingMustEnd)

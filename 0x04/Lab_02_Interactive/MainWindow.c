@@ -144,17 +144,7 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
             {
                 LOG("Начато завершение программы");
 
-                if (!pMainWindow->IsAutoSpawnDisabled)
-                {
-                    LOG("Принудительная отмена потока-спавнера");
-                    pthread_cancel(pMainWindow->AutoEatThreadId);
-                    DestroyAutoEatThreadOptions(
-                            pMainWindow->pAutoEatThreadOptions);
-                }
-
                 LOG("Запуск потока, который завершает потоки");
-
-                pMainWindow->pTable->IsEatingMustEnd = true;
 
                 ProgramQuitThreadOptions* pProgramQuitThreadOptions = CreateProgramQuitThreadOptions(pMainWindow);
                 pthread_t programQuitThreadId;

@@ -33,7 +33,17 @@ void* ProgramQuitThread(void* pProgramQuitThreadOptions)
 
     pthread_mutex_lock(pOptions->pMutex);
     LOG("Запуск потока");
-    pthread_mutex_unlock(pOptions->pMutex);
+
+    if (!pOptions->pMainWindow->IsAutoSpawnDisabled)
+    {
+        LOG("Принудительная отмена потока-спавнера");
+        pthread_cancel(pOptions->pMainWindow->AutoEatThreadId);
+        DestroyAutoEatThreadOptions(
+                pOptions->pMainWindow->pAutoEatThreadOptions);
+    }
+
+    pOptions->pMainWindow->pTable->IsEatingMustEnd = true;
+    //pthread_mutex_unlock(pOptions->pMutex);
 
     PhilosophersWaiterThreadOptions*
             pPhilosophersWaiterThreadOptions =
@@ -43,6 +53,7 @@ void* ProgramQuitThread(void* pProgramQuitThreadOptions)
                    PhilosophersWaiterThread,
                    pPhilosophersWaiterThreadOptions);
 
+    pthread_mutex_unlock(pOptions->pMutex);
     pthread_join(philosophersWaiterThreadId, NULL);
 
     DestroyPhilosophersWaiterThreadOptions(pPhilosophersWaiterThreadOptions);

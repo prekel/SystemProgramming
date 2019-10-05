@@ -76,5 +76,7 @@ void Log(char* format, ...)
     fprintf(LOG_OUTPUT_STREAM, "\n");
     va_end(argPtr);
 
+    fflush(LOG_OUTPUT_STREAM);
+
     pthread_mutex_unlock(&g_pLogMutex);
 }
