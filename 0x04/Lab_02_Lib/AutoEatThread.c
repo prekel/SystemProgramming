@@ -61,9 +61,15 @@ void* AutoEatThread(void* pAutoEatThreadOptions)
     LOG("Запуск потока");
     srand(time(NULL));
 
-    AutoEatThreadOptions* pOptions = (AutoEatThreadOptions*) pAutoEatThreadOptions;
+    AutoEatThreadOptions* pOptionsToDestroy = (AutoEatThreadOptions*) pAutoEatThreadOptions;
+    AutoEatThreadOptions pOptions1;
+    pOptions1.pMutex = pOptionsToDestroy->pMutex;
+    pOptions1.MinSendIntervalDuration = pOptionsToDestroy->MinSendIntervalDuration;
+    pOptions1.MaxSendIntervalDuration = pOptionsToDestroy->MaxSendIntervalDuration;
+    pOptions1.pTable = pOptionsToDestroy->pTable;
+    DestroyAutoEatThreadOptions(pOptionsToDestroy);
 
-    pOptions->pTable->IsEatingStarted = true;
+    AutoEatThreadOptions* pOptions = &pOptions1;
 
     while (!pOptions->pTable->IsEatingMustEnd)
     {
