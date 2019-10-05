@@ -49,7 +49,8 @@ void* PhilosophersWaiterThread(void* pPhilosophersWaiterThreadOptions)
             //LogTableInfo(pTable);
             //printf("[pid: 0x%08lx] Ожидание завершения потока философа %d\n",
             //       pthread_self(), pTable->ppPhilosophers[i]->PhilosopherId);
-            sem_post(pOptions->pTable->ppPhilosophers[i]->pSemOnGoingToEat);
+            //sem_post(pOptions->pTable->ppPhilosophers[i]->pSemOnGoingToEat);
+            pthread_cond_signal(pOptions->pTable->ppPhilosophers[i]->pCondOnGoingToEat);
             pthread_mutex_unlock(pOptions->pTable->pMutex);
             void* pReturned;
             pthread_join(pOptions->pTable->ppPhilosophers[i]->pThread, &pReturned);

@@ -318,7 +318,9 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
 
     while (!pOptions->pTable->IsEatingMustEnd)
     {
-        sem_wait(pPhilosopher->pSemOnGoingToEat);
+        pthread_mutex_lock(pMutex);
+        pthread_cond_wait(pPhilosopher->pCondOnGoingToEat, pMutex);
+
         if (pOptions->pTable->IsEatingMustEnd)
         {
             LOG("Поток для философа %d завершается",
@@ -333,7 +335,7 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
 
         LOG("Философ с номером %d начинает есть, смотрит на вилки", pPhilosopher->PhilosopherId);
 
-        pthread_mutex_lock(pMutex);
+        //pthread_mutex_lock(pMutex);
         if (pPhilosopher->pLeftFork->IsInUse == false &&
             pPhilosopher->pRightFork->IsInUse == false)
         {
@@ -386,7 +388,7 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
                                   pOptions->pMutex))
             {
 
-                LOG("Приём пищи завершён заранее сигналом");
+                LOG("Приём пищи принудительно завершён заранее");
                 //LogTableInfo(pOptions->pTable);
                 //printf("[pid: 0x%08lx, philosopherId: %d] Приём пищи завершён заранее сигналом\n",
                 //       pthread_self(), pPhilosopher->PhilosopherId);
@@ -647,7 +649,7 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
         }
     }
 
-    pthread_mutex_lock(pMutex);
+    //pthread_mutex_lock(pMutex);
     pPhilosopher->IsThreadRunning = false;
     pthread_mutex_unlock(pMutex);
 
