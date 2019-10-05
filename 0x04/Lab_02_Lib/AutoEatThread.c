@@ -66,7 +66,7 @@ void* AutoEatThread(void* pAutoEatThreadOptions)
 
     while (!pOptions->pTable->IsEatingMustEnd)
     {
-        struct timespec twb = RandomTimeFromSec(
+        struct timespec twb = RandomTimeMs(
                 pOptions->MinSendIntervalDuration,
                 pOptions->MaxSendIntervalDuration);
 

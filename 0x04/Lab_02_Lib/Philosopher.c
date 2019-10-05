@@ -12,8 +12,8 @@
 #include "Macro.h"
 
 Philosopher*
-CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork, int minDurationEat,
-                  int maxDurationEat, bool isInfinityDuration)
+CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork, int minDurationEatMs,
+                  int maxDurationEatMs, bool isInfinityDuration)
 {
     Philosopher* pPhilosopher = (Philosopher*) malloc(sizeof(Philosopher));
     FAILURE_IF_NULLPTR(pPhilosopher);
@@ -34,8 +34,8 @@ CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork, int minDurationEat,
     FAILURE_IF_NULLPTR(pPhilosopher->pSemOnInfinityWaitingEnding);
     sem_init(pPhilosopher->pSemOnInfinityWaitingEnding, 0, 0);
 
-    pPhilosopher->MinDurationEat = minDurationEat;
-    pPhilosopher->MaxDurationEat = maxDurationEat;
+    pPhilosopher->MinDurationEatMs = minDurationEatMs;
+    pPhilosopher->MaxDurationEatMs = maxDurationEatMs;
     pPhilosopher->IsInfinityDuration = isInfinityDuration;
 
 

@@ -44,14 +44,14 @@ int main(int argc, char** args)
 
     printf("Для того, чтобы время приёма пищы было бесконечным, введите 0 минимальное и максимальное\n");
     printf("Для того, чтобы было постоянным, введите одинаковое максимальное и минимальное\n");
-    int minDurationEat = CycleInputInt("Введите минимальное время приёма пищи: ", MAX_INT_LENGTH, TimeChecker);
-    int maxDurationEat = CycleInputInt("Введите максимальное время приёма пищи: ", MAX_INT_LENGTH, TimeChecker);
+    int minDurationEat = CycleInputInt("Введите минимальное время приёма пищи (например 1000): ", MAX_INT_LENGTH, TimeChecker);
+    int maxDurationEat = CycleInputInt("Введите максимальное время приёма пищи (например 9000): ", MAX_INT_LENGTH, TimeChecker);
     bool isInfinityDuration = minDurationEat == 0 && maxDurationEat == 0;
 
     printf("Для того, философы не появлялись автоматически, введите 0 и 0\n");
     printf("Для того, чтобы было постоянным, введите одинаковое максимальное и минимальное\n");
-    int minSendIntervalDuration = CycleInputInt("Введите минимальное время между появлениями: ", MAX_INT_LENGTH, TimeChecker);
-    int maxSendIntervalDuration = CycleInputInt("Введите максимальное время между появлениями: ", MAX_INT_LENGTH, TimeChecker);
+    int minSendIntervalDuration = CycleInputInt("Введите минимальное время между появлениями (например 1000): ", MAX_INT_LENGTH, TimeChecker);
+    int maxSendIntervalDuration = CycleInputInt("Введите максимальное время между появлениями (например 3000): ", MAX_INT_LENGTH, TimeChecker);
     bool isAutoSpawnDisabled = minSendIntervalDuration == 0 && maxSendIntervalDuration == 0;
 
 

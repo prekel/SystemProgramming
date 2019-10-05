@@ -10,20 +10,17 @@
 
 typedef struct
 {
-    Philosopher** ppPhilosophers;
     int PhilosophersCount;
+    Philosopher** ppPhilosophers;
     Fork** ppForks;
     bool IsEatingStarted;
     bool IsEatingEnded;
     bool IsEatingMustEnd;
     pthread_mutex_t* pMutex;
     sem_t* pArbitrator;
-    //int MinDurationEat;
-    //int MaxDurationEat;
 } Table;
 
-Table*
-CreateTable(int philosophersCount, int minDurationEat, int maxDurationEat,
+Table* CreateTable(int philosophersCount, int minDurationEatMs, int maxDurationEatMs,
             bool isInfinityDuration);
 
 int Eat(Table* pTable, Philosopher* pPhilosopher, struct timespec tw1, int i);

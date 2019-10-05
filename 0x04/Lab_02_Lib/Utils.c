@@ -14,7 +14,7 @@ int RandomInterval(int min, int max)
     return rand() % (max - min) + min;
 }
 
-struct timespec RandomTimeFromSec(int minSeconds, int maxSeconds)
+struct timespec RandomTimeS(int minSeconds, int maxSeconds)
 {
     assert(maxSeconds >= minSeconds);
 
@@ -35,7 +35,7 @@ struct timespec RandomTimeFromSec(int minSeconds, int maxSeconds)
     return tw;
 }
 
-struct timespec RandomTimeFromMs(int minMs, int maxMs)
+struct timespec RandomTimeMs(int minMs, int maxMs)
 {
     assert(maxMs >= minMs);
 
@@ -47,10 +47,12 @@ struct timespec RandomTimeFromMs(int minMs, int maxMs)
     }
     else
     {
-        tw.tv_sec = RandomInterval(minMs / MS_IN_S, maxMs / MS_IN_S);
+        int randomMs = RandomInterval(minMs, maxMs);
+
+        tw.tv_sec = randomMs / MS_IN_S;
+
         tw.tv_nsec =
-                RandomInterval(minMs % MS_IN_S * NS_IN_MS,
-                        maxMs % MS_IN_S * NS_IN_MS) * NS_IN_MS +
+                randomMs % MS_IN_S * NS_IN_MS +
                 RandomInterval(0, 1000) * MS_IN_S +
                 RandomInterval(0, 1000);
     }

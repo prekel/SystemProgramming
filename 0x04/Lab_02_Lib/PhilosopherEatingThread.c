@@ -62,7 +62,7 @@ void* PhilosopherEatingThread(void* pEatThreadOptions)
     PhilosopherEatingThreadOptions* pEatOptions = (PhilosopherEatingThreadOptions*) pEatThreadOptions;
 
     Philosopher* pPh = pEatOptions->pPhilosopher;
-    struct timespec pDurationEat = RandomTimeFromSec(10, 10);
+    struct timespec pDurationEat = RandomTimeMs(10, 10);
     pthread_mutex_t* pMutex = pEatOptions->pMutex;
     sem_t* pArbitrator = pEatOptions->pArbitrator;
 
@@ -326,9 +326,9 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
             break;
         }
 
-        struct timespec pDurationEat = RandomTimeFromSec(
-                pPhilosopher->MinDurationEat,
-                pPhilosopher->MaxDurationEat);
+        struct timespec pDurationEat = RandomTimeMs(
+                pPhilosopher->MinDurationEatMs,
+                pPhilosopher->MaxDurationEatMs);
 
 
         LOG("Философ с номером %d начинает есть, смотрит на вилки", pPhilosopher->PhilosopherId);
