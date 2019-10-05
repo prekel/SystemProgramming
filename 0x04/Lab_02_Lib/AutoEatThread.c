@@ -24,11 +24,17 @@ CreateAutoEatThreadOptions(Table* pTable, int minSendIntervalDuration, int maxSe
 
     pOptions->pMutex = pTable->pMutex;
 
+    pOptions->OnCondQuit = (pthread_cond_t*)malloc(sizeof(pthread_cond_t));
+    FAILURE_IF_NULLPTR(pOptions->OnCondQuit);
+    pthread_cond_init(pOptions->OnCondQuit, NULL);
+
     return pOptions;
 }
 
 void DestroyAutoEatThreadOptions(AutoEatThreadOptions* pOptions)
 {
+    pthread_cond_destroy(pOptions->OnCondQuit);
+    free(pOptions->OnCondQuit);
     free(pOptions);
 }
 
@@ -74,8 +80,7 @@ void* AutoEatThread(void* pAutoEatThreadOptions)
         int c = RandomInterval(0, pOptions->pTable->PhilosophersCount);
         Philosopher* pPhilosopher = pOptions->pTable->ppPhilosophers[c];
 
-        LOG("Философ с номером %d отправлен есть",
-        pPhilosopher->PhilosopherId);
+        LOG("Философ с номером %d отправлен есть", pPhilosopher->PhilosopherId);
 
         if (Eat1(pOptions->pTable, pPhilosopher) == 1)
         {
@@ -83,8 +88,7 @@ void* AutoEatThread(void* pAutoEatThreadOptions)
         }
 
         LOG("После отправки философа с номером %d задержка перед отправкой следующего %lf сек.", pPhilosopher->PhilosopherId,
-               TimespecToDouble(
-                       twb, false));
+               TimespecToDouble(twb, false));
 
         //LogTableInfo(pOptions->pTable);
         //printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Задержка перед отправкой следующего %lf сек.\n",

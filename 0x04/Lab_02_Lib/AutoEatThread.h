@@ -11,6 +11,7 @@ typedef struct
     int MinSendIntervalDuration;
     int MaxSendIntervalDuration;
     pthread_mutex_t* pMutex;
+    pthread_cond_t* OnCondQuit;
 } AutoEatThreadOptions;
 
 AutoEatThreadOptions*

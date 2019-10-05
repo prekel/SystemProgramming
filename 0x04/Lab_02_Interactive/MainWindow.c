@@ -143,6 +143,18 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
             if (event.key.keysym.sym == SDLK_ESCAPE && !pMainWindow->pTable->IsEatingMustEnd)
             {
                 LOG("Начато завершение программы");
+//
+//                pthread_mutex_lock(pMainWindow->pTable->pMutex);
+//                pMainWindow->pTable->IsEatingMustEnd = true;
+//
+//                if (!pMainWindow->IsAutoSpawnDisabled)
+//                {
+//                    LOG("Принудительная отмена потока-спавнера");
+//                    pthread_cancel(pMainWindow->AutoEatThreadId);
+//                    DestroyAutoEatThreadOptions(
+//                            pMainWindow->pAutoEatThreadOptions);
+//                }
+//                pthread_mutex_unlock(pMainWindow->pTable->pMutex);
 
                 LOG("Запуск потока, который завершает потоки");
 

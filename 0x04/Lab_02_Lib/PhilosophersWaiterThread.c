@@ -39,6 +39,7 @@ void* PhilosophersWaiterThread(void* pPhilosophersWaiterThreadOptions)
             (PhilosophersWaiterThreadOptions*)
             pPhilosophersWaiterThreadOptions;
 
+    //pthread_mutex_lock(pOptions->pTable->pMutex);
     for (int i = 0; i < pOptions->pTable->PhilosophersCount; i++)
     {
         pthread_mutex_lock(pOptions->pTable->pMutex);
