@@ -8,9 +8,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-/// Макрос для провер
-/// \param ptr Pointer to allocated memory for check
-///
+/// Макрос для проверки указателя на NULL. Программа аварийно завершается с кодом 0 (EXIT_FAILURE) если ptr == NULL.
+/// \param ptr Указатель для проверки
 #define FAILURE_IF_NULLPTR(ptr) do { \
     if((ptr) == NULL) { \
         fprintf(stderr, "Ошибка при выделении памяти\n"); \
@@ -18,15 +17,14 @@
     } \
 } while(0)
 
-//#ifdef __MINGW32__
-//#define _FILE strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__
-//#else
-//#define _FILE strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__
-//#endif
-
+/// Макрос, формиирующий строку с именем файла (например, для этого файла будет "Macro.h")
 #define _FILE strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
 
+/// Макрос нужен для STRINGIZE(A)
 #define STRINGIZE_NX(A) #A
+
+/// Макрос преобразующий не-строковое определение в строковое. Например STRINGIZE(__LINE__) будет "26".
+/// \param A Определение для преобразования
 #define STRINGIZE(A) STRINGIZE_NX(A)
 
 #endif // MACRO_H

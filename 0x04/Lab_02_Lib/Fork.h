@@ -1,3 +1,7 @@
+/// \file
+/// \brief Вилка
+/// \details Вилка, функции для её создания, уничтожения и взаимодействия
+
 #ifndef FORK_H
 #define FORK_H
 
@@ -5,6 +9,9 @@
 #include <pthread.h>
 #include <semaphore.h>
 
+/// \struct Fork
+///
+/// Вилка.
 typedef struct
 {
     int ForkId;
