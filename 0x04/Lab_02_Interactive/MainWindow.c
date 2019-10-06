@@ -1,4 +1,5 @@
 #include <malloc.h>
+#include <sysexits.h>
 
 #include "Macro.h"
 #include "Log.h"
@@ -134,8 +135,27 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
     {
         if (event.type == SDL_QUIT)
         {
-            LOG("Главный цикл завершён принудительно");
-            return 2;
+            LOG("Главный цикл завершён событием");
+
+            if (!pMainWindow->pTable->IsEatingEnded)
+            {
+                pthread_mutex_lock(pMainWindow->pTable->pMutex);
+                LOG("Событие выхода из программы было послано без завершения потоков и очистки");
+                LOG("Завершение программы с кодом 1 (EXIT_FAILURE)");
+                return EXIT_FAILURE;
+            }
+
+            QuitMainWindow(pMainWindow);
+
+            QuitVideoMainWindow(pMainWindow);
+
+            LOG("Завершение программы с кодом 0 (EXIT_SUCCESS)");
+
+            DestroyTable(pMainWindow->pTable);
+            DestroyMainWindow(pMainWindow);
+
+            fflush(stdout);
+            return EXIT_SUCCESS;
         }
 
         if (event.type == SDL_KEYDOWN)
@@ -217,8 +237,9 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
     }
 
     LOG("Главный цикл завершён по неизвестной ошибке: %s", SDL_GetError());
+    LOG("Завершение программы с кодом 70 (EX_SOFTWARE)");
 
-    return 1;
+    return EX_SOFTWARE;
 }
 
 void QuitMainWindow(MainWindow* pMainWindow)
@@ -237,7 +258,7 @@ void QuitMainWindow(MainWindow* pMainWindow)
     pthread_join(pMainWindow->RendererThreadId, NULL);
     DestroyRendererThreadOptions(pMainWindow->pRendererThreadOptions);
 
-    LOG("Завершение программы");
+    //LOG("Завершение программы");
 }
 
 int QuitVideoMainWindow(MainWindow* pMainWindow)

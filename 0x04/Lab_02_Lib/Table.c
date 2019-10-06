@@ -47,6 +47,10 @@ CreateTable(int philosophersCount, int minDurationEatMs, int maxDurationEatMs,
 
     pTable->pMutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
     FAILURE_IF_NULLPTR(pTable->pMutex);
+//    pthread_mutexattr_t mutexAttr;
+//    pthread_mutexattr_init(&mutexAttr);
+//    pthread_mutexattr_settype(&mutexAttr, PTHREAD_MUTEX_RECURSIVE);
+//    pthread_mutex_init(pTable->pMutex, &mutexAttr);
     pthread_mutex_init(pTable->pMutex, NULL);
 
     pTable->pArbitrator = (sem_t*) malloc(sizeof(sem_t));

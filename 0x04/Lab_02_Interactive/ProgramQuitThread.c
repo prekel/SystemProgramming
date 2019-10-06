@@ -51,6 +51,7 @@ void* ProgramQuitThread(void* pProgramQuitThreadOptions)
     //pOptions->pMainWindow->pTable->IsEatingMustEnd = true;
     //pthread_mutex_unlock(pOptions->pMutex);
 
+    LOG("Запуск потока, который завершает потоки филосософ");
     PhilosophersWaiterThreadOptions*
             pPhilosophersWaiterThreadOptions =
             CreatePhilosophersWaiterThreadOptions(pOptions->pMainWindow->pTable);
@@ -60,38 +61,53 @@ void* ProgramQuitThread(void* pProgramQuitThreadOptions)
                    pPhilosophersWaiterThreadOptions);
 
     //pthread_mutex_unlock(pOptions->pMutex);
-    pthread_join(philosophersWaiterThreadId, NULL);
 
+    if (!pOptions->pMainWindow->IsAutoSpawnDisabled)
+    {
+        LOG("Принудительная остановка потока-cпавнера");
+        //pthread_cancel(pOptions->pMainWindow->AutoEatThreadId);
+        pthread_cond_signal(pOptions->pMainWindow->pAutoEatThreadOptions->OnCondQuit);
+    }
+
+    LOG("Ожидание завершения потока, который завершает потоки филосософ");
+    pthread_join(philosophersWaiterThreadId, NULL);
     DestroyPhilosophersWaiterThreadOptions(pPhilosophersWaiterThreadOptions);
 
     if (!pOptions->pMainWindow->IsAutoSpawnDisabled)
     {
-        LOG("Принудительная остановка потока-спавнера");
-        //pthread_cancel(pOptions->pMainWindow->AutoEatThreadId);
-        pthread_cond_signal(pOptions->pMainWindow->pAutoEatThreadOptions->OnCondQuit);
+        LOG("Ожидание завершения потока-cпавнера");
         pthread_join(pOptions->pMainWindow->AutoEatThreadId, NULL);
         DestroyAutoEatThreadOptions(
                 pOptions->pMainWindow->pAutoEatThreadOptions);
     }
 
-    pthread_mutex_lock(pOptions->pMutex);
+    //pthread_mutex_lock(pOptions->pMutex);
+    //pOptions->pMainWindow->pTable->IsEatingEnded = true;
+    //pthread_mutex_unlock(pOptions->pMutex);
     LOG("Принудительная отмена главного потока");
-    pthread_cancel(pOptions->pMainWindow->MainThreadId);
-    pthread_mutex_unlock(pOptions->pMutex);
+    SDL_Event event;
+    event.type = SDL_QUIT;
+    //pthread_mutex_unlock(pOptions->pMutex);
+    SDL_PushEvent(&event);
 
-    QuitMainWindow(pOptions->pMainWindow);
-
-    QuitVideoMainWindow(pOptions->pMainWindow);
-
-    LOG("Завершение потока и программы");
-
-    DestroyTable(pOptions->pMainWindow->pTable);
-    DestroyMainWindow(pOptions->pMainWindow);
     DestroyProgramQuitThreadOptions(pOptions);
-
-    fflush(stdout);
-
-    exit(EXIT_SUCCESS);
+    LOG("Завершение потока");
+    //pthread_cancel(pOptions->pMainWindow->MainThreadId);
+//    pthread_mutex_unlock(pOptions->pMutex);
+//
+//    QuitMainWindow(pOptions->pMainWindow);
+//
+//    QuitVideoMainWindow(pOptions->pMainWindow);
+//
+//    LOG("Завершение потока и программы");
+//
+//    DestroyTable(pOptions->pMainWindow->pTable);
+//    DestroyMainWindow(pOptions->pMainWindow);
+//    DestroyProgramQuitThreadOptions(pOptions);
+//
+//    fflush(stdout);
+//
+//    exit(EXIT_SUCCESS);
 
     return NULL;
 }
