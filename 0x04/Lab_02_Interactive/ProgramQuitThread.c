@@ -66,7 +66,8 @@ void* ProgramQuitThread(void* pProgramQuitThreadOptions)
     {
         LOG("Принудительная остановка потока-cпавнера");
         //pthread_cancel(pOptions->pMainWindow->AutoEatThreadId);
-        pthread_cond_signal(pOptions->pMainWindow->pAutoEatThreadOptions->OnCondQuit);
+        sem_post(pOptions->pMainWindow->pAutoEatThreadOptions->OnSemQuit);
+        //pthread_cond_signal(pOptions->pMainWindow->pAutoEatThreadOptions->OnCondQuit);
     }
 
     LOG("Ожидание завершения потока, который завершает потоки филосософ");

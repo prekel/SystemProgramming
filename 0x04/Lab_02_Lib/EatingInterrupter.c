@@ -49,7 +49,8 @@ int InterruptEating(Philosopher* pPhilosopher, pthread_mutex_t* pMutex)
     {
         LOG("Приём пищи философа с номером %d прерван",
                pPhilosopher->PhilosopherId);
-        pthread_cond_signal(pPhilosopher->pCondOnWaitingEnding);
+        //pthread_cond_signal(pPhilosopher->pCondOnWaitingEnding);
+        sem_post(pPhilosopher->pSemOnWaitingEnding);
         pthread_mutex_unlock(pMutex);
         return 0;
     }

@@ -24,17 +24,23 @@ CreateAutoEatThreadOptions(Table* pTable, int minSendIntervalDuration, int maxSe
 
     pOptions->pMutex = pTable->pMutex;
 
-    pOptions->OnCondQuit = (pthread_cond_t*)malloc(sizeof(pthread_cond_t));
-    FAILURE_IF_NULLPTR(pOptions->OnCondQuit);
-    pthread_cond_init(pOptions->OnCondQuit, NULL);
+//    pOptions->OnCondQuit = (pthread_cond_t*)malloc(sizeof(pthread_cond_t));
+//    FAILURE_IF_NULLPTR(pOptions->OnCondQuit);
+//    pthread_cond_init(pOptions->OnCondQuit, NULL);
+
+    pOptions->OnSemQuit = (sem_t*) malloc(sizeof(sem_t));
+    FAILURE_IF_NULLPTR(pOptions->OnSemQuit);
+    sem_init(pOptions->OnSemQuit, 0, 0);
 
     return pOptions;
 }
 
 void DestroyAutoEatThreadOptions(AutoEatThreadOptions* pOptions)
 {
-    pthread_cond_destroy(pOptions->OnCondQuit);
-    free(pOptions->OnCondQuit);
+    //pthread_cond_destroy(pOptions->OnCondQuit);
+    //free(pOptions->OnCondQuit);
+    sem_destroy(pOptions->OnSemQuit);
+    free(pOptions->OnSemQuit);
     free(pOptions);
 }
 
@@ -56,7 +62,8 @@ int Eat1(Table* pTable, Philosopher* pPhilosopher)
 
     pthread_mutex_unlock(pTable->pMutex);
 
-    pthread_cond_signal(pPhilosopher->pCondOnGoingToEat);
+    sem_post(pPhilosopher->pSemOnGoingToEat);
+    //pthread_cond_signal(pPhilosopher->pCondOnGoingToEat);
 
 
     //sem_post(pPhilosopher->pSemOnGoingToEat);
@@ -95,14 +102,14 @@ void* AutoEatThread(void* pAutoEatThreadOptions)
         //LogTableInfo(pOptions->pTable);
         //printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Задержка перед отправкой следующего %lf сек.\n",
         //       pthread_self(), pPhilosopher->PhilosopherId, i++, TimespecToDouble(&twb));
-        pthread_mutex_lock(pOptions->pMutex);
-        if (!SleepOrWaitSignal(pOptions->OnCondQuit, twb, false, pOptions->pMutex))
+        //pthread_mutex_lock(pOptions->pMutex);
+        if (!SleepOrWaitSignal(pOptions->OnSemQuit, twb, false, pOptions->pMutex))
         {
             LOG("Принудительная остановка потока-спавнера");
-            pthread_mutex_unlock(pOptions->pMutex);
+            //pthread_mutex_unlock(pOptions->pMutex);
             break;
         }
-        pthread_mutex_unlock(pOptions->pMutex);
+        //pthread_mutex_unlock(pOptions->pMutex);
         //nanosleep(&twb, NULL);
     }
 

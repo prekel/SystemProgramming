@@ -80,7 +80,7 @@ struct timespec TimespecFromDouble(double seconds)
     return tw;
 }
 
-int SleepOrWaitSignal(pthread_cond_t* pCondOnWaitingEnding, struct timespec duration,
+int SleepOrWaitSignal(sem_t* pSemOnWaitingEnding, struct timespec duration,
                       bool isInfinityDuration, pthread_mutex_t* pMutex)
 {
     //struct timespec rem = {0, 0};
@@ -88,8 +88,8 @@ int SleepOrWaitSignal(pthread_cond_t* pCondOnWaitingEnding, struct timespec dura
     {
         //pthread_mutex_lock(pMutex);
         struct timespec infinityTime = {INT_MAX, NS_IN_S - 1};
-        int timedwaitReturns = pthread_cond_timedwait(
-                pCondOnWaitingEnding, pMutex,
+        int timedwaitReturns = sem_timedwait(
+                pSemOnWaitingEnding,
                 &infinityTime);
         //LogPrefix(FILE_NAME);
         //printf("pthread_cond_timedwait вернул %d\n", timedwaitReturns);
@@ -110,13 +110,13 @@ int SleepOrWaitSignal(pthread_cond_t* pCondOnWaitingEnding, struct timespec dura
             endTime.tv_nsec -= NS_IN_S;
         }
 
-        int timedwaitReturns = pthread_cond_timedwait(
-                pCondOnWaitingEnding, pMutex,
+        int timedwaitReturns = sem_timedwait(
+                pSemOnWaitingEnding,
                 &endTime);
         //LogPrefix(FILE_NAME);
         //printf("pthread_cond_timedwait вернул %d\n", timedwaitReturns);
         //pthread_mutex_unlock(pMutex);
-        return timedwaitReturns == ETIMEDOUT;
+        return errno == ETIMEDOUT;
     }
     return 0;
 }
