@@ -86,19 +86,19 @@ int SleepOrWaitSignal(pthread_cond_t* pCondOnWaitingEnding, struct timespec dura
     //struct timespec rem = {0, 0};
     if (isInfinityDuration)
     {
-        pthread_mutex_lock(pMutex);
+        //pthread_mutex_lock(pMutex);
         struct timespec infinityTime = {INT_MAX, NS_IN_S - 1};
         int timedwaitReturns = pthread_cond_timedwait(
                 pCondOnWaitingEnding, pMutex,
                 &infinityTime);
         //LogPrefix(FILE_NAME);
         //printf("pthread_cond_timedwait вернул %d\n", timedwaitReturns);
-        pthread_mutex_unlock(pMutex);
+        //pthread_mutex_unlock(pMutex);
         return 1;
     }
     else
     {
-        pthread_mutex_lock(pMutex);
+        //pthread_mutex_lock(pMutex);
 
         struct timespec currentTime;
         clock_gettime(CLOCK_REALTIME, &currentTime);
@@ -115,7 +115,7 @@ int SleepOrWaitSignal(pthread_cond_t* pCondOnWaitingEnding, struct timespec dura
                 &endTime);
         //LogPrefix(FILE_NAME);
         //printf("pthread_cond_timedwait вернул %d\n", timedwaitReturns);
-        pthread_mutex_unlock(pMutex);
+        //pthread_mutex_unlock(pMutex);
         return timedwaitReturns == ETIMEDOUT;
     }
     return 0;

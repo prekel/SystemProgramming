@@ -5,11 +5,14 @@
 #include "Log.h"
 #include "Macro.h"
 
-#define LOG_OUTPUT_STREAM stdout
-
 static Table* g_pLoggingTable;
-static pthread_mutex_t g_pLogMutex;
+
 static bool g_IsLoggerInitialized = false;
+static FILE* g_pMainOutputStream;
+bool g_IsMainTableInfoEnabled;
+static FILE* g_pSecondaryOutputStream;
+bool g_IsSecondaryTableInfoEnabled;
+bool g_IsTableInfoRequired;
 
 char ForkToChar(Fork* fork)
 {
@@ -18,6 +21,7 @@ char ForkToChar(Fork* fork)
     else
         return '.';
 }
+
 char PhilosopherToChar(Philosopher* philosopher)
 {
     if (!philosopher->IsThreadRunning)
@@ -30,36 +34,21 @@ char PhilosopherToChar(Philosopher* philosopher)
         return '_';
 }
 
-char* TableInfo(Table* pTable)
-{
-    char* result = (char*)malloc((pTable->PhilosophersCount * 2 + 1) * sizeof(char));
-    FAILURE_IF_NULLPTR(result);
-    for (int i = 0; i < pTable->PhilosophersCount; i++)
-    {
-        result[i * 2] = PhilosopherToChar(pTable->ppPhilosophers[i]);
-        result[i * 2 + 1] = ForkToChar(pTable->ppForks[i]);
-    }
-    result[pTable->PhilosophersCount * 2] = '\0';
-    return result;
-}
-
-void InitLogger(Table* pTable)
+void InitLogger(Table* pTable, FILE* pMainOutputStream,
+                bool isMainTableInfoEnabled, FILE* pSecondaryOutputStream,
+                bool isSecondaryTableInfoEnabled)
 {
     g_pLoggingTable = pTable;
-    pthread_mutex_init(&g_pLogMutex, NULL);
 
-	g_IsLoggerInitialized = true;
-}
+    g_pMainOutputStream = pMainOutputStream;
+    g_IsMainTableInfoEnabled = isMainTableInfoEnabled;
 
-void LogPrefix()
-{
-    char* info = TableInfo(g_pLoggingTable);
-#ifdef __MINGW32__
-    printf("[%s][tid: 0x%08llx]", info, pthread_self());
-#else
-    printf("[%s][tid: 0x%08lx]", info, pthread_self());
-#endif
-    free(info);
+    g_pSecondaryOutputStream = pSecondaryOutputStream;
+    g_IsSecondaryTableInfoEnabled = isSecondaryTableInfoEnabled;
+
+    g_IsTableInfoRequired = isMainTableInfoEnabled || isSecondaryTableInfoEnabled;
+
+    g_IsLoggerInitialized = true;
 }
 
 void Log(char* format, ...)
@@ -68,19 +57,43 @@ void Log(char* format, ...)
     {
         return;
     }
-    pthread_mutex_lock(&g_pLogMutex);
-    //pthread_mutex_lock(g_pLoggingTable->pMutex);
 
-    LogPrefix();
+    int tableInfoLength = g_IsTableInfoRequired ?
+                          g_pLoggingTable->PhilosophersCount * 2 + 1 : 1;
+    char result[tableInfoLength];
+    if (g_IsTableInfoRequired)
+    {
+        for (int i = 0; i < g_pLoggingTable->PhilosophersCount; i++)
+        {
+            result[i * 2] = PhilosopherToChar(
+                    g_pLoggingTable->ppPhilosophers[i]);
+            result[i * 2 + 1] = ForkToChar(g_pLoggingTable->ppForks[i]);
+        }
+    }
+    result[tableInfoLength - 1] = '\0';
+
+    char empty[] = "";
+    char* res1 = g_IsMainTableInfoEnabled ? result : empty;
+    char* res2 = g_IsSecondaryTableInfoEnabled ? result : empty;
+
+#ifdef __MINGW32__
+    if (g_pMainOutputStream) fprintf(g_pMainOutputStream, "[%s][tid: 0x%08llx]", res1, pthread_self());
+    if (g_pSecondaryOutputStream) fprintf(g_pSecondaryOutputStream, "[%s][tid: 0x%08llx]", res2, pthread_self());
+#else
+    if (g_pMainOutputStream) fprintf(g_pMainOutputStream, "[%s][tid: 0x%08lx]", res1, pthread_self());
+    if (g_pSecondaryOutputStream) fprintf(g_pSecondaryOutputStream, "[%s][tid: 0x%08lx]", res2, pthread_self());
+#endif
 
     va_list argPtr;
     va_start(argPtr, format);
-    vfprintf(LOG_OUTPUT_STREAM, format, argPtr);
-    fprintf(LOG_OUTPUT_STREAM, "\n");
+    if (g_pMainOutputStream) vfprintf(g_pMainOutputStream, format, argPtr);
+    if (g_pMainOutputStream) fprintf(g_pMainOutputStream, "\n");
     va_end(argPtr);
 
-    fflush(LOG_OUTPUT_STREAM);
+    va_start(argPtr, format);
+    if (g_pSecondaryOutputStream) vfprintf(g_pSecondaryOutputStream, format, argPtr);
+    if (g_pSecondaryOutputStream) fprintf(g_pSecondaryOutputStream, "\n");
+    va_end(argPtr);
 
-    pthread_mutex_unlock(&g_pLogMutex);
-    //pthread_mutex_unlock(g_pLoggingTable->pMutex);
+    fflush(g_pMainOutputStream);
 }

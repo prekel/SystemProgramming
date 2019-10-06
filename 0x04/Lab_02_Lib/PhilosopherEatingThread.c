@@ -340,7 +340,7 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
             // LogTableInfo(pOptions->pTable);
             //printf("[pid: 0x%08lx, philosopherId: %d] Начал есть\n",
             //       pthread_self(), pPhilosopher->PhilosopherId);
-            pthread_mutex_unlock(pMutex);
+            //pthread_mutex_unlock(pMutex);
 
             if (SleepOrWaitSignal(pOptions->pPhilosopher->pCondOnWaitingEnding, pDurationEat,
                                   pOptions->pPhilosopher->IsInfinityDuration,
@@ -354,7 +354,7 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
             }
 
             //nanosleep(&pDurationEat, NULL);
-            pthread_mutex_lock(pMutex);
+            //pthread_mutex_lock(pMutex);
             LOG("Закончил есть философ с номером %d",
                    pPhilosopher->PhilosopherId);
             //LogTableInfo(pOptions->pTable);
@@ -563,7 +563,8 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
             //LogTableInfo(pOptions->pTable);
             //printf("[pid: 0x%08lx, philosopherId: %d] Начал есть\n",
             //       pthread_self(), pPhilosopher->PhilosopherId);
-            pthread_mutex_unlock(pMutex);
+
+            //pthread_mutex_unlock(pMutex);
 
             if (SleepOrWaitSignal(pOptions->pPhilosopher->pCondOnWaitingEnding, pDurationEat,
                                   pOptions->pPhilosopher->IsInfinityDuration,
@@ -578,7 +579,8 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
                 //       pthread_self(), pPhilosopher->PhilosopherId);
             }
 
-            pthread_mutex_lock(pMutex);
+            //pthread_mutex_lock(pMutex);
+
             LOG("Философ с номером %d закончил есть",
                    pPhilosopher->PhilosopherId);
             //LogTableInfo(pOptions->pTable);

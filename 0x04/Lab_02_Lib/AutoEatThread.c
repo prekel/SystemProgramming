@@ -54,9 +54,9 @@ int Eat1(Table* pTable, Philosopher* pPhilosopher)
         return 1;
     }
 
-    pthread_cond_signal(pPhilosopher->pCondOnGoingToEat);
-
     pthread_mutex_unlock(pTable->pMutex);
+
+    pthread_cond_signal(pPhilosopher->pCondOnGoingToEat);
 
 
     //sem_post(pPhilosopher->pSemOnGoingToEat);
@@ -95,11 +95,14 @@ void* AutoEatThread(void* pAutoEatThreadOptions)
         //LogTableInfo(pOptions->pTable);
         //printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Задержка перед отправкой следующего %lf сек.\n",
         //       pthread_self(), pPhilosopher->PhilosopherId, i++, TimespecToDouble(&twb));
+        pthread_mutex_lock(pOptions->pMutex);
         if (!SleepOrWaitSignal(pOptions->OnCondQuit, twb, false, pOptions->pMutex))
         {
             LOG("Принудительная остановка потока-спавнера");
+            pthread_mutex_unlock(pOptions->pMutex);
             break;
         }
+        pthread_mutex_unlock(pOptions->pMutex);
         //nanosleep(&twb, NULL);
     }
 

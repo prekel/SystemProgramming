@@ -16,7 +16,9 @@
 
 #define LOG(message, args...) LOG_HELPER(message, LOG_ARGS, ## args)
 
-void InitLogger(Table* pTable);
+void InitLogger(Table* pTable, FILE* pMainOutputStream,
+                bool isMainTableInfoEnabled, FILE* pSecondaryOutputStream,
+                bool isSecondaryTableInfoEnabled);
 
 void Log(char* format, ...);
 
