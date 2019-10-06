@@ -9,10 +9,11 @@ static Table* g_pLoggingTable;
 
 static bool g_IsLoggerInitialized = false;
 static FILE* g_pMainOutputStream;
-bool g_IsMainTableInfoEnabled;
+static bool g_IsMainTableInfoEnabled;
 static FILE* g_pSecondaryOutputStream;
-bool g_IsSecondaryTableInfoEnabled;
-bool g_IsTableInfoRequired;
+static bool g_IsSecondaryTableInfoEnabled;
+static bool g_IsTableInfoRequired;
+static pthread_mutex_t g_pLoggerMutex;
 
 char ForkToChar(Fork* fork)
 {
@@ -38,6 +39,11 @@ void InitLogger(Table* pTable, FILE* pMainOutputStream,
                 bool isMainTableInfoEnabled, FILE* pSecondaryOutputStream,
                 bool isSecondaryTableInfoEnabled)
 {
+    if (g_IsLoggerInitialized)
+    {
+        return;
+    }
+
     g_pLoggingTable = pTable;
 
     g_pMainOutputStream = pMainOutputStream;
@@ -49,6 +55,8 @@ void InitLogger(Table* pTable, FILE* pMainOutputStream,
     g_IsTableInfoRequired = isMainTableInfoEnabled || isSecondaryTableInfoEnabled;
 
     g_IsLoggerInitialized = true;
+
+    pthread_mutex_init(&g_pLoggerMutex, NULL);
 }
 
 void Log(char* format, ...)
@@ -76,6 +84,8 @@ void Log(char* format, ...)
     char* res1 = g_IsMainTableInfoEnabled ? result : empty;
     char* res2 = g_IsSecondaryTableInfoEnabled ? result : empty;
 
+    pthread_mutex_lock(&g_pLoggerMutex);
+
 #ifdef __MINGW32__
     if (g_pMainOutputStream) fprintf(g_pMainOutputStream, "[%s][tid: 0x%08llx]", res1, pthread_self());
     if (g_pSecondaryOutputStream) fprintf(g_pSecondaryOutputStream, "[%s][tid: 0x%08llx]", res2, pthread_self());
@@ -96,4 +106,6 @@ void Log(char* format, ...)
     va_end(argPtr);
 
     fflush(g_pMainOutputStream);
+
+    pthread_mutex_unlock(&g_pLoggerMutex);
 }

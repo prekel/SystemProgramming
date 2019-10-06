@@ -78,8 +78,8 @@ int main(int argc, char** args)
     Table* pTable = CreateTable(philosophersCount, minDurationEat, maxDurationEat,
                                 isInfinityDuration);
 
-    //InitLogger(pTable, stdout, false, fopen("3.txt", "w+"), false);
-    InitLogger(pTable, stdout, true, NULL, false);
+    InitLogger(pTable, stdout, true, fopen("5.txt", "w+"), true);
+    //InitLogger(pTable, stdout, true, NULL, false);
     LOG("Введены данные, создание объектов, запуск потоков");
 
     MainWindow* pMainWindow = CreateMainWindow(
