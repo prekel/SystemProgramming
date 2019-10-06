@@ -3,17 +3,14 @@ project(Lab_02_Interactive C)
 
 set(CMAKE_C_STANDARD 11)
 
-if (UNIX)
-    if (NOT TARGET SDL2)
-        find_package(SDL2 REQUIRED)
-        include_directories(${SDL2_INCLUDE_DIRS})
-    endif (NOT TARGET SDL2)
-endif (UNIX)
+#if (UNIX)
+#    if (NOT TARGET SDL2)
+#        find_package(SDL2 REQUIRED)
+#        include_directories(${SDL2_INCLUDE_DIRS})
+#    endif (NOT TARGET SDL2)
+#endif (UNIX)
 
-add_executable(Lab_02_Interactive main.c
-        RendererThread.c RendererThread.h
-        ProgramQuitThread.c ProgramQuitThread.h
-        MainWindow.c MainWindow.h)
+add_executable(Lab_02_Interactive main.c)
 
 if (UNIX)
     target_link_libraries(Lab_02_Interactive PRIVATE SDL2main SDL2)
@@ -21,7 +18,8 @@ endif (UNIX)
 
 if (MINGW)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mconsole -mwindows")
-    target_link_libraries(Lab_02_Interactive PRIVATE mingw32 SDL2main SDL2)
+    target_link_libraries(Lab_02_Interactive PRIVATE mingw32)
 endif (MINGW)
 
+target_link_libraries(Lab_02_Interactive PRIVATE Lab_02_InteractiveLib)
 target_link_libraries(Lab_02_Interactive PRIVATE Lab_02_Lib)
