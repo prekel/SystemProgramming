@@ -1,3 +1,7 @@
+/// \file
+/// \brief Главное окно
+/// \details Главное окно, функции создания, уничтожения, инициализации, главного цикла итд.
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -12,6 +16,9 @@
 
 #include "RendererThread.h"
 
+/// \struct MainWindow
+///
+/// Главное окно.
 typedef  struct
 {
     int ScreenWidth;
@@ -41,6 +48,15 @@ typedef  struct
     int MaxSendIntervalDuration;
 } MainWindow;
 
+/// Создаёт главное окно. Требуется очистка с помощью DestroyMainWindow.
+///
+/// \param screenWidth Ширина окна.
+/// \param screenHeight Высота окна.
+/// \param pTable Стол.
+/// \param minSendIntervalDuration Нижняя граница
+/// \param maxSendIntervalDuration
+/// \param isAutoSpawnDisabled
+/// \return
 MainWindow* CreateMainWindow(int screenWidth, int screenHeight, Table* pTable,
                              int minSendIntervalDuration,
                              int maxSendIntervalDuration,

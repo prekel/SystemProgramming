@@ -35,7 +35,7 @@ typedef struct
     sem_t* pArbitrator;
 } Table;
 
-/// Инициализирует новый экземпляр стола. Требуется очистка с помощью DestroyTable.
+/// Создаёт новый стол. Требуется очистка с помощью DestroyTable.
 ///
 /// \param philosophersCount Число философов.
 /// \param minDurationEatMs Нижняя граница случайного времени для приёма пищи.
