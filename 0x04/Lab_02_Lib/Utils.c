@@ -82,12 +82,12 @@ struct timespec TimespecFromDouble(double seconds)
 
 ///
 /// \param pSemOnWaitingEnding
-/// \param duration
+/// \param durationMs
 /// \param isInfinityDuration
 /// \param pMutex
 /// \return Возвращает не ноль, если семафор быстрее таймаута
-int SleepOrWaitSem(sem_t* pSemOnWaitingEnding, struct timespec duration,
-                   bool isInfinityDuration, pthread_mutex_t* pMutex)
+int SleepOrWaitSem(sem_t* pSemOnWaitingEnding, struct timespec durationMs,
+                   bool isInfinityDuration)
 {
     //struct timespec rem = {0, 0};
     if (isInfinityDuration)
@@ -109,7 +109,7 @@ int SleepOrWaitSem(sem_t* pSemOnWaitingEnding, struct timespec duration,
         struct timespec currentTime;
         clock_gettime(CLOCK_REALTIME, &currentTime);
 
-        struct timespec endTime = {currentTime.tv_sec + duration.tv_sec, currentTime.tv_nsec + duration.tv_nsec};
+        struct timespec endTime = {currentTime.tv_sec + durationMs.tv_sec, currentTime.tv_nsec + durationMs.tv_nsec};
         if (endTime.tv_nsec >= NS_IN_S)
         {
             endTime.tv_sec++;

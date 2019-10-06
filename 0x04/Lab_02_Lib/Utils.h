@@ -26,7 +26,7 @@ double TimespecToDouble(struct timespec duration, bool isInfinityDuration);
 
 struct timespec TimespecFromDouble(double seconds);
 
-int SleepOrWaitSem(sem_t* pSemOnWaitingEnding, struct timespec duration,
-                   bool isInfinityDuration, pthread_mutex_t* pMutex);
+int SleepOrWaitSem(sem_t* pSemOnWaitingEnding, struct timespec durationMs,
+                   bool isInfinityDuration);
 
 #endif // UTILS_H

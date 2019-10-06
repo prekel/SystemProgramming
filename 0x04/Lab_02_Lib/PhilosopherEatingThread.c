@@ -80,8 +80,7 @@ void* PhilosopherEatingThread(void* pEatThreadOptions)
 
         if (SleepOrWaitSem(pEatOptions->pPhilosopher->pSemOnWaitingEnding,
                            pDurationEat,
-                           pEatOptions->pPhilosopher->IsInfinityDuration,
-                           pEatOptions->pMutex))
+                           pEatOptions->pPhilosopher->IsInfinityDuration))
         {
 //            LogTableInfo(pEatOptions->pTable);
             printf("[pid: 0x%08lx, philosopherId: %d] Приём пищи завершён заранее сигналом\n",
@@ -220,8 +219,7 @@ void* PhilosopherEatingThread(void* pEatThreadOptions)
 
         if (SleepOrWaitSem(pEatOptions->pPhilosopher->pSemOnWaitingEnding,
                            pDurationEat,
-                           pEatOptions->pPhilosopher->IsInfinityDuration,
-                           pEatOptions->pMutex))
+                           pEatOptions->pPhilosopher->IsInfinityDuration))
         {
 //            LogTableInfo(pEatOptions->pTable);
             printf("[pid: 0x%08lx, philosopherId: %d] Приём пищи после ожидания завершён заранее сигналом\n",
@@ -349,8 +347,7 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
 
             if (SleepOrWaitSem(pOptions->pPhilosopher->pSemOnWaitingEnding,
                                pDurationEat,
-                               pOptions->pPhilosopher->IsInfinityDuration,
-                               pOptions->pMutex))
+                               pOptions->pPhilosopher->IsInfinityDuration))
             {
 
                 LOG("Приём пищи принудительно завершён заранее");
@@ -574,8 +571,7 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
 
             if (SleepOrWaitSem(pOptions->pPhilosopher->pSemOnWaitingEnding,
                                pDurationEat,
-                               pOptions->pPhilosopher->IsInfinityDuration,
-                               pOptions->pMutex))
+                               pOptions->pPhilosopher->IsInfinityDuration))
             {
 
                 LOG("Приём пищи после ожидания для философа с номером %d завершён заранее сигналом",
