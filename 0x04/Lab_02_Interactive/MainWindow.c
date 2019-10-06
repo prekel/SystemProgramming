@@ -1,5 +1,5 @@
-#include <malloc.h>
-#include <sysexits.h>
+﻿#include <malloc.h> 
+//#include <sysexits.h>
 
 #include "Macro.h"
 #include "Log.h"
@@ -239,7 +239,8 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
     LOG("Главный цикл завершён по неизвестной ошибке: %s", SDL_GetError());
     LOG("Завершение программы с кодом 70 (EX_SOFTWARE)");
 
-    return EX_SOFTWARE;
+    return 70;
+    //return EX_SOFTWARE;
 }
 
 void QuitMainWindow(MainWindow* pMainWindow)

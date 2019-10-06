@@ -1,4 +1,4 @@
-/*! \file
+﻿/*! \file
  *  \brief   Macro
  *
  *  \details Macro-definitions.
@@ -24,7 +24,13 @@
     } \
 } while(0)
 
-#define _FILE strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__
+//#ifdef __MINGW32__
+//#define _FILE strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__
+//#else
+//#define _FILE strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__
+//#endif
+
+#define _FILE strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
 
 #define STRINGIZE_NX(A) #A
 #define STRINGIZE(A) STRINGIZE_NX(A)
