@@ -16,7 +16,15 @@ add_library(Lab_02_Lib
         EatingInterrupter.c EatingInterrupter.h
         PhilosophersWaiterThread.c PhilosophersWaiterThread.h)
 
-target_link_libraries(Lab_02_Lib PRIVATE pthread)
+if (MSVC)
+    include_directories("C:/Users/vladislav/Projects/_foreign/pthreads-w32-2-9-1-release/Pre-built.2/include")
+endif (MSVC)
+
+if (NOT MSVC)
+    target_link_libraries(Lab_02_Lib PRIVATE pthread)
+endif (NOT MSVC)
+
+
 
 target_link_libraries(Lab_02_Lib PRIVATE m)
 

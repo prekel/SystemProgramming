@@ -26,7 +26,7 @@
 ///
 /// \param message Сообщение (формат) для логгирования.
 /// \param args Аргументы для вывода.
-#define LOG(message, args...) LOG_HELPER(message, LOG_ARGS, ## args)
+#define LOG(message, ...) LOG_HELPER(message, LOG_ARGS)//, ## args)
 
 /// Инициализирует логгер.
 ///
