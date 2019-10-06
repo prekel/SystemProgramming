@@ -80,8 +80,14 @@ struct timespec TimespecFromDouble(double seconds)
     return tw;
 }
 
-int SleepOrWaitSignal(sem_t* pSemOnWaitingEnding, struct timespec duration,
-                      bool isInfinityDuration, pthread_mutex_t* pMutex)
+///
+/// \param pSemOnWaitingEnding
+/// \param duration
+/// \param isInfinityDuration
+/// \param pMutex
+/// \return Возвращает не ноль, если семафор быстрее таймаута
+int SleepOrWaitSem(sem_t* pSemOnWaitingEnding, struct timespec duration,
+                   bool isInfinityDuration, pthread_mutex_t* pMutex)
 {
     //struct timespec rem = {0, 0};
     if (isInfinityDuration)
@@ -94,7 +100,7 @@ int SleepOrWaitSignal(sem_t* pSemOnWaitingEnding, struct timespec duration,
         //LogPrefix(FILE_NAME);
         //printf("pthread_cond_timedwait вернул %d\n", timedwaitReturns);
         //pthread_mutex_unlock(pMutex);
-        return 1;
+        return timedwaitReturns == 0;
     }
     else
     {
@@ -116,7 +122,8 @@ int SleepOrWaitSignal(sem_t* pSemOnWaitingEnding, struct timespec duration,
         //LogPrefix(FILE_NAME);
         //printf("pthread_cond_timedwait вернул %d\n", timedwaitReturns);
         //pthread_mutex_unlock(pMutex);
-        return errno == ETIMEDOUT;
+        return timedwaitReturns == 0;
+        //return errno == ETIMEDOUT;
     }
     return 0;
 }

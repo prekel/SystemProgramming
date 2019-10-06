@@ -78,9 +78,10 @@ void* PhilosopherEatingThread(void* pEatThreadOptions)
                pthread_self(), pPh->PhilosopherId);
         pthread_mutex_unlock(pMutex);
 
-        if (SleepOrWaitSignal(pEatOptions->pPhilosopher->pSemOnWaitingEnding, pDurationEat,
-                              pEatOptions->pPhilosopher->IsInfinityDuration,
-                              pEatOptions->pMutex))
+        if (SleepOrWaitSem(pEatOptions->pPhilosopher->pSemOnWaitingEnding,
+                           pDurationEat,
+                           pEatOptions->pPhilosopher->IsInfinityDuration,
+                           pEatOptions->pMutex))
         {
 //            LogTableInfo(pEatOptions->pTable);
             printf("[pid: 0x%08lx, philosopherId: %d] Приём пищи завершён заранее сигналом\n",
@@ -217,9 +218,10 @@ void* PhilosopherEatingThread(void* pEatThreadOptions)
                pthread_self(), pPh->PhilosopherId);
         pthread_mutex_unlock(pMutex);
 
-        if (SleepOrWaitSignal(pEatOptions->pPhilosopher->pSemOnWaitingEnding, pDurationEat,
-                              pEatOptions->pPhilosopher->IsInfinityDuration,
-                              pEatOptions->pMutex))
+        if (SleepOrWaitSem(pEatOptions->pPhilosopher->pSemOnWaitingEnding,
+                           pDurationEat,
+                           pEatOptions->pPhilosopher->IsInfinityDuration,
+                           pEatOptions->pMutex))
         {
 //            LogTableInfo(pEatOptions->pTable);
             printf("[pid: 0x%08lx, philosopherId: %d] Приём пищи после ожидания завершён заранее сигналом\n",
@@ -279,7 +281,7 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
     {
         //pthread_cond_wait(pPhilosopher->pCondOnGoingToEat, pMutex);
         sem_wait(pPhilosopher->pSemOnGoingToEat);
-        
+
         pthread_mutex_lock(pMutex);
 
         if (pOptions->pTable->IsEatingMustEnd)
@@ -345,9 +347,10 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
 
             pthread_mutex_unlock(pMutex);
 
-            if (SleepOrWaitSignal(pOptions->pPhilosopher->pSemOnWaitingEnding, pDurationEat,
-                                  pOptions->pPhilosopher->IsInfinityDuration,
-                                  pOptions->pMutex))
+            if (SleepOrWaitSem(pOptions->pPhilosopher->pSemOnWaitingEnding,
+                               pDurationEat,
+                               pOptions->pPhilosopher->IsInfinityDuration,
+                               pOptions->pMutex))
             {
 
                 LOG("Приём пищи принудительно завершён заранее");
@@ -569,9 +572,10 @@ void* PhilosopherEatingThread1(void* pEatThreadOptions)
 
             pthread_mutex_unlock(pMutex);
 
-            if (SleepOrWaitSignal(pOptions->pPhilosopher->pSemOnWaitingEnding, pDurationEat,
-                                  pOptions->pPhilosopher->IsInfinityDuration,
-                                  pOptions->pMutex))
+            if (SleepOrWaitSem(pOptions->pPhilosopher->pSemOnWaitingEnding,
+                               pDurationEat,
+                               pOptions->pPhilosopher->IsInfinityDuration,
+                               pOptions->pMutex))
             {
 
                 LOG("Приём пищи после ожидания для философа с номером %d завершён заранее сигналом",

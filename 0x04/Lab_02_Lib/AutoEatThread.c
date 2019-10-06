@@ -103,7 +103,7 @@ void* AutoEatThread(void* pAutoEatThreadOptions)
         //printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Задержка перед отправкой следующего %lf сек.\n",
         //       pthread_self(), pPhilosopher->PhilosopherId, i++, TimespecToDouble(&twb));
         //pthread_mutex_lock(pOptions->pMutex);
-        if (!SleepOrWaitSignal(pOptions->OnSemQuit, twb, false, pOptions->pMutex))
+        if (SleepOrWaitSem(pOptions->OnSemQuit, twb, false, pOptions->pMutex))
         {
             LOG("Принудительная остановка потока-спавнера");
             //pthread_mutex_unlock(pOptions->pMutex);
