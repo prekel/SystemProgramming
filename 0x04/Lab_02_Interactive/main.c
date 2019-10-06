@@ -1,4 +1,8 @@
-﻿#include <stdio.h>
+﻿/// \file
+/// Файл с главной функцией интерактивной программы.
+///
+
+#include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
 
@@ -12,25 +16,44 @@
 
 #include "MainWindow.h"
 
-#define FILE_NAME "main"
+//#define FILE_NAME "main"
 
+/// Ширина окна
 const int SCREEN_WIDTH = 512;
+/// Высота окна
 const int SCREEN_HEIGHT = 512;
 
+/// Максимальная длина для считывания целого числа
 const int MAX_INT_LENGTH = 20;
 
+/// Чилос секунд в дне
 const int SEC_IN_DAY = 60 * 60 * 24;
 
+/// Проверяет введённое время на неотрицательность.
+///
+/// \param time Время для проверки в миллисекундах.
+/// \return Логическое значение - результат проверки.
 bool TimeChecker(int time)
 {
     return 0 <= time;// && time <= SEC_IN_DAY;
 }
 
+/// Проверяет введёное число философ чтобы было не меньше двух.
+///
+/// \param philosophersCount Число философов для проверки.
+/// \return Логическое значение - результат проверки.
 bool PhilosophersCountChecker(int philosophersCount)
 {
     return 2 <= philosophersCount;// && philosophersCount <= 10000;
 }
 
+/// Главная функция программы, считывающая данные и запускающая главное окно
+/// с главным циклом.
+///
+/// \param argc Число аргументов переданное программе.
+/// \param args Массив строк аргументов.
+/// \return Возвращает результат выполнения главного цикла - 0 в случае
+///         успешного завершения, 1 в случае принудительного.
 int main(int argc, char** args)
 {
 #ifdef __MINGW32__
