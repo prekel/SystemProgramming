@@ -9,8 +9,8 @@
 #include <pthread.h>
 #include <stdbool.h>
 #include <time.h>
-#include <RealTimeTableStateThread.h>
 
+#include "RealTimeTableStateThread.h"
 #include "Table.h"
 #include "AutoEatThread.h"
 
