@@ -95,7 +95,7 @@ void* ProgramQuitThread(void* pProgramQuitThreadOptions)
     //pthread_cancel(pOptions->pMainWindow->MainThreadId);
 //    pthread_mutex_unlock(pOptions->pMutex);
 //
-//    QuitMainWindow(pOptions->pMainWindow);
+//    StopThreadsMainWindow(pOptions->pMainWindow);
 //
 //    QuitVideoMainWindow(pOptions->pMainWindow);
 //

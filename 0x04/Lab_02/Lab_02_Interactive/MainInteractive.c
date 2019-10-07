@@ -156,7 +156,7 @@ int main(int argc, char** args)
 
     InitVideoMainWindow(pMainWindow);
 
-    InitAndStartThreadsMainWindow(pMainWindow);
+    StartThreadsMainWindow(pMainWindow);
 
     LOG("Запуск главного цикла");
     return MainCycleMainWindow(pMainWindow);
