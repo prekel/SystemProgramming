@@ -1,3 +1,7 @@
+/// \file
+/// \brief Реализация функций из Utils.h
+/// \details Реализация функций из Utils.h.
+
 #include <stdlib.h>
 #include <time.h>
 #include <assert.h>
@@ -12,29 +16,10 @@ int RandomInterval(int min, int max)
 {
     assert(max >= min);
     if (min == max)
+    {
         return min;
+    }
     return rand() % (max - min) + min;
-}
-
-struct timespec RandomTimeS(int minSeconds, int maxSeconds)
-{
-    assert(maxSeconds >= minSeconds);
-
-    struct timespec tw;
-    if (maxSeconds == minSeconds)
-    {
-        tw.tv_sec = minSeconds;
-        tw.tv_nsec = 0;
-    }
-    else
-    {
-        tw.tv_sec = RandomInterval(minSeconds, maxSeconds);
-        tw.tv_nsec =
-                RandomInterval(0, 1000) * 1000000 +
-                RandomInterval(0, 1000) * 1000 +
-                RandomInterval(0, 1000);
-    }
-    return tw;
 }
 
 struct timespec RandomTimeMs(int minMs, int maxMs)
@@ -61,55 +46,34 @@ struct timespec RandomTimeMs(int minMs, int maxMs)
     return tw;
 }
 
-double TimespecToDouble(struct timespec duration, bool isInfinityDuration)
+double TimespecToDouble(struct timespec duration, bool isInfinityTime)
 {
-    if (isInfinityDuration)
+    if (isInfinityTime)
     {
         return INFINITY;
     }
     return duration.tv_sec * 1.0 + duration.tv_nsec / 1000000000.0;
 }
 
-struct timespec TimespecFromDouble(double seconds)
-{
-    struct timespec tw = {0,0};
-
-    tw.tv_sec = (int)seconds;
-    tw.tv_nsec = (long int)((seconds - (int)seconds) * 1000000000);
-
-    return tw;
-}
-
-///
-/// \param pSemOnWaitingEnding
-/// \param durationMs
-/// \param isInfinityDuration
-/// \param pMutex
-/// \return Возвращает не ноль, если семафор быстрее таймаута
-int SleepOrWaitSem(sem_t* pSemOnWaitingEnding, struct timespec durationMs,
+int SleepOrWaitSem(sem_t* pSemOnWaitingEnding, struct timespec duration,
                    bool isInfinityDuration)
 {
-    //struct timespec rem = {0, 0};
     if (isInfinityDuration)
     {
-        //pthread_mutex_lock(pMutex);
         struct timespec infinityTime = {INT_MAX, NS_IN_S - 1};
         int timedwaitReturns = sem_timedwait(
                 pSemOnWaitingEnding,
                 &infinityTime);
-        //LogPrefix(FILE_NAME);
-        //printf("pthread_cond_timedwait вернул %d\n", timedwaitReturns);
-        //pthread_mutex_unlock(pMutex);
         return timedwaitReturns == 0;
     }
     else
     {
-        //pthread_mutex_lock(pMutex);
-
         struct timespec currentTime;
         clock_gettime(CLOCK_REALTIME, &currentTime);
 
-        struct timespec endTime = {currentTime.tv_sec + durationMs.tv_sec, currentTime.tv_nsec + durationMs.tv_nsec};
+        struct timespec endTime = {
+                currentTime.tv_sec + duration.tv_sec,
+                currentTime.tv_nsec + duration.tv_nsec};
         if (endTime.tv_nsec >= NS_IN_S)
         {
             endTime.tv_sec++;
@@ -119,11 +83,7 @@ int SleepOrWaitSem(sem_t* pSemOnWaitingEnding, struct timespec durationMs,
         int timedwaitReturns = sem_timedwait(
                 pSemOnWaitingEnding,
                 &endTime);
-        //LogPrefix(FILE_NAME);
-        //printf("pthread_cond_timedwait вернул %d\n", timedwaitReturns);
-        //pthread_mutex_unlock(pMutex);
         return timedwaitReturns == 0;
         //return errno == ETIMEDOUT;
     }
-    return 0;
 }

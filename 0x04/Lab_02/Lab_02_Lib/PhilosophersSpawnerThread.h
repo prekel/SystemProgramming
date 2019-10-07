@@ -49,10 +49,10 @@ void DestroyPhilosophersSpawnerThreadOptions(
 /// успешно отправлен.
 int SpawnPhilosopher(Table* pTable, Philosopher* pPhilosopher);
 
-///Ц
+/// Функция потока, отправляющего есть философов каждое случайное время.
 ///
-/// \param pAutoEatThreadOptions
-/// \return
+/// \param pAutoEatThreadOptions Указатель на параметры запуска потока.
+/// \return Указатель на параметры запуска с какими был запущен.
 void* PhilosophersSpawnerThread(void* pAutoEatThreadOptions);
 
 #endif //PHILOSOPHERSSPAWNERTHREAD_H

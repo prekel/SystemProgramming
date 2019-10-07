@@ -1,3 +1,7 @@
+/// \file
+/// \brief Реализация функций из PhilosophersWaiterThread.h
+/// \details Реализация функций из PhilosophersWaiterThread.h.
+
 #include <malloc.h>
 #include <time.h>
 #include <stdlib.h>
@@ -8,13 +12,14 @@
 #include "Macro.h"
 #include "Logger.h"
 
-#define FILE_NAME "PhilosophersSpawnerThread"
-
-PhilosophersSpawnerThreadOptions*
-CreatePhilosophersSpawnerThreadOptions(Table* pTable, int minSendIntervalDuration, int maxSendIntervalDuration)
+PhilosophersSpawnerThreadOptions* CreatePhilosophersSpawnerThreadOptions(
+        Table* pTable,
+        int minSendIntervalDuration,
+        int maxSendIntervalDuration)
 {
-    PhilosophersSpawnerThreadOptions* pOptions = (PhilosophersSpawnerThreadOptions*) malloc(
-            sizeof(PhilosophersSpawnerThreadOptions));
+    PhilosophersSpawnerThreadOptions* pOptions =
+            (PhilosophersSpawnerThreadOptions*)
+                    malloc(sizeof(PhilosophersSpawnerThreadOptions));
     FAILURE_IF_NULLPTR(pOptions);
 
     pOptions->pTable = pTable;
@@ -24,10 +29,6 @@ CreatePhilosophersSpawnerThreadOptions(Table* pTable, int minSendIntervalDuratio
 
     pOptions->pMutex = pTable->pMutex;
 
-//    pOptions->OnCondQuit = (pthread_cond_t*)malloc(sizeof(pthread_cond_t));
-//    FAILURE_IF_NULLPTR(pOptions->OnCondQuit);
-//    pthread_cond_init(pOptions->OnCondQuit, NULL);
-
     pOptions->OnSemQuit = (sem_t*) malloc(sizeof(sem_t));
     FAILURE_IF_NULLPTR(pOptions->OnSemQuit);
     sem_init(pOptions->OnSemQuit, 0, 0);
@@ -35,10 +36,9 @@ CreatePhilosophersSpawnerThreadOptions(Table* pTable, int minSendIntervalDuratio
     return pOptions;
 }
 
-void DestroyPhilosophersSpawnerThreadOptions(PhilosophersSpawnerThreadOptions* pOptions)
+void DestroyPhilosophersSpawnerThreadOptions(
+        PhilosophersSpawnerThreadOptions* pOptions)
 {
-    //pthread_cond_destroy(pOptions->OnCondQuit);
-    //free(pOptions->OnCondQuit);
     sem_destroy(pOptions->OnSemQuit);
     free(pOptions->OnSemQuit);
     free(pOptions);
@@ -72,50 +72,42 @@ void* PhilosophersSpawnerThread(void* pAutoEatThreadOptions)
     LOG("Запуск потока");
     srand(time(NULL));
 
-    PhilosophersSpawnerThreadOptions* pOptions = (PhilosophersSpawnerThreadOptions*) pAutoEatThreadOptions;
+    PhilosophersSpawnerThreadOptions* pOptions =
+            (PhilosophersSpawnerThreadOptions*) pAutoEatThreadOptions;
 
     pOptions->pTable->IsEatingStarted = true;
 
     while (!pOptions->pTable->IsEatingMustEnd)
     {
-        struct timespec twb = RandomTimeMs(
+        struct timespec randomWaitTime = RandomTimeMs(
                 pOptions->MinSendIntervalDuration,
                 pOptions->MaxSendIntervalDuration);
 
         int c = RandomInterval(0, pOptions->pTable->PhilosophersCount);
         Philosopher* pPhilosopher = pOptions->pTable->ppPhilosophers[c];
 
-        LOG("Философ с номером %d отправлен есть", pPhilosopher->PhilosopherId);
+        LOG("Философ с номером %d отправлен есть",
+            pPhilosopher->PhilosopherId);
 
         if (SpawnPhilosopher(pOptions->pTable, pPhilosopher) == 1)
         {
-            //continue;
+            //LOG("Не удалось отправить есть философа с номером %d",
+            //    pPhilosopher->PhilosopherId);
         }
 
-        LOG("После отправки философа с номером %d задержка перед отправкой следующего %lf сек.", pPhilosopher->PhilosopherId,
-               TimespecToDouble(twb, false));
+        LOG("После отправки философа с номером %d задержка перед отправкой "
+            "следующего %lf сек.",
+            pPhilosopher->PhilosopherId,
+            TimespecToDouble(randomWaitTime, false));
 
-        //LogTableInfo(pOptions->pTable);
-        //printf("[pid: 0x%08lx, philosopherId: %d, i: %d] Задержка перед отправкой следующего %lf сек.\n",
-        //       pthread_self(), pPhilosopher->PhilosopherId, i++, TimespecToDouble(&twb));
-        //pthread_mutex_lock(pOptions->pMutex);
-        if (SleepOrWaitSem(pOptions->OnSemQuit, twb, false))
+        if (SleepOrWaitSem(pOptions->OnSemQuit, randomWaitTime, false))
         {
             LOG("Принудительная остановка потока-спавнера");
-            //pthread_mutex_unlock(pOptions->pMutex);
             break;
         }
-        //pthread_mutex_unlock(pOptions->pMutex);
-        //nanosleep(&twb, NULL);
     }
-
-    //pOptions->pTable->IsEatingEnded = true;
 
     LOG("Завершение потока");
 
-
-    //LogTableInfo(pOptions->pTable);
-    //printf("[pid: 0x%08lx][PhilosophersSpawnerThread] Завершение потока\n", pthread_self());
-
-    return NULL;
+    return pOptions;
 }

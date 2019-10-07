@@ -9,31 +9,48 @@
 #include "Logger.h"
 #include "Macro.h"
 
+/// Логгируемый стол
 static Table* g_pLoggingTable;
 
+/// Инициализирон ли логгер
 static bool g_IsLoggerInitialized = false;
+/// Основной поток для вывода
 static FILE* g_pMainOutputStream;
+/// Требуется ли выводить информацию о столе в основной поток
 static bool g_IsMainTableInfoEnabled;
+/// Дополнителый поток для вывода
 static FILE* g_pSecondaryOutputStream;
+/// Требуется ли выводить информацию о столе в дополнительный поток
 static bool g_IsSecondaryTableInfoEnabled;
+/// Требуется ли генерировать информацию о столе
 static bool g_IsTableInfoRequired;
+/// Дополнительный мьютекс (не главный) для логгирования
 static pthread_mutex_t g_pLoggerMutex;
 
-char ForkToChar(Fork* fork)
+/// Преобразует вилку в символ.
+///
+/// \param pFork Указатель на вилку.
+/// \return Занятая вилка - ',', свободная - '.'.
+char ForkToChar(Fork* pFork)
 {
-    if (fork->IsInUse)
+    if (pFork->IsInUse)
         return ',';
     else
         return '.';
 }
 
-char PhilosopherToChar(Philosopher* philosopher)
+/// Преобразует философа в символ.
+///
+/// \param pPhilosopher Указатель на философа.
+/// \return Философ без запущенного потока - '-', обедающий филосов - '=',
+/// ожидающий - '?', свободный - '_'.
+char PhilosopherToChar(Philosopher* pPhilosopher)
 {
-    if (!philosopher->IsThreadRunning)
+    if (!pPhilosopher->IsThreadRunning)
         return '-';
-    else if (philosopher->IsEating)
+    else if (pPhilosopher->IsEating)
         return '=';
-    else if (philosopher->IsWaiting)
+    else if (pPhilosopher->IsWaiting)
         return '?';
     else
         return '_';
