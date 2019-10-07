@@ -2,8 +2,8 @@
 /// \brief Функции и макросы для логгирования
 /// \details Функции и макросы для логгирования.
 
-#ifndef LOG_H
-#define LOG_H
+#ifndef LOGGER_H
+#define LOGGER_H
 
 #include <time.h>
 #include <string.h>
@@ -45,4 +45,4 @@ void InitLogger(Table* pTable, FILE* pMainOutputStream,
 /// \param ... Аргументы для вывода.
 void Log(char* format, ...);
 
-#endif // LOG_H
+#endif //LOGGER_H

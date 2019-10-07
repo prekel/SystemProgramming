@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 #include "PhilosophersWaiterThread.h"
-#include "Log.h"
+#include "Logger.h"
 #include "PhilosopherEatingThread.h"
 #include "Macro.h"
 

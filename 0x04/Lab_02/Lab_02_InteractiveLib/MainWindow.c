@@ -2,8 +2,7 @@
 //#include <sysexits.h>
 
 #include "Macro.h"
-#include "Log.h"
-#include "EatingInterrupter.h"
+#include "Logger.h"
 
 #include "MainWindow.h"
 

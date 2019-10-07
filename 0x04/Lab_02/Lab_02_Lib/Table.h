@@ -31,8 +31,6 @@ typedef struct
     bool IsEatingMustEnd;
     /// Главный мьютекс
     pthread_mutex_t* pMutex;
-
-    sem_t* pArbitrator;
 } Table;
 
 /// Создаёт новый стол. Требуется очистка с помощью DestroyTable.

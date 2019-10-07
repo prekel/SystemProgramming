@@ -1,7 +1,6 @@
-/*! \file
- *
- *  \brief Реализация функций из Input.h
- */
+/// \file
+/// \brief Реализация функций из Input.h
+/// \details Реализация функций из Input.h.
 
 #include <stdbool.h>
 #include <stdio.h>

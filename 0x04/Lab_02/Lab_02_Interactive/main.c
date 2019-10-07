@@ -12,11 +12,9 @@
 
 #include "Input.h"
 #include "Table.h"
-#include "Log.h"
+#include "Logger.h"
 
 #include "MainWindow.h"
-
-//#define FILE_NAME "main"
 
 /// Ширина окна
 const int SCREEN_WIDTH = 512;

@@ -1,8 +1,12 @@
+/// \file
+/// \brief Реализация функций из Logger.h
+/// \details Реализация функций из Logger.h.
+
 #include <malloc.h>
 #include <stdio.h>
 #include <stdarg.h>
 
-#include "Log.h"
+#include "Logger.h"
 #include "Macro.h"
 
 static Table* g_pLoggingTable;

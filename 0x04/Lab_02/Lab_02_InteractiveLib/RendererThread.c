@@ -3,7 +3,7 @@
 
 #include <SDL.h>
 
-#include "Log.h"
+#include "Logger.h"
 #include "Macro.h"
 
 #include "RendererThread.h"

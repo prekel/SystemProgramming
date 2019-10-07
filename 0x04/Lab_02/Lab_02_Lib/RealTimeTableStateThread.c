@@ -3,7 +3,7 @@
 #include <malloc.h>
 
 #include "RealTimeTableStateThread.h"
-#include "Log.h"
+#include "Logger.h"
 #include "Macro.h"
 
 #define FILE_NAME "RealTimeTableStateThread"

@@ -1,6 +1,6 @@
 /// \file
 /// \brief Реализация функций из Table.h
-/// \details
+/// \details Реализация функций из Table.h.
 
 #include <malloc.h>
 #include <pthread.h>
@@ -10,7 +10,7 @@
 #include "Table.h"
 #include "Input.h"
 #include "PhilosopherEatingThread.h"
-#include "Log.h"
+#include "Logger.h"
 #include "Macro.h"
 
 Table* CreateTable(int philosophersCount, int minDurationEatMs, int maxDurationEatMs,
@@ -51,13 +51,6 @@ Table* CreateTable(int philosophersCount, int minDurationEatMs, int maxDurationE
 //    pthread_mutex_init(pTable->pMutex, &mutexAttr);
     pthread_mutex_init(pTable->pMutex, NULL);
 
-    pTable->pArbitrator = (sem_t*) malloc(sizeof(sem_t));
-    FAILURE_IF_NULLPTR(pTable->pArbitrator);
-    sem_init(pTable->pArbitrator, 0, pTable->PhilosophersCount);
-
-    //pTable->MinDurationEatMs = 3;
-    //pTable->MaxDurationEatMs = 15;
-
     return pTable;
 }
 
@@ -69,16 +62,12 @@ void StartAllThreads(Table* pTable)
                 = CreatePhilosopherEatingThreadOptions(
                         pTable,
                         pTable->ppPhilosophers[i],
-                        pTable->pMutex,
-                        pTable->pArbitrator);
+                        pTable->pMutex);
 
         LOG("Создан поток для философа %d", pTable->ppPhilosophers[i]->PhilosopherId);
 
-        //LogTableInfo(pTable);
-        //printf("[pid: 0x%08lx] Создан поток для философа %d\n",
-        //       pthread_self(), pTable->ppPhilosophers[i]->PhilosopherId);
         pthread_create(&pTable->ppPhilosophers[i]->pThread, NULL,
-                       PhilosopherEatingThread1, options);
+                       PhilosopherEatingThread, options);
     }
 }
 
@@ -91,8 +80,6 @@ void DestroyTable(Table* pTable)
     }
     pthread_mutex_destroy(pTable->pMutex);
     free(pTable->pMutex);
-    sem_destroy(pTable->pArbitrator);
-    free(pTable->pArbitrator);
     free(pTable->ppForks);
     free(pTable->ppPhilosophers);
     free(pTable);

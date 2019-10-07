@@ -19,12 +19,25 @@ typedef struct
     pthread_cond_t* CondSignalOnRelease;
 } Fork;
 
+/// Создаёт вилку. Требуется очистка с помощью DestroyFork.
+///
+/// \param id Номер вилки.
+/// \return Указатель на созданную вилку.
 Fork* CreateFork(int id);
 
-void TakeOnFork(Fork* pFork, pthread_mutex_t* pMutex, sem_t* pArbitrator);
+/// Взять вилку. Главный мьютекс должен быть заблокирован.
+///
+/// \param pFork Указатель на вилку, которую нужно взять.
+void TakeOnFork(Fork* pFork);
 
-void TakeOffFork(Fork* pFork, pthread_mutex_t* pMutex, sem_t* pArbitrator);
+/// Положить вилку. Главный мьютекс должен быть заблокирован.
+///
+/// \param pFork Указатель на вилку, которую требуется положить.
+void TakeOffFork(Fork* pFork);
 
+/// Уничтожает вилку.
+///
+/// \param pFork Указатель на вилку, которую требудется уничтожить.
 void DestroyFork(Fork* pFork);
 
 #endif // FORK_H

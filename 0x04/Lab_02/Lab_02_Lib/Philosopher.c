@@ -1,3 +1,7 @@
+#include "Logger.h"
+#include <limits.h>
+#include <signal.h>
+#include <errno.h>
 #include <malloc.h>
 #include <stdbool.h>
 #include <time.h>
@@ -11,9 +15,7 @@
 #include "PhilosopherEatingThread.h"
 #include "Macro.h"
 
-Philosopher*
-CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork, int minDurationEatMs,
-                  int maxDurationEatMs, bool isInfinityDuration)
+Philosopher* CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork, int minDurationEatMs, int maxDurationEatMs, bool isInfinityDuration)
 {
     Philosopher* pPhilosopher = (Philosopher*) malloc(sizeof(Philosopher));
     FAILURE_IF_NULLPTR(pPhilosopher);
@@ -43,16 +45,6 @@ CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork, int minDurationEatMs,
     FAILURE_IF_NULLPTR(pPhilosopher->pSemOnWaitingEnding);
     sem_init(pPhilosopher->pSemOnWaitingEnding, 0, 0);
 
-//    pPhilosopher->pCondOnGoingToEat = (pthread_cond_t*)malloc(
-//            sizeof(pthread_cond_t));
-//    FAILURE_IF_NULLPTR(pPhilosopher->pCondOnGoingToEat);
-//    pthread_cond_init(pPhilosopher->pCondOnGoingToEat, NULL);
-//
-//    pPhilosopher->pCondOnWaitingEnding = (pthread_cond_t*)malloc(
-//            sizeof(pthread_cond_t));
-//    FAILURE_IF_NULLPTR(pPhilosopher->pCondOnWaitingEnding);
-//    pthread_cond_init(pPhilosopher->pCondOnWaitingEnding, NULL);
-
     return pPhilosopher;
 }
 
@@ -69,3 +61,40 @@ void DestroyPhilosopher(Philosopher* pPhilosopher)
     free(pPhilosopher);
 }
 
+int InterruptEating(Philosopher* pPhilosopher, pthread_mutex_t* pMutex)
+{
+    LOG("Попытка прервать приём пищи философа с номером %d",
+        pPhilosopher->PhilosopherId);
+
+    pthread_mutex_lock(pMutex);
+    if (pPhilosopher->IsEating)
+    {
+        LOG("Приём пищи философа с номером %d прерван",
+            pPhilosopher->PhilosopherId);
+        //pthread_cond_signal(pPhilosopher->pCondOnWaitingEnding);
+        sem_post(pPhilosopher->pSemOnWaitingEnding);
+        pthread_mutex_unlock(pMutex);
+        return 0;
+    }
+    else if (pPhilosopher->IsWaitingLeftFork)
+    {
+        LOG("Ожидание левой вилки философом с номером %d прервано",
+            pPhilosopher->PhilosopherId);
+        pthread_cond_signal(pPhilosopher->pLeftFork->CondSignalOnRelease);
+        pthread_mutex_unlock(pMutex);
+        return 0;
+    }
+    else if (pPhilosopher->IsWaitingRightFork)
+    {
+        LOG("Ожидание правой вилки философом с номером %d прервано",
+            pPhilosopher->PhilosopherId);
+        pthread_cond_signal(pPhilosopher->pRightFork->CondSignalOnRelease);
+        pthread_mutex_unlock(pMutex);
+        return 0;
+    }
+
+    LOG("Философ с номером %d не ест", pPhilosopher->PhilosopherId);
+    pthread_mutex_unlock(pMutex);
+
+    return 1;
+}

@@ -1,7 +1,7 @@
 #include <malloc.h>
 
 #include "Macro.h"
-#include "Log.h"
+#include "Logger.h"
 
 #include "ProgramQuitThread.h"
 #include "PhilosophersWaiterThread.h"
