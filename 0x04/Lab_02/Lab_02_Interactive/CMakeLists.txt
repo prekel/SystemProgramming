@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.0)
 project(Lab_02_Interactive C)
 
 set(CMAKE_C_STANDARD 11)

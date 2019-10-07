@@ -1,3 +1,7 @@
+/// \file
+/// \brief Реализация функций из RendererThread.h
+/// \details Реализация функций из RendererThread.h.
+
 #include <malloc.h>
 #include <math.h>
 
@@ -7,14 +11,58 @@
 
 #include "RendererThread.h"
 
-#define FILE_NAME "RendererThread"
+/// Чёрный цвет (полная прозрачность)
+static const int ZERO_RGBA = 0;
+/// Белый цвет (полная непрозрачность)
+static const int FULL_RGBA = 255;
+/// Красная, зелёная, синяя составляющая цвета философа без потока
+static const int THREAD_NOT_RUNNING_RGB = 64;
+/// Красная составляющая цвета философа который ест
+static const int EATING_R = 255;
+/// Зелёная и синяя составляющая цвета философа который ест
+static const int EATING_GB = 64;
+/// Красная составляющая цвета философа который ожидает
+static const int WAITING_R = 32;
+/// Зелёная составляющая цвета философа который ожидает
+static const int WAITING_G = 255;
+/// Синяя составляющая цвета философа который ожидает
+static const int WAITING_B = 64;
+/// Красная, зелёная, синяя составляющая цвета философа который свободен
+static const int FREE_RGB = 255;
+/// Красная составляющая цвета занятой вилки
+static const int USED_R = 255;
+/// Зелёня составляющая цвета занятой вилки
+static const int USED_G = 128;
+/// Синяя составляющая цвета занятой вилки
+static const int USED_B = 64;
+/// Красная, зелёная, синяя составляющая цвета свободной вилки
+static const int NOT_USED_RGB = 200;
 
-RendererThreadOptions*
-CreateRendererThreadOptions(Table* pTable, SDL_Renderer* pRenderer,
-                            int screenWidth, int screenHeight)
+/// Радиус от центра экрана до середины квадрата философа
+static const int PHILOSOPHER_RADIUS = 200;
+/// Ширина квадрата философа
+static const int PHILOSOPHER_WIDTH = 60;
+/// Радиус от центра экрана до середины квадрата вилки
+static const int FORK_RADIUS = 160;
+/// Ширина квадрата вилки
+static const int FORK_WIDTH = 30;
+
+/// Угол на полный оборот
+static const double FULL_ANGLE = 360.0;
+/// Развёрнутый угол
+static const double WIDE_ANGLE = 180.0;
+/// Прямой угол
+static const double RIGHT_ANGLE = 90.0;
+
+/// Число миллисекунд на 1 кадр, если в 1 секунде 60 кадров
+static const int VSYNCMS = 16;
+
+RendererThreadOptions* CreateRendererThreadOptions(
+        Table* pTable, SDL_Renderer* pRenderer,
+        int screenWidth, int screenHeight)
 {
-    RendererThreadOptions* pOptions = (RendererThreadOptions*)malloc(sizeof
-            (RendererThreadOptions));
+    RendererThreadOptions* pOptions =
+            (RendererThreadOptions*) malloc(sizeof(RendererThreadOptions));
     FAILURE_IF_NULLPTR(pOptions);
 
     pOptions->pTable = pTable;
@@ -34,15 +82,17 @@ void DestroyRendererThreadOptions(RendererThreadOptions* pOptions)
 
 int CenterCircleX(int screenWidth, double angle, double r)
 {
-    return screenWidth / 2 + (int) (cos(angle * M_PI / 180) * r);
+    return screenWidth / 2 + (int) (cos(angle * M_PI / WIDE_ANGLE) * r);
 }
 
 int CenterCircleY(int screenHeight, double angle, double r)
 {
-    return screenHeight / 2 + (int) (sin(angle * M_PI / 180) * r);
+    return screenHeight / 2 + (int) (sin(angle * M_PI / WIDE_ANGLE) * r);
 }
 
-void DrawSquare(SDL_Renderer* pRenderer, int screenWidth, int screenHeight, int width, int r, double angle)
+void DrawSquare(
+        SDL_Renderer* pRenderer, int screenWidth, int screenHeight,
+        int width, int r, double angle)
 {
     SDL_Rect rect = {
             CenterCircleX(screenWidth, angle, r) - width / 2,
@@ -59,46 +109,57 @@ void* RendererThread(void* pRendererThreadOptions)
     RendererThreadOptions* pOptions = (RendererThreadOptions*)
             pRendererThreadOptions;
 
-    //Uint32 ticks0 = SDL_GetTicks();
     Uint32 ticks1 = SDL_GetTicks();
-    //int countedFrames = 0;
-    bool run = true;
-    while (run)
+
+    while (true)
     {
         if (pOptions->pTable->IsEatingEnded) break;
 
-        SDL_SetRenderDrawColor(pOptions->pRenderer, 0x00, 0x00, 0x00, 0x00);
+        SDL_SetRenderDrawColor(pOptions->pRenderer,
+                               ZERO_RGBA, ZERO_RGBA, ZERO_RGBA, ZERO_RGBA);
         SDL_RenderClear(pOptions->pRenderer);
-        SDL_SetRenderDrawColor(pOptions->pRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+        SDL_SetRenderDrawColor(pOptions->pRenderer,
+                               FULL_RGBA, FULL_RGBA, FULL_RGBA, FULL_RGBA);
 
 
         for (int i = 0; i < pOptions->pTable->PhilosophersCount; i++)
         {
             if (!pOptions->pTable->ppPhilosophers[i]->IsThreadRunning)
             {
-                SDL_SetRenderDrawColor(pOptions->pRenderer, 64, 64, 64, 255);
+                SDL_SetRenderDrawColor(pOptions->pRenderer,
+                                       THREAD_NOT_RUNNING_RGB,
+                                       THREAD_NOT_RUNNING_RGB,
+                                       THREAD_NOT_RUNNING_RGB,
+                                       FULL_RGBA);
             }
             else if (pOptions->pTable->ppPhilosophers[i]->IsEating)
             {
-                SDL_SetRenderDrawColor(pOptions->pRenderer, 255, 64, 64, 255);
+                SDL_SetRenderDrawColor(pOptions->pRenderer,
+                                       EATING_R, EATING_GB, EATING_GB,
+                                       FULL_RGBA);
             }
             else if (pOptions->pTable->ppPhilosophers[i]->IsWaiting)
             {
-                SDL_SetRenderDrawColor(pOptions->pRenderer, 32, 255, 64, 255);
+                SDL_SetRenderDrawColor(pOptions->pRenderer,
+                                       WAITING_R, WAITING_G, WAITING_B,
+                                       FULL_RGBA);
             }
             else if (!pOptions->pTable->ppPhilosophers[i]->IsEating)
             {
-                SDL_SetRenderDrawColor(pOptions->pRenderer, 255, 255, 255, 255);
+                SDL_SetRenderDrawColor(pOptions->pRenderer,
+                                       FREE_RGB, FREE_RGB, FREE_RGB,
+                                       FULL_RGBA);
             }
 
             double angle =
-                    360.0 / pOptions->pTable->PhilosophersCount * i - 90;
+                    FULL_ANGLE / pOptions->pTable->PhilosophersCount * i -
+                    RIGHT_ANGLE;
 
             DrawSquare(pOptions->pRenderer,
                        pOptions->ScreenWidth,
                        pOptions->ScreenHeight,
-                       60,
-                       200,
+                       PHILOSOPHER_WIDTH,
+                       PHILOSOPHER_RADIUS,
                        angle);
         }
 
@@ -107,39 +168,41 @@ void* RendererThread(void* pRendererThreadOptions)
         {
             if (pOptions->pTable->ppForks[i]->IsInUse)
             {
-                SDL_SetRenderDrawColor(pOptions->pRenderer, 255, 128, 64, 255);
+                SDL_SetRenderDrawColor(pOptions->pRenderer,
+                                       USED_R, USED_G, USED_B, FULL_RGBA);
             }
             else
             {
-                SDL_SetRenderDrawColor(pOptions->pRenderer, 200, 200, 200, 255);
+                SDL_SetRenderDrawColor(pOptions->pRenderer,
+                                       NOT_USED_RGB, NOT_USED_RGB,
+                                       NOT_USED_RGB, FULL_RGBA);
             }
 
-            double angle = 360.0 / pOptions->pTable->PhilosophersCount * i - (90 - (360.0 / (pOptions->pTable->PhilosophersCount * 2)));
+            double angle =
+                    FULL_ANGLE / pOptions->pTable->PhilosophersCount * i -
+                    (RIGHT_ANGLE - (FULL_ANGLE /
+                                    (pOptions->pTable->PhilosophersCount *
+                                     2)));
 
             DrawSquare(pOptions->pRenderer,
                        pOptions->ScreenWidth,
                        pOptions->ScreenHeight,
-                       30,
-                       160,
+                       FORK_WIDTH,
+                       FORK_RADIUS,
                        angle);
         }
 
         Uint32 frameMs = SDL_GetTicks() - ticks1;
-        //double avgFPS = countedFrames / ((SDL_GetTicks() - ticks0) / 1000.f);
+
         ticks1 = SDL_GetTicks();
 
 
         SDL_RenderPresent(pOptions->pRenderer);
-        //++countedFrames;
 
-        int vsyncms = 17;
-        if (frameMs < vsyncms) SDL_Delay(vsyncms - frameMs);
+        if (frameMs < VSYNCMS) SDL_Delay(VSYNCMS - frameMs);
     }
 
     LOG("Завершение потока");
-
-    //LogTableInfo(g_pLoggingTable);
-    //printf("[pid: 0x%08lx][Render] Завершение потока\n", pthread_self());
 
     return NULL;
 }

@@ -89,6 +89,11 @@ void InitLogger(Table* pTable, FILE* pMainOutputStream,
 
     g_IsLoggerInitialized = true;
 
+    if (g_pMainOutputStream == NULL && g_pSecondaryOutputStream == NULL)
+    {
+        g_IsLoggerInitialized = false;
+    }
+
     pthread_mutex_init(&g_pLoggerMutex, NULL);
 }
 
