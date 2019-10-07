@@ -15,6 +15,8 @@
 int RandomInterval(int min, int max)
 {
     assert(max >= min);
+    assert(max - min <= RAND_MAX);
+
     if (min == max)
     {
         return min;
@@ -52,7 +54,7 @@ double TimespecToDouble(struct timespec duration, bool isInfinityTime)
     {
         return INFINITY;
     }
-    return duration.tv_sec * 1.0 + duration.tv_nsec / 1000000000.0;
+    return duration.tv_sec * 1.0 + duration.tv_nsec * 1.0 / NS_IN_S;
 }
 
 int SleepOrWaitSem(sem_t* pSemOnWaitingEnding, struct timespec duration,

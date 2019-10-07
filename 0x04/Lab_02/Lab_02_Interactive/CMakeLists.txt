@@ -10,7 +10,7 @@ set(CMAKE_C_STANDARD 11)
 #    endif (NOT TARGET SDL2)
 #endif (UNIX)
 
-add_executable(Lab_02_Interactive main.c)
+add_executable(Lab_02_Interactive MainInteractive.c)
 
 if (UNIX)
     target_link_libraries(Lab_02_Interactive PRIVATE SDL2main SDL2)
