@@ -1,7 +1,6 @@
 ﻿#include <malloc.h> 
 //#include <sysexits.h>
 
-#include "Macro.h"
 #include "Logger.h"
 
 #include "MainWindow.h"
@@ -22,8 +21,6 @@ MainWindow* CreateMainWindow(int screenWidth, int screenHeight, Table* pTable,
     pMainWindow->ScreenHeight = screenHeight;
 
     pMainWindow->pTable = pTable;
-
-    pMainWindow->IsRealTimeTableStateEnabled = false;
 
     pMainWindow->MinSendIntervalDuration = minSendIntervalDuration;
     pMainWindow->MaxSendIntervalDuration = maxSendIntervalDuration;

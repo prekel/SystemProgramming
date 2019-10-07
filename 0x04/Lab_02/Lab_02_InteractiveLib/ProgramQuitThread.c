@@ -1,6 +1,5 @@
 #include <malloc.h>
 
-#include "Macro.h"
 #include "Logger.h"
 
 #include "ProgramQuitThread.h"

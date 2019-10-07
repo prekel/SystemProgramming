@@ -11,10 +11,10 @@
 #include "Fork.h"
 #include "Table.h"
 #include "Philosopher.h"
-#include "Macro.h"
+#include "Utils.h"
 
 /// Ширина в логе для имени файла
-#define LOG_FILE_WIDTH 30
+#define LOG_FILE_WIDTH 32
 /// Формат аргументов для логгера генерируемых макросом
 #define LOG_FMT "[%*s:%d] "
 /// Аргументы для логгера генерируемые макросом
@@ -31,15 +31,20 @@
 /// Инициализирует логгер.
 ///
 /// \param pTable Стол.
-/// \param pMainOutputStream Первый поток для вывода логов. Например stdout или NULL.
-/// \param isMainTableInfoEnabled Треуется ли выводить информацию о столе в первый поток.
-/// \param pSecondaryOutputStream Второй поток для вывода логов. Например fopen("1.log", "w+") или NULL.
-/// \param isSecondaryTableInfoEnabled Треуется ли выводить информацию о столе во второй поток.
+/// \param pMainOutputStream Основной поток для вывода логов.
+/// Например stdout или NULL.
+/// \param isMainTableInfoEnabled Треуется ли выводить информацию о столе
+/// в оснойной поток.
+/// \param pSecondaryOutputStream Дополнительный поток для вывода логов.
+/// Например fopen("1.log", "w+") или NULL.
+/// \param isSecondaryTableInfoEnabled Треуется ли выводить информацию о столе
+/// в дополнительный поток.
 void InitLogger(Table* pTable, FILE* pMainOutputStream,
                 bool isMainTableInfoEnabled, FILE* pSecondaryOutputStream,
                 bool isSecondaryTableInfoEnabled);
 
-/// Логгирует сообщение, рекомендуется использовать макрос LOG(message, args...).
+/// Логгирует сообщение, рекомендуется использовать макрос
+/// LOG(message, args...).
 ///
 /// \param format Сообщение (формат) для логгирования.
 /// \param ... Аргументы для вывода.

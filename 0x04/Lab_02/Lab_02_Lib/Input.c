@@ -8,8 +8,8 @@
 #include <stdlib.h>
 #include <malloc.h>
 
-#include "Macro.h"
 #include "Input.h"
+#include "Utils.h"
 
 int InputLine(char* stringToInput, int maxStringLength)
 {

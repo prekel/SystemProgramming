@@ -8,7 +8,6 @@
 
 #include "Fork.h"
 #include "Logger.h"
-#include "Macro.h"
 
 Fork* CreateFork(int id)
 {

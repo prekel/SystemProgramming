@@ -7,7 +7,6 @@
 #include <stdarg.h>
 
 #include "Logger.h"
-#include "Macro.h"
 
 /// Логгируемый стол
 static Table* g_pLoggingTable;
@@ -34,9 +33,13 @@ static pthread_mutex_t g_pLoggerMutex;
 char ForkToChar(Fork* pFork)
 {
     if (pFork->IsInUse)
+    {
         return ',';
+    }
     else
+    {
         return '.';
+    }
 }
 
 /// Преобразует философа в символ.
@@ -47,13 +50,21 @@ char ForkToChar(Fork* pFork)
 char PhilosopherToChar(Philosopher* pPhilosopher)
 {
     if (!pPhilosopher->IsThreadRunning)
+    {
         return '-';
+    }
     else if (pPhilosopher->IsEating)
+    {
         return '=';
+    }
     else if (pPhilosopher->IsWaiting)
+    {
         return '?';
+    }
     else
+    {
         return '_';
+    }
 }
 
 void InitLogger(Table* pTable, FILE* pMainOutputStream,
@@ -73,7 +84,8 @@ void InitLogger(Table* pTable, FILE* pMainOutputStream,
     g_pSecondaryOutputStream = pSecondaryOutputStream;
     g_IsSecondaryTableInfoEnabled = isSecondaryTableInfoEnabled;
 
-    g_IsTableInfoRequired = isMainTableInfoEnabled || isSecondaryTableInfoEnabled;
+    g_IsTableInfoRequired =
+            isMainTableInfoEnabled || isSecondaryTableInfoEnabled;
 
     g_IsLoggerInitialized = true;
 
@@ -111,8 +123,16 @@ void Log(char* format, ...)
     if (g_pMainOutputStream) fprintf(g_pMainOutputStream, "[%s][tid: 0x%08llx]", res1, pthread_self());
     if (g_pSecondaryOutputStream) fprintf(g_pSecondaryOutputStream, "[%s][tid: 0x%08llx]", res2, pthread_self());
 #else
-    if (g_pMainOutputStream) fprintf(g_pMainOutputStream, "[%s][tid: 0x%08lx]", res1, pthread_self());
-    if (g_pSecondaryOutputStream) fprintf(g_pSecondaryOutputStream, "[%s][tid: 0x%08lx]", res2, pthread_self());
+    if (g_pMainOutputStream)
+    {
+        fprintf(g_pMainOutputStream, "[%s][tid: 0x%08lx]", res1,
+                pthread_self());
+    }
+    if (g_pSecondaryOutputStream)
+    {
+        fprintf(g_pSecondaryOutputStream, "[%s][tid: 0x%08lx]", res2,
+                pthread_self());
+    }
 #endif
 
     va_list argPtr;
@@ -122,7 +142,10 @@ void Log(char* format, ...)
     va_end(argPtr);
 
     va_start(argPtr, format);
-    if (g_pSecondaryOutputStream) vfprintf(g_pSecondaryOutputStream, format, argPtr);
+    if (g_pSecondaryOutputStream)
+    {
+        vfprintf(g_pSecondaryOutputStream, format, argPtr);
+    }
     if (g_pSecondaryOutputStream) fprintf(g_pSecondaryOutputStream, "\n");
     va_end(argPtr);
 

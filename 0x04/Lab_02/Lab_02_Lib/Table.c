@@ -11,7 +11,6 @@
 #include "Input.h"
 #include "PhilosopherEatingThread.h"
 #include "Logger.h"
-#include "Macro.h"
 
 Table* CreateTable(int philosophersCount, int minDurationEatMs,
                    int maxDurationEatMs, bool isInfinityDuration)

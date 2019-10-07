@@ -10,7 +10,6 @@
 #include "PhilosophersWaiterThread.h"
 #include "Logger.h"
 #include "PhilosopherEatingThread.h"
-#include "Macro.h"
 
 PhilosophersWaiterThreadOptions* CreatePhilosophersWaiterThreadOptions(
         Table* pTable)

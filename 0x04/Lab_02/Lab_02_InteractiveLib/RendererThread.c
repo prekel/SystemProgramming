@@ -4,7 +4,6 @@
 #include <SDL.h>
 
 #include "Logger.h"
-#include "Macro.h"
 
 #include "RendererThread.h"
 

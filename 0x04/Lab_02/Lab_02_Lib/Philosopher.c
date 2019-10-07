@@ -10,7 +10,6 @@
 
 #include "Logger.h"
 #include "Philosopher.h"
-#include "Macro.h"
 
 Philosopher* CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork,
                                int minDurationEatMs, int maxDurationEatMs,

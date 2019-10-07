@@ -9,7 +9,6 @@
 
 #include "PhilosophersSpawnerThread.h"
 #include "Utils.h"
-#include "Macro.h"
 #include "Logger.h"
 
 PhilosophersSpawnerThreadOptions* CreatePhilosophersSpawnerThreadOptions(

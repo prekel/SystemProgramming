@@ -28,6 +28,6 @@ int InputLine(char* stringToInput, int maxStringLength);
 /// чекер не проводится.
 /// \return Считанное число.
 int CycleInputInt(char* stringToOutput, int maxStringLength,
-        bool(* pChecker)(int));
+                  bool(* pChecker)(int));
 
 #endif //INPUT_H

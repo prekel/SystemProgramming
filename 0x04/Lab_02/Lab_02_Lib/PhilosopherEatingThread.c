@@ -11,7 +11,6 @@
 #include "Utils.h"
 #include "PhilosopherEatingThread.h"
 #include "Logger.h"
-#include "Macro.h"
 #include "Philosopher.h"
 
 PhilosopherEatingThreadOptions* CreatePhilosopherEatingThreadOptions(

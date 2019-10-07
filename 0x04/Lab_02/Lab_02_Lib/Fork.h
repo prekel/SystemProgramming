@@ -14,8 +14,12 @@
 /// Вилка.
 typedef struct
 {
+    /// Номер вилки
     int ForkId;
+    /// Занята ли вилка
     bool IsInUse;
+    /// Указатель на условную переменную сигнализирующую о том, что вилка
+    /// освободилась
     pthread_cond_t* CondSignalOnRelease;
 } Fork;
 
@@ -40,4 +44,4 @@ void TakeOffFork(Fork* pFork);
 /// \param pFork Указатель на вилку, которую требудется уничтожить.
 void DestroyFork(Fork* pFork);
 
-#endif // FORK_H
+#endif //FORK_H
