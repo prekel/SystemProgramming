@@ -121,7 +121,7 @@ void* RendererThread(void* pRendererThreadOptions)
     RendererThreadOptions* pOptions = (RendererThreadOptions*)
             pRendererThreadOptions;
 
-    Uint32 ticks1 = SDL_GetTicks();
+    unsigned int ticks1 = SDL_GetTicks();
 
     while (true)
     {
@@ -204,10 +204,9 @@ void* RendererThread(void* pRendererThreadOptions)
                        angle);
         }
 
-        Uint32 frameMs = SDL_GetTicks() - ticks1;
+        unsigned int frameMs = SDL_GetTicks() - ticks1;
 
         ticks1 = SDL_GetTicks();
-
 
         SDL_RenderPresent(pOptions->pRenderer);
 

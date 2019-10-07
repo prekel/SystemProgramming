@@ -24,16 +24,13 @@ const int SCREEN_HEIGHT = 512;
 /// Максимальная длина для считывания целого числа
 const int MAX_INT_LENGTH = 20;
 
-/// Число секунд в дне
-const int SEC_IN_DAY = 60 * 60 * 24;
-
 /// Проверяет введённое время на неотрицательность.
 ///
 /// \param time Время для проверки в миллисекундах.
 /// \return Логическое значение - результат проверки.
 bool TimeChecker(int time)
 {
-    return 0 <= time;// && time <= SEC_IN_DAY;
+    return 0 <= time;
 }
 
 /// Проверяет введёное число философ чтобы было не меньше двух.
@@ -42,7 +39,7 @@ bool TimeChecker(int time)
 /// \return Логическое значение - результат проверки.
 bool PhilosophersCountChecker(int philosophersCount)
 {
-    return 2 <= philosophersCount;// && philosophersCount <= 10000;
+    return 2 <= philosophersCount;
 }
 
 /// Главная функция программы, считывающая данные и запускающая главное окно
