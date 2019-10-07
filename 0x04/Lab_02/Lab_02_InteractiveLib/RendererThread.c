@@ -80,12 +80,24 @@ void DestroyRendererThreadOptions(RendererThreadOptions* pOptions)
     free(pOptions);
 }
 
-int CenterCircleX(int screenWidth, double angle, double r)
+/// Вычисляет X-координату сдвинутого на заданный радиус и угол центра экрана.
+///
+/// \param screenWidth Ширина окна.
+/// \param angle Угол.
+/// \param r Радиус.
+/// \return Вычисляемая координата.
+static inline int CenterCircleX(int screenWidth, double angle, double r)
 {
     return screenWidth / 2 + (int) (cos(angle * M_PI / WIDE_ANGLE) * r);
 }
 
-int CenterCircleY(int screenHeight, double angle, double r)
+/// Вычисляет Y-координату сдвинутого на заданный радиус и угол центра экрана.
+///
+/// \param screenHeight Высота окна.
+/// \param angle Угол.
+/// \param r Радиус.
+/// \return Вычисляемая координата.
+static inline int CenterCircleY(int screenHeight, double angle, double r)
 {
     return screenHeight / 2 + (int) (sin(angle * M_PI / WIDE_ANGLE) * r);
 }
