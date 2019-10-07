@@ -1,4 +1,5 @@
 /*! \file
+
  *  \brief   Matrix structure and functions to use it
  *
  *  \details Matrix structure and functions to calculate sum, determinant,
