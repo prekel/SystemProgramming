@@ -1,14 +1,7 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.0)
 project(Lab_02_InteractiveLib C)
 
 set(CMAKE_C_STANDARD 11)
-
-if (UNIX)
-    if (NOT TARGET SDL2)
-        find_package(SDL2 REQUIRED)
-        include_directories(${SDL2_INCLUDE_DIRS})
-    endif (NOT TARGET SDL2)
-endif (UNIX)
 
 add_library(Lab_02_InteractiveLib
         RendererThread.c RendererThread.h
@@ -16,7 +9,14 @@ add_library(Lab_02_InteractiveLib
         MainWindow.c MainWindow.h)
 
 if (UNIX)
-    target_link_libraries(Lab_02_InteractiveLib PRIVATE SDL2main SDL2)
+    if (TARGET SDL2)
+        target_link_libraries(Lab_02_InteractiveLib PRIVATE SDL2main SDL2)
+    else (TARGET SDL2)
+        find_package(SDL2 REQUIRED)
+        target_include_directories(
+                Lab_02_InteractiveLib PRIVATE ${SDL2_INCLUDE_DIRS})
+        target_link_libraries(Lab_02_InteractiveLib PRIVATE ${SDL2_LIBRARIES})
+    endif (TARGET SDL2)
 endif (UNIX)
 
 if (MINGW)
@@ -26,4 +26,5 @@ endif (MINGW)
 
 target_link_libraries(Lab_02_InteractiveLib PRIVATE Lab_02_Lib)
 
-target_include_directories(Lab_02_InteractiveLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(
+        Lab_02_InteractiveLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

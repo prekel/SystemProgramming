@@ -3,17 +3,17 @@ project(Lab_02_Interactive C)
 
 set(CMAKE_C_STANDARD 11)
 
-if (UNIX)
-    if (NOT TARGET SDL2)
-        find_package(SDL2 REQUIRED)
-        include_directories(${SDL2_INCLUDE_DIRS})
-    endif (NOT TARGET SDL2)
-endif (UNIX)
-
 add_executable(Lab_02_Interactive MainInteractive.c)
 
 if (UNIX)
-    target_link_libraries(Lab_02_Interactive PRIVATE SDL2main SDL2)
+    if (TARGET SDL2)
+        target_link_libraries(Lab_02_Interactive PRIVATE SDL2main SDL2)
+    else (TARGET SDL2)
+        find_package(SDL2 REQUIRED)
+        target_include_directories(
+                Lab_02_Interactive PRIVATE ${SDL2_INCLUDE_DIRS})
+        target_link_libraries(Lab_02_Interactive PRIVATE ${SDL2_LIBRARIES})
+    endif (TARGET SDL2)
 endif (UNIX)
 
 if (MINGW)
