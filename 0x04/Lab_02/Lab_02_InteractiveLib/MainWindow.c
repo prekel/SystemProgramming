@@ -176,24 +176,29 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
                 if ('1' <= button && button <= '9')
                 {
                     int philosopherId = (int) (button - '0');
-                    pthread_mutex_lock(pMainWindow->pTable->pMutex);
                     int phIndex = philosopherId - 1;
-                    Philosopher* ph =
-                            pMainWindow->pTable->ppPhilosophers[phIndex];
-                    if (!ph->IsEating)
+                    if (philosopherId <=
+                        pMainWindow->pTable->PhilosophersCount)
                     {
-                        LOG("Переключение метки бесконечного времени приёма "
-                            "пищи для философа с номером %d",
-                            ph->PhilosopherId);
-                        ph->IsInfinityDuration = !ph->IsInfinityDuration;
+                        pthread_mutex_lock(pMainWindow->pTable->pMutex);
+                        Philosopher* ph =
+                                pMainWindow->pTable->ppPhilosophers[phIndex];
+                        if (!ph->IsEating)
+                        {
+                            LOG("Переключение метки бесконечного времени "
+                                "приёма пищи для философа с номером %d",
+                                ph->PhilosopherId);
+                            ph->IsInfinityDuration = !ph->IsInfinityDuration;
+                        }
+                        else
+                        {
+                            LOG("Невозможно переключение метки бесконечного "
+                                "времени приёма пищи для философа с "
+                                "номером %d",
+                                ph->PhilosopherId);
+                        }
+                        pthread_mutex_unlock(pMainWindow->pTable->pMutex);
                     }
-                    else
-                    {
-                        LOG("Неваозможно переключение метки бесконечного "
-                            "времени приёма пищи для философа с номером %d",
-                            ph->PhilosopherId);
-                    }
-                    pthread_mutex_unlock(pMainWindow->pTable->pMutex);
                 }
             }
             else if (event.key.keysym.mod & KMOD_ALT)
@@ -203,11 +208,11 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
                 {
                     int philosopherId = (int) (button - '0');
                     int phIndex = philosopherId - 1;
-                    Philosopher* ph =
-                            pMainWindow->pTable->ppPhilosophers[phIndex];
                     if (philosopherId <=
                         pMainWindow->pTable->PhilosophersCount)
                     {
+                        Philosopher* ph =
+                                pMainWindow->pTable->ppPhilosophers[phIndex];
                         InterruptEating(ph, pMainWindow->pTable->pMutex);
                     }
                 }
@@ -219,11 +224,11 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
                 {
                     int philosopherId = (int) (button - '0');
                     int phIndex = philosopherId - 1;
-                    Philosopher* ph =
-                            pMainWindow->pTable->ppPhilosophers[phIndex];
                     if (philosopherId <=
                         pMainWindow->pTable->PhilosophersCount)
                     {
+                        Philosopher* ph =
+                                pMainWindow->pTable->ppPhilosophers[phIndex];
                         LOG("Философ с номером %d вручную отправлен есть",
                             ph->PhilosopherId);
                         SpawnPhilosopher(pMainWindow->pTable, ph);
@@ -236,8 +241,8 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
     LOG("Главный цикл завершён по неизвестной ошибке: %s", SDL_GetError());
     LOG("Завершение программы с кодом 70 (EX_SOFTWARE)");
 
-    return 70;
     //return EX_SOFTWARE;
+    return 70;
 }
 
 void StopThreadsMainWindow(MainWindow* pMainWindow)
