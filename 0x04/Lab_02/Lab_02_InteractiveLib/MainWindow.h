@@ -33,9 +33,9 @@ typedef struct
     SDL_Renderer* pRenderer;
 
     /// Указатель на параметры запуска потока, отправляющего философов
-    PhilosophersSpawnerThreadOptions* pAutoEatThreadOptions;
+    PhilosophersSpawnerThreadOptions* pPhilosophersSpawnerThreadOptions;
     /// Идентификатор потока, отправляющий философов
-    pthread_t AutoEatThreadId;
+    pthread_t PhilosophersSpawnerThreadId;
 
     /// Указатель на параметры запуска потока отрисовщика
     RendererThreadOptions* pRendererThreadOptions;

@@ -12,50 +12,50 @@
 #include "RendererThread.h"
 
 /// Чёрный цвет (полная прозрачность)
-static const int ZERO_RGBA = 0;
+#define ZERO_RGBA 0
 /// Белый цвет (полная непрозрачность)
-static const int FULL_RGBA = 255;
+#define FULL_RGBA 255
 /// Красная, зелёная, синяя составляющая цвета философа без потока
-static const int THREAD_NOT_RUNNING_RGB = 64;
+#define THREAD_NOT_RUNNING_RGB 64
 /// Красная составляющая цвета философа который ест
-static const int EATING_R = 255;
+#define EATING_R 255
 /// Зелёная и синяя составляющая цвета философа который ест
-static const int EATING_GB = 64;
+#define EATING_GB 64
 /// Красная составляющая цвета философа который ожидает
-static const int WAITING_R = 32;
+#define WAITING_R 32
 /// Зелёная составляющая цвета философа который ожидает
-static const int WAITING_G = 255;
+#define WAITING_G 255
 /// Синяя составляющая цвета философа который ожидает
-static const int WAITING_B = 64;
+#define WAITING_B 64
 /// Красная, зелёная, синяя составляющая цвета философа который свободен
-static const int FREE_RGB = 255;
+#define FREE_RGB 255
 /// Красная составляющая цвета занятой вилки
-static const int USED_R = 255;
+#define USED_R 255
 /// Зелёня составляющая цвета занятой вилки
-static const int USED_G = 128;
+#define USED_G 128
 /// Синяя составляющая цвета занятой вилки
-static const int USED_B = 64;
+#define USED_B 64
 /// Красная, зелёная, синяя составляющая цвета свободной вилки
-static const int NOT_USED_RGB = 200;
+#define NOT_USED_RGB 200
 
 /// Радиус от центра экрана до середины квадрата философа
-static const int PHILOSOPHER_RADIUS = 200;
+#define PHILOSOPHER_RADIUS 200
 /// Ширина квадрата философа
-static const int PHILOSOPHER_WIDTH = 60;
+#define PHILOSOPHER_WIDTH 60
 /// Радиус от центра экрана до середины квадрата вилки
-static const int FORK_RADIUS = 160;
+#define FORK_RADIUS 160
 /// Ширина квадрата вилки
-static const int FORK_WIDTH = 30;
+#define FORK_WIDTH 30
 
 /// Угол на полный оборот
-static const double FULL_ANGLE = 360.0;
+#define FULL_ANGLE 360.0
 /// Развёрнутый угол
-static const double WIDE_ANGLE = 180.0;
+#define WIDE_ANGLE 180.0
 /// Прямой угол
-static const double RIGHT_ANGLE = 90.0;
+#define RIGHT_ANGLE 90.0
 
 /// Число миллисекунд на 1 кадр, если в 1 секунде 60 кадров
-static const int VSYNCMS = 16;
+#define VSYNCMS 16
 
 RendererThreadOptions* CreateRendererThreadOptions(
         Table* pTable, SDL_Renderer* pRenderer,

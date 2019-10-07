@@ -46,7 +46,7 @@ typedef struct
 Table* CreateTable(int philosophersCount, int minDurationEatMs,
                    int maxDurationEatMs, bool isInfinityDuration);
 
-/// Запускиет все потоки философов.
+/// Запускает все потоки философов.
 ///
 /// \param pTable Указатель на стол.
 void StartAllThreads(Table* pTable);

@@ -54,7 +54,7 @@ void* ProgramQuitThread(void* pProgramQuitThreadOptions)
     if (!pOptions->pMainWindow->IsAutoSpawnDisabled)
     {
         LOG("Принудительная остановка потока-cпавнера");
-        sem_post(pOptions->pMainWindow->pAutoEatThreadOptions->OnSemQuit);
+        sem_post(pOptions->pMainWindow->pPhilosophersSpawnerThreadOptions->OnSemQuit);
     }
 
     LOG("Ожидание завершения потока, который завершает потоки филосософ");
@@ -64,9 +64,9 @@ void* ProgramQuitThread(void* pProgramQuitThreadOptions)
     if (!pOptions->pMainWindow->IsAutoSpawnDisabled)
     {
         LOG("Ожидание завершения потока-cпавнера");
-        pthread_join(pOptions->pMainWindow->AutoEatThreadId, NULL);
+        pthread_join(pOptions->pMainWindow->PhilosophersSpawnerThreadId, NULL);
         DestroyPhilosophersSpawnerThreadOptions(
-                pOptions->pMainWindow->pAutoEatThreadOptions);
+                pOptions->pMainWindow->pPhilosophersSpawnerThreadOptions);
     }
 
     LOG("Отправление события выхода главному циклу");

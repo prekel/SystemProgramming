@@ -105,15 +105,15 @@ void StartThreadsMainWindow(MainWindow* pMainWindow)
     if (!pMainWindow->IsAutoSpawnDisabled)
     {
         LOG("Запуск потока, отправляющий философов есть");
-        pMainWindow->pAutoEatThreadOptions =
+        pMainWindow->pPhilosophersSpawnerThreadOptions =
                 CreatePhilosophersSpawnerThreadOptions(
                         pMainWindow->pTable,
                         pMainWindow->MinSendIntervalDuration,
                         pMainWindow->MaxSendIntervalDuration);
-        pthread_create(&pMainWindow->AutoEatThreadId,
+        pthread_create(&pMainWindow->PhilosophersSpawnerThreadId,
                        NULL,
                        PhilosophersSpawnerThread,
-                       pMainWindow->pAutoEatThreadOptions);
+                       pMainWindow->pPhilosophersSpawnerThreadOptions);
     }
 
     pMainWindow->pTable->IsEatingStarted = true;
