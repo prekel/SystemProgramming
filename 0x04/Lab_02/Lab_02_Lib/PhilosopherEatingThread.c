@@ -8,7 +8,6 @@
 #include <signal.h>
 #include <limits.h>
 
-#include "RealTimeTableStateThread.h"
 #include "Utils.h"
 #include "PhilosopherEatingThread.h"
 #include "Logger.h"

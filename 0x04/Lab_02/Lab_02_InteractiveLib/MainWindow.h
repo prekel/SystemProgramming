@@ -5,14 +5,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <SDL.h>
 #include <pthread.h>
 #include <stdbool.h>
 #include <time.h>
 
-#include "RealTimeTableStateThread.h"
+#include <SDL.h>
+
 #include "Table.h"
-#include "AutoEatThread.h"
+#include "PhilosophersSpawnerThread.h"
 
 #include "RendererThread.h"
 
@@ -27,16 +27,11 @@ typedef  struct
     SDL_Window* pWindow;
     SDL_Renderer* pRenderer;
 
-    AutoEatThreadOptions* pAutoEatThreadOptions;
+    PhilosophersSpawnerThreadOptions* pAutoEatThreadOptions;
     pthread_t AutoEatThreadId;
 
     RendererThreadOptions* pRendererThreadOptions;
     pthread_t RendererThreadId;
-
-    bool IsRealTimeTableStateEnabled;
-    struct timespec RealTimeTableStateInterval;
-    RealTimeTableStateThreadOptions* pRealTimeTableStateThreadOptions;
-    pthread_t RealTimeTableStateThreadId;
 
     pthread_t MainThreadId;
 

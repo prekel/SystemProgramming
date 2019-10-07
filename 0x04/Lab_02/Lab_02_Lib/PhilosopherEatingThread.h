@@ -1,6 +1,7 @@
 /// \file
 /// \brief Поток философа
-/// \details Поток философа, его конфигурация, функции для её создания уничтожения и тд.
+/// \details Поток философа, его конфигурация, функции для её создания
+/// уничтожения и тд.
 
 #ifndef PHILOSOPHEREATINGTHREAD_H
 #define PHILOSOPHEREATINGTHREAD_H
@@ -40,6 +41,12 @@ PhilosopherEatingThreadOptions* CreatePhilosopherEatingThreadOptions(
 void DestroyPhilosopherEatingThreadOptions(
         PhilosopherEatingThreadOptions* pOptions);
 
+/// Функция потока философа. Ожидает пока философа отправят есть, ждёт
+/// свободных вилок если они не свободны, ест в течении заданного случайного
+/// времени, ждёт пока отправят есть... Пока не получит каманду завершения.
+///
+/// \param pEatThreadOptions Указатель на параметры запуска потока
+/// \return Возвращает указатель на параметры запуска с какими был запущен.
 void* PhilosopherEatingThread(void* pEatThreadOptions);
 
 #endif //PHILOSOPHEREATINGTHREAD_H

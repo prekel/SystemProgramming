@@ -13,15 +13,16 @@
 #include "Logger.h"
 #include "Macro.h"
 
-Table* CreateTable(int philosophersCount, int minDurationEatMs, int maxDurationEatMs,
-            bool isInfinityDuration)
+Table* CreateTable(int philosophersCount, int minDurationEatMs,
+                   int maxDurationEatMs, bool isInfinityDuration)
 {
     Table* pTable = (Table*) malloc(sizeof(Table));
     FAILURE_IF_NULLPTR(pTable);
 
     pTable->PhilosophersCount = philosophersCount;
 
-    pTable->ppForks = (Fork**) malloc(pTable->PhilosophersCount * sizeof(Fork*));
+    pTable->ppForks =
+            (Fork**) malloc(pTable->PhilosophersCount * sizeof(Fork*));
     FAILURE_IF_NULLPTR(pTable->ppForks);
     for (int i = 0; i < pTable->PhilosophersCount; i++)
     {
@@ -34,9 +35,15 @@ Table* CreateTable(int philosophersCount, int minDurationEatMs, int maxDurationE
 
     for (int i = 0; i < pTable->PhilosophersCount; i++)
     {
-        Fork* lFork = pTable->ppForks[i == 0 ? pTable->PhilosophersCount - 1 : i - 1];
+        Fork* lFork = pTable->ppForks[i == 0 ?
+                                      pTable->PhilosophersCount - 1 : i - 1];
         pTable->ppPhilosophers[i] =
-                CreatePhilosopher(i + 1, lFork, pTable->ppForks[i], minDurationEatMs, maxDurationEatMs, isInfinityDuration);
+                CreatePhilosopher(i + 1,
+                                  lFork,
+                                  pTable->ppForks[i],
+                                  minDurationEatMs,
+                                  maxDurationEatMs,
+                                  isInfinityDuration);
     }
 
     pTable->IsEatingStarted = false;
@@ -45,10 +52,6 @@ Table* CreateTable(int philosophersCount, int minDurationEatMs, int maxDurationE
 
     pTable->pMutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
     FAILURE_IF_NULLPTR(pTable->pMutex);
-//    pthread_mutexattr_t mutexAttr;
-//    pthread_mutexattr_init(&mutexAttr);
-//    pthread_mutexattr_settype(&mutexAttr, PTHREAD_MUTEX_RECURSIVE);
-//    pthread_mutex_init(pTable->pMutex, &mutexAttr);
     pthread_mutex_init(pTable->pMutex, NULL);
 
     return pTable;
@@ -64,7 +67,8 @@ void StartAllThreads(Table* pTable)
                         pTable->ppPhilosophers[i],
                         pTable->pMutex);
 
-        LOG("Создан поток для философа %d", pTable->ppPhilosophers[i]->PhilosopherId);
+        LOG("Создан поток для философа %d",
+            pTable->ppPhilosophers[i]->PhilosopherId);
 
         pthread_create(&pTable->ppPhilosophers[i]->pThread, NULL,
                        PhilosopherEatingThread, options);

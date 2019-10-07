@@ -85,20 +85,6 @@ int InitVideoMainWindow(MainWindow* pMainWindow)
 
 void InitAndStartThreadsMainWindow(MainWindow* pMainWindow)
 {
-    if (pMainWindow->IsRealTimeTableStateEnabled)
-    {
-        LOG("Запуск потока, котрый выводит состояние стола в поток "
-               "ошибок");
-        pMainWindow->pRealTimeTableStateThreadOptions =
-                CreateRealTimeTableStateThreadOptions(pMainWindow->pTable,
-                                                      pMainWindow->RealTimeTableStateInterval);
-        pthread_create(
-                &pMainWindow->RealTimeTableStateThreadId,
-                NULL,
-                RealTimeTableStateThread,
-                pMainWindow->pRealTimeTableStateThreadOptions);
-    }
-
     LOG("Запуск потока отрисовщика");
     pMainWindow->pRendererThreadOptions =
             CreateRendererThreadOptions(pMainWindow->pTable,
@@ -114,10 +100,11 @@ void InitAndStartThreadsMainWindow(MainWindow* pMainWindow)
     if (!pMainWindow->IsAutoSpawnDisabled)
     {
         LOG("Запуск потока, отправляющий философов есть");
-        pMainWindow->pAutoEatThreadOptions = CreateAutoEatThreadOptions(
+        pMainWindow->pAutoEatThreadOptions = CreatePhilosophersSpawnerThreadOptions(
                 pMainWindow->pTable, pMainWindow->MinSendIntervalDuration,
                 pMainWindow->MaxSendIntervalDuration);
-        pthread_create(&pMainWindow->AutoEatThreadId, NULL, AutoEatThread,
+        pthread_create(&pMainWindow->AutoEatThreadId, NULL,
+                       PhilosophersSpawnerThread,
                        pMainWindow->pAutoEatThreadOptions);
     }
 
@@ -170,7 +157,7 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
 //                {
 //                    LOG("Принудительная отмена потока-спавнера");
 //                    pthread_cancel(pMainWindow->AutoEatThreadId);
-//                    DestroyAutoEatThreadOptions(
+//                    DestroyPhilosophersSpawnerThreadOptions(
 //                            pMainWindow->pAutoEatThreadOptions);
 //                }
 //                pthread_mutex_unlock(pMainWindow->pTable->pMutex);
@@ -227,8 +214,9 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
                     {
                         LOG("Философ с номером %d вручную отправлен есть",
                                pMainWindow->pTable->ppPhilosophers[philosopherId -1]->PhilosopherId);
-                        Eat1(pMainWindow->pTable,
-                             pMainWindow->pTable->ppPhilosophers[philosopherId - 1]);
+                        SpawnPhilosopher(pMainWindow->pTable,
+                                         pMainWindow->pTable->ppPhilosophers[
+                                                 philosopherId - 1]);
                     }
                 }
             }
@@ -245,14 +233,6 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
 void QuitMainWindow(MainWindow* pMainWindow)
 {
     LOG("Завершение программы, завершение остальных потоков");
-
-    if (pMainWindow->IsRealTimeTableStateEnabled)
-    {
-        LOG("Ожидание завершения потока-наблюдателя");
-        pthread_join(pMainWindow->RealTimeTableStateThreadId, NULL);
-        DestroyRealTimeTableStateThreadOptions
-        (pMainWindow->pRealTimeTableStateThreadOptions);
-    }
 
     LOG("Ожидание завершения отрисовщика");
     pthread_join(pMainWindow->RendererThreadId, NULL);

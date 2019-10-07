@@ -1,10 +1,10 @@
 /// \file
-/// \brief Поток, завершающий потоки философов
-/// \details Поток
+/// \brief Реализация функций из PhilosophersWaiterThread.h
+/// \details Реализация функций из PhilosophersWaiterThread.h.
 
+#include <malloc.h>
 #include <pthread.h>
 #include <stdio.h>
-#include <malloc.h>
 #include <stdlib.h>
 
 #include "PhilosophersWaiterThread.h"
@@ -12,14 +12,12 @@
 #include "PhilosopherEatingThread.h"
 #include "Macro.h"
 
-#define FILE_NAME "PhilosophersWaiterThread"
-
-PhilosophersWaiterThreadOptions* CreatePhilosophersWaiterThreadOptions
-        (Table* pTable)
+PhilosophersWaiterThreadOptions* CreatePhilosophersWaiterThreadOptions(
+        Table* pTable)
 {
     PhilosophersWaiterThreadOptions* pOptions =
-            (PhilosophersWaiterThreadOptions*)malloc(sizeof
-            (PhilosophersWaiterThreadOptions));
+            (PhilosophersWaiterThreadOptions*)
+                    malloc(sizeof(PhilosophersWaiterThreadOptions));
     FAILURE_IF_NULLPTR(pOptions);
 
     pOptions->pTable = pTable;
@@ -29,8 +27,8 @@ PhilosophersWaiterThreadOptions* CreatePhilosophersWaiterThreadOptions
     return pOptions;
 }
 
-void DestroyPhilosophersWaiterThreadOptions
-(PhilosophersWaiterThreadOptions* pOptions)
+void DestroyPhilosophersWaiterThreadOptions(
+        PhilosophersWaiterThreadOptions* pOptions)
 {
     free(pOptions);
 }
@@ -41,28 +39,27 @@ void* PhilosophersWaiterThread(void* pPhilosophersWaiterThreadOptions)
 
     PhilosophersWaiterThreadOptions* pOptions =
             (PhilosophersWaiterThreadOptions*)
-            pPhilosophersWaiterThreadOptions;
+                    pPhilosophersWaiterThreadOptions;
 
-    //pthread_mutex_lock(pOptions->pTable->pMutex);
     for (int i = 0; i < pOptions->pTable->PhilosophersCount; i++)
     {
         pthread_mutex_lock(pOptions->pTable->pMutex);
         if (pOptions->pTable->ppPhilosophers[i]->IsThreadRunning)
         {
-            LOG("Ожидание завершения потока философа %d", pOptions->pTable->ppPhilosophers[i]->PhilosopherId);
+            LOG("Ожидание завершения потока философа %d",
+                pOptions->pTable->ppPhilosophers[i]->PhilosopherId);
 
-            //LogTableInfo(pTable);
-            //printf("[pid: 0x%08lx] Ожидание завершения потока философа %d\n",
-            //       pthread_self(), pTable->ppPhilosophers[i]->PhilosopherId);
-            //sem_post(pOptions->pTable->ppPhilosophers[i]->pSemOnGoingToEat);
-            //pthread_cond_signal(pOptions->pTable->ppPhilosophers[i]->pCondOnGoingToEat);
             sem_post(pOptions->pTable->ppPhilosophers[i]->pSemOnGoingToEat);
+
             pthread_mutex_unlock(pOptions->pTable->pMutex);
+
             void* pReturned;
-            pthread_join(pOptions->pTable->ppPhilosophers[i]->pThread, &pReturned);
+            pthread_join(pOptions->pTable->ppPhilosophers[i]->pThread,
+                         &pReturned);
             PhilosopherEatingThreadOptions* pReturnedOptions =
-                    (PhilosopherEatingThreadOptions*)pReturned;
+                    (PhilosopherEatingThreadOptions*) pReturned;
             DestroyPhilosopherEatingThreadOptions(pReturnedOptions);
+
             continue;
         }
         pthread_mutex_unlock(pOptions->pTable->pMutex);
@@ -74,5 +71,5 @@ void* PhilosophersWaiterThread(void* pPhilosophersWaiterThreadOptions)
 
     LOG("Завершение потока");
 
-    return NULL;
+    return pOptions;
 }

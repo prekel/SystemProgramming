@@ -9,9 +9,8 @@ add_library(Lab_02_Lib
         Fork.c Fork.h
         Table.c Table.h
         Utils.c Utils.h
-        RealTimeTableStateThread.c RealTimeTableStateThread.h
         PhilosopherEatingThread.c PhilosopherEatingThread.h
-        AutoEatThread.c AutoEatThread.h
+        PhilosophersSpawnerThread.c PhilosophersSpawnerThread.h
         Logger.c Logger.h
         PhilosophersWaiterThread.c PhilosophersWaiterThread.h)
 

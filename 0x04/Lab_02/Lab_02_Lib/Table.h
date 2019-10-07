@@ -1,6 +1,7 @@
 /// \file
 /// \brief Стол
-/// \details Стол, функции для его создания, уничтожения, старта потоков и отправки философов.
+/// \details Стол, функции для его создания, уничтожения, старта потоков и
+/// отправки философов.
 
 #ifndef TABLE_H
 #define TABLE_H
@@ -33,15 +34,17 @@ typedef struct
     pthread_mutex_t* pMutex;
 } Table;
 
-/// Создаёт новый стол. Требуется очистка с помощью DestroyTable.
+/// Создаёт стол. Требуется очистка с помощью DestroyTable.
 ///
 /// \param philosophersCount Число философов.
-/// \param minDurationEatMs Нижняя граница случайного времени для приёма пищи.
-/// \param maxDurationEatMs Верхняя граница случайного времени для приёма пищи.
+/// \param minDurationEatMs Нижняя граница случайного времени
+/// для приёма пищи.
+/// \param maxDurationEatMs Верхняя граница случайного времени
+/// для приёма пищи.
 /// \param isInfinityDuration Бесконечен ли приём пищи.
-/// \return Указатель на новый стол.
-Table* CreateTable(int philosophersCount, int minDurationEatMs, int maxDurationEatMs,
-            bool isInfinityDuration);
+/// \return Указатель на созданный стол.
+Table* CreateTable(int philosophersCount, int minDurationEatMs,
+                   int maxDurationEatMs, bool isInfinityDuration);
 
 /// Запускиет все потоки философов.
 ///
@@ -53,4 +56,4 @@ void StartAllThreads(Table* pTable);
 /// \param pTable Указатель на стол.
 void DestroyTable(Table* pTable);
 
-#endif // TABLE_H
+#endif //TABLE_H

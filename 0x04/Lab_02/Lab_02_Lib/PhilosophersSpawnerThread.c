@@ -3,18 +3,18 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "AutoEatThread.h"
+#include "PhilosophersSpawnerThread.h"
 #include "Utils.h"
 #include "Macro.h"
 #include "Logger.h"
 
-#define FILE_NAME "AutoEatThread"
+#define FILE_NAME "PhilosophersSpawnerThread"
 
-AutoEatThreadOptions*
-CreateAutoEatThreadOptions(Table* pTable, int minSendIntervalDuration, int maxSendIntervalDuration)
+PhilosophersSpawnerThreadOptions*
+CreatePhilosophersSpawnerThreadOptions(Table* pTable, int minSendIntervalDuration, int maxSendIntervalDuration)
 {
-    AutoEatThreadOptions* pOptions = (AutoEatThreadOptions*) malloc(
-            sizeof(AutoEatThreadOptions));
+    PhilosophersSpawnerThreadOptions* pOptions = (PhilosophersSpawnerThreadOptions*) malloc(
+            sizeof(PhilosophersSpawnerThreadOptions));
     FAILURE_IF_NULLPTR(pOptions);
 
     pOptions->pTable = pTable;
@@ -35,7 +35,7 @@ CreateAutoEatThreadOptions(Table* pTable, int minSendIntervalDuration, int maxSe
     return pOptions;
 }
 
-void DestroyAutoEatThreadOptions(AutoEatThreadOptions* pOptions)
+void DestroyPhilosophersSpawnerThreadOptions(PhilosophersSpawnerThreadOptions* pOptions)
 {
     //pthread_cond_destroy(pOptions->OnCondQuit);
     //free(pOptions->OnCondQuit);
@@ -44,7 +44,7 @@ void DestroyAutoEatThreadOptions(AutoEatThreadOptions* pOptions)
     free(pOptions);
 }
 
-int Eat1(Table* pTable, Philosopher* pPhilosopher)
+int SpawnPhilosopher(Table* pTable, Philosopher* pPhilosopher)
 {
     pthread_mutex_lock(pTable->pMutex);
     if (pPhilosopher->IsEating == true)
@@ -67,12 +67,12 @@ int Eat1(Table* pTable, Philosopher* pPhilosopher)
     return 0;
 }
 
-void* AutoEatThread(void* pAutoEatThreadOptions)
+void* PhilosophersSpawnerThread(void* pAutoEatThreadOptions)
 {
     LOG("Запуск потока");
     srand(time(NULL));
 
-    AutoEatThreadOptions* pOptions = (AutoEatThreadOptions*) pAutoEatThreadOptions;
+    PhilosophersSpawnerThreadOptions* pOptions = (PhilosophersSpawnerThreadOptions*) pAutoEatThreadOptions;
 
     pOptions->pTable->IsEatingStarted = true;
 
@@ -87,7 +87,7 @@ void* AutoEatThread(void* pAutoEatThreadOptions)
 
         LOG("Философ с номером %d отправлен есть", pPhilosopher->PhilosopherId);
 
-        if (Eat1(pOptions->pTable, pPhilosopher) == 1)
+        if (SpawnPhilosopher(pOptions->pTable, pPhilosopher) == 1)
         {
             //continue;
         }
@@ -115,7 +115,7 @@ void* AutoEatThread(void* pAutoEatThreadOptions)
 
 
     //LogTableInfo(pOptions->pTable);
-    //printf("[pid: 0x%08lx][AutoEatThread] Завершение потока\n", pthread_self());
+    //printf("[pid: 0x%08lx][PhilosophersSpawnerThread] Завершение потока\n", pthread_self());
 
     return NULL;
 }

@@ -43,7 +43,7 @@ void* ProgramQuitThread(void* pProgramQuitThreadOptions)
 //        pthread_cancel(pOptions->pMainWindow->AutoEatThreadId);
 //        //pthread_cond_signal(pOptions->pMainWindow->pAutoEatThreadOptions->OnCondQuit);
 //        //pthread_join(pOptions->pMainWindow->AutoEatThreadId, NULL);
-//        DestroyAutoEatThreadOptions(
+//        DestroyPhilosophersSpawnerThreadOptions(
 //                pOptions->pMainWindow->pAutoEatThreadOptions);
 //    }
     pthread_mutex_unlock(pOptions->pMainWindow->pTable->pMutex);
@@ -78,7 +78,7 @@ void* ProgramQuitThread(void* pProgramQuitThreadOptions)
     {
         LOG("Ожидание завершения потока-cпавнера");
         pthread_join(pOptions->pMainWindow->AutoEatThreadId, NULL);
-        DestroyAutoEatThreadOptions(
+        DestroyPhilosophersSpawnerThreadOptions(
                 pOptions->pMainWindow->pAutoEatThreadOptions);
     }
 
