@@ -1,3 +1,7 @@
+/// \file
+/// \brief Поток, завершающий потоки философов
+/// \details Поток
+
 #include <pthread.h>
 #include <stdio.h>
 #include <malloc.h>

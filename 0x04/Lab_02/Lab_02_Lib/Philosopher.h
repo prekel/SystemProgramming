@@ -30,9 +30,10 @@ typedef struct
     bool IsThreadRunning;
     /// Идентификатор потока философа
     pthread_t pThread;
-    /// Семафор, сигнализирующий о том, что нужно начать есть
+    /// Указатель на семафор, сигнализирующий о том, что нужно начать есть
     sem_t* pSemOnGoingToEat;
-    /// Семафор, сигнализирующий что требуется перестать есть или ждать
+    /// Указатель на семафор, сигнализирующий что требуется перестать есть
+    /// или ждать
     sem_t* pSemOnWaitingEnding;
     /// Ждёт ли философ левую вилку.
     bool IsWaitingLeftFork;
@@ -51,12 +52,15 @@ typedef struct
 /// \param id Номер философа.
 /// \param leftFork Указатель на левую вилку.
 /// \param rightFork Указатель на правую вилку.
-/// \param minDurationEatMs Нижняя граница случайного времени приёма пищи в миллисекундах.
-/// \param maxDurationEatMs Верхняя граница случайного времени приёма пищи в миллисекундах.
+/// \param minDurationEatMs Нижняя граница случайного времени приёма пищи
+/// в миллисекундах.
+/// \param maxDurationEatMs Верхняя граница случайного времени приёма пищи
+/// в миллисекундах.
 /// \param isInfinityDuration Бесконечен ли приём пищи.
 /// \return Указатель на созданного филисофа.
-Philosopher* CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork, int minDurationEatMs,
-                  int maxDurationEatMs, bool isInfinityDuration);
+Philosopher* CreatePhilosopher(int id, Fork* leftFork, Fork* rightFork,
+                               int minDurationEatMs, int maxDurationEatMs,
+                               bool isInfinityDuration);
 
 /// Уничтожает философа.
 ///
