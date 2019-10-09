@@ -7,17 +7,21 @@
 #include <assert.h>
 
 #include "Matrix.h"
+#include "Macro.h"
 
 Matrix* CreateBlankMatrix(int firstCount, int secondCount)
 {
     Matrix* pRet = (Matrix*) malloc(sizeof(Matrix));
+    FAILURE_IF_NULLPTR(pRet);
     pRet->SecondCount = secondCount;
     pRet->FirstCount = firstCount;
     pRet->pData = (int**) malloc(pRet->FirstCount * sizeof(int*));
+    FAILURE_IF_NULLPTR(pRet->pData);
 
     for (int i = 0; i < pRet->FirstCount; i++)
     {
         pRet->pData[i] = (int*) malloc(pRet->SecondCount * sizeof(int));
+        FAILURE_IF_NULLPTR(pRet->pData[i]);
         for (int j = 0; j < pRet->SecondCount; j++)
         {
             pRet->pData[i][j] = 0;
@@ -30,13 +34,16 @@ Matrix* CreateBlankMatrix(int firstCount, int secondCount)
 Matrix* CreateEmptyMatrix(int firstCount, int secondCount)
 {
     Matrix* pRet = (Matrix*) malloc(sizeof(Matrix));
+    FAILURE_IF_NULLPTR(pRet);
     pRet->SecondCount = secondCount;
     pRet->FirstCount = firstCount;
     pRet->pData = (int**) malloc(pRet->FirstCount * sizeof(int*));
+    FAILURE_IF_NULLPTR(pRet->pData);
 
     for (int i = 0; i < pRet->FirstCount; i++)
     {
         pRet->pData[i] = (int*) malloc(pRet->SecondCount * sizeof(int));
+        FAILURE_IF_NULLPTR(pRet->pData[i]);
     }
     return pRet;
 }

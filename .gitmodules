@@ -1,3 +1,6 @@
 [submodule "cunit"]
 	path = cunit
 	url = https://gitlab.com/cunity/cunit.git
+[submodule "SDL-mirror"]
+	path = SDL-mirror
+	url = https://github.com/spurious/SDL-mirror
