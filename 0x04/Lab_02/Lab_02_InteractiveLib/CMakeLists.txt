@@ -6,7 +6,8 @@ set(CMAKE_C_STANDARD 11)
 add_library(Lab_02_InteractiveLib
         RendererThread.c RendererThread.h
         ProgramQuitThread.c ProgramQuitThread.h
-        MainWindow.c MainWindow.h)
+        MainWindow.c MainWindow.h
+        MainCycleThread.c MainCycleThread.h)
 
 if (UNIX)
     if (TARGET SDL2)
