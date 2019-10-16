@@ -26,7 +26,7 @@ int LogFunction2(char* format, va_list argPtr)
 int SDL_main(int argc, char** argv) {
     Table* pTable = CreateTable(9, 1000, 5000, false);
 
-    InitLogger(pTable, stdout, true, NULL, false);
+    InitLogger(pTable, false, stdout, NULL, NULL, NULL);
     g_pFunction1 = LogFunction1;
     g_pFunction2 = LogFunction2;
 

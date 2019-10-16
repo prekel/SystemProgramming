@@ -10,9 +10,11 @@
 #include "MainWindow.h"
 #include "ProgramQuitThread.h"
 
-MainWindow *
-CreateMainWindow(int screenWidth, int screenHeight, Table *pTable, int minSendIntervalDuration,
-                 int maxSendIntervalDuration, bool isAutoSpawnDisabled, bool isRendererAsync,
+MainWindow*
+CreateMainWindow(int screenWidth, int screenHeight, Table* pTable,
+                 int minSendIntervalDuration,
+                 int maxSendIntervalDuration, bool isAutoSpawnDisabled,
+                 bool isRendererAsync,
                  bool isMainCycleAsync)
 {
     MainWindow* pMainWindow = (MainWindow*) malloc(sizeof(MainWindow));
@@ -30,16 +32,17 @@ CreateMainWindow(int screenWidth, int screenHeight, Table *pTable, int minSendIn
 
     pMainWindow->MainThreadId = pthread_self();
 
-    pMainWindow->IsRendererAsync = isRendererAsync;
-    pMainWindow->IsMainCycleAsync = isMainCycleAsync;
 
     pMainWindow->pRendererThreadOptions =
             CreateRendererThreadOptions(pMainWindow->pTable,
                                         pMainWindow->pRenderer,
                                         pMainWindow->ScreenWidth,
                                         pMainWindow->ScreenHeight);
+    pMainWindow->IsRendererAsync = isRendererAsync;
 
-    pMainWindow->pMainCycleThreadOptions = CreateMainCycleThreadOptions(pMainWindow);
+    pMainWindow->pMainCycleThreadOptions =
+            CreateMainCycleThreadOptions(pMainWindow);
+    pMainWindow->IsMainCycleAsync = isMainCycleAsync;
 
     pMainWindow->pPhilosophersSpawnerThreadOptions =
             CreatePhilosophersSpawnerThreadOptions(
@@ -99,13 +102,15 @@ int InitVideoMainWindow(MainWindow* pMainWindow)
                 SDL_GetError());
         return 1;
     }
+    pMainWindow->pRendererThreadOptions->pRenderer = pMainWindow->pRenderer;
 
     return 0;
 }
 
 void StartThreadsMainWindow(MainWindow* pMainWindow)
 {
-    if (pMainWindow->IsRendererAsync) {
+    if (pMainWindow->IsRendererAsync)
+    {
         LOG("Запуск потока отрисовщика");
         pthread_create(&pMainWindow->RendererThreadId,
                        NULL,
@@ -117,9 +122,9 @@ void StartThreadsMainWindow(MainWindow* pMainWindow)
     {
         LOG("Запуск потока обработчика событий");
         pthread_create(&pMainWindow->MainCycleThreadId,
-                NULL,
-                MainCycleThread,
-                pMainWindow->pMainCycleThreadOptions);
+                       NULL,
+                       MainCycleThread,
+                       pMainWindow->pMainCycleThreadOptions);
     }
 
     LOG("Запуск потоков-философов");
@@ -140,13 +145,7 @@ void StartThreadsMainWindow(MainWindow* pMainWindow)
 int RendererMainWindow(MainWindow* pMainWindow)
 {
     LOG("Запуск отрисовщика синхронно");
-    pMainWindow->pRendererThreadOptions =
-            CreateRendererThreadOptions(pMainWindow->pTable,
-                                        pMainWindow->pRenderer,
-                                        pMainWindow->ScreenWidth,
-                                        pMainWindow->ScreenHeight);
     RendererThread(pMainWindow->pRendererThreadOptions);
-    DestroyRendererThreadOptions(pMainWindow->pRendererThreadOptions);
 }
 
 int MainCycleMainWindow(MainWindow* pMainWindow)
@@ -185,8 +184,9 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
 
         if (event.type == SDL_KEYDOWN)
         {
-            if (event.key.keysym.sym == SDLK_ESCAPE &&
-                !pMainWindow->pTable->IsEatingMustEnd)
+            if ((event.key.keysym.sym == SDLK_ESCAPE
+                 || event.key.keysym.sym == SDLK_AC_BACK)
+                && !pMainWindow->pTable->IsEatingMustEnd)
             {
                 LOG("Начато завершение программы");
 
@@ -279,11 +279,13 @@ void StopThreadsMainWindow(MainWindow* pMainWindow)
 {
     LOG("Завершение программы, завершение остальных потоков");
 
-    if (pMainWindow->IsRendererAsync) {
+    if (pMainWindow->IsRendererAsync)
+    {
         LOG("Ожидание завершения отрисовщика");
         pthread_join(pMainWindow->RendererThreadId, NULL);
     }
-    if (pMainWindow->IsMainCycleAsync) {
+    if (pMainWindow->IsMainCycleAsync)
+    {
         LOG("Ожидание завершения потока обработчика событий");
         pthread_join(pMainWindow->MainCycleThreadId, NULL);
         pMainWindow->MainCycleReturned = pMainWindow->pMainCycleThreadOptions->Returned;
@@ -307,6 +309,7 @@ void DestroyMainWindow(MainWindow* pMainWindow)
 {
     DestroyRendererThreadOptions(pMainWindow->pRendererThreadOptions);
     DestroyMainCycleThreadOptions(pMainWindow->pMainCycleThreadOptions);
-    DestroyPhilosophersSpawnerThreadOptions(pMainWindow->pPhilosophersSpawnerThreadOptions);
+    DestroyPhilosophersSpawnerThreadOptions(
+            pMainWindow->pPhilosophersSpawnerThreadOptions);
     free(pMainWindow);
 }
