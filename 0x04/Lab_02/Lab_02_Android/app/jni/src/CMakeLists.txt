@@ -1,14 +1,9 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.0)
+project(Lab_02_Android)
 
-project(MY_APP)
+add_library(Lab_02_Android SHARED MainAndroid.c)
 
-find_library(SDL2 SDL2)
+target_link_libraries(Lab_02_Android SDL2main SDL2)
 
-add_library(main SHARED)
-
-target_sources(main PRIVATE YourSourceHere.c)
-
-target_link_libraries(main SDL2)
-
-target_link_libraries(main Lab_02_Lib)
-target_link_libraries(main Lab_02_InteractiveLib)
+target_link_libraries(Lab_02_Android Lab_02_Lib)
+target_link_libraries(Lab_02_Android Lab_02_InteractiveLib)

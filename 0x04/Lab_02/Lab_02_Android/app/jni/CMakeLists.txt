@@ -1,6 +1,5 @@
-cmake_minimum_required(VERSION 3.6)
-
-project(GAME)
+cmake_minimum_required(VERSION 3.0)
+#project(Lab_02_Android)
 
 #armeabi-v7a requires cpufeatures library
 #include(AndroidNdkModules)
