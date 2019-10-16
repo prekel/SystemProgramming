@@ -104,6 +104,9 @@
       <excludeFolder url="file://$MODULE_DIR$/.externalNativeBuild" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
     </content>
+    <content url="file://$MODULE_DIR$/../../Lab_02_Interactive">
+      <sourceFolder url="file://$MODULE_DIR$/../../Lab_02_Interactive" isTestSource="false" />
+    </content>
     <content url="file://$MODULE_DIR$/../../Lab_02_InteractiveLib">
       <sourceFolder url="file://$MODULE_DIR$/../../Lab_02_InteractiveLib" isTestSource="false" />
     </content>

@@ -44,17 +44,17 @@ bool PhilosophersCountChecker(int philosophersCount)
 
 static FILE* g_pOutputFile;
 
-int PrintToFile(char* format)
-{
-    int ret = fprintf(g_pOutputFile, format);
-    fflush(g_pOutputFile);
-    return ret;
-}
+//int PrintToFile(char* format)
+//{
+//    //int ret = fprintf(g_pOutputFile, format);
+//    //fflush(g_pOutputFile);
+//    //return ret;
+//}
 
-int SdlLog(char* format)
-{
-    SDL_Log(format);
-}
+//int SdlLog(char* format)
+//{
+//    //SDL_Log(format);
+//}
 
 /// Главная функция программы, считывающая данные и запускающая главное окно
 /// с главным циклом.
@@ -156,7 +156,7 @@ int main(int argc, char** args)
     //InitLogger(pTable, stdout, false, fopen("5.txt", "w+"), false);
     g_pOutputFile = fopen("3.log", "w+");
     FILE* file2 = fopen("4.log", "w+");
-    InitLogger(pTable, true, stdout, file2, PrintToFile, NULL);
+    InitLogger(pTable, true, stdout, file2, NULL, NULL);
     LOG("Введены данные, создание объектов, запуск потоков");
 
     MainWindow* pMainWindow = CreateMainWindow(

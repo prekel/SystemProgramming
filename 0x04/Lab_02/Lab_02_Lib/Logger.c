@@ -23,10 +23,10 @@ static bool g_IsTableInfoRequired;
 static pthread_mutex_t g_pLoggerMutex;
 
 /// Дополнительная функция для вывода
-static int (* g_MainOutputFunction)(char*);
+static int (* g_pOutputFunction3th)(char*);
 
 /// Ещё дополнительная функция для вывода
-static int (* g_SecondaryOutputFunction)(char*);
+static int (* g_pOutputFunction4th)(char*);
 
 /// Кол-во функций для вывода
 static const int g_OutputFunctionsCount = 4;
@@ -107,14 +107,18 @@ void InitLogger(Table* pTable,
 
     g_pOutputStream2nd = pOutputStream2nd;
 
+    g_pOutputFunction3th = pOutputFunction3th;
+
+    g_pOutputFunction4th = pOutputFunction4th;
+
     g_IsTableInfoRequired = isTableInfoEnabled;
 
     g_IsLoggerInitialized = true;
 
     if (g_pOutputStream1st == NULL
         && g_pOutputStream2nd == NULL
-        && g_MainOutputFunction == NULL
-        && g_SecondaryOutputFunction == NULL)
+        && g_pOutputFunction3th == NULL
+        && g_pOutputFunction4th == NULL)
     {
         g_IsLoggerInitialized = false;
     }
@@ -127,8 +131,8 @@ void InitLogger(Table* pTable,
     {
         g_ppOutputFunctions[1] = WriteStringOutputStream2nd;
     }
-    g_ppOutputFunctions[2] = pOutputFunction3th;
-    g_ppOutputFunctions[3] = pOutputFunction4th;
+    g_ppOutputFunctions[2] = g_pOutputFunction3th;
+    g_ppOutputFunctions[3] = g_pOutputFunction4th;
 
     pthread_mutex_init(&g_pLoggerMutex, NULL);
 }

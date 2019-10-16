@@ -9,29 +9,31 @@
 #include "Logger.h"
 #include "MainWindow.h"
 
-int LogFunction1(char* format, ...)
+int AndroidLog(char* format)
 {
-    va_list argPtr;
-    va_start(argPtr, format);
-    int ret = __android_log_vprint(ANDROID_LOG_INFO, "Lab_02_Android", format, argPtr);
-    va_end(argPtr);
+    int ret = __android_log_write(ANDROID_LOG_INFO, "Lab_02_Android", format);
     return ret;
 }
 
-int LogFunction2(char* format, va_list argPtr)
+int SDL_main(int argc, char** argv)
 {
-    return __android_log_vprint(ANDROID_LOG_INFO, "Lab_02_Android", format, argPtr);
-}
+    Table* pTable = CreateTable(5, 1000, 5000, false);
+    //Table* pTable = CreateTable(6000, 1000, 10000, false);
 
-int SDL_main(int argc, char** argv) {
-    Table* pTable = CreateTable(9, 1000, 5000, false);
+    //InitLogger(pTable, false, NULL, NULL, AndroidLog, NULL);
+    InitLogger(pTable, true, NULL, NULL, AndroidLog, NULL);
 
-    InitLogger(pTable, false, stdout, NULL, NULL, NULL);
-    g_pFunction1 = LogFunction1;
-    g_pFunction2 = LogFunction2;
-
-    MainWindow* pMainWindow = CreateMainWindow(1080, 2280, pTable, 500, 1500, false, false, true);
-    pMainWindow->IsRendererAsync = false;
+    MainWindow* pMainWindow = CreateMainWindow(
+            1080,
+            2280,
+            pTable,
+            500,
+            //0,
+            1500,
+            //1,
+            false,
+            false,
+            true);
 
     InitVideoMainWindow(pMainWindow);
 
