@@ -33,5 +33,8 @@ cmake-build-*
 /0x04/Lab_02/Lab_02_Android/app/build/
 /0x04/Lab_02/Lab_02_Android/.idea/
 /0x04/Lab_02/Lab_02_Android/.gradle/
-/0x04/Lab_02/Lab_02_Android/app/.cxx/cmake/
-/0x04/Lab_02/Lab_02_Android/app/.cxx/ndk_locator_record.json
+/0x04/Lab_02/Lab_02_Android/app/.cxx/
+/0x04/Lab_02/Lab_02_Android/app/.cxx/
+/0x04/Lab_02/Lab_02_Android/app/app.iml/
+/0x04/Lab_02/Lab_02_Android/app/build/
+
