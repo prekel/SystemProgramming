@@ -401,7 +401,7 @@ class SDLJoystickHandler_API19 extends SDLJoystickHandler_API16 {
 class SDLHapticHandler_API26 extends SDLHapticHandler {
     @Override
     public void run(int device_id, float intensity, int length) {
-        nodomain.prekel.lab02android.SDLHapticHandler.SDLHaptic haptic = getHaptic(device_id);
+        SDLHapticHandler.SDLHaptic haptic = getHaptic(device_id);
         if (haptic != null) {
             Log.d("SDL", "Rtest: Vibe with intensity " + intensity + " for " + length);
             if (intensity == 0.0f) {
@@ -560,14 +560,14 @@ class SDLGenericMotionListener_API12 implements View.OnGenericMotionListener {
                     case MotionEvent.ACTION_SCROLL:
                         x = event.getAxisValue(MotionEvent.AXIS_HSCROLL, 0);
                         y = event.getAxisValue(MotionEvent.AXIS_VSCROLL, 0);
-                        nodomain.prekel.lab02android.SDLActivity.onNativeMouse(0, action, x, y, false);
+                        SDLActivity.onNativeMouse(0, action, x, y, false);
                         return true;
 
                     case MotionEvent.ACTION_HOVER_MOVE:
                         x = event.getX(0);
                         y = event.getY(0);
 
-                        nodomain.prekel.lab02android.SDLActivity.onNativeMouse(0, action, x, y, false);
+                        SDLActivity.onNativeMouse(0, action, x, y, false);
                         return true;
 
                     default:
@@ -625,7 +625,7 @@ class SDLGenericMotionListener_API24 extends SDLGenericMotionListener_API12 {
                 if (action == MotionEvent.ACTION_HOVER_MOVE) {
                     float x = event.getAxisValue(MotionEvent.AXIS_RELATIVE_X);
                     float y = event.getAxisValue(MotionEvent.AXIS_RELATIVE_Y);
-                    nodomain.prekel.lab02android.SDLActivity.onNativeMouse(0, action, x, y, true);
+                    SDLActivity.onNativeMouse(0, action, x, y, true);
                     return true;
                 }
             }
@@ -696,13 +696,13 @@ class SDLGenericMotionListener_API26 extends SDLGenericMotionListener_API24 {
                     case MotionEvent.ACTION_SCROLL:
                         x = event.getAxisValue(MotionEvent.AXIS_HSCROLL, 0);
                         y = event.getAxisValue(MotionEvent.AXIS_VSCROLL, 0);
-                        nodomain.prekel.lab02android.SDLActivity.onNativeMouse(0, action, x, y, false);
+                        SDLActivity.onNativeMouse(0, action, x, y, false);
                         return true;
 
                     case MotionEvent.ACTION_HOVER_MOVE:
                         x = event.getX(0);
                         y = event.getY(0);
-                        nodomain.prekel.lab02android.SDLActivity.onNativeMouse(0, action, x, y, false);
+                        SDLActivity.onNativeMouse(0, action, x, y, false);
                         return true;
 
                     default:
@@ -716,13 +716,13 @@ class SDLGenericMotionListener_API26 extends SDLGenericMotionListener_API24 {
                     case MotionEvent.ACTION_SCROLL:
                         x = event.getAxisValue(MotionEvent.AXIS_HSCROLL, 0);
                         y = event.getAxisValue(MotionEvent.AXIS_VSCROLL, 0);
-                        nodomain.prekel.lab02android.SDLActivity.onNativeMouse(0, action, x, y, false);
+                        SDLActivity.onNativeMouse(0, action, x, y, false);
                         return true;
 
                     case MotionEvent.ACTION_HOVER_MOVE:
                         x = event.getX(0);
                         y = event.getY(0);
-                        nodomain.prekel.lab02android.SDLActivity.onNativeMouse(0, action, x, y, true);
+                        SDLActivity.onNativeMouse(0, action, x, y, true);
                         return true;
 
                     default:
@@ -740,7 +740,7 @@ class SDLGenericMotionListener_API26 extends SDLGenericMotionListener_API24 {
 
     @Override
     public boolean supportsRelativeMouse() {
-        return (!nodomain.prekel.lab02android.SDLActivity.isDeXMode() || (Build.VERSION.SDK_INT >= 27));
+        return (!SDLActivity.isDeXMode() || (Build.VERSION.SDK_INT >= 27));
     }
 
     @Override
@@ -750,12 +750,12 @@ class SDLGenericMotionListener_API26 extends SDLGenericMotionListener_API24 {
 
     @Override
     public boolean setRelativeMouseEnabled(boolean enabled) {
-        if (!nodomain.prekel.lab02android.SDLActivity.isDeXMode() || (Build.VERSION.SDK_INT >= 27)) {
+        if (!SDLActivity.isDeXMode() || (Build.VERSION.SDK_INT >= 27)) {
             if (enabled) {
-                nodomain.prekel.lab02android.SDLActivity.getContentView().requestPointerCapture();
+                SDLActivity.getContentView().requestPointerCapture();
             }
             else {
-                nodomain.prekel.lab02android.SDLActivity.getContentView().releasePointerCapture();
+                SDLActivity.getContentView().releasePointerCapture();
             }
             mRelativeModeEnabled = enabled;
             return true;
@@ -769,7 +769,7 @@ class SDLGenericMotionListener_API26 extends SDLGenericMotionListener_API24 {
     @Override
     public void reclaimRelativeMouseModeIfNeeded()
     {
-        if (mRelativeModeEnabled && !nodomain.prekel.lab02android.SDLActivity.isDeXMode()) {
+        if (mRelativeModeEnabled && !SDLActivity.isDeXMode()) {
             SDLActivity.getContentView().requestPointerCapture();
         }
     }

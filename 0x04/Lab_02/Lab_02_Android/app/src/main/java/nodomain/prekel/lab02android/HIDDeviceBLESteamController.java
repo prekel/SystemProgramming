@@ -21,10 +21,10 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.UUID;
 
-class HIDDeviceBLESteamController extends BluetoothGattCallback implements nodomain.prekel.lab02android.HIDDevice {
+class HIDDeviceBLESteamController extends BluetoothGattCallback implements HIDDevice {
 
     private static final String TAG = "hidapi";
-    private nodomain.prekel.lab02android.HIDDeviceManager mManager;
+    private HIDDeviceManager mManager;
     private BluetoothDevice mDevice;
     private int mDeviceId;
     private BluetoothGatt mGatt;

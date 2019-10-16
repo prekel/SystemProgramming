@@ -6,11 +6,11 @@ import android.util.Log;
 
 import java.util.Arrays;
 
-class HIDDeviceUSB implements nodomain.prekel.lab02android.HIDDevice {
+class HIDDeviceUSB implements HIDDevice {
 
     private static final String TAG = "hidapi";
 
-    protected nodomain.prekel.lab02android.HIDDeviceManager mManager;
+    protected HIDDeviceManager mManager;
     protected UsbDevice mDevice;
     protected int mInterface;
     protected int mDeviceId;
