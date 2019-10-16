@@ -146,6 +146,7 @@ int RendererMainWindow(MainWindow* pMainWindow)
 {
     LOG("Запуск отрисовщика синхронно");
     RendererThread(pMainWindow->pRendererThreadOptions);
+    return 0;
 }
 
 int MainCycleMainWindow(MainWindow* pMainWindow)
