@@ -1,15 +1,16 @@
-package org.libsdl.app;
+package nodomain.prekel.lab02android;
 
 import android.hardware.usb.*;
 import android.os.Build;
 import android.util.Log;
+
 import java.util.Arrays;
 
-class HIDDeviceUSB implements HIDDevice {
+class HIDDeviceUSB implements nodomain.prekel.lab02android.HIDDevice {
 
     private static final String TAG = "hidapi";
 
-    protected HIDDeviceManager mManager;
+    protected nodomain.prekel.lab02android.HIDDeviceManager mManager;
     protected UsbDevice mDevice;
     protected int mInterface;
     protected int mDeviceId;

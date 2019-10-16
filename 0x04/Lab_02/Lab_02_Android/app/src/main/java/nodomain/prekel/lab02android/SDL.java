@@ -1,4 +1,4 @@
-package org.libsdl.app;
+package nodomain.prekel.lab02android;
 
 import android.content.Context;
 

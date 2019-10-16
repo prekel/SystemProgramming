@@ -1,4 +1,4 @@
-package org.libsdl.app;
+package nodomain.prekel.lab02android;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -25,7 +25,7 @@ import java.util.List;
 
 public class HIDDeviceManager {
     private static final String TAG = "hidapi";
-    private static final String ACTION_USB_PERMISSION = "org.libsdl.app.USB_PERMISSION";
+    private static final String ACTION_USB_PERMISSION = "nodomain.prekel.lab02android.USB_PERMISSION";
 
     private static HIDDeviceManager sManager;
     private static int sManagerRefCount = 0;
@@ -49,9 +49,9 @@ public class HIDDeviceManager {
     }
 
     private Context mContext;
-    private HashMap<Integer, HIDDevice> mDevicesById = new HashMap<Integer, HIDDevice>();
-    private HashMap<UsbDevice, HIDDeviceUSB> mUSBDevices = new HashMap<UsbDevice, HIDDeviceUSB>();
-    private HashMap<BluetoothDevice, HIDDeviceBLESteamController> mBluetoothDevices = new HashMap<BluetoothDevice, HIDDeviceBLESteamController>();
+    private HashMap<Integer, nodomain.prekel.lab02android.HIDDevice> mDevicesById = new HashMap<Integer, nodomain.prekel.lab02android.HIDDevice>();
+    private HashMap<UsbDevice, nodomain.prekel.lab02android.HIDDeviceUSB> mUSBDevices = new HashMap<UsbDevice, nodomain.prekel.lab02android.HIDDeviceUSB>();
+    private HashMap<BluetoothDevice, nodomain.prekel.lab02android.HIDDeviceBLESteamController> mBluetoothDevices = new HashMap<BluetoothDevice, nodomain.prekel.lab02android.HIDDeviceBLESteamController>();
     private int mNextDeviceId = 0;
     private SharedPreferences mSharedPreferences = null;
     private boolean mIsChromebook = false;
@@ -334,7 +334,7 @@ public class HIDDeviceManager {
     }
 
     private void handleUsbDeviceDetached(UsbDevice usbDevice) {
-        HIDDeviceUSB device = mUSBDevices.get(usbDevice);
+        nodomain.prekel.lab02android.HIDDeviceUSB device = mUSBDevices.get(usbDevice);
         if (device == null)
             return;
 
@@ -346,7 +346,7 @@ public class HIDDeviceManager {
     }
 
     private void handleUsbDevicePermission(UsbDevice usbDevice, boolean permission_granted) {
-        HIDDeviceUSB device = mUSBDevices.get(usbDevice);
+        nodomain.prekel.lab02android.HIDDeviceUSB device = mUSBDevices.get(usbDevice);
         if (device == null)
             return;
 
@@ -361,7 +361,7 @@ public class HIDDeviceManager {
         synchronized (this) {
             for (int interface_number = 0; interface_number < usbDevice.getInterfaceCount(); interface_number++) {
                 if (isHIDDeviceInterface(usbDevice, interface_number)) {
-                    HIDDeviceUSB device = new HIDDeviceUSB(this, usbDevice, interface_number);
+                    nodomain.prekel.lab02android.HIDDeviceUSB device = new nodomain.prekel.lab02android.HIDDeviceUSB(this, usbDevice, interface_number);
                     int id = device.getId();
                     mUSBDevices.put(usbDevice, device);
                     mDevicesById.put(id, device);
@@ -479,12 +479,12 @@ public class HIDDeviceManager {
             if (mBluetoothDevices.containsKey(bluetoothDevice)) {
                 Log.v(TAG, "Steam controller with address " + bluetoothDevice + " already exists, attempting reconnect");
 
-                HIDDeviceBLESteamController device = mBluetoothDevices.get(bluetoothDevice);
+                nodomain.prekel.lab02android.HIDDeviceBLESteamController device = mBluetoothDevices.get(bluetoothDevice);
                 device.reconnect();
 
                 return false;
             }
-            HIDDeviceBLESteamController device = new HIDDeviceBLESteamController(this, bluetoothDevice);
+            nodomain.prekel.lab02android.HIDDeviceBLESteamController device = new nodomain.prekel.lab02android.HIDDeviceBLESteamController(this, bluetoothDevice);
             int id = device.getId();
             mBluetoothDevices.put(bluetoothDevice, device);
             mDevicesById.put(id, device);
@@ -496,7 +496,7 @@ public class HIDDeviceManager {
 
     public void disconnectBluetoothDevice(BluetoothDevice bluetoothDevice) {
         synchronized (this) {
-            HIDDeviceBLESteamController device = mBluetoothDevices.get(bluetoothDevice);
+            nodomain.prekel.lab02android.HIDDeviceBLESteamController device = mBluetoothDevices.get(bluetoothDevice);
             if (device == null)
                 return;
 
@@ -526,7 +526,7 @@ public class HIDDeviceManager {
         shutdownUSB();
         shutdownBluetooth();
         synchronized (this) {
-            for (HIDDevice device : mDevicesById.values()) {
+            for (nodomain.prekel.lab02android.HIDDevice device : mDevicesById.values()) {
                 device.shutdown();
             }
             mDevicesById.clear();
@@ -537,7 +537,7 @@ public class HIDDeviceManager {
 
     public void setFrozen(boolean frozen) {
         synchronized (this) {
-            for (HIDDevice device : mDevicesById.values()) {
+            for (nodomain.prekel.lab02android.HIDDevice device : mDevicesById.values()) {
                 device.setFrozen(frozen);
             }
         }        
@@ -547,9 +547,9 @@ public class HIDDeviceManager {
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private HIDDevice getDevice(int id) {
+    private nodomain.prekel.lab02android.HIDDevice getDevice(int id) {
         synchronized (this) {
-            HIDDevice result = mDevicesById.get(id);
+            nodomain.prekel.lab02android.HIDDevice result = mDevicesById.get(id);
             if (result == null) {
                 Log.v(TAG, "No device for id: " + id);
                 Log.v(TAG, "Available devices: " + mDevicesById.keySet());
@@ -564,7 +564,7 @@ public class HIDDeviceManager {
 
     public boolean openDevice(int deviceID) {
         // Look to see if this is a USB device and we have permission to access it
-        for (HIDDeviceUSB device : mUSBDevices.values()) {
+        for (nodomain.prekel.lab02android.HIDDeviceUSB device : mUSBDevices.values()) {
             if (deviceID == device.getId()) {
                 UsbDevice usbDevice = device.getDevice();
                 if (!mUsbManager.hasPermission(usbDevice)) {
@@ -583,7 +583,7 @@ public class HIDDeviceManager {
 
         try {
             Log.v(TAG, "openDevice deviceID=" + deviceID);
-            HIDDevice device;
+            nodomain.prekel.lab02android.HIDDevice device;
             device = getDevice(deviceID);
             if (device == null) {
                 HIDDeviceDisconnected(deviceID);
@@ -600,7 +600,7 @@ public class HIDDeviceManager {
     public int sendOutputReport(int deviceID, byte[] report) {
         try {
             Log.v(TAG, "sendOutputReport deviceID=" + deviceID + " length=" + report.length);
-            HIDDevice device;
+            nodomain.prekel.lab02android.HIDDevice device;
             device = getDevice(deviceID);
             if (device == null) {
                 HIDDeviceDisconnected(deviceID);
@@ -617,7 +617,7 @@ public class HIDDeviceManager {
     public int sendFeatureReport(int deviceID, byte[] report) {
         try {
             Log.v(TAG, "sendFeatureReport deviceID=" + deviceID + " length=" + report.length);
-            HIDDevice device;
+            nodomain.prekel.lab02android.HIDDevice device;
             device = getDevice(deviceID);
             if (device == null) {
                 HIDDeviceDisconnected(deviceID);
@@ -634,7 +634,7 @@ public class HIDDeviceManager {
     public boolean getFeatureReport(int deviceID, byte[] report) {
         try {
             Log.v(TAG, "getFeatureReport deviceID=" + deviceID);
-            HIDDevice device;
+            nodomain.prekel.lab02android.HIDDevice device;
             device = getDevice(deviceID);
             if (device == null) {
                 HIDDeviceDisconnected(deviceID);
@@ -651,7 +651,7 @@ public class HIDDeviceManager {
     public void closeDevice(int deviceID) {
         try {
             Log.v(TAG, "closeDevice deviceID=" + deviceID);
-            HIDDevice device;
+            nodomain.prekel.lab02android.HIDDevice device;
             device = getDevice(deviceID);
             if (device == null) {
                 HIDDeviceDisconnected(deviceID);

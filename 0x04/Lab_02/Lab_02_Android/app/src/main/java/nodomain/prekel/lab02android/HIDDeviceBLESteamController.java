@@ -1,4 +1,4 @@
-package org.libsdl.app;
+package nodomain.prekel.lab02android;
 
 import android.content.Context;
 import android.bluetooth.BluetoothDevice;
@@ -21,10 +21,10 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.UUID;
 
-class HIDDeviceBLESteamController extends BluetoothGattCallback implements HIDDevice {
+class HIDDeviceBLESteamController extends BluetoothGattCallback implements nodomain.prekel.lab02android.HIDDevice {
 
     private static final String TAG = "hidapi";
-    private HIDDeviceManager mManager;
+    private nodomain.prekel.lab02android.HIDDeviceManager mManager;
     private BluetoothDevice mDevice;
     private int mDeviceId;
     private BluetoothGatt mGatt;

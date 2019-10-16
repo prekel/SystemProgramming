@@ -1,8 +1,7 @@
-package org.libsdl.app;
+package nodomain.prekel.lab02android;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Hashtable;
 import java.lang.reflect.Method;
 import java.lang.Math;
