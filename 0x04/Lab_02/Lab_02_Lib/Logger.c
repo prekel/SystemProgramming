@@ -29,10 +29,10 @@ static int (* g_pOutputFunction3th)(char*);
 static int (* g_pOutputFunction4th)(char*);
 
 /// Кол-во функций для вывода
-static const int g_OutputFunctionsCount = 4;
+#define OUTPUT_FUNCTIONS_COUNT 4
 
 /// Массив функиций для вывода
-static int (* g_ppOutputFunctions[g_OutputFunctionsCount])(char*);
+static int (* g_ppOutputFunctions[OUTPUT_FUNCTIONS_COUNT])(char*);
 
 /// Преобразует вилку в символ.
 ///
@@ -175,7 +175,7 @@ void Log(char* format, ...)
     vsnprintf(s + len1, len2 + 1, format, argPtr);
     va_end(argPtr);
 
-    for (int i = 0; i < g_OutputFunctionsCount; i++)
+    for (int i = 0; i < OUTPUT_FUNCTIONS_COUNT; i++)
     {
         if (g_ppOutputFunctions[i])
         {
