@@ -13,8 +13,10 @@ struct StructNode
 
 typedef struct
 {
-    Node* pFirst;
-    Node* pLast;
+    void* private;
+
+    Node* (* GetFirst)();
+    Node* (* GetLast)();
 } LinkedList;
 
 enum {
