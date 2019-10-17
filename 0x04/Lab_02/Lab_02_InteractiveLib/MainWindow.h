@@ -14,7 +14,7 @@
 
 #include "Table.h"
 #include "PhilosophersSpawnerThread.h"
-
+#include "MainCycleThread.h"
 #include "RendererThread.h"
 
 /// \struct MainWindow
@@ -41,6 +41,15 @@ typedef struct
     RendererThreadOptions* pRendererThreadOptions;
     /// Идентификатор потока отрисовщика
     pthread_t RendererThreadId;
+    /// Нужен ли поток отрисовщика, запускаемый в StartThreadsMainWindow
+    bool IsRendererAsync;
+
+    /// Указатель на параметры запуска потока обработчика событий
+    MainCycleThreadOptions* pMainCycleThreadOptions;
+    /// Идентификатор потока обработчика событий
+    pthread_t MainCycleThreadId;
+    /// Нужен ли поток обработчика событий, запускаемый в StartThreadsMainWindow
+    bool IsMainCycleAsync;
 
     /// Идентификатор главного потока
     pthread_t MainThreadId;
@@ -55,6 +64,8 @@ typedef struct
     int MinSendIntervalDuration;
     /// Верхняя граница случайного времени между отправками в миллисекундах
     int MaxSendIntervalDuration;
+
+    int MainCycleReturned;
 } MainWindow;
 
 /// Создаёт главное окно. Требуется очистка с помощью DestroyMainWindow.
@@ -68,10 +79,10 @@ typedef struct
 /// отправками в миллисекундах.
 /// \param isAutoSpawnDisabled Выключена ли автоматическая отправка философов.
 /// \return Указатель на созданное главное окно.
-MainWindow* CreateMainWindow(int screenWidth, int screenHeight, Table* pTable,
-                             int minSendIntervalDuration,
-                             int maxSendIntervalDuration,
-                             bool isAutoSpawnDisabled);
+MainWindow *
+CreateMainWindow(int screenWidth, int screenHeight, Table *pTable, int minSendIntervalDuration,
+                 int maxSendIntervalDuration, bool isAutoSpawnDisabled, bool isRendererAsync,
+                 bool isMainCycleAsync);
 
 /// Инициализирует SDL, окно, отрисовщик
 ///
@@ -84,7 +95,13 @@ int InitVideoMainWindow(MainWindow* pMainWindow);
 /// \param pMainWindow Указатель на главное окно.
 void StartThreadsMainWindow(MainWindow* pMainWindow);
 
-/// Главный цикл приложения. Обрабатывает события.
+/// Синхронный запуск отрисовщика.
+///
+/// \param pMainWindow Указатель на главное окно.
+/// \return 0 в случае успешного завершения
+int RendererMainWindow(MainWindow* pMainWindow);
+
+/// Главный цикл приложения. Обрабатывает события. (Синхронный запуск).
 ///
 /// \param pMainWindow Указатель на главное окно.
 /// \return 0 в случае успешного завершения, 1 в случае принудительного,
