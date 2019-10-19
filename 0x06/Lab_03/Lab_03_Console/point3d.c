@@ -17,6 +17,8 @@ static void setz(struct point3D* p, int val)
     ((struct private*) (p->prvtPoint3D))->z = val;
 }
 
+static Point3DVTable g_DvTable = {getz, setz};
+
 point3D* newPoint3D()
 {
     point3D* ptr;
@@ -24,9 +26,10 @@ point3D* newPoint3D()
     ptr = (point3D*) malloc(sizeof(point3D));
     ptr->base = newPoint2D();
 
+    ptr->pVTable = &g_DvTable;
+    ptr->pBaseVTable = ptr->base->pVTable;
+
     ptr->prvtPoint3D = malloc(sizeof(private));
-    ptr->getZ = &getz;
-    ptr->setZ = &setz;
 
     return ptr;
 }

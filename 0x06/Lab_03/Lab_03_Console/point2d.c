@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "point2d.h"
 
+
 typedef struct private
 {
     int x;
@@ -9,33 +10,38 @@ typedef struct private
 
 static int getx(struct point2D* p)
 {
-    return ((struct private*) (p->prvtPoint2D))->x;
+    return ((struct private*) (p->pPrivate))->x;
 }
 
 static void setx(struct point2D* p, int val)
 {
-    ((struct private*) (p->prvtPoint2D))->x = val;
+    ((struct private*) (p->pPrivate))->x = val;
 }
 
 static int gety(struct point2D* p)
 {
-    return ((struct private*) (p->prvtPoint2D))->y;
+    return ((struct private*) (p->pPrivate))->y;
 }
 
 static void sety(struct point2D* p, int val)
 {
-    ((struct private*) (p->prvtPoint2D))->y = val;
+    ((struct private*) (p->pPrivate))->y = val;
 }
+
+static Point2DVTable g_Point2DvTable = {getx, setx, gety, sety};
 
 point2D* newPoint2D()
 {
     point2D* ptr;
     ptr = (point2D*) malloc(sizeof(point2D));
-    ptr->prvtPoint2D = malloc(sizeof(private));
-    ptr->getX = &getx;
-    ptr->setX = &setx;
-    ptr->getY = &gety;
-    ptr->setY = &sety;
+    ptr->pPrivate = malloc(sizeof(private));
+
+    ptr->pVTable = &g_Point2DvTable;
+
+//    ptr->getX = &getx;
+//    ptr->setX = &setx;
+//    ptr->getY = &gety;
+//    ptr->setY = &sety;
     return ptr;
 }
 

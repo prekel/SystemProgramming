@@ -5,10 +5,10 @@
 #ifndef POINT2D_H
 #define POINT2D_H
 
-typedef struct point2D
-{
-    void* prvtPoint2D;
+struct point2D;
 
+typedef struct
+{
     int (* getX)(struct point2D*);
 
     void (* setX)(struct point2D*, int);
@@ -16,6 +16,13 @@ typedef struct point2D
     int (* getY)(struct point2D*);
 
     void (* setY)(struct point2D*, int);
+} Point2DVTable;
+
+typedef struct point2D
+{
+    void* pPrivate;
+
+    Point2DVTable* pVTable;
 } point2D;
 
 point2D* newPoint2D();
