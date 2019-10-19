@@ -1,39 +1,18 @@
 #include <stdio.h>
-#include "compressor_interface.h"
-#include "rar.h"
-#include "zip.h"
-#include "logging_compressor.h"
-
-#define DATA_SIZE 10
-#define COMP_RATIO 4
-#define VOLUMES 3
-
-void work(compressor_t* c, void* data_to_compress, void* data_to_decompress)
-{
-    c->compress(c, data_to_compress);
-    c->uncompress(c, data_to_decompress);
-    c->status(c);
-}
+#include "point2d.h"
+#include "point3d.h"
+#include "points.h"
 
 int main()
 {
-    void* uncompressed_data[DATA_SIZE];
-    void* compressed_data[DATA_SIZE];
-
-    compressor_t rar;
-    rar_init(&rar, COMP_RATIO);
-    work(&rar, uncompressed_data, compressed_data);
-    rar_free(&rar);
-
-    printf("\n");
-
-    compressor_t zip;
-    zip_init(&zip, VOLUMES);
-    work(&zip, uncompressed_data, compressed_data);
-    zip_free(&zip);
-
-    logging_compressor_t lc;
-    lc.base.compress(lc);
-
+    point3D* point = newPoint3D();
+    point->base->setX(point->base, 11);
+    point->base->setY(point->base, 12);
+    point->setZ(point, 13);
+    printf("d = %f\n", doSomething(point));
+    printf("x = %d\n", point->base->getX(point->base));
+    printf("y = %d\n", point->base->getY(point->base));
+    printf("z = %d\n", point->getZ(point));
+    deletePoint3D(point);
     return 0;
 }

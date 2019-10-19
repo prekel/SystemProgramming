@@ -5,8 +5,8 @@ typedef struct
 {
     void* private;
 
-    Node* (* GetFirst)();
-    Node* (* GetLast)();
+    ///Node* (* GetFirst)();
+    //Node* (* GetLast)();
 } LinkedList;
 
 enum {

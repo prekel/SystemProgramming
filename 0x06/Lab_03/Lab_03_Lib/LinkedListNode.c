@@ -9,5 +9,5 @@ typedef struct
 
 static LinkedListNode* GetNext()
 {
-    PrivateLinkedListNode* = (PrivateLinkedListNode*)
+    //PrivateLinkedListNode* = (PrivateLinkedListNode*)
 }
