@@ -16,6 +16,5 @@ static void AppendLinkedList(LinkedList* pList, void* pElement)
 
 static void* GetLastLinkedList(LinkedList* pList)
 {
-    LinkedListPrivate* pPrivate = (LinkedListPrivate*)(pList->private);
-    return pPrivate->pLast;
+    return pList->pLast;
 }
