@@ -26,7 +26,10 @@ Archipelago* ArchipelagoCollectionFindByName(
 Archipelago* ArchipelagoCollectionGetFirst(
         ArchipelagoCollection* pCollection);
 
+LinkedListNode* ArchipelagoCollectionGetIterator(
+        ArchipelagoCollection* pCollection);
+
 Archipelago* ArchipelagoCollectionIteratorNext(
-        Archipelago** ppArchipelagoIterator);
+        LinkedListNode** ppArchipelagoIterator);
 
 #endif //ARCHIPELAGOCOLLECTION_H
