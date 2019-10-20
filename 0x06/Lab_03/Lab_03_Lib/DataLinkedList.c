@@ -3,10 +3,10 @@
 
 void AppendDataLinkedList(LinkedList* pList, Data* pData)
 {
-    AppendLinkedList(pList, pData);
+    LinkedListAppend(pList, pData);
 }
 
 Data* GetLastDataLinkedList(LinkedList* pList)
 {
-    return (Data*) GetLastLinkedList(pList);
+    return (Data*) LinkedListGetLast(pList);
 }

@@ -1,12 +1,12 @@
 #ifndef LINKEDLISTNODE_H
 #define LINKEDLISTNODE_H
 
-struct StructLinkedListNode;
 typedef struct StructLinkedListNode LinkedListNode;
-
-struct StructLinkedListNode
+typedef struct StructLinkedListNode
 {
-    void* pPrivate;
+    void* pElement;
+    LinkedListNode* pNext;
+    LinkedListNode* pPrevious;
+} LinkedListNode;
 
-};
 #endif //LINKEDLISTNODE_H

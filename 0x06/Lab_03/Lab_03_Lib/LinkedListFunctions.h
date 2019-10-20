@@ -3,8 +3,10 @@
 
 #include "LinkedList.h"
 
-void AppendLinkedList(LinkedList* pList, void* pElement);
+void LinkedListAppend(LinkedList* pList, void* pElement);
 
-void* GetLastLinkedList(LinkedList* pList);
+void* LinkedListGetFirst(LinkedList* pList);
+
+void* LinkedListGetLast(LinkedList* pList);
 
 #endif //LINKEDLISTFUNCTIONS_H

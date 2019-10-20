@@ -8,13 +8,13 @@ typedef struct
 
 
 
-static void AppendLinkedList(LinkedList* pList, void* pElement)
+static void LinkedListAppend(LinkedList* pList, void* pElement)
 {
     LinkedListPrivate* pPrivate = (LinkedListPrivate*)(pList->private);
     //pList->GetLast();
 }
 
-static void* GetLastLinkedList(LinkedList* pList)
+static void* LinkedListGetLast(LinkedList* pList)
 {
     //return pList->pLast;
 }
