@@ -8,4 +8,12 @@ typedef struct
     int CountInhabitedIslands;
 } Archipelago;
 
+Archipelago* ArchipelagoCreate(char* name,
+                               int countIslands,
+                               int countInhabitedIslands);
+
+void ArchipelagoDestroy(Archipelago* pArchipelago);
+
+char* ArchipelagoToString(Archipelago* pArchipelago);
+
 #endif //ARCHIPELAGO_H

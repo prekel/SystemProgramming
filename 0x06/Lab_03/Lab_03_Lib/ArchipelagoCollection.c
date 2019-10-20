@@ -1,12 +1,7 @@
 #include "ArchipelagoCollection.h"
-#include "LinkedListFunctions.h"
 
-void DataCollectionAppend(LinkedList* pList, Data* pData)
+void ArchipelagoCollectionAdd(ArchipelagoCollection* pCollection,
+                              Archipelago* pArchipelago)
 {
-    LinkedListAppend(pList, pData);
-}
 
-Data* GetLastDataLinkedList(LinkedList* pList)
-{
-    return (Data*) LinkedListGetLastElement(pList);
 }
