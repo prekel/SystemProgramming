@@ -2,20 +2,22 @@
 
 bool ArchipelagoCollectionQueryHas1(
         ArchipelagoCollection* pCollection,
-        bool (pPredicate)(Archipelago* pArchipelago))
+        bool (pPredicate)(Archipelago*))
 {
-    LinkedListNode* pIterator = ArchipelagoCollectionGetIterator(pCollection);
     bool result = false;
 
-    Archipelago* pArchipelago = ArchipelagoCollectionIteratorNext(&pIterator);
-    while (pArchipelago)
+    for (LinkedListNode* pIterator =
+            ArchipelagoCollectionGetIterator(pCollection);
+         pIterator;
+         ArchipelagoCollectionIteratorNext(&pIterator))
     {
+        Archipelago* pArchipelago =
+                ArchipelagoCollectionGetByIterator(pIterator);
         if (pPredicate(pArchipelago))
         {
             result = true;
             break;
         }
-        pArchipelago = ArchipelagoCollectionIteratorNext(&pIterator);
     }
     return result;
 }
@@ -23,19 +25,21 @@ bool ArchipelagoCollectionQueryHas1(
 ArchipelagoCollection* ArchipelagoCollectionQuerySelectWhereIsN(
         ArchipelagoCollection* pCollection,
         int n,
-        bool (pPredicate)(Archipelago* pArchipelago, int n))
+        bool (pPredicate)(Archipelago*, int))
 {
-    LinkedListNode* pIterator = ArchipelagoCollectionGetIterator(pCollection);
     ArchipelagoCollection* pResultCollection = ArchipelagoCollectionCreate();
 
-    Archipelago* pArchipelago = ArchipelagoCollectionIteratorNext(&pIterator);
-    while (pArchipelago)
+    for (LinkedListNode* pIterator =
+            ArchipelagoCollectionGetIterator(pCollection);
+         pIterator;
+         ArchipelagoCollectionIteratorNext(&pIterator))
     {
+        Archipelago* pArchipelago =
+                ArchipelagoCollectionGetByIterator(pIterator);
         if (pPredicate(pArchipelago, n))
         {
             ArchipelagoCollectionAdd(pResultCollection, pArchipelago);
         }
-        pArchipelago = ArchipelagoCollectionIteratorNext(&pIterator);
     }
     return pResultCollection;
 }
@@ -53,9 +57,8 @@ bool ArchipelagoCollectionQueryHasOnlyUninhabited(
             PredicateArchipelagoHasOnlyUninhabited);
 }
 
-static bool PredicateArchipelagoIslandsCountIsN(
-        Archipelago* pArchipelago,
-        int n)
+static bool PredicateArchipelagoIslandsCountIsN(Archipelago* pArchipelago,
+                                                int n)
 {
     return pArchipelago->CountIslands == n;
 }

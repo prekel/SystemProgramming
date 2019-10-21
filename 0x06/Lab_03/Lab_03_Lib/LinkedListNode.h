@@ -11,7 +11,7 @@ typedef struct LinkedListNode
     LinkedList* pList;
 } LinkedListNode;
 
-LinkedListNode* LinkedListNodeCreate(void* pElement, LinkedList* pList);
+LinkedListNode* LinkedListNodeCreate(LinkedList* pList, void* pElement);
 
 void LinkedListNodeDestroy(LinkedListNode* pNode);
 
@@ -19,5 +19,6 @@ void LinkedListNodePutBetween(LinkedListNode* pPrevious,
                               LinkedListNode* pNode,
                               LinkedListNode* pNext);
 
+void LinkedListNodeDrop(LinkedListNode* pNode);
+
 #endif //LINKEDLISTNODE_H
-          

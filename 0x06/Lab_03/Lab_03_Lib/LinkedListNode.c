@@ -3,7 +3,7 @@
 
 #include "LinkedListNode.h"
 
-LinkedListNode* LinkedListNodeCreate(void* pElement, LinkedList* pList)
+LinkedListNode* LinkedListNodeCreate(LinkedList* pList, void* pElement)
 {
     LinkedListNode* pNode = malloc(sizeof(LinkedListNode*));
     assert(pNode);

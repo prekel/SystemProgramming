@@ -12,6 +12,8 @@ typedef struct LinkedList
 
 LinkedList* LinkedListCreate();
 
+void LinkedListDestroy(LinkedList* pList);
+
 void LinkedListAppendElement(LinkedList* pList, void* pElement);
 
 void LinkedListRemoveElement(LinkedList* pList, void* pElement);

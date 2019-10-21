@@ -32,9 +32,11 @@ Archipelago* ArchipelagoCollectionFindByName(
         ArchipelagoCollection* pCollection,
         char* name)
 {
-    LinkedListNode* pIterator = ArchipelagoCollectionGetIterator(pCollection);
 
-    do
+    for (LinkedListNode* pIterator =
+            ArchipelagoCollectionGetIterator(pCollection);
+         pIterator != NULL;
+         ArchipelagoCollectionIteratorNext(&pIterator))
     {
         Archipelago* pArchipelago =
                 ArchipelagoCollectionGetByIterator(pIterator);
@@ -42,8 +44,7 @@ Archipelago* ArchipelagoCollectionFindByName(
         {
             return pArchipelago;
         }
-    } while (ArchipelagoCollectionIteratorNext(&pIterator));
-
+    }
     return NULL;
 }
 
