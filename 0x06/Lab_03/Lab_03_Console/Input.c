@@ -11,30 +11,36 @@
 
 #include "Input.h"
 
-char* InputLineRealloc(int stepSize)
+char* InputLineRealloc(int stepSize, bool isFinalReallocRequired)
 {
+    assert(stepSize >= 2);
     unsigned int currentSize = stepSize;
-    char* string = (char*) malloc(currentSize * sizeof(char));
+    char* string = (char*) malloc((currentSize + 1) * sizeof(char));
+    assert(string);
     char* currentStep = string;
+    int i = 1;
     while (true)
     {
-        fgets(currentStep, stepSize, stdin);
+        char* fgetsReturns = fgets(currentStep, stepSize, stdin);
+        assert(fgetsReturns);
 
         unsigned int stringLength = strlen(currentStep);
 
         if (currentStep[stringLength - 1] == '\n')
         {
             currentStep[stringLength - 1] = '\0';
-            currentSize -= stepSize;
-            currentSize += stringLength - 1;
-            string = realloc(string, currentSize);
-            assert(string);
+            if (isFinalReallocRequired)
+            {
+                currentSize = strlen(string) + 1;
+                string = realloc(string, currentSize * sizeof(char));
+                assert(string);
+            }
             break;
         }
         currentSize += stepSize;
-        currentStep += stepSize - 1;
-        string = realloc(string, currentSize);
+        string = realloc(string, currentSize * sizeof(char));
         assert(string);
+        currentStep = string + currentSize - stepSize - i++;
     }
     return string;
 }
@@ -86,31 +92,22 @@ int InputLine(char* stringToInput, int maxStringLength)
     return -(int) errorCode;
 }
 
-int CycleInputInt(char* stringToOutput, int maxStringLength,
-                  bool(* pChecker)(int))
+int CycleInputInt(char* stringToOutput, bool (* pChecker)(int))
 {
     int number = -1;
     int position = -1;
-    char* stringNumber = (char*) malloc(maxStringLength * sizeof(char));
-    assert(stringNumber);
     while (true)
     {
         printf("%s", stringToOutput);
         fflush(stdout);
 
-        int inputLineCode = InputLine(stringNumber, maxStringLength);
-        if (inputLineCode == -1) continue;
-        if (inputLineCode < 0)
-        {
-            fprintf(stderr, "Ошибка при вводе\n");
-            fflush(stderr);
-            exit(EXIT_FAILURE);
-        }
-        int sscanfCode = sscanf(stringNumber, "%d%n", &number, &position);
+        char* str1 = InputLineRealloc(20, false);
+        int sscanfCode = sscanf(str1, "%d%n", &number, &position);
+        unsigned int inputLineCode = strlen(str1);
+        free(str1);
         if (position != inputLineCode) continue;
         if (pChecker != NULL && !pChecker(number)) continue;
         if (sscanfCode > 0) break;
     }
-    free(stringNumber);
     return number;
 }
