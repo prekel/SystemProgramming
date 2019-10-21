@@ -39,3 +39,18 @@ void LinkedListNodePutBetween(LinkedListNode* pPrevious,
         pNext->pPrevious = pNode;
     }
 }
+
+void LinkedListNodeDrop(LinkedListNode* pNode)
+{
+    assert(pNode);
+    if (pNode->pPrevious)
+    {
+        assert(pNode->pPrevious->pList == pNode->pList);
+        pNode->pPrevious->pNext = pNode->pNext;
+    }
+    if (pNode->pNext)
+    {
+        assert(pNode->pNext->pList == pNode->pList);
+        pNode->pNext->pPrevious = pNode->pPrevious;
+    }
+}

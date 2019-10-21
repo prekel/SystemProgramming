@@ -15,11 +15,12 @@ bool check1(int n)
 
 int main()
 {
+
     ArchipelagoCollection* pCollection = ArchipelagoCollectionCreate();
     Action action;
     do
     {
         action = (Action) CycleInputInt("Введите номер действия: ", 3, NULL);
-    } while (!ActionsHandler(pCollection, action));
+    } while (ActionsHandler(pCollection, action));
     return 0;
 }

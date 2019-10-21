@@ -29,6 +29,14 @@ void ArchipelagoDestroy(Archipelago* pArchipelago)
     free(pArchipelago);
 }
 
+void ArchipelagoSetName(Archipelago* pArchipelago, char* newName)
+{
+    pArchipelago->Name =
+            (char*) realloc(pArchipelago->Name, (strlen(newName) + 1) * sizeof(char));
+    assert(pArchipelago->Name);
+    strcpy(pArchipelago->Name, newName);
+}
+
 #define ARCHIPELAGO_FORMAT "Архипелаг: %s; Кол-во островов: %d; Кол-во обитаемых островов: %d\n"
 
 char* ArchipelagoToString(Archipelago* pArchipelago)

@@ -5,14 +5,18 @@
 
 typedef enum
 {
-    ADD, MODIFY, DELETE, PRINT, PRINT_ALL, HAS_ONLY_UNINHABITED, PRINT_WHERE_ISLANDS_COUNT_IS, EXIT
+    ADD, MODIFY_NAME, MODIFY_COUNT_ISLANDS, MODIFY_COUNT_INHABITED_ISLANDS, DELETE, PRINT, PRINT_ALL, HAS_ONLY_UNINHABITED, PRINT_WHERE_ISLANDS_COUNT_IS, EXIT
 } Action;
 
 int ActionsHandler(ArchipelagoCollection* pCollection, Action action);
 
 void Add(ArchipelagoCollection* pCollection);
 
-void Modify(ArchipelagoCollection* pCollection);
+void ModifyName(ArchipelagoCollection* pCollection);
+
+void ModifyCountIslands(ArchipelagoCollection* pCollection);
+
+void ModifyCountInhabitedIslands(ArchipelagoCollection* pCollection);
 
 void Delete(ArchipelagoCollection* pCollection);
 

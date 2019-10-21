@@ -130,6 +130,6 @@ char* CycleInputString(char* stringToOutput, bool(* pChecker)(char*))
         printf("%s", stringToOutput);
         fflush(stdout);
         string = InputLineRealloc(10, true);
-    } while (!pChecker(string));
+    } while (pChecker && !pChecker(string));
     return string;
 }

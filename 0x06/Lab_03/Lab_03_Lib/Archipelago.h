@@ -14,6 +14,8 @@ Archipelago* ArchipelagoCreate(char* name,
 
 void ArchipelagoDestroy(Archipelago* pArchipelago);
 
+void ArchipelagoSetName(Archipelago* pArchipelago, char* newName);
+
 char* ArchipelagoToString(Archipelago* pArchipelago);
 
 #endif //ARCHIPELAGO_H
