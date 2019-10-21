@@ -11,34 +11,34 @@ int ActionsHandler(ArchipelagoCollection* pCollection, Action action)
 {
     switch (action)
     {
-        case ADD:
+        case ACTION_ADD:
             Add(pCollection);
             break;
-        case MODIFY_NAME:
+        case ACTION_MODIFY_NAME:
             ModifyName(pCollection);
             break;
-        case MODIFY_COUNT_ISLANDS:
+        case ACTION_MODIFY_COUNT_ISLANDS:
             ModifyCountIslands(pCollection);
             break;
-        case MODIFY_COUNT_INHABITED_ISLANDS:
+        case ACTION_MODIFY_COUNT_INHABITED_ISLANDS:
             ModifyCountInhabitedIslands(pCollection);
             break;
-        case DELETE:
+        case ACTION_DELETE:
             Delete(pCollection);
             break;
-        case PRINT:
+        case ACTION_PRINT:
             Print(pCollection);
             break;
-        case PRINT_ALL:
+        case ACTION_PRINT_ALL:
             PrintAll(pCollection);
             break;
-        case HAS_ONLY_UNINHABITED:
+        case ACTION_HAS_ONLY_UNINHABITED:
             HasOnlyUninhabited(pCollection);
             break;
-        case PRINT_WHERE_ISLANDS_COUNT_IS:
+        case ACTION_PRINT_WHERE_ISLANDS_COUNT_IS:
             PrintWhereIslandsCountIs(pCollection);
             break;
-        case EXIT:
+        case ACTION_EXIT:
             return 0;
         default:
             return -1;
@@ -60,6 +60,7 @@ void Add(ArchipelagoCollection* pCollection)
     } while (countInhabitedIslands > countIslands);
     Archipelago* pArchipelago = ArchipelagoCreate(name, countIslands,
                                                   countInhabitedIslands);
+
     ArchipelagoCollectionAdd(pCollection, pArchipelago);
     free(name);
 }

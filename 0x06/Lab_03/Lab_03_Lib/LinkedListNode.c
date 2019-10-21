@@ -5,7 +5,7 @@
 
 LinkedListNode* LinkedListNodeCreate(LinkedList* pList, void* pElement)
 {
-    LinkedListNode* pNode = malloc(sizeof(LinkedListNode*));
+    LinkedListNode* pNode = malloc(sizeof(LinkedListNode));
     assert(pNode);
 
     pNode->pElement = pElement;
@@ -13,7 +13,7 @@ LinkedListNode* LinkedListNodeCreate(LinkedList* pList, void* pElement)
     assert(pList);
     pNode->pList = pList;
 
-    return pElement;
+    return pNode;
 }
 
 void LinkedListNodeDestroy(LinkedListNode* pNode)

@@ -1,6 +1,7 @@
 #include <malloc.h>
 #include <assert.h>
 #include <stdbool.h>
+#include <stddef.h>
 
 #include "LinkedList.h"
 #include "LinkedListNode.h"
@@ -25,7 +26,8 @@ void LinkedListDestroy(LinkedList* pList)
     {
         LinkedListRemoveNode(pList, pList->pFirst);
     }
-    else if (pList->Count > 1)
+    else
+        if (pList->Count > 1)
     {
         for (LinkedListNode* pIterator = LinkedListGetFirstNode(pList);
              pIterator != NULL;
@@ -36,6 +38,7 @@ void LinkedListDestroy(LinkedList* pList)
                 LinkedListRemoveNode(pList, pIterator->pPrevious);
             }
         }
+        LinkedListRemoveNode(pList, pList->pLast);
     }
     free(pList);
 }
