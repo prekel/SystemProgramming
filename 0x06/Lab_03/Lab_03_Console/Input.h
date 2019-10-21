@@ -29,6 +29,8 @@ int InputLine(char* stringToInput, int maxStringLength);
 /// \param pChecker Указател на функцию-чекер. Если равер NULL, проверка через
 /// чекер не проводится.
 /// \return Считанное число.
-int CycleInputInt(char* stringToOutput, bool (* pChecker)(int));
+int CycleInputInt(char* stringToOutput,
+                  int maxStringLength,
+                  bool(* pChecker)(int));
 
 #endif //INPUT_H

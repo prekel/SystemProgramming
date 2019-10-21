@@ -92,22 +92,31 @@ int InputLine(char* stringToInput, int maxStringLength)
     return -(int) errorCode;
 }
 
-int CycleInputInt(char* stringToOutput, bool (* pChecker)(int))
+int CycleInputInt(char* stringToOutput, int maxStringLength,
+                  bool(* pChecker)(int))
 {
     int number = -1;
     int position = -1;
+    char* stringNumber = (char*) malloc(maxStringLength * sizeof(char));
+    assert(stringNumber);
     while (true)
     {
         printf("%s", stringToOutput);
         fflush(stdout);
 
-        char* str1 = InputLineRealloc(20, false);
-        int sscanfCode = sscanf(str1, "%d%n", &number, &position);
-        unsigned int inputLineCode = strlen(str1);
-        free(str1);
+        int inputLineCode = InputLine(stringNumber, maxStringLength);
+        if (inputLineCode == -1) continue;
+        if (inputLineCode < 0)
+        {
+            fprintf(stderr, "Ошибка при вводе\n");
+            fflush(stderr);
+            exit(EXIT_FAILURE);
+        }
+        int sscanfCode = sscanf(stringNumber, "%d%n", &number, &position);
         if (position != inputLineCode) continue;
         if (pChecker != NULL && !pChecker(number)) continue;
         if (sscanfCode > 0) break;
     }
+    free(stringNumber);
     return number;
 }

@@ -1,7 +1,15 @@
 #include <stdio.h>
 #include <malloc.h>
+#include <limits.h>
 
 #include "Input.h"
+
+#define M_1E9 1000000000
+
+bool check1(int n)
+{
+    return 2 <= n && n < M_1E9;
+}
 
 int main()
 {
@@ -18,7 +26,7 @@ int main()
     }
     while (true)
     {
-        int a = CycleInputInt("123: ", NULL);
+        int a = CycleInputInt("123: ", 10, NULL);
         printf("%d\n", a);
         if (a == -10)
         {
