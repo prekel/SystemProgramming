@@ -3,6 +3,8 @@
 #include <limits.h>
 
 #include "Input.h"
+#include "Actions.h"
+#include "ArchipelagoCollection.h"
 
 #define M_1E9 1000000000
 
@@ -13,25 +15,11 @@ bool check1(int n)
 
 int main()
 {
-    while (true)
+    ArchipelagoCollection* pCollection = ArchipelagoCollectionCreate();
+    Action action;
+    do
     {
-        char* line = InputLineRealloc(10, true);
-        printf("%s\n", line);
-        if (line[0] == '\0')
-        {
-            free(line);
-            break;
-        }
-        free(line);
-    }
-    while (true)
-    {
-        int a = CycleInputInt("123: ", 10, NULL);
-        printf("%d\n", a);
-        if (a == -10)
-        {
-            break;
-        }
-    }
+        action = (Action) CycleInputInt("Введите номер действия: ", 3, NULL);
+    } while (!ActionsHandler(pCollection, action));
     return 0;
 }

@@ -120,3 +120,16 @@ int CycleInputInt(char* stringToOutput, int maxStringLength,
     free(stringNumber);
     return number;
 }
+
+char* CycleInputString(char* stringToOutput, bool(* pChecker)(char*))
+{
+    char* string = NULL;
+    do
+    {
+        free(string);
+        printf("%s", stringToOutput);
+        fflush(stdout);
+        string = InputLineRealloc(10, true);
+    } while (!pChecker(string));
+    return string;
+}

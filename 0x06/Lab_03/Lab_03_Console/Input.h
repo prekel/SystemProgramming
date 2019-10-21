@@ -33,4 +33,6 @@ int CycleInputInt(char* stringToOutput,
                   int maxStringLength,
                   bool(* pChecker)(int));
 
+char* CycleInputString(char* stringToOutput, bool(* pChecker)(char*));
+
 #endif //INPUT_H
