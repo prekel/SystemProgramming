@@ -3,6 +3,7 @@
 
 #include "LinkedList.h"
 #include "Archipelago.h"
+#include "LinkedListNode.h"
 
 typedef struct
 {
@@ -31,5 +32,8 @@ LinkedListNode* ArchipelagoCollectionGetIterator(
 
 Archipelago* ArchipelagoCollectionIteratorNext(
         LinkedListNode** ppArchipelagoIterator);
+
+Archipelago* ArchipelagoCollectionGetByIterator(
+        LinkedListNode* pArchipelagoIterator);
 
 #endif //ARCHIPELAGOCOLLECTION_H

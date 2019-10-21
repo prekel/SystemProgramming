@@ -24,4 +24,12 @@ void* LinkedListGetFirstElement(LinkedList* pList);
 
 void* LinkedListGetLastElement(LinkedList* pList);
 
+LinkedListNode* LinkedListGetFirstNode(LinkedList* pList);
+
+LinkedListNode* LinkedListGetLastNode(LinkedList* pList);
+
+LinkedListNode* LinkedListIteratorNext(LinkedListNode** ppNode);
+
+LinkedListNode* LinkedListIteratorPrevious(LinkedListNode** ppNode);
+
 #endif //LINKEDLIST_H
