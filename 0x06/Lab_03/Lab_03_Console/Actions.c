@@ -71,6 +71,12 @@ void ModifyName(ArchipelagoCollection* pCollection)
     Archipelago* pArchipelago =
             ArchipelagoCollectionFindByName(pCollection, name);
 
+    if (pArchipelago == NULL)
+    {
+        printf("Архипелаг с таким названием не существует\n");
+        return;
+    }
+
     char* newName = CycleInputString("Введите новое название архипелага: ", NULL);
     ArchipelagoSetName(pArchipelago, newName);
 }
@@ -80,6 +86,12 @@ void ModifyCountIslands(ArchipelagoCollection* pCollection)
     char* name = CycleInputString("Введите название архипелага: ", NULL);
     Archipelago* pArchipelago =
             ArchipelagoCollectionFindByName(pCollection, name);
+
+    if (pArchipelago == NULL)
+    {
+        printf("Архипелаг с таким названием не существует\n");
+        return;
+    }
 
     int newCountIslands =
             CycleInputInt("Введите новое кол-во островов архипелага: ", 10, NULL);
@@ -92,6 +104,12 @@ void ModifyCountInhabitedIslands(ArchipelagoCollection* pCollection)
     Archipelago* pArchipelago =
             ArchipelagoCollectionFindByName(pCollection, name);
 
+    if (pArchipelago == NULL)
+    {
+        printf("Архипелаг с таким названием не существует\n");
+        return;
+    }
+
     int newCountInhabitedIslands =
             CycleInputInt("Введите новое кол-во обитаемых островов архипелага: ", 10, NULL);
     pArchipelago->CountIslands = newCountInhabitedIslands;
@@ -100,13 +118,30 @@ void ModifyCountInhabitedIslands(ArchipelagoCollection* pCollection)
 void Delete(ArchipelagoCollection* pCollection)
 {
     char* name = CycleInputString("Введите название архипелага: ", NULL);
-    ArchipelagoCollectionRemove(pCollection, ArchipelagoCollectionFindByName(pCollection, name));
+    Archipelago* pArchipelago =
+            ArchipelagoCollectionFindByName(pCollection, name);
+
+    if (pArchipelago == NULL)
+    {
+        printf("Архипелаг с таким названием не существует\n");
+        return;
+    }
+    ArchipelagoCollectionRemove(pCollection, pArchipelago);
 }
 
 void Print(ArchipelagoCollection* pCollection)
 {
     char* name = CycleInputString("Введите название архипелага: ", NULL);
-    char* archipelagoString = ArchipelagoToString(ArchipelagoCollectionFindByName(pCollection, name));
+    Archipelago* pArchipelago =
+            ArchipelagoCollectionFindByName(pCollection, name);
+
+    if (pArchipelago == NULL)
+    {
+        printf("Архипелаг с таким названием не существует\n");
+        return;
+    }
+    
+    char* archipelagoString = ArchipelagoToString(pArchipelago);
     printf("%s\n", archipelagoString);
     free(archipelagoString);
 }

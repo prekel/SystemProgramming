@@ -37,7 +37,7 @@ void ArchipelagoSetName(Archipelago* pArchipelago, char* newName)
     strcpy(pArchipelago->Name, newName);
 }
 
-#define ARCHIPELAGO_FORMAT "Архипелаг: %s; Кол-во островов: %d; Кол-во обитаемых островов: %d\n"
+#define ARCHIPELAGO_FORMAT "Архипелаг: %s; Кол-во островов: %d; Кол-во обитаемых островов: %d"
 
 char* ArchipelagoToString(Archipelago* pArchipelago)
 {
