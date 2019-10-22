@@ -39,7 +39,7 @@
 
 #define HELP_ENTER_ACTION "Введите %d %s\n"
 
-#define HELP_COUNT "Числа вводятся от 0 до %d, если не указано иначе\n"
+#define HELP_COUNT "Числа вводятся от 0 по %d, если не указано иное\n"
 
 #define HELP_STRINGS "Строки вводятся длиной хотя бы в 1 символ\n"
 
