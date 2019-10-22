@@ -42,6 +42,20 @@ bool PhilosophersCountChecker(int philosophersCount)
     return 2 <= philosophersCount;
 }
 
+static FILE* g_pOutputFile;
+
+//int PrintToFile(char* format)
+//{
+//    //int ret = fprintf(g_pOutputFile, format);
+//    //fflush(g_pOutputFile);
+//    //return ret;
+//}
+
+//int SdlLog(char* format)
+//{
+//    //SDL_Log(format);
+//}
+
 /// Главная функция программы, считывающая данные и запускающая главное окно
 /// с главным циклом.
 ///
@@ -140,7 +154,9 @@ int main(int argc, char** args)
                                 isInfinityDuration);
 
     //InitLogger(pTable, stdout, false, fopen("5.txt", "w+"), false);
-    InitLogger(pTable, stdout, true, NULL, false);
+    g_pOutputFile = fopen("3.log", "w+");
+    FILE* file2 = fopen("4.log", "w+");
+    InitLogger(pTable, true, stdout, file2, NULL, NULL);
     LOG("Введены данные, создание объектов, запуск потоков");
 
     MainWindow* pMainWindow = CreateMainWindow(
@@ -149,12 +165,22 @@ int main(int argc, char** args)
             pTable,
             minSendIntervalDuration,
             maxSendIntervalDuration,
-            isAutoSpawnDisabled);
+            isAutoSpawnDisabled,
+            true,
+            false);
 
     InitVideoMainWindow(pMainWindow);
 
     StartThreadsMainWindow(pMainWindow);
 
     LOG("Запуск главного цикла");
-    return MainCycleMainWindow(pMainWindow);
+    int ret = MainCycleMainWindow(pMainWindow);
+
+    DestroyMainWindow(pMainWindow);
+    DestroyTable(pTable);
+
+    fclose(g_pOutputFile);
+    fclose(file2);
+
+    return ret;
 }

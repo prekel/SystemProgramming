@@ -14,17 +14,25 @@ static Table* g_pLoggingTable;
 /// Инициализирон ли логгер
 static bool g_IsLoggerInitialized = false;
 /// Основной поток для вывода
-static FILE* g_pMainOutputStream;
-/// Требуется ли выводить информацию о столе в основной поток
-static bool g_IsMainTableInfoEnabled;
+static FILE* g_pOutputStream1st;
 /// Дополнителый поток для вывода
-static FILE* g_pSecondaryOutputStream;
-/// Требуется ли выводить информацию о столе в дополнительный поток
-static bool g_IsSecondaryTableInfoEnabled;
+static FILE* g_pOutputStream2nd;
 /// Требуется ли генерировать информацию о столе
 static bool g_IsTableInfoRequired;
 /// Дополнительный мьютекс (не главный) для логгирования
 static pthread_mutex_t g_pLoggerMutex;
+
+/// Дополнительная функция для вывода
+static int (* g_pOutputFunction3th)(char*);
+
+/// Ещё дополнительная функция для вывода
+static int (* g_pOutputFunction4th)(char*);
+
+/// Кол-во функций для вывода
+#define OUTPUT_FUNCTIONS_COUNT 4
+
+/// Массив функиций для вывода
+static int (* g_ppOutputFunctions[OUTPUT_FUNCTIONS_COUNT])(char*);
 
 /// Преобразует вилку в символ.
 ///
@@ -67,9 +75,26 @@ char PhilosopherToChar(Philosopher* pPhilosopher)
     }
 }
 
-void InitLogger(Table* pTable, FILE* pMainOutputStream,
-                bool isMainTableInfoEnabled, FILE* pSecondaryOutputStream,
-                bool isSecondaryTableInfoEnabled)
+int WriteStringOutputStream1st(char* format)
+{
+    int ret = fputs(format, g_pOutputStream1st);
+    fflush(g_pOutputStream1st);
+    return ret;
+}
+
+int WriteStringOutputStream2nd(char* format)
+{
+    int ret = fputs(format, g_pOutputStream2nd);
+    fflush(g_pOutputStream2nd);
+    return ret;
+}
+
+void InitLogger(Table* pTable,
+                bool isTableInfoEnabled,
+                FILE* pOutputStream1st,
+                FILE* pOutputStream2nd,
+                int (* pOutputFunction3th)(char*),
+                int (* pOutputFunction4th)(char*))
 {
     if (g_IsLoggerInitialized)
     {
@@ -78,21 +103,36 @@ void InitLogger(Table* pTable, FILE* pMainOutputStream,
 
     g_pLoggingTable = pTable;
 
-    g_pMainOutputStream = pMainOutputStream;
-    g_IsMainTableInfoEnabled = isMainTableInfoEnabled;
+    g_pOutputStream1st = pOutputStream1st;
 
-    g_pSecondaryOutputStream = pSecondaryOutputStream;
-    g_IsSecondaryTableInfoEnabled = isSecondaryTableInfoEnabled;
+    g_pOutputStream2nd = pOutputStream2nd;
 
-    g_IsTableInfoRequired =
-            isMainTableInfoEnabled || isSecondaryTableInfoEnabled;
+    g_pOutputFunction3th = pOutputFunction3th;
+
+    g_pOutputFunction4th = pOutputFunction4th;
+
+    g_IsTableInfoRequired = isTableInfoEnabled;
 
     g_IsLoggerInitialized = true;
 
-    if (g_pMainOutputStream == NULL && g_pSecondaryOutputStream == NULL)
+    if (g_pOutputStream1st == NULL
+        && g_pOutputStream2nd == NULL
+        && g_pOutputFunction3th == NULL
+        && g_pOutputFunction4th == NULL)
     {
         g_IsLoggerInitialized = false;
     }
+
+    if (g_pOutputStream1st)
+    {
+        g_ppOutputFunctions[0] = WriteStringOutputStream1st;
+    }
+    if (g_pOutputStream2nd)
+    {
+        g_ppOutputFunctions[1] = WriteStringOutputStream2nd;
+    }
+    g_ppOutputFunctions[2] = g_pOutputFunction3th;
+    g_ppOutputFunctions[3] = g_pOutputFunction4th;
 
     pthread_mutex_init(&g_pLoggerMutex, NULL);
 }
@@ -118,43 +158,32 @@ void Log(char* format, ...)
     }
     result[tableInfoLength - 1] = '\0';
 
-    char empty[] = "";
-    char* res1 = g_IsMainTableInfoEnabled ? result : empty;
-    char* res2 = g_IsSecondaryTableInfoEnabled ? result : empty;
-
     pthread_mutex_lock(&g_pLoggerMutex);
 
-#ifdef __MINGW32__
-    if (g_pMainOutputStream) fprintf(g_pMainOutputStream, "[%s][tid: 0x%08llx]", res1, pthread_self());
-    if (g_pSecondaryOutputStream) fprintf(g_pSecondaryOutputStream, "[%s][tid: 0x%08llx]", res2, pthread_self());
-#else
-    if (g_pMainOutputStream)
-    {
-        fprintf(g_pMainOutputStream, "[%s][tid: 0x%08lx]", res1,
-                pthread_self());
-    }
-    if (g_pSecondaryOutputStream)
-    {
-        fprintf(g_pSecondaryOutputStream, "[%s][tid: 0x%08lx]", res2,
-                pthread_self());
-    }
-#endif
+    int len1 = snprintf(NULL, 0, "[%s][tid: 0x%08lx]", result,
+                        pthread_self());
 
     va_list argPtr;
     va_start(argPtr, format);
-    if (g_pMainOutputStream) vfprintf(g_pMainOutputStream, format, argPtr);
-    if (g_pMainOutputStream) fprintf(g_pMainOutputStream, "\n");
+    int len2 = vsnprintf(NULL, 0, format, argPtr);
     va_end(argPtr);
 
+    char* s = (char*) malloc((len1 + len2 + 1) * sizeof(char));
+    FAILURE_IF_NULLPTR(s);
+    snprintf(s, len1 + 1, "[%s][tid: 0x%08lx]", result, pthread_self());
     va_start(argPtr, format);
-    if (g_pSecondaryOutputStream)
-    {
-        vfprintf(g_pSecondaryOutputStream, format, argPtr);
-    }
-    if (g_pSecondaryOutputStream) fprintf(g_pSecondaryOutputStream, "\n");
+    vsnprintf(s + len1, len2 + 1, format, argPtr);
     va_end(argPtr);
 
-    fflush(g_pMainOutputStream);
+    for (int i = 0; i < OUTPUT_FUNCTIONS_COUNT; i++)
+    {
+        if (g_ppOutputFunctions[i])
+        {
+            g_ppOutputFunctions[i](s);
+        }
+    }
+
+    free(s);
 
     pthread_mutex_unlock(&g_pLoggerMutex);
 }

@@ -14,7 +14,9 @@ add_library(Lab_02_Lib
         Logger.c Logger.h
         PhilosophersWaiterThread.c PhilosophersWaiterThread.h)
 
-target_link_libraries(Lab_02_Lib PRIVATE pthread)
+if (NOT ANDROID)
+    target_link_libraries(Lab_02_Lib PRIVATE pthread)
+endif (NOT ANDROID)
 
 target_link_libraries(Lab_02_Lib PRIVATE m)
 

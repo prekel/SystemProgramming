@@ -38,14 +38,25 @@
 /// Красная, зелёная, синяя составляющая цвета свободной вилки
 #define NOT_USED_RGB 200
 
+#ifdef ANDROID
+/// Числитель масштаба
+#define SCALE_NOM 2000
+/// Знаменатель масштаба
+#define SCALE_DENOM 1000
+#else
+/// Числитель масштаба
+#define SCALE_NOM 1000
+/// Знаменатель масштаба
+#define SCALE_DENOM 1000
+#endif
 /// Радиус от центра экрана до середины квадрата философа
-#define PHILOSOPHER_RADIUS 200
+#define PHILOSOPHER_RADIUS (200 * SCALE_NOM / SCALE_DENOM)
 /// Ширина квадрата философа
-#define PHILOSOPHER_WIDTH 60
+#define PHILOSOPHER_WIDTH (60 * SCALE_NOM / SCALE_DENOM)
 /// Радиус от центра экрана до середины квадрата вилки
-#define FORK_RADIUS 160
+#define FORK_RADIUS (160 * SCALE_NOM / SCALE_DENOM)
 /// Ширина квадрата вилки
-#define FORK_WIDTH 30
+#define FORK_WIDTH (30 * SCALE_NOM / SCALE_DENOM)
 
 /// Угол на полный оборот
 #define FULL_ANGLE 360.0
