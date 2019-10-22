@@ -3,7 +3,7 @@ project(Lab_03_Console C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(Lab_03_Console main.c
+add_executable(Lab_03_Console MainConsole.c
         Actions.c Actions.h
         Input.c Input.h)
 

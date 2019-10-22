@@ -3,7 +3,7 @@ project(Lab_03_LibTests C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(Lab_03_LibTests main.c
+add_executable(Lab_03_LibTests MainLibTests.c
         LinkedListTests.c LinkedListTests.h
         Suite.c Suite.h
         ArchipelagoCollectionTests.c ArchipelagoCollectionTests.h ArchipelagoCollectionQueryTests.c ArchipelagoCollectionQueryTests.h)
