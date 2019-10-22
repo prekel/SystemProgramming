@@ -175,4 +175,3 @@ void ArchipelagoCollectionQueryTest_SelectWhereIslandsCountIs1(void)
     ArchipelagoCollectionDestroyArchipelagos(pCollection);
     ArchipelagoCollectionDestroy(pCollection);
 }
-

@@ -1,7 +1,15 @@
+/// \file
+/// \brief Функции действий
+/// \details Функции для действий и перечесление действий.
+
 #ifndef ACTIONS_H
 #define ACTIONS_H
 
+#include <stdbool.h>
+
 #include "ArchipelagoCollection.h"
+
+#define ACTION_NUMBER_LENGTH 4
 
 typedef enum Action
 {
@@ -19,8 +27,18 @@ typedef enum Action
     ACTION_DEFAULT
 } Action;
 
-int ActionExec(ArchipelagoCollection* pCollection, Action action);
+/// Чекер для вводимого номера действия
+///
+/// \param number Номер действия.
+/// \return Истина если от ACTION_EXIT до ACTION_DEFAULT.
+bool ActionNumberChecker(int number);
 
-char* ActionInfo(Action action);
+/// Исполняет действие.
+///
+/// \param pCollection Указатель на коллекцию архипелагов.
+/// \param action Действие.
+/// \return 0 если было действие выхода, 1 если действие успешно совершено,
+/// -1 если неопознанное действие.
+int ActionExec(ArchipelagoCollection* pCollection, Action action);
 
 #endif //ACTIONS_H

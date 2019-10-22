@@ -1,3 +1,7 @@
+/// \file
+/// \brief Реализация функций из Actions.h
+/// \details Реализация функций из Actions.h.
+
 #include <stdio.h>
 #include <malloc.h>
 #include <assert.h>
@@ -39,24 +43,39 @@
 
 #define HELP_STRINGS "Строки вводятся длиной хотя бы в 1 символ\n"
 
+/// Чекер для строк.
+///
+/// \param name Строка для проверки.
+/// \return Истина если длина больше или равна 1.
 static bool NameChecker(char* name)
 {
     return strlen(name) >= 1;
 }
 
+/// Чекер для кол-ва островов.
+///
+/// \param count Кол-во островов для проверки.
+/// \return Истина если от двух по MAX_COUNT.
 static bool CountIslandsChecker(int count)
 {
     return 2 <= count && count <= MAX_COUNT;
 }
 
+/// Чекер для кол-ва обитаемых остров.
+///
+/// \param count Кол-во обитаемых островов.
+/// \return Истина если от 0 по MAX_COUNT.
 static bool CountInhabitedIslandsChecker(int count)
 {
     return 0 <= count && count <= MAX_COUNT;
 }
 
+/// Добавление архипелага.
+///
+/// \param pCollection Указатель на коллекцию архепилагов.
 static void Add(ArchipelagoCollection* pCollection)
 {
-    char* name = CycleInputString(ENTER_ARCHIPELAGO_NAME, NameChecker);
+    char* name = CycleInputString(NameChecker, ENTER_ARCHIPELAGO_NAME);
 
     if (ArchipelagoCollectionFindByName(pCollection, name))
     {
@@ -70,10 +89,10 @@ static void Add(ArchipelagoCollection* pCollection)
         do
         {
             countInhabitedIslands =
-                    CycleInputIntVa(MAX_INT_LENGTH,
-                                    CountInhabitedIslandsChecker,
-                                    ENTER_INHABITED_COUNT_ISLANDS,
-                                    countIslands);
+                    CycleInputInt(MAX_INT_LENGTH,
+                                  CountInhabitedIslandsChecker,
+                                  ENTER_INHABITED_COUNT_ISLANDS,
+                                  countIslands);
         } while (countInhabitedIslands > countIslands);
         Archipelago* pArchipelago =
                 ArchipelagoCreate(name, countIslands, countInhabitedIslands);
@@ -83,9 +102,12 @@ static void Add(ArchipelagoCollection* pCollection)
     free(name);
 }
 
+/// Изменение названия архипелага.
+///
+/// \param pCollection Указатель на коллекцию архепилагов.
 static void ModifyName(ArchipelagoCollection* pCollection)
 {
-    char* name = CycleInputString(ENTER_ARCHIPELAGO_NAME, NameChecker);
+    char* name = CycleInputString(NameChecker, ENTER_ARCHIPELAGO_NAME);
     Archipelago* pArchipelago =
             ArchipelagoCollectionFindByName(pCollection, name);
 
@@ -95,8 +117,8 @@ static void ModifyName(ArchipelagoCollection* pCollection)
         printf(ARCHIPELAGO_NOT_EXIST);
         return;
     }
-    char* newName = CycleInputString(ENTER_NEW_ARCHIPELAGO_NAME,
-                                     NameChecker);
+    char* newName = CycleInputString(
+            NameChecker, ENTER_NEW_ARCHIPELAGO_NAME);
     if (ArchipelagoCollectionFindByName(pCollection, newName))
     {
         printf(ALREADY_EXIST);
@@ -109,9 +131,12 @@ static void ModifyName(ArchipelagoCollection* pCollection)
     free(newName);
 }
 
+/// Изменение кол-ва островов архипелага.
+///
+/// \param pCollection Указатель на коллекцию архепилагов.
 static void ModifyCountIslands(ArchipelagoCollection* pCollection)
 {
-    char* name = CycleInputString(ENTER_ARCHIPELAGO_NAME, NameChecker);
+    char* name = CycleInputString(NameChecker, ENTER_ARCHIPELAGO_NAME);
     Archipelago* pArchipelago =
             ArchipelagoCollectionFindByName(pCollection, name);
     free(name);
@@ -126,17 +151,20 @@ static void ModifyCountIslands(ArchipelagoCollection* pCollection)
     do
     {
         newCountIslands =
-                CycleInputIntVa(MAX_INT_LENGTH,
-                                CountIslandsChecker,
-                                ENTER_NEW_COUNT_ISLANDS,
-                                pArchipelago->CountInhabitedIslands);
+                CycleInputInt(MAX_INT_LENGTH,
+                              CountIslandsChecker,
+                              ENTER_NEW_COUNT_ISLANDS,
+                              pArchipelago->CountInhabitedIslands);
     } while (newCountIslands < pArchipelago->CountInhabitedIslands);
     pArchipelago->CountIslands = newCountIslands;
 }
 
+/// Изменение кол-ва обитаемых островов архипелага.
+///
+/// \param pCollection Указатель на коллекцию архепилагов.
 static void ModifyCountInhabitedIslands(ArchipelagoCollection* pCollection)
 {
-    char* name = CycleInputString(ENTER_ARCHIPELAGO_NAME, NameChecker);
+    char* name = CycleInputString(NameChecker, ENTER_ARCHIPELAGO_NAME);
     Archipelago* pArchipelago =
             ArchipelagoCollectionFindByName(pCollection, name);
     free(name);
@@ -151,18 +179,21 @@ static void ModifyCountInhabitedIslands(ArchipelagoCollection* pCollection)
     do
     {
         newCountInhabitedIslands =
-                CycleInputIntVa(MAX_INT_LENGTH,
-                                CountInhabitedIslandsChecker,
-                                ENTER_NEW_INHABITED_COUNT_ISLANDS,
-                                pArchipelago->CountIslands);
+                CycleInputInt(MAX_INT_LENGTH,
+                              CountInhabitedIslandsChecker,
+                              ENTER_NEW_INHABITED_COUNT_ISLANDS,
+                              pArchipelago->CountIslands);
     } while (newCountInhabitedIslands > pArchipelago->CountIslands);
 
     pArchipelago->CountInhabitedIslands = newCountInhabitedIslands;
 }
 
+/// Удаление архипелага.
+///
+/// \param pCollection Указатель на коллекцию архепилагов.
 static void Delete(ArchipelagoCollection* pCollection)
 {
-    char* name = CycleInputString(ENTER_ARCHIPELAGO_NAME, NameChecker);
+    char* name = CycleInputString(NameChecker, ENTER_ARCHIPELAGO_NAME);
     Archipelago* pArchipelago =
             ArchipelagoCollectionFindByName(pCollection, name);
     free(name);
@@ -177,9 +208,12 @@ static void Delete(ArchipelagoCollection* pCollection)
     ArchipelagoDestroy(pArchipelago);
 }
 
+/// Вывод информации об архипелаге.
+///
+/// \param pCollection Указатель на коллекцию архепилагов.
 static void Print(ArchipelagoCollection* pCollection)
 {
-    char* name = CycleInputString(ENTER_ARCHIPELAGO_NAME, NameChecker);
+    char* name = CycleInputString(NameChecker, ENTER_ARCHIPELAGO_NAME);
     Archipelago* pArchipelago =
             ArchipelagoCollectionFindByName(pCollection, name);
     free(name);
@@ -195,6 +229,9 @@ static void Print(ArchipelagoCollection* pCollection)
     free(archipelagoString);
 }
 
+/// Вывод информации обо всех архипелагах.
+///
+/// \param pCollection Указатель на коллекцию архепилагов.
 static void PrintAll(ArchipelagoCollection* pCollection)
 {
     if (pCollection->pList->Count == 0)
@@ -215,6 +252,9 @@ static void PrintAll(ArchipelagoCollection* pCollection)
     }
 }
 
+/// Имеются ли архипелаги с только необитаемымы островами.
+///
+/// \param pCollection Указатель на коллекцию архепилагов.
 static void HasOnlyUninhabited(ArchipelagoCollection* pCollection)
 {
     bool hasOnlyUninhabited =
@@ -230,6 +270,9 @@ static void HasOnlyUninhabited(ArchipelagoCollection* pCollection)
     }
 }
 
+/// Вывод архипелагов с заданным числом островов.
+///
+/// \param pCollection Указатель на коллекцию архепилагов.
 static void PrintWhereIslandsCountIs(ArchipelagoCollection* pCollection)
 {
     int countIslands =
@@ -262,6 +305,43 @@ static void PrintWhereIslandsCountIs(ArchipelagoCollection* pCollection)
     ArchipelagoCollectionDestroy(pQueryResult);
 }
 
+/// Справка о действии.
+///
+/// \param action Действие.
+/// \return Информация о действии.
+static char* ActionInfo(Action action)
+{
+    switch (action)
+    {
+        case ACTION_EXIT:
+            return "чтобы завершить программу";
+        case ACTION_ADD:
+            return "чтобы добавить архипелаг";
+        case ACTION_MODIFY_NAME:
+            return "чтобы изменить название архипелага";
+        case ACTION_MODIFY_COUNT_ISLANDS:
+            return "чтобы изменить кол-во островов";
+        case ACTION_MODIFY_COUNT_INHABITED_ISLANDS:
+            return "чтобы изменить кол-во обитаемых островов";
+        case ACTION_DELETE:
+            return "чтобы удалить архипелаг";
+        case ACTION_PRINT:
+            return "чтобы вывести информацию об архипелаге";
+        case ACTION_PRINT_ALL:
+            return "чтобы вывести информацию о всех архипелагах";
+        case ACTION_HAS_ONLY_UNINHABITED:
+            return "чтобы выяснить, есть ли только необитаемые архипелаги";
+        case ACTION_PRINT_WHERE_ISLANDS_COUNT_IS:
+            return "чтобы вывести архипелаги с заданным кол-вом островов";
+        case ACTION_HELP:
+            return "чтобы вывести список команд";
+        default:
+            return NULL;
+    }
+}
+
+/// Вывод стравки
+///
 static void Help()
 {
     for (Action i = ACTION_EXIT; i < ACTION_DEFAULT; i++)
@@ -270,6 +350,11 @@ static void Help()
     }
     printf(HELP_COUNT, MAX_COUNT);
     printf(HELP_STRINGS);
+}
+
+bool ActionNumberChecker(int number)
+{
+    return ACTION_EXIT <= number && number < ACTION_DEFAULT;
 }
 
 int ActionExec(ArchipelagoCollection* pCollection, Action action)
@@ -315,35 +400,4 @@ int ActionExec(ArchipelagoCollection* pCollection, Action action)
     printf("\n");
     fflush(stdout);
     return 1;
-}
-
-char* ActionInfo(Action action)
-{
-    switch (action)
-    {
-        case ACTION_EXIT:
-            return "чтобы завершить программу";
-        case ACTION_ADD:
-            return "чтобы добавить архипелаг";
-        case ACTION_MODIFY_NAME:
-            return "чтобы изменить название архипелага";
-        case ACTION_MODIFY_COUNT_ISLANDS:
-            return "чтобы изменить кол-во островов";
-        case ACTION_MODIFY_COUNT_INHABITED_ISLANDS:
-            return "чтобы изменить кол-во обитаемых островов";
-        case ACTION_DELETE:
-            return "чтобы удалить архипелаг";
-        case ACTION_PRINT:
-            return "чтобы вывести информацию об архипелаге";
-        case ACTION_PRINT_ALL:
-            return "чтобы вывести информацию о всех архипелагах";
-        case ACTION_HAS_ONLY_UNINHABITED:
-            return "чтобы выяснить, есть ли только необитаемые архипелаги";
-        case ACTION_PRINT_WHERE_ISLANDS_COUNT_IS:
-            return "чтобы вывести архипелаги с заданным кол-вом островов";
-        case ACTION_HELP:
-            return "чтобы вывести список команд";
-        default:
-            return NULL;
-    }
 }

@@ -1,3 +1,7 @@
+/// \file
+/// \brief Главная функция программы
+/// \details Главная функция программы.
+
 #include <stdio.h>
 #include <stdbool.h>
 
@@ -9,14 +13,12 @@
 #include "Actions.h"
 #include "ArchipelagoCollection.h"
 
-bool ActionNumberChecker(int number)
-{
-    return ACTION_EXIT <= number && number < ACTION_DEFAULT;
-}
-
-#define ACTION_NUMBER_LENGTH 4
-
-int main()
+/// Главная функция программы.
+///
+/// \param argc Кол-во аргументов.
+/// \param argv Массив аргументов.
+/// \return 0 в случае успешного завершения программы.
+int main(int argc, char** argv)
 {
 #ifdef WIN32
     SetConsoleOutputCP(CP_UTF8);

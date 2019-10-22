@@ -73,47 +73,24 @@ int InputLine(char* stringToInput, int maxStringLength)
     return -1;
 }
 
-int CycleInputInt(int maxStringLength, bool (* pChecker)(int), char* format)
-{
-    return CycleInputIntVa(maxStringLength, pChecker, format);
-    int number = -1;
-    int position = -1;
-    char* stringNumber = (char*) malloc(maxStringLength * sizeof(char));
-    assert(stringNumber);
-    while (true)
-    {
-        printf("%s", format);
-        fflush(stdout);
-
-        int inputLineCode = InputLine(stringNumber, maxStringLength);
-        if (inputLineCode == -1) continue;
-        int sscanfCode = sscanf(stringNumber, "%d%n", &number, &position);
-        if (position != inputLineCode) continue;
-        if (pChecker != NULL && !pChecker(number)) continue;
-        if (sscanfCode > 0) break;
-    }
-    free(stringNumber);
-    return number;
-}
-
-int CycleInputIntVa(int maxStringLength,
-                    bool(* pChecker)(int),
-                    char* format,
-                    ...)
+int CycleInputInt(int maxIntLength,
+                  bool(* pChecker)(int),
+                  char* formatToOutput,
+                  ...)
 {
     int number = -1;
     int position = -1;
-    char* stringNumber = (char*) malloc(maxStringLength * sizeof(char));
+    char* stringNumber = (char*) malloc(maxIntLength * sizeof(char));
     assert(stringNumber);
     while (true)
     {
         va_list vaPtr;
-        va_start(vaPtr, format);
-        vprintf(format, vaPtr);
+        va_start(vaPtr, formatToOutput);
+        vprintf(formatToOutput, vaPtr);
         va_end(vaPtr);
         fflush(stdout);
 
-        int inputLineCode = InputLine(stringNumber, maxStringLength);
+        int inputLineCode = InputLine(stringNumber, maxIntLength);
         if (inputLineCode == -1) continue;
         int sscanfCode = sscanf(stringNumber, "%d%n", &number, &position);
         if (position != inputLineCode) continue;
@@ -124,14 +101,19 @@ int CycleInputIntVa(int maxStringLength,
     return number;
 }
 
-char* CycleInputString(char* stringToOutput, bool(* pChecker)(char*))
+char* CycleInputString(bool (* pChecker)(char*), char* formatToOutput, ...)
 {
     char* string = NULL;
     do
     {
         free(string);
-        printf("%s", stringToOutput);
+
+        va_list vaPtr;
+        va_start(vaPtr, formatToOutput);
+        vprintf(formatToOutput, vaPtr);
+        va_end(vaPtr);
         fflush(stdout);
+
         string = InputLineRealloc(10, true);
     } while (pChecker && !pChecker(string));
     return string;
