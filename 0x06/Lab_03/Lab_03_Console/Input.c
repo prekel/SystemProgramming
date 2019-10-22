@@ -73,7 +73,8 @@ int InputLine(char* stringToInput, int maxStringLength)
     return -1;
 }
 
-int CycleInputInt(char* stringToOutput, int maxStringLength,
+int CycleInputInt(char* stringToOutput,
+                  int maxStringLength,
                   bool(* pChecker)(int))
 {
     int number = -1;
@@ -87,12 +88,6 @@ int CycleInputInt(char* stringToOutput, int maxStringLength,
 
         int inputLineCode = InputLine(stringNumber, maxStringLength);
         if (inputLineCode == -1) continue;
-        if (inputLineCode < 0)
-        {
-            fprintf(stderr, "Ошибка при вводе\n");
-            fflush(stderr);
-            exit(EXIT_FAILURE);
-        }
         int sscanfCode = sscanf(stringNumber, "%d%n", &number, &position);
         if (position != inputLineCode) continue;
         if (pChecker != NULL && !pChecker(number)) continue;

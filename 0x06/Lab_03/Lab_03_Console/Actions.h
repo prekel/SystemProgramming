@@ -15,29 +15,12 @@ typedef enum Action
     ACTION_PRINT_ALL,
     ACTION_HAS_ONLY_UNINHABITED,
     ACTION_PRINT_WHERE_ISLANDS_COUNT_IS,
+    ACTION_HELP,
     ACTION_DEFAULT
 } Action;
 
-int ActionsHandler(ArchipelagoCollection* pCollection, Action action);
+int ActionExec(ArchipelagoCollection* pCollection, Action action);
 
 char* ActionInfo(Action action);
-
-void Add(ArchipelagoCollection* pCollection);
-
-void ModifyName(ArchipelagoCollection* pCollection);
-
-void ModifyCountIslands(ArchipelagoCollection* pCollection);
-
-void ModifyCountInhabitedIslands(ArchipelagoCollection* pCollection);
-
-void Delete(ArchipelagoCollection* pCollection);
-
-void Print(ArchipelagoCollection* pCollection);
-
-void PrintAll(ArchipelagoCollection* pCollection);
-
-void HasOnlyUninhabited(ArchipelagoCollection* pCollection);
-
-void PrintWhereIslandsCountIs(ArchipelagoCollection* pCollection);
 
 #endif //ACTIONS_H
