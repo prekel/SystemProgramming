@@ -1,3 +1,7 @@
+/// \file
+/// \brief Реализация функций из Archipelago.h
+/// \details Реализация функций из Archipelago.h.
+
 #include <assert.h>
 #include <malloc.h>
 #include <string.h>
