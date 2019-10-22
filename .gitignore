@@ -22,3 +22,11 @@ cmake-build-*
 
 # Doxygen
 /0x02/Lab_01/html/
+
+# temp
+./SDL
+/SDL/
+/build/
+/0x04/html
+/0x04/Lab_02/build/
+/0x04/Lab_02/html/
