@@ -1,3 +1,7 @@
+/// \file
+/// \brief Реализация функций из LinkedList.h
+/// \details Реализация функций из LinkedList.h.
+
 #include <malloc.h>
 #include <assert.h>
 #include <stdbool.h>

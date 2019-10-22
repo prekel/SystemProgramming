@@ -1,8 +1,12 @@
+/// \file
+/// \brief Реализация функций из ArchipelagoCollectionQuery.h
+/// \details Реализация функций из ArchipelagoCollectionQuery.h.
+
 #include "ArchipelagoCollectionQuery.h"
 
 bool ArchipelagoCollectionQueryHas(
         ArchipelagoCollection* pCollection,
-        bool (pPredicate)(Archipelago*))
+        bool pPredicate(Archipelago*))
 {
     bool result = false;
 
@@ -25,7 +29,7 @@ bool ArchipelagoCollectionQueryHas(
 ArchipelagoCollection* ArchipelagoCollectionQuerySelectWhereIsN(
         ArchipelagoCollection* pCollection,
         int n,
-        bool (pPredicate)(Archipelago*, int))
+        bool pPredicate(Archipelago*, int))
 {
     ArchipelagoCollection* pResultCollection = ArchipelagoCollectionCreate();
 

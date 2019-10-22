@@ -1,3 +1,7 @@
+/// \file
+/// \brief Реализация функций из ArchipelagoCollection.h
+/// \details Реализация функций из ArchipelagoCollection.h.
+
 #include <malloc.h>
 #include <assert.h>
 #include <string.h>
