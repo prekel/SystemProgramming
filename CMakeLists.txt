@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 project(SystemProgramming)
 
-#add_subdirectory(cunit/CUnit)
+add_subdirectory(cunit/CUnit)
 
 #add_subdirectory(0x01/1-UnitTesting)
 

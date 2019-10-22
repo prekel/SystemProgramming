@@ -11,6 +11,8 @@ int ActionsHandler(ArchipelagoCollection* pCollection, Action action)
 {
     switch (action)
     {
+        case ACTION_EXIT:
+            return 0;
         case ACTION_ADD:
             Add(pCollection);
             break;
@@ -38,13 +40,40 @@ int ActionsHandler(ArchipelagoCollection* pCollection, Action action)
         case ACTION_PRINT_WHERE_ISLANDS_COUNT_IS:
             PrintWhereIslandsCountIs(pCollection);
             break;
-        case ACTION_EXIT:
-            return 0;
         default:
             return -1;
     }
     fflush(stdout);
     return 1;
+}
+
+char* ActionInfo(Action action)
+{
+    switch (action)
+    {
+        case ACTION_EXIT:
+            return "чтобы завершить программу";
+        case ACTION_ADD:
+            return "чтобы добавить архипелаг";
+        case ACTION_MODIFY_NAME:
+            return "чтобы изменить название архипелага";
+        case ACTION_MODIFY_COUNT_ISLANDS:
+            return "чтобы изменить кол-во островов";
+        case ACTION_MODIFY_COUNT_INHABITED_ISLANDS:
+            return "чтобы изменить кол-во обитаемых островов";
+        case ACTION_DELETE:
+            return "чтобы удалить архипелаг";
+        case ACTION_PRINT:
+            return "чтобы вывести информацию об архипелаге";
+        case ACTION_PRINT_ALL:
+            return "чтобы вывести информацию о всех архипелагах";
+        case ACTION_HAS_ONLY_UNINHABITED:
+            return "чтобы выяснить, есть ли только необитаемые архипелаги";
+        case ACTION_PRINT_WHERE_ISLANDS_COUNT_IS:
+            return "чтобы вывести архипелаги с заданным кол-вом островов";
+        default:
+            return NULL;
+    }
 }
 
 void Add(ArchipelagoCollection* pCollection)

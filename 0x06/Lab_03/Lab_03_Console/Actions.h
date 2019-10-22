@@ -5,6 +5,7 @@
 
 typedef enum Action
 {
+    ACTION_EXIT = 0,
     ACTION_ADD = 1,
     ACTION_MODIFY_NAME,
     ACTION_MODIFY_COUNT_ISLANDS,
@@ -14,10 +15,12 @@ typedef enum Action
     ACTION_PRINT_ALL,
     ACTION_HAS_ONLY_UNINHABITED,
     ACTION_PRINT_WHERE_ISLANDS_COUNT_IS,
-    ACTION_EXIT
+    ACTION_DEFAULT
 } Action;
 
 int ActionsHandler(ArchipelagoCollection* pCollection, Action action);
+
+char* ActionInfo(Action action);
 
 void Add(ArchipelagoCollection* pCollection);
 
