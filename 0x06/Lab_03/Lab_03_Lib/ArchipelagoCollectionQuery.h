@@ -6,7 +6,7 @@
 
 bool ArchipelagoCollectionQueryHas(
         ArchipelagoCollection* pCollection,
-        bool ( pPredicate)(Archipelago* pArchipelago));
+        bool (pPredicate)(Archipelago*));
 
 ArchipelagoCollection* ArchipelagoCollectionQuerySelectWhereIsN(
         ArchipelagoCollection* pCollection, int n,

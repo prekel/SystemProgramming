@@ -14,6 +14,8 @@ ArchipelagoCollection* ArchipelagoCollectionCreate();
 
 void ArchipelagoCollectionDestroy(ArchipelagoCollection* pCollection);
 
+void ArchipelagoCollectionDestroyArchipelagos(ArchipelagoCollection* pCollection);
+
 void ArchipelagoCollectionAdd(ArchipelagoCollection* pCollection,
                               Archipelago* pArchipelago);
 

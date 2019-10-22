@@ -1,6 +1,6 @@
 #include "ArchipelagoCollectionQuery.h"
 
-bool ArchipelagoCollectionQueryHas1(
+bool ArchipelagoCollectionQueryHas(
         ArchipelagoCollection* pCollection,
         bool (pPredicate)(Archipelago*))
 {
@@ -52,7 +52,7 @@ static bool PredicateArchipelagoHasOnlyUninhabited(Archipelago* pArchipelago)
 bool ArchipelagoCollectionQueryHasOnlyUninhabited(
         ArchipelagoCollection* pCollection)
 {
-    return ArchipelagoCollectionQueryHas1(
+    return ArchipelagoCollectionQueryHas(
             pCollection,
             PredicateArchipelagoHasOnlyUninhabited);
 }

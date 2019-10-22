@@ -4,6 +4,7 @@
 
 #include "LinkedListTests.h"
 #include "ArchipelagoCollectionTests.h"
+#include "ArchipelagoCollectionQueryTests.h"
 #include "Suite.h"
 
 int main()
@@ -13,6 +14,7 @@ int main()
     CU_pSuite* ppSuites[] = {
             LinkedListTestsSuiteCreate(),
             ArchipelagoCollectionTestsSuiteCreate(),
+            ArchipelagoCollectionQueryTestsSuiteCreate(),
             NULL};
 
     CU_basic_run_tests();

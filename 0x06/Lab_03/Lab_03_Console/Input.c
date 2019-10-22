@@ -47,49 +47,30 @@ char* InputLineRealloc(int stepSize, bool isFinalReallocRequired)
 
 int InputLine(char* stringToInput, int maxStringLength)
 {
-    unsigned int errorCode = 0;
     unsigned long stringLength = 0;
-    while (errorCode == 0 || errorCode == 1)
+    bool isError = false;
+    while (true)
     {
         char* fgetsReturn = fgets(stringToInput, maxStringLength, stdin);
-
-        int isEof = feof(stdin);
-        int isErr = ferror(stdin);
-
-        if (isEof == 1)
-        {
-            errorCode |= 2u;
-        }
-        if (isErr == 1)
-        {
-            errorCode |= 4u;
-        }
-        if (fgetsReturn == NULL)
-        {
-            errorCode |= 8u;
-        }
-        if (errorCode > 1)
-        {
-            break;
-        }
+        assert(fgetsReturn);
 
         stringLength = strlen(stringToInput);
 
         if (stringToInput[stringLength - 1] != '\n')
         {
-            errorCode |= 1u;
+            isError = true;
         }
         else
         {
             break;
         }
     }
-    if (errorCode == 0)
+    if (!isError)
     {
         stringToInput[stringLength - 1] = '\0';
         return (int) stringLength - 1;
     }
-    return -(int) errorCode;
+    return -1;
 }
 
 int CycleInputInt(char* stringToOutput, int maxStringLength,

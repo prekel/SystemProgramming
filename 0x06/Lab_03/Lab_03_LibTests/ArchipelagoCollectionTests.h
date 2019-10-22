@@ -5,6 +5,6 @@
 
 CU_pSuite* ArchipelagoCollectionTestsSuiteCreate();
 
-void ArchipelagoCollectionTest_Append1(void);
+void ArchipelagoCollectionTest_Add1(void);
 
 #endif //ARCHIPELAGOCOLLECTIONTESTS_H

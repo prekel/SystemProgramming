@@ -18,6 +18,12 @@ ArchipelagoCollection* ArchipelagoCollectionCreate()
 
 void ArchipelagoCollectionDestroy(ArchipelagoCollection* pCollection)
 {
+    LinkedListDestroy(pCollection->pList);
+    free(pCollection);
+}
+
+void ArchipelagoCollectionDestroyArchipelagos(ArchipelagoCollection* pCollection)
+{
     for (LinkedListNode* pIterator =
             ArchipelagoCollectionGetIterator(pCollection);
          pIterator != NULL;
@@ -27,8 +33,6 @@ void ArchipelagoCollectionDestroy(ArchipelagoCollection* pCollection)
                 ArchipelagoCollectionGetByIterator(pIterator);
         ArchipelagoDestroy(pArchipelago);
     }
-    LinkedListDestroy(pCollection->pList);
-    free(pCollection);
 }
 
 void ArchipelagoCollectionAdd(ArchipelagoCollection* pCollection,
