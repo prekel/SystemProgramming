@@ -1,113 +1,195 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <assert.h>
+#include <string.h>
 
 #include "Actions.h"
 #include "ArchipelagoCollection.h"
 #include "ArchipelagoCollectionQuery.h"
 #include "Input.h"
 
+#define MAX_INT_LENGTH 11
+#define MAX_COUNT 999999999
+
+#define ENTER_ARCHIPELAGO_NAME "Введите название архипелага: "
+
+#define ENTER_COUNT_ISLANDS "Введите кол-во островов архипелага (не менее 2): "
+
+#define ENTER_INHABITED_COUNT_ISLANDS "Введите кол-во обитаемых островов архипелага (не более %d): "
+
+#define ARCHIPELAGO_NOT_EXIST "Архипелаг с таким названием не существует\n"
+
+#define ENTER_NEW_ARCHIPELAGO_NAME "Введите новое название архипелага: "
+
+#define ENTER_NEW_COUNT_ISLANDS "Введите новое кол-во островов архипелага (не менее %d): "
+
+#define ENTER_NEW_INHABITED_COUNT_ISLANDS "Введите новое кол-во обитаемых островов архипелага (не более %d): "
+
+#define HAS_ONLY_UNINHABITED_TRUE "Имеются архипелаги, состоящие только из необитаемых островов\n"
+
+#define HAS_ONLY_UNINHABITED_FALSE "Отсутствуют архипелаги, состоящие только из необитаемых островов\n"
+
+#define ALREADY_EXIST "Архипелаг с таким названием уже существует\n"
+
+#define COLLECTION_EMPTY "Архипелаги отсутствуют\n"
+
+#define HELP_ENTER_ACTION "Введите %d %s\n"
+
+#define HELP_COUNT "Числа вводятся от 0 до %d, если не указано иначе\n"
+
+#define HELP_STRINGS "Строки вводятся длиной хотя бы в 1 символ\n"
+
+static bool NameChecker(char* name)
+{
+    return strlen(name) >= 1;
+}
+
+static bool CountIslandsChecker(int count)
+{
+    return 2 <= count && count <= MAX_COUNT;
+}
+
+static bool CountInhabitedIslandsChecker(int count)
+{
+    return 0 <= count && count <= MAX_COUNT;
+}
+
 static void Add(ArchipelagoCollection* pCollection)
 {
-    char* name = CycleInputString("Введите название архипелага: ", NULL);
-    int countIslands = CycleInputInt("Введите кол-во островов архипелага: ",
-                                     10, NULL);
-    int countInhabitedIslands;
-    do
-    {
-        countInhabitedIslands = CycleInputInt(
-                "Введите кол-во обитаемых островов архипелага: ", 10, NULL);
-    } while (countInhabitedIslands > countIslands);
-    Archipelago* pArchipelago = ArchipelagoCreate(name, countIslands,
-                                                  countInhabitedIslands);
+    char* name = CycleInputString(ENTER_ARCHIPELAGO_NAME, NameChecker);
 
-    ArchipelagoCollectionAdd(pCollection, pArchipelago);
+    if (ArchipelagoCollectionFindByName(pCollection, name))
+    {
+        printf(ALREADY_EXIST);
+    }
+    else
+    {
+        int countIslands = CycleInputInt(
+                MAX_INT_LENGTH, CountIslandsChecker, ENTER_COUNT_ISLANDS);
+        int countInhabitedIslands;
+        do
+        {
+            countInhabitedIslands =
+                    CycleInputIntVa(MAX_INT_LENGTH,
+                                    CountInhabitedIslandsChecker,
+                                    ENTER_INHABITED_COUNT_ISLANDS,
+                                    countIslands);
+        } while (countInhabitedIslands > countIslands);
+        Archipelago* pArchipelago =
+                ArchipelagoCreate(name, countIslands, countInhabitedIslands);
+
+        ArchipelagoCollectionAdd(pCollection, pArchipelago);
+    }
     free(name);
 }
 
 static void ModifyName(ArchipelagoCollection* pCollection)
 {
-    char* name = CycleInputString("Введите название архипелага: ", NULL);
+    char* name = CycleInputString(ENTER_ARCHIPELAGO_NAME, NameChecker);
     Archipelago* pArchipelago =
             ArchipelagoCollectionFindByName(pCollection, name);
-    free(name);
 
+    free(name);
     if (pArchipelago == NULL)
     {
-        printf("Архипелаг с таким названием не существует\n");
+        printf(ARCHIPELAGO_NOT_EXIST);
         return;
     }
+    char* newName = CycleInputString(ENTER_NEW_ARCHIPELAGO_NAME,
+                                     NameChecker);
+    if (ArchipelagoCollectionFindByName(pCollection, newName))
+    {
+        printf(ALREADY_EXIST);
+    }
+    else
+    {
+        ArchipelagoSetName(pArchipelago, newName);
+    }
 
-    char* newName = CycleInputString("Введите новое название архипелага: ", NULL);
-    ArchipelagoSetName(pArchipelago, newName);
     free(newName);
 }
 
 static void ModifyCountIslands(ArchipelagoCollection* pCollection)
 {
-    char* name = CycleInputString("Введите название архипелага: ", NULL);
+    char* name = CycleInputString(ENTER_ARCHIPELAGO_NAME, NameChecker);
     Archipelago* pArchipelago =
             ArchipelagoCollectionFindByName(pCollection, name);
     free(name);
 
     if (pArchipelago == NULL)
     {
-        printf("Архипелаг с таким названием не существует\n");
+        printf(ARCHIPELAGO_NOT_EXIST);
         return;
     }
 
-    int newCountIslands =
-            CycleInputInt("Введите новое кол-во островов архипелага: ", 10, NULL);
+    int newCountIslands;
+    do
+    {
+        newCountIslands =
+                CycleInputIntVa(MAX_INT_LENGTH,
+                                CountIslandsChecker,
+                                ENTER_NEW_COUNT_ISLANDS,
+                                pArchipelago->CountInhabitedIslands);
+    } while (newCountIslands < pArchipelago->CountInhabitedIslands);
     pArchipelago->CountIslands = newCountIslands;
 }
 
 static void ModifyCountInhabitedIslands(ArchipelagoCollection* pCollection)
 {
-    char* name = CycleInputString("Введите название архипелага: ", NULL);
+    char* name = CycleInputString(ENTER_ARCHIPELAGO_NAME, NameChecker);
     Archipelago* pArchipelago =
             ArchipelagoCollectionFindByName(pCollection, name);
     free(name);
 
     if (pArchipelago == NULL)
     {
-        printf("Архипелаг с таким названием не существует\n");
+        printf(ARCHIPELAGO_NOT_EXIST);
         return;
     }
 
-    int newCountInhabitedIslands =
-            CycleInputInt("Введите новое кол-во обитаемых островов архипелага: ", 10, NULL);
-    pArchipelago->CountIslands = newCountInhabitedIslands;
+    int newCountInhabitedIslands;
+    do
+    {
+        newCountInhabitedIslands =
+                CycleInputIntVa(MAX_INT_LENGTH,
+                                CountInhabitedIslandsChecker,
+                                ENTER_NEW_INHABITED_COUNT_ISLANDS,
+                                pArchipelago->CountIslands);
+    } while (newCountInhabitedIslands > pArchipelago->CountIslands);
+
+    pArchipelago->CountInhabitedIslands = newCountInhabitedIslands;
 }
 
 static void Delete(ArchipelagoCollection* pCollection)
 {
-    char* name = CycleInputString("Введите название архипелага: ", NULL);
+    char* name = CycleInputString(ENTER_ARCHIPELAGO_NAME, NameChecker);
     Archipelago* pArchipelago =
             ArchipelagoCollectionFindByName(pCollection, name);
     free(name);
 
     if (pArchipelago == NULL)
     {
-        printf("Архипелаг с таким названием не существует\n");
+        printf(ARCHIPELAGO_NOT_EXIST);
         return;
     }
+
     ArchipelagoCollectionRemove(pCollection, pArchipelago);
     ArchipelagoDestroy(pArchipelago);
 }
 
 static void Print(ArchipelagoCollection* pCollection)
 {
-    char* name = CycleInputString("Введите название архипелага: ", NULL);
+    char* name = CycleInputString(ENTER_ARCHIPELAGO_NAME, NameChecker);
     Archipelago* pArchipelago =
             ArchipelagoCollectionFindByName(pCollection, name);
     free(name);
 
     if (pArchipelago == NULL)
     {
-        printf("Архипелаг с таким названием не существует\n");
+        printf(ARCHIPELAGO_NOT_EXIST);
         return;
     }
-    
+
     char* archipelagoString = ArchipelagoToString(pArchipelago);
     printf("%s\n", archipelagoString);
     free(archipelagoString);
@@ -115,6 +197,11 @@ static void Print(ArchipelagoCollection* pCollection)
 
 static void PrintAll(ArchipelagoCollection* pCollection)
 {
+    if (pCollection->pList->Count == 0)
+    {
+        printf(COLLECTION_EMPTY);
+        return;
+    }
     for (LinkedListNode* pIterator =
             ArchipelagoCollectionGetIterator(pCollection);
          pIterator != NULL;
@@ -135,33 +222,41 @@ static void HasOnlyUninhabited(ArchipelagoCollection* pCollection)
 
     if (hasOnlyUninhabited)
     {
-        printf("Имеются архипелаги, состоящие только из необитаемых островов\n");
+        printf(HAS_ONLY_UNINHABITED_TRUE);
     }
     else
     {
-        printf("Отсутствуют архипелаги, состоящие только из необитаемых островов\n");
+        printf(HAS_ONLY_UNINHABITED_FALSE);
     }
 }
 
 static void PrintWhereIslandsCountIs(ArchipelagoCollection* pCollection)
 {
     int countIslands =
-            CycleInputInt("Введите кол-во островов архипелага: ", 10, NULL);
+            CycleInputInt(MAX_INT_LENGTH, CountIslandsChecker,
+                          ENTER_COUNT_ISLANDS);
 
     ArchipelagoCollection* pQueryResult =
             ArchipelagoCollectionQuerySelectWhereIslandsCountIs(pCollection,
                                                                 countIslands);
 
-    for (LinkedListNode* pIterator =
-            ArchipelagoCollectionGetIterator(pQueryResult);
-         pIterator != NULL;
-         ArchipelagoCollectionIteratorNext(&pIterator))
+    if (pQueryResult->pList->Count == 0)
     {
-        Archipelago* pArchipelago =
-                ArchipelagoCollectionGetByIterator(pIterator);
-        char* archipelagoString = ArchipelagoToString(pArchipelago);
-        printf("%s\n", archipelagoString);
-        free(archipelagoString);
+        printf(COLLECTION_EMPTY);
+    }
+    else
+    {
+        for (LinkedListNode* pIterator =
+                ArchipelagoCollectionGetIterator(pQueryResult);
+             pIterator != NULL;
+             ArchipelagoCollectionIteratorNext(&pIterator))
+        {
+            Archipelago* pArchipelago =
+                    ArchipelagoCollectionGetByIterator(pIterator);
+            char* archipelagoString = ArchipelagoToString(pArchipelago);
+            printf("%s\n", archipelagoString);
+            free(archipelagoString);
+        }
     }
 
     ArchipelagoCollectionDestroy(pQueryResult);
@@ -171,8 +266,10 @@ static void Help()
 {
     for (Action i = ACTION_EXIT; i < ACTION_DEFAULT; i++)
     {
-        printf("Введите %d %s\n", i, ActionInfo(i));
+        printf(HELP_ENTER_ACTION, i, ActionInfo(i));
     }
+    printf(HELP_COUNT, MAX_COUNT);
+    printf(HELP_STRINGS);
 }
 
 int ActionExec(ArchipelagoCollection* pCollection, Action action)

@@ -24,15 +24,22 @@ int InputLine(char* stringToInput, int maxStringLength);
 /// pChecker, то число считывается занаго. Если был получен EOF или другая
 /// ошибка, программа аварийно завершается.
 ///
-/// \param stringToOutput Строка для вывода перед вводом.
+/// \param format Строка для вывода перед вводом.
 /// \param maxStringLength Максимальная длина считываемого числа.
 /// \param pChecker Указател на функцию-чекер. Если равер NULL, проверка через
 /// чекер не проводится.
 /// \return Считанное число.
-int CycleInputInt(char* stringToOutput,
-                  int maxStringLength,
-                  bool(* pChecker)(int));
+int CycleInputInt(int maxStringLength, bool (* pChecker)(int), char* format);
 
+int CycleInputIntVa(int maxStringLength,
+                    bool(* pChecker)(int),
+                    char* format,
+                    ...);
+
+///
+///
+/// \param stringToOutput
+/// \return
 char* CycleInputString(char* stringToOutput, bool(* pChecker)(char*));
 
 #endif //INPUT_H

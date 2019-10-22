@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdbool.h>
 
 #ifdef WIN32
 #include <Windows.h>
@@ -29,9 +30,9 @@ int main()
     Action action;
     do
     {
-        action = (Action) CycleInputInt("Введите номер действия: ",
-                                        ACTION_NUMBER_LENGTH,
-                                        ActionNumberChecker);
+        action = (Action) CycleInputInt(
+                ACTION_NUMBER_LENGTH,
+                ActionNumberChecker, "Введите номер действия: ");
     } while (ActionExec(pCollection, action));
 
     ArchipelagoCollectionDestroyArchipelagos(pCollection);
