@@ -66,5 +66,7 @@ void ArchipelagoCollectionTest_Add1(void)
     CU_ASSERT_PTR_NOT_EQUAL(pCollection->pList->pFirst, pCollection->pList->pLast);
     CU_ASSERT_PTR_NOT_EQUAL(ArchipelagoCollectionGetFirst(pCollection), pArchipelago2);
 
+    ArchipelagoDestroy(pArchipelago);
+    ArchipelagoDestroy(pArchipelago2);
     ArchipelagoCollectionDestroy(pCollection);
 }
