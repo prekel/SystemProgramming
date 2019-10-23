@@ -13,6 +13,9 @@
 #include "Input.h"
 
 #define MAX_INT_LENGTH 11
+
+#define MIN_COUNT_ISLANDS 2
+
 #define MAX_COUNT 999999999
 
 #define ENTER_ARCHIPELAGO_NAME "Введите название архипелага: "
@@ -58,7 +61,7 @@ static bool NameChecker(char* name)
 /// \return Истина если от двух по MAX_COUNT.
 static bool CountIslandsChecker(int count)
 {
-    return 2 <= count && count <= MAX_COUNT;
+    return MIN_COUNT_ISLANDS <= count && count <= MAX_COUNT;
 }
 
 /// Чекер для кол-ва обитаемых остров.
@@ -357,6 +360,8 @@ bool ActionNumberChecker(int number)
     return ACTION_EXIT <= number && number < ACTION_DEFAULT;
 }
 
+#define ACTION_DEFAULT_RETURN_CODE -1
+
 int ActionExec(ArchipelagoCollection* pCollection, Action action)
 {
     printf("\n");
@@ -395,7 +400,7 @@ int ActionExec(ArchipelagoCollection* pCollection, Action action)
             Help();
             break;
         default:
-            return -1;
+            return ACTION_DEFAULT_RETURN_CODE;
     }
     printf("\n");
     fflush(stdout);
