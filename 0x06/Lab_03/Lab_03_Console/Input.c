@@ -45,6 +45,8 @@ char* InputLineRealloc(int stepSize, bool isFinalReallocRequired)
     return string;
 }
 
+#define INPUTLINE_LESS_THAN_MAXSTRINGLENGTH -1
+
 int InputLine(char* stringToInput, int maxStringLength)
 {
     unsigned long stringLength = 0;
@@ -70,7 +72,7 @@ int InputLine(char* stringToInput, int maxStringLength)
         stringToInput[stringLength - 1] = '\0';
         return (int) stringLength - 1;
     }
-    return -1;
+    return INPUTLINE_LESS_THAN_MAXSTRINGLENGTH;
 }
 
 int CycleInputInt(int maxIntLength,
@@ -78,8 +80,8 @@ int CycleInputInt(int maxIntLength,
                   char* formatToOutput,
                   ...)
 {
-    int number = -1;
-    int position = -1;
+    int number;
+    int position;
     char* stringNumber = (char*) malloc(maxIntLength * sizeof(char));
     assert(stringNumber);
     while (true)
@@ -91,7 +93,7 @@ int CycleInputInt(int maxIntLength,
         fflush(stdout);
 
         int inputLineCode = InputLine(stringNumber, maxIntLength);
-        if (inputLineCode == -1) continue;
+        if (inputLineCode < 0) continue;
         int sscanfCode = sscanf(stringNumber, "%d%n", &number, &position);
         if (position != inputLineCode) continue;
         if (pChecker != NULL && !pChecker(number)) continue;
