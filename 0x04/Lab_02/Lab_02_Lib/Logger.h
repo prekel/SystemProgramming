@@ -13,14 +13,19 @@
 #include "Philosopher.h"
 #include "Utils.h"
 
+int(* g_pFunction1)(char*, ...);
+int(* g_pFunction2)(char*, va_list);
+
 /// Ширина в логе для имени файла
 #define LOG_FILE_WIDTH 32
 /// Формат аргументов для логгера генерируемых макросом
 #define LOG_FMT "[%*s:%d] "
+/// Перевод строки
+#define LOG_NEWLINE "\n"
 /// Аргументы для логгера генерируемые макросом
 #define LOG_ARGS (LOG_FILE_WIDTH - sizeof(STRINGIZE(__LINE__))), _FILE, __LINE__
 /// Помощник для макроса-логгера
-#define LOG_HELPER(format, ...) Log(LOG_FMT format, __VA_ARGS__)
+#define LOG_HELPER(format, ...) Log(LOG_FMT format LOG_NEWLINE, __VA_ARGS__)
 
 /// Логгирует сообщение с соответствующим форматом. Будет выведена информация
 /// о столе (если не выключена), идентификатор потока, имя файла со строкой
@@ -33,17 +38,18 @@
 /// Инициализирует логгер.
 ///
 /// \param pTable Стол.
-/// \param pMainOutputStream Основной поток для вывода логов.
+/// \param pOutputStream1st Основной поток для вывода логов.
 /// Например stdout или NULL.
 /// \param isMainTableInfoEnabled Треуется ли выводить информацию о столе
 /// в оснойной поток.
-/// \param pSecondaryOutputStream Дополнительный поток для вывода логов.
+/// \param pOutputStream2nd Дополнительный поток для вывода логов.
 /// Например fopen("1.log", "w+") или NULL.
-/// \param isSecondaryTableInfoEnabled Треуется ли выводить информацию о столе
+/// \param isTableInfoEnabled Треуется ли выводить информацию о столе
 /// в дополнительный поток.
-void InitLogger(Table* pTable, FILE* pMainOutputStream,
-                bool isMainTableInfoEnabled, FILE* pSecondaryOutputStream,
-                bool isSecondaryTableInfoEnabled);
+void
+InitLogger(Table* pTable, bool isTableInfoEnabled, FILE* pOutputStream1st,
+           FILE* pOutputStream2nd, int (* pOutputFunction3th)(char*),
+           int (* pOutputFunction4th)(char*));
 
 /// Логгирует сообщение, рекомендуется использовать макрос
 /// LOG(message, args...).

@@ -1,0 +1,18 @@
+# A makefile for "circle" to demonstrate double-colon rules.
+
+CC = gcc
+RM = rm -f
+CFLAGS = -Wall -std=c99
+DBGFLAGS = -ggdb -pg
+DEBUGFILE = ./debug
+SRC = circle.c circulararea.c
+
+circle :: $(SRC)
+	$(CC) $(CFLAGS) -o $@ -lm $^
+
+circle :: $(DEBUGFILE)
+	$(CC) $(CFLAGS) $(DBGFLAGS) -o $@ -lm $(SRC)
+
+.PHONY : clean
+clean :
+	$(RM) circle

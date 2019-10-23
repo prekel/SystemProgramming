@@ -1,0 +1,37 @@
+# Tools and options:
+CC = gcc
+CFLAGS = -c -Wall -std=c99 $(ASMFLAGS)
+DEBUGCFLAGS = -ggdb -O0
+RM = rm -f
+MKDIR = mkdir -p
+
+# Filenames:
+OBJ = circle.o circulararea.o
+SYMTABS = $(OBJ:.o=.sym)
+EXEC = circle
+
+# The primary targets:
+production: clean circle
+
+testing: clean debug
+
+symbols: $(SYMTABS)
+
+clean:
+	$(RM) $(OBJ) *.sym circle circle-dbg
+
+# Rules to build prerequisites:
+circle debug: $(OBJ) -lm
+	$(CC) $(LDFLAGS) -o $(EXEC) $^
+
+$(OBJ): %.o: %.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $<
+
+$(SYMTABS): %.sym: %.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $*.o $<
+
+# Target-specific options:
+debug: CPPFLAGS += -DDEBUG
+debug: EXEC = circle-dbg
+debug symbols: CFLAGS += $(DEBUGCFLAGS)
+symbols: ASMFLAGS = -Wa,-as=$*.sym,-L

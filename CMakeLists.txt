@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 project(SystemProgramming)
 
-#add_subdirectory(cunit/CUnit)
+add_subdirectory(cunit/CUnit)
 
 #add_subdirectory(0x01/1-UnitTesting)
 
@@ -10,10 +10,10 @@ project(SystemProgramming)
 
 #add_subdirectory(0x03/2-Threads)
 
-add_subdirectory(SDL-mirror)
+#add_subdirectory(SDL-mirror)
 
 #add_subdirectory(0x04/3-Synchro)
+
 #add_subdirectory(0x04/Lab_02)
-#add_subdirectory(0x04/Lab_02_Lib)
-#add_subdirectory(0x04/Lab_02_Interactive)
-add_subdirectory(0x04/Lab_02)
+
+add_subdirectory(0x06/Lab_03)

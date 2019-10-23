@@ -65,8 +65,6 @@ void* ProgramQuitThread(void* pProgramQuitThreadOptions)
     {
         LOG("Ожидание завершения потока-cпавнера");
         pthread_join(pOptions->pMainWindow->PhilosophersSpawnerThreadId, NULL);
-        DestroyPhilosophersSpawnerThreadOptions(
-                pOptions->pMainWindow->pPhilosophersSpawnerThreadOptions);
     }
 
     LOG("Отправление события выхода главному циклу");

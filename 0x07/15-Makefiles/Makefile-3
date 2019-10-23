@@ -1,0 +1,6 @@
+# A slightly more elegant makefile for "circle".
+CC = gcc
+CFLAGS = -Werror -std=c99
+OBJS = circle.o circulararea.o
+
+circle: $(OBJS) -lm
