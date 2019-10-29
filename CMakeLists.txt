@@ -17,3 +17,5 @@ add_subdirectory(cunit/CUnit)
 #add_subdirectory(0x04/Lab_02)
 
 add_subdirectory(0x06/Lab_03)
+
+add_subdirectory(0x08/4-Files)
