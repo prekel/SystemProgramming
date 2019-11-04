@@ -1,11 +1,11 @@
 #include "Meta.h"
 #include "File.h"
 
-void FillMeta(Meta* meta, int size)
+void FillMeta(Meta* pMeta, int size)
 {
-    meta->Version = META_VERSION;
-    meta->Size = size;
-    meta->Count = 0;
+    pMeta->Version = META_VERSION;
+    pMeta->Size = size;
+    pMeta->Count = 0;
 }
 
 bool CheckMetaVersion(int fd)

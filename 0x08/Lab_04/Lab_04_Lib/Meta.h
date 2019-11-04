@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <stdbool.h>
 
-#define META_VERSION 1
+#define META_VERSION 2
 
 typedef struct
 {
@@ -13,7 +13,7 @@ typedef struct
     int Count;
 } Meta;
 
-void FillMeta(Meta* meta, int size);
+void FillMeta(Meta* pMeta, int size);
 
 bool CheckMetaVersion(int fd);
 

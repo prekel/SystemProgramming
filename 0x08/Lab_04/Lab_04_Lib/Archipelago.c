@@ -12,7 +12,7 @@ void FillArchipelago(Archipelago* pArchipelago,
 {
     assert(strlen(name) + 1 <= ARCHIPELAGO_NAME_LENGTH);
     assert(countIslands > 1);
-    assert(countInhabitedIslands > 0);
+    assert(countInhabitedIslands >= 0);
     strcpy(pArchipelago->Name, name);
     pArchipelago->CountIslands = countIslands;
     pArchipelago->CountInhabitedIslands = countInhabitedIslands;
@@ -58,7 +58,7 @@ int ModifyCountIslands(int fd, int index, int newCountIslands)
 
 int ModifyCountInhabitedIslands(int fd, int index, int newCountInhabitedIslands)
 {
-    assert(newCountInhabitedIslands > 0);
+    assert(newCountInhabitedIslands >= 0);
     Archipelago archipelago;
     ReadRecord(fd, &archipelago, index);
     archipelago.CountInhabitedIslands = newCountInhabitedIslands;

@@ -3,6 +3,6 @@ project(Lab_04_Console C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(Lab_04_Console main.c)
+add_executable(Lab_04_Console main.c Commands.c Commands.h)
 
 target_link_libraries(Lab_04_Console PRIVATE Lab_04_Lib)

@@ -100,7 +100,7 @@ int AddRecord(int fd, void* data)
     meta.Count++;
     WriteMeta(fd, &meta);
 
-    return WriteRecord(fd, data, meta.Count);
+    return WriteRecord(fd, data, meta.Count - 1);
 }
 
 int ChangeSize(int fd, int n)

@@ -18,6 +18,7 @@
 #include "File.h"
 #include "Meta.h"
 #include "HexDump.h"
+#include "Commands.h"
 
 /// Главная функция программы.
 ///
@@ -31,19 +32,39 @@ int main(int argc, char** argv)
     SetConsoleCP(CP_UTF8);
 #endif
 
-    Archipelago a1 = {"a1rchipelago22222222222222222222222222222221", 12, 3};
-    Archipelago a2 = {"a1rchipel3123421423432453rfwesfgredashgedrsahgreago2", 11, 0};
+    char* command = argv[1];
 
-    char* path = "1.bin";
+    if (strcmp(command, ADD_COMMAND_NAME) == 0)
+    {
+        AddCommandExec(argc - 1, argv + 1);
+        return 0;
+    }
+    if (strcmp(command, FORMAT_COMMAND_NAME) == 0)
+    {
+        FormatCommandExec(argc - 1, argv + 1);
+        return 0;
+    }
 
-    int fd = OpenOrCreateFile(path, sizeof(Archipelago)); HexDump(fd);
 
-    AddRecord(fd, &a1); HexDump(fd);
-    AddRecord(fd, &a2); HexDump(fd);
+    Archipelago a1;
+    FillArchipelago(&a1, "daswd", 12, 3);
+    Archipelago a2;
+    FillArchipelago(&a2, "wqde2", 11, 0);
 
-    //RemoveSwapWithLast(fd, 0, 0); HexDump(fd);
+    char* path = "2.bin";
+
+    int fd = OpenOrCreateFile(path, sizeof(Archipelago));
+    HexDump(fd);
+
+    AddRecord(fd, &a1);
+    HexDump(fd);
+    AddRecord(fd, &a2);
+    HexDump(fd);
+
+    RemoveSwapWithLast(fd, 0, 1);
+    HexDump(fd);
 
     CloseFile(fd);
 
-    return 0;
+    return 1;
 }
