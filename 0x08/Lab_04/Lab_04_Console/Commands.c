@@ -28,12 +28,15 @@ void AddCommandExec(Args* pArgs)
 
     Archipelago archipelago;
     FillArchipelago(&archipelago,
-                    pArgs->IsNameGiven ? pArgs->Name : pArgs->pExtraArgs[0],
-                    pArgs->IsCountIslandsGiven ? pArgs->CountIslands : ParseInt(
-                            pArgs->pExtraArgs[1]),
+                    pArgs->IsNameGiven
+                    ? pArgs->Name
+                    : pArgs->pExtraArgs[0],
+                    pArgs->IsCountIslandsGiven
+                    ? pArgs->CountIslands
+                    : ParseInt(pArgs->pExtraArgs[1]),
                     pArgs->IsCountInhabitedIslandsGiven
-                    ? pArgs->CountInhabitedIslands : ParseInt(
-                            pArgs->pExtraArgs[2]));
+                    ? pArgs->CountInhabitedIslands
+                    : ParseInt(pArgs->pExtraArgs[2]));
 
     AddRecord(fd, &archipelago);
 
@@ -152,11 +155,13 @@ void HasUninhabitedCommandExec(Args* pArgs)
 
     if (has)
     {
-        printf("Имеются архипелаги, состоящие только из необитаемых островов\n");
+        printf("Имеются архипелаги, состоящие только из необитаемых "
+               "островов\n");
     }
     else
     {
-        printf("Отсутствуют архипелаги, состоящие только из необитаемых островов\n");
+        printf("Отсутствуют архипелаги, состоящие только из необитаемых "
+               "островов\n");
     }
 
     if (pArgs->IsHexDumpRequired)

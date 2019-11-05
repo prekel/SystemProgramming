@@ -34,7 +34,7 @@ int CreateFile1(char* path, size_t size)
 
 int OpenOrCreateFile(char* path, size_t size)
 {
-    if(IsExist(path))
+    if (IsExist(path))
     {
         return OpenFile1(path);
     }

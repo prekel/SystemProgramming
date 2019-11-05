@@ -56,7 +56,9 @@ int ModifyCountIslands(int fd, int index, int newCountIslands)
     return 0;
 }
 
-int ModifyCountInhabitedIslands(int fd, int index, int newCountInhabitedIslands)
+int ModifyCountInhabitedIslands(int fd,
+                                int index,
+                                int newCountInhabitedIslands)
 {
     assert(newCountInhabitedIslands >= 0);
     Archipelago archipelago;
