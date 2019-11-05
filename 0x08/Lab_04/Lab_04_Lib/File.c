@@ -158,3 +158,8 @@ int ReadToEnd(int fd, void* allData)
     SeekToStartRecord(fd, -1);
     return read(fd, allData, GetFileSize1(fd));
 }
+
+int DeleteFile(char* path)
+{
+    return unlink(path);
+}

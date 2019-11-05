@@ -37,4 +37,6 @@ size_t GetFileSize1(int fd);
 
 int ReadToEnd(int fd, void* allData);
 
+int DeleteFile(char* path);
+
 #endif //FILE_H

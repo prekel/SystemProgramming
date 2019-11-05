@@ -40,36 +40,11 @@ int main(int argc, char** argv)
     }
 
     char* command = argv[1];
-    Args* pArgs=ParseArgs(argc - 1, argv + 1);
+    Args* pArgs = ParseArgs(argc - 1, argv + 1);
 
-    if (strcmp(command, ADD_COMMAND_NAME) == 0)
-    {
-        AddCommandExec(pArgs);
-    }
-    else if (strcmp(command, MODIFY_COMMAND_NAME) == 0)
-    {
-        ModifyCommandExec(pArgs);
-    }
-    else if (strcmp(command, REMOVE_COMMAND_NAME) == 0)
-    {
-        RemoveCommandExec(pArgs);
-    }
-    else if (strcmp(command, HAS_UNINHABITED_COMMAND_NAME) == 0)
-    {
-        HasUninhabitedCommandExec(pArgs);
-    }
-    else if (strcmp(command, PRINT_COMMAND_NAME) == 0)
-    {
-        PrintCommandExec(pArgs);
-    }
-    else
-    {
-        printf("Введена неверная команда\n");
-        DestroyArgs(pArgs);
-        return 1;
-    }
+    int ret = Exec(command, pArgs);
 
     DestroyArgs(pArgs);
 
-    return 0;
+    return ret;
 }

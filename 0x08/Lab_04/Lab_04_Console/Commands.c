@@ -15,6 +15,7 @@
 #include "Commands.h"
 #include "File.h"
 #include "HexDump.h"
+#include "Utils.h"
 
 void AddCommandExec(Args* pArgs)
 {
@@ -28,10 +29,10 @@ void AddCommandExec(Args* pArgs)
     Archipelago archipelago;
     FillArchipelago(&archipelago,
                     pArgs->IsNameGiven ? pArgs->Name : pArgs->pExtraArgs[0],
-                    pArgs->IsCountIslandsGiven ? pArgs->CountIslands : atoi(
+                    pArgs->IsCountIslandsGiven ? pArgs->CountIslands : ParseInt(
                             pArgs->pExtraArgs[1]),
                     pArgs->IsCountInhabitedIslandsGiven
-                    ? pArgs->CountInhabitedIslands : atoi(
+                    ? pArgs->CountInhabitedIslands : ParseInt(
                             pArgs->pExtraArgs[2]));
 
     AddRecord(fd, &archipelago);
@@ -112,6 +113,15 @@ void RemoveCommandExec(Args* pArgs)
     }
 
     CloseFile1(fd);
+}
+
+void DeleteCommandExec(Args* pArgs)
+{
+    bool isExist = IsExist(pArgs->FileName);
+    assert(isExist);
+
+    int deleteFile = DeleteFile(pArgs->FileName);
+    assert(deleteFile == 0);
 }
 
 void HasUninhabitedCommandExec(Args* pArgs)
@@ -226,4 +236,53 @@ void PrintCommandExec(Args* pArgs)
     }
 
     CloseFile1(fd);
+}
+
+void HexdumpExec(Args* pArgs)
+{
+    int fd = pArgs->IsForceCreate
+             ? CreateFile1(pArgs->FileName, sizeof(Archipelago))
+             : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
+
+    HexDump(fd);
+
+    CloseFile1(fd);
+}
+
+int Exec(char* command, Args* pArgs)
+{
+    if (strcmp(command, ADD_COMMAND_NAME) == 0)
+    {
+        AddCommandExec(pArgs);
+    }
+    else if (strcmp(command, MODIFY_COMMAND_NAME) == 0)
+    {
+        ModifyCommandExec(pArgs);
+    }
+    else if (strcmp(command, REMOVE_COMMAND_NAME) == 0)
+    {
+        RemoveCommandExec(pArgs);
+    }
+    else if (strcmp(command, DELETE_COMMAND_NAME) == 0)
+    {
+        DeleteCommandExec(pArgs);
+    }
+    else if (strcmp(command, HAS_UNINHABITED_COMMAND_NAME) == 0)
+    {
+        HasUninhabitedCommandExec(pArgs);
+    }
+    else if (strcmp(command, PRINT_COMMAND_NAME) == 0)
+    {
+        PrintCommandExec(pArgs);
+    }
+    else if (strcmp(command, HEXDUMP_COMMAND_NAME) == 0)
+    {
+        HexdumpExec(pArgs);
+    }
+    else
+    {
+        printf("Введена неверная команда\n");
+        return 1;
+    }
+    return 0;
 }

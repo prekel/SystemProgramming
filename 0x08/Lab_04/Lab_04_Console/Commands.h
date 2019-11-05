@@ -15,6 +15,10 @@ void ModifyCommandExec(Args* pArgs);
 
 void RemoveCommandExec(Args* pArgs);
 
+#define DELETE_COMMAND_NAME "delete"
+
+void DeleteCommandExec(Args* pArgs);
+
 #define PRINT_COMMAND_NAME "print"
 
 void PrintCommandExec(Args* pArgs);
@@ -22,5 +26,11 @@ void PrintCommandExec(Args* pArgs);
 #define HAS_UNINHABITED_COMMAND_NAME "has"
 
 void HasUninhabitedCommandExec(Args* pArgs);
+
+#define HEXDUMP_COMMAND_NAME "hexdump"
+
+void HexdumpExec(Args* pArgs);
+
+int Exec(char* command, Args* pArgs);
 
 #endif //COMMANDS_H
