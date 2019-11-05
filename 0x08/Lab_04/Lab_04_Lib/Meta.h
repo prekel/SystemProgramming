@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <stdbool.h>
 
-#define META_VERSION 3
+#define META_VERSION 5
 
 typedef struct
 {

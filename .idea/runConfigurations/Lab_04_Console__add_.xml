@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Lab_04_Console (add)" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="add -f &quot;q.bin&quot; -d &quot;вфыца&quot; 122 0" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SystemProgramming" TARGET_NAME="Lab_04_Console" CONFIG_NAME="Debug (MinGW)" RUN_TARGET_PROJECT_NAME="SystemProgramming" RUN_TARGET_NAME="Lab_04_Console">
+  <configuration default="false" name="Lab_04_Console (add)" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="add -f &quot;q1.bin&quot; -d &quot;вфыца&quot; 122 0" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SystemProgramming" TARGET_NAME="Lab_04_Console" CONFIG_NAME="Debug (MinGW)" RUN_TARGET_PROJECT_NAME="SystemProgramming" RUN_TARGET_NAME="Lab_04_Console">
     <method v="2">
       <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
     </method>
