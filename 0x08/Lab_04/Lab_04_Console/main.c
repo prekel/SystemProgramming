@@ -32,16 +32,20 @@ int main(int argc, char** argv)
     SetConsoleCP(CP_UTF8);
 #endif
 
+    Args* pArgs = ParseArgs(argc - 1, argv + 1);
+
     char* command = argv[1];
 
     if (strcmp(command, ADD_COMMAND_NAME) == 0)
     {
-        AddCommandExec(argc - 1, argv + 1);
+        AddCommandExec(pArgs);
+        DestroyArgs(pArgs);
         return 0;
     }
     if (strcmp(command, FORMAT_COMMAND_NAME) == 0)
     {
-        FormatCommandExec(argc - 1, argv + 1);
+        FormatCommandExec(pArgs);
+        DestroyArgs(pArgs);
         return 0;
     }
 

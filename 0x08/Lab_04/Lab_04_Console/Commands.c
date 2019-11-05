@@ -14,81 +14,45 @@
 #include "Archipelago.h"
 #include "Commands.h"
 #include "File.h"
+#include "HexDump.h"
 
-void AddCommandExec(int argc, char** argv)
+void AddCommandExec(Args* pArgs)
 {
-    bool isRequiredFileCreation = false;
-    int opt;
-    char* path = "1.bin";
-    while ((opt = getopt(argc, argv, ":f:p")) != -1)
-    {
-        switch (opt)
-        {
-            case 'f':
-                path = (char*) malloc((sizeof(char) + 1) * strlen(optarg));
-                assert(path);
-                strcpy(path, optarg);
-                break;
-            case 'p':
-                isRequiredFileCreation = true;
-                break;
-            case ':':
-                printf("option needs a value\n");
-                break;
-            case '?':
-                printf("unknown option: %c\n", optopt);
-                break;
-        }
-    }
+    assert(!pArgs->IsFormatGiven);
 
-    int fd = isRequiredFileCreation
-             ? CreateFile(path, sizeof(Archipelago))
-             : OpenOrCreateFile(path, sizeof(Archipelago));
+    int fd = pArgs->IsForceCreate
+             ? CreateFile(pArgs->FileName, sizeof(Archipelago))
+             : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
 
     Archipelago archipelago;
-    FillArchipelago(&archipelago, argv[optind], atoi(argv[optind + 1]),
-                    atoi(argv[optind + 2]));
+    FillArchipelago(&archipelago,
+                    pArgs->IsNameGiven ? pArgs->Name : pArgs->pExtraArgs[0],
+                    pArgs->IsCountIslandsGiven ? pArgs->CountIslands : atoi(
+                            pArgs->pExtraArgs[1]),
+                    pArgs->IsCountInhabitedIslandsGiven
+                    ? pArgs->CountInhabitedIslands : atoi(
+                            pArgs->pExtraArgs[2]));
 
     AddRecord(fd, &archipelago);
+
+    if (pArgs->IsHexDumpRequired)
+    {
+        HexDump(fd);
+    }
 
     CloseFile(fd);
 }
 
-void FormatCommandExec(int argc, char** argv)
+void FormatCommandExec(Args* pArgs)
 {
-    bool isRequiredFileCreation = false;
-    int opt;
-    char* path = "1.bin";
-    char* format = "%s %d %d";
-    while ((opt = getopt(argc, argv, ":f:pF:")) != -1)
-    {
-        switch (opt)
-        {
-            case 'f':
-                path = (char*) malloc((sizeof(char) + 1) * strlen(optarg));
-                assert(path);
-                strcpy(path, optarg);
-                break;
-            case 'p':
-                isRequiredFileCreation = true;
-                break;
-            case 'F':
-                format = (char*) malloc((sizeof(char) + 1) * strlen(optarg));
-                assert(format);
-                strcpy(format, optarg);
-                break;
-            case ':':
-                printf("option needs a value\n");
-                break;
-            case '?':
-                printf("unknown option: %c\n", optopt);
-                break;
-        }
-    }
+    assert(!pArgs->IsIsForceCreateGiven);
+    assert(!pArgs->IsNameGiven);
+    assert(!pArgs->IsCountIslandsGiven);
+    assert(!pArgs->IsCountInhabitedIslandsGiven);
 
-    int fd = isRequiredFileCreation
-             ? CreateFile(path, sizeof(Archipelago))
-             : OpenOrCreateFile(path, sizeof(Archipelago));
+    int fd = pArgs->IsForceCreate
+             ? CreateFile(pArgs->FileName, sizeof(Archipelago))
+             : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
 
     Meta meta;
     ReadMeta(fd, &meta);
@@ -96,9 +60,15 @@ void FormatCommandExec(int argc, char** argv)
     {
         Archipelago archipelago;
         ReadRecord(fd, &archipelago, i);
-        printf(format, archipelago.Name, archipelago.CountIslands,
+        printf(pArgs->Format, archipelago.Name, archipelago.CountIslands,
                archipelago.CountInhabitedIslands);
         printf("\n");
+    }
+    printf("\n");
+
+    if (pArgs->IsHexDumpRequired)
+    {
+        HexDump(fd);
     }
 
     CloseFile(fd);
