@@ -52,10 +52,14 @@ void FormatCommandExec(Args* pArgs)
 
     int fd = pArgs->IsForceCreate
              ? CreateFile(pArgs->FileName, sizeof(Archipelago))
-             : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
+             : OpenFile(pArgs->FileName);
+
+    assert(fd != -1);
 
     Meta meta;
     ReadMeta(fd, &meta);
+    printf(pArgs->MetaFormat, meta.Version, meta.Size, meta.Count);
+    printf("\n");
     for (int i = 0; i < meta.Count; i++)
     {
         Archipelago archipelago;

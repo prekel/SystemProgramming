@@ -12,7 +12,7 @@
 int OpenFile(char* path)
 {
     mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH;
-    int fd = open(path, O_RDWR | O_CREAT, mode);
+    int fd = open(path, O_RDWR, mode);
 
     assert(CheckMetaVersion(fd));
 

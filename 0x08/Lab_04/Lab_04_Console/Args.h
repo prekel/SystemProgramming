@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 #define DEFAULT_FILENAME "1.bin";
+#define DEFAULT_META_FORMAT "%d %ld %d";
 #define DEFAULT_FORMAT "%s %d %d";
 
 typedef struct
@@ -13,6 +14,9 @@ typedef struct
 
     bool IsIsForceCreateGiven;
     bool IsForceCreate;
+
+    bool IsMetaFormatGiven;
+    char* MetaFormat;
 
     bool IsFormatGiven;
     char* Format;
