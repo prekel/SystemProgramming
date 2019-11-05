@@ -21,6 +21,12 @@ typedef struct
     bool IsFormatGiven;
     char* Format;
 
+    bool IsOldNameGiven;
+    char* OldName;
+
+    bool IsIndexGiven;
+    int Index;
+
     bool IsNameGiven;
     char* Name;
 

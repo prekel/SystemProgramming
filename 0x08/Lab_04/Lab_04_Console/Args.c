@@ -33,6 +33,12 @@ Args* CreateArgs()
     pArgs->IsFormatGiven = false;
     pArgs->Format = DEFAULT_FORMAT;
 
+    pArgs->IsOldNameGiven = false;
+    pArgs->OldName = "";
+
+    pArgs->IsIndexGiven = false;
+    pArgs->Index = 0;
+
     pArgs->IsNameGiven = false;
     pArgs->Name = "";
 
@@ -59,6 +65,10 @@ void DestroyArgs(Args* pArgs)
     {
         free(pArgs->Format);
     }
+    if (pArgs->IsOldNameGiven)
+    {
+        free(pArgs->OldName);
+    }
     if (pArgs->IsNameGiven)
     {
         free(pArgs->Name);
@@ -66,12 +76,14 @@ void DestroyArgs(Args* pArgs)
     free(pArgs);
 }
 
-#define OPT_STRING ":f:pM:F:n:c:i:d"
+#define OPT_STRING ":f:pM:F:N:I:n:c:i:d"
 
 #define OPT_FILENAME 'f'
 #define OPT_FORCE_CREATE 'p'
 #define OPT_META_FORMAT 'M'
 #define OPT_FORMAT 'F'
+#define OPT_OLD_NAME 'N'
+#define OPT_INDEX 'I'
 #define OPT_NAME 'n'
 #define OPT_COUNT_ISLANDS 'c'
 #define OPT_COUNT_INHABITED_ISLANDS 'i'
@@ -112,6 +124,17 @@ Args* ParseArgs(int argc, char** argv)
             assert(pArgs->Format);
             strcpy(pArgs->Format, optarg);
             break;
+        case OPT_OLD_NAME:
+            pArgs->IsOldNameGiven = true;
+            pArgs->OldName = (char*) malloc(
+                    (sizeof(char) + 1) * strlen(optarg));
+            assert(pArgs->OldName);
+            strcpy(pArgs->OldName, optarg);
+            break;
+        case OPT_INDEX:
+            pArgs->IsIndexGiven = true;
+            pArgs->Index = atoi(optarg);
+            break;
         case OPT_NAME:
             pArgs->IsNameGiven = true;
             pArgs->Name = (char*) malloc(
@@ -137,6 +160,8 @@ Args* ParseArgs(int argc, char** argv)
         case OPT_HELP:
             printf("unknown option: %c\n", optopt);
             break;
+        default:
+            assert(false);
         }
     }
 

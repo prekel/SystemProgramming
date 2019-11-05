@@ -18,6 +18,7 @@
 
 void AddCommandExec(Args* pArgs)
 {
+    assert(!pArgs->IsMetaFormatGiven);
     assert(!pArgs->IsFormatGiven);
 
     int fd = pArgs->IsForceCreate
@@ -69,6 +70,41 @@ void FormatCommandExec(Args* pArgs)
         printf("\n");
     }
     printf("\n");
+
+    if (pArgs->IsHexDumpRequired)
+    {
+        HexDump(fd);
+    }
+
+    CloseFile(fd);
+}
+
+void ModifyCommandExec(Args* pArgs)
+{
+    assert(!pArgs->IsMetaFormatGiven);
+    assert(!pArgs->IsFormatGiven);
+    assert(pArgs->IsIndexGiven || pArgs->IsOldNameGiven);
+    assert(!(pArgs->IsIndexGiven && pArgs->IsOldNameGiven));
+    assert(pArgs->IsNameGiven || pArgs->IsCountIslandsGiven || pArgs->IsCountInhabitedIslandsGiven);
+
+    int fd = pArgs->IsForceCreate
+             ? CreateFile(pArgs->FileName, sizeof(Archipelago))
+             : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
+
+    int index = pArgs->IsIndexGiven ? pArgs->Index : IndexByName(fd, pArgs->OldName);
+
+    if (pArgs->IsNameGiven)
+    {
+        ModifyName(fd, index, pArgs->Name);
+    }
+    if (pArgs->IsCountIslandsGiven)
+    {
+        ModifyCountIslands(fd, index, pArgs->CountIslands);
+    }
+    if (pArgs->IsCountInhabitedIslandsGiven)
+    {
+        ModifyCountInhabitedIslands(fd, index, pArgs->CountInhabitedIslands);
+    }
 
     if (pArgs->IsHexDumpRequired)
     {

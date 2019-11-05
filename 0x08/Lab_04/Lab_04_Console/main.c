@@ -39,15 +39,19 @@ int main(int argc, char** argv)
     if (strcmp(command, ADD_COMMAND_NAME) == 0)
     {
         AddCommandExec(pArgs);
-        DestroyArgs(pArgs);
-        return 0;
     }
     if (strcmp(command, FORMAT_COMMAND_NAME) == 0)
     {
         FormatCommandExec(pArgs);
-        DestroyArgs(pArgs);
-        return 0;
     }
+    if (strcmp(command, MODIFY_COMMAND_NAME) == 0)
+    {
+        ModifyCommandExec(pArgs);
+    }
+
+    DestroyArgs(pArgs);
+
+    return 0;
 
 
     Archipelago a1;
