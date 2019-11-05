@@ -22,7 +22,7 @@ void AddCommandExec(Args* pArgs)
     assert(!pArgs->IsFormatGiven);
 
     int fd = pArgs->IsForceCreate
-             ? CreateFile(pArgs->FileName, sizeof(Archipelago))
+             ? CreateFile1(pArgs->FileName, sizeof(Archipelago))
              : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
 
     Archipelago archipelago;
@@ -41,42 +41,7 @@ void AddCommandExec(Args* pArgs)
         HexDump(fd);
     }
 
-    CloseFile(fd);
-}
-
-void FormatCommandExec(Args* pArgs)
-{
-    assert(!pArgs->IsIsForceCreateGiven);
-    assert(!pArgs->IsNameGiven);
-    assert(!pArgs->IsCountIslandsGiven);
-    assert(!pArgs->IsCountInhabitedIslandsGiven);
-
-    int fd = pArgs->IsForceCreate
-             ? CreateFile(pArgs->FileName, sizeof(Archipelago))
-             : OpenFile(pArgs->FileName);
-
-    assert(fd != -1);
-
-    Meta meta;
-    ReadMeta(fd, &meta);
-    printf(pArgs->MetaFormat, meta.Version, meta.Size, meta.Count);
-    printf("\n");
-    for (int i = 0; i < meta.Count; i++)
-    {
-        Archipelago archipelago;
-        ReadRecord(fd, &archipelago, i);
-        printf(pArgs->Format, archipelago.Name, archipelago.CountIslands,
-               archipelago.CountInhabitedIslands);
-        printf("\n");
-    }
-    printf("\n");
-
-    if (pArgs->IsHexDumpRequired)
-    {
-        HexDump(fd);
-    }
-
-    CloseFile(fd);
+    CloseFile1(fd);
 }
 
 void ModifyCommandExec(Args* pArgs)
@@ -89,7 +54,7 @@ void ModifyCommandExec(Args* pArgs)
            pArgs->IsCountInhabitedIslandsGiven);
 
     int fd = pArgs->IsForceCreate
-             ? CreateFile(pArgs->FileName, sizeof(Archipelago))
+             ? CreateFile1(pArgs->FileName, sizeof(Archipelago))
              : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
 
     int index = pArgs->IsIndexGiven
@@ -114,7 +79,7 @@ void ModifyCommandExec(Args* pArgs)
         HexDump(fd);
     }
 
-    CloseFile(fd);
+    CloseFile1(fd);
 }
 
 void RemoveCommandExec(Args* pArgs)
@@ -125,7 +90,7 @@ void RemoveCommandExec(Args* pArgs)
     assert(!(pArgs->IsIndexGiven && pArgs->IsOldNameGiven));
 
     int fd = pArgs->IsForceCreate
-             ? CreateFile(pArgs->FileName, sizeof(Archipelago))
+             ? CreateFile1(pArgs->FileName, sizeof(Archipelago))
              : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
 
     int index = pArgs->IsIndexGiven
@@ -146,7 +111,7 @@ void RemoveCommandExec(Args* pArgs)
         HexDump(fd);
     }
 
-    CloseFile(fd);
+    CloseFile1(fd);
 }
 
 void HasUninhabitedCommandExec(Args* pArgs)
@@ -157,7 +122,7 @@ void HasUninhabitedCommandExec(Args* pArgs)
     assert(!(pArgs->IsIndexGiven && pArgs->IsOldNameGiven));
 
     int fd = pArgs->IsForceCreate
-             ? CreateFile(pArgs->FileName, sizeof(Archipelago))
+             ? CreateFile1(pArgs->FileName, sizeof(Archipelago))
              : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
 
     Meta meta;
@@ -189,22 +154,17 @@ void HasUninhabitedCommandExec(Args* pArgs)
         HexDump(fd);
     }
 
-    CloseFile(fd);
+    CloseFile1(fd);
 }
 
-void WhereCountIslandsCommandExec(Args* pArgs)
+void PrintCommandExec(Args* pArgs)
 {
-    assert(!pArgs->IsMetaFormatGiven);
-    assert(pArgs->IsNameGiven || pArgs->IsCountIslandsGiven ||
-           pArgs->IsCountInhabitedIslandsGiven);
-
     int fd = pArgs->IsForceCreate
-             ? CreateFile(pArgs->FileName, sizeof(Archipelago))
+             ? CreateFile1(pArgs->FileName, sizeof(Archipelago))
              : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
 
     Meta meta;
     ReadMeta(fd, &meta);
-
 
     printf(pArgs->MetaFormat, meta.Version, meta.Size, meta.Count);
     printf("\n");
@@ -240,13 +200,13 @@ void WhereCountIslandsCommandExec(Args* pArgs)
                  pArgs->CountInhabitedIslands) ||
                 !pArgs->IsCountInhabitedIslandsGiven;
 
-        if (pArgs->IsAnd
-            ? condAndIsNameGiven &&
-              condAndIsCountIslandsGiven &&
-              condAndIsCountInhabitedIslandsGiven
-            : condOrIsNameGiven ||
+        if (pArgs->IsOr
+            ? condOrIsNameGiven ||
               condOrIsCountIslandsGiven ||
-              condOrIsCountInhabitedIslandsGiven)
+              condOrIsCountInhabitedIslandsGiven
+            : condAndIsNameGiven &&
+              condAndIsCountIslandsGiven &&
+              condAndIsCountInhabitedIslandsGiven)
         {
             printf(pArgs->Format,
                    archipelago.Name,
@@ -265,5 +225,5 @@ void WhereCountIslandsCommandExec(Args* pArgs)
         HexDump(fd);
     }
 
-    CloseFile(fd);
+    CloseFile1(fd);
 }

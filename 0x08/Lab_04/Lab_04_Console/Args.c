@@ -58,8 +58,8 @@ Args* CreateArgs()
     pArgs->IsIsRemoveSwapWithLastGiven = false;
     pArgs->IsRemoveSwapWithLast = false;
 
-    pArgs->IsIsAndGiven = false;
-    pArgs->IsAnd = false;
+    pArgs->IsIsOrGiven = false;
+    pArgs->IsOr = false;
 
     return pArgs;
 }
@@ -78,6 +78,10 @@ void DestroyArgs(Args* pArgs)
     {
         free(pArgs->Format);
     }
+    if (pArgs->IsCountFormatGiven)
+    {
+        free(pArgs->CountFormat);
+    }
     if (pArgs->IsOldNameGiven)
     {
         free(pArgs->OldName);
@@ -89,7 +93,7 @@ void DestroyArgs(Args* pArgs)
     free(pArgs);
 }
 
-#define OPT_STRING ":f:pM:F:C:N:I:n:c:i:dsa"
+#define OPT_STRING ":f:pM:F:C:N:I:n:c:i:dsoh"
 
 #define OPT_FILENAME 'f'
 #define OPT_FORCE_CREATE 'p'
@@ -103,8 +107,9 @@ void DestroyArgs(Args* pArgs)
 #define OPT_COUNT_INHABITED_ISLANDS 'i'
 #define OPT_HEXDUMP 'd'
 #define OPT_REMOVE_SWAP_WITH_LAST 's'
-#define OPT_AND 'a'
-#define OPT_HELP '?'
+#define OPT_OR 'o'
+#define OPT_HELP 'h'
+#define OPT_UNKNOWN '?'
 
 Args* ParseArgs(int argc, char** argv)
 {
@@ -181,14 +186,14 @@ Args* ParseArgs(int argc, char** argv)
             pArgs->IsIsRemoveSwapWithLastGiven = true;
             pArgs->IsRemoveSwapWithLast = true;
             break;
-        case OPT_AND:
-            pArgs->IsIsAndGiven = true;
-            pArgs->IsAnd = true;
-            break;
-        case ':':
-            printf("option needs a value\n");
+        case OPT_OR:
+            pArgs->IsIsOrGiven = true;
+            pArgs->IsOr = true;
             break;
         case OPT_HELP:
+            printf("help\n");
+            break;
+        case OPT_UNKNOWN:
             printf("unknown option: %c\n", optopt);
             break;
         default:

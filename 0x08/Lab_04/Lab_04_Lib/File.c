@@ -1,15 +1,15 @@
+#include <unistd.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <unistd.h>
 #include <assert.h>
 
 #include "File.h"
 #include "Meta.h"
 
-int OpenFile(char* path)
+int OpenFile1(char* path)
 {
     mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH;
     int fd = open(path, O_RDWR, mode);
@@ -19,7 +19,7 @@ int OpenFile(char* path)
     return fd;
 }
 
-int CreateFile(char* path, size_t size)
+int CreateFile1(char* path, size_t size)
 {
     Meta meta;
     FillMeta(&meta, size);
@@ -36,9 +36,9 @@ int OpenOrCreateFile(char* path, size_t size)
 {
     if(IsExist(path))
     {
-        return OpenFile(path);
+        return OpenFile1(path);
     }
-    return CreateFile(path, size);
+    return CreateFile1(path, size);
 }
 
 bool IsExist(char* path)
@@ -46,7 +46,7 @@ bool IsExist(char* path)
     return access(path, F_OK | R_OK | W_OK) != -1;
 }
 
-int CloseFile(int fd)
+int CloseFile1(int fd)
 {
     return close(fd);
 }
@@ -146,7 +146,7 @@ void RemoveShift(int fd, int index)
     ChangeSize(fd, meta.Count);
 }
 
-size_t GetFileSize(int fd)
+size_t GetFileSize1(int fd)
 {
     Meta meta;
     ReadMeta(fd, &meta);
@@ -156,5 +156,5 @@ size_t GetFileSize(int fd)
 int ReadToEnd(int fd, void* allData)
 {
     SeekToStartRecord(fd, -1);
-    return read(fd, allData, GetFileSize(fd));
+    return read(fd, allData, GetFileSize1(fd));
 }

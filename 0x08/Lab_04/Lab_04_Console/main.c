@@ -9,6 +9,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <string.h>
+#include <assert.h>
 
 #ifdef WIN32
 #include <windows.h>
@@ -32,59 +33,43 @@ int main(int argc, char** argv)
     SetConsoleCP(CP_UTF8);
 #endif
 
-    Args* pArgs = ParseArgs(argc - 1, argv + 1);
+    if (argc <= 1)
+    {
+        printf("Не введена команда\n");
+        return 1;
+    }
 
     char* command = argv[1];
+    Args* pArgs=ParseArgs(argc - 1, argv + 1);
 
     if (strcmp(command, ADD_COMMAND_NAME) == 0)
     {
         AddCommandExec(pArgs);
     }
-    if (strcmp(command, FORMAT_COMMAND_NAME) == 0)
-    {
-        FormatCommandExec(pArgs);
-    }
-    if (strcmp(command, MODIFY_COMMAND_NAME) == 0)
+    else if (strcmp(command, MODIFY_COMMAND_NAME) == 0)
     {
         ModifyCommandExec(pArgs);
     }
-    if (strcmp(command, REMOVE_COMMAND_NAME) == 0)
+    else if (strcmp(command, REMOVE_COMMAND_NAME) == 0)
     {
         RemoveCommandExec(pArgs);
     }
-    if (strcmp(command, HAS_UNINHABITED_COMMAND_NAME) == 0)
+    else if (strcmp(command, HAS_UNINHABITED_COMMAND_NAME) == 0)
     {
         HasUninhabitedCommandExec(pArgs);
     }
-    if (strcmp(command, WHERE_COUNT_ISLANDS_COMMAND_NAME) == 0)
+    else if (strcmp(command, PRINT_COMMAND_NAME) == 0)
     {
-        WhereCountIslandsCommandExec(pArgs);
+        PrintCommandExec(pArgs);
+    }
+    else
+    {
+        printf("Введена неверная команда\n");
+        DestroyArgs(pArgs);
+        return 1;
     }
 
     DestroyArgs(pArgs);
 
     return 0;
-
-
-    Archipelago a1;
-    FillArchipelago(&a1, "daswd", 12, 3);
-    Archipelago a2;
-    FillArchipelago(&a2, "wqde2", 11, 0);
-
-    char* path = "2.bin";
-
-    int fd = OpenOrCreateFile(path, sizeof(Archipelago));
-    HexDump(fd);
-
-    AddRecord(fd, &a1);
-    HexDump(fd);
-    AddRecord(fd, &a2);
-    HexDump(fd);
-
-    RemoveSwapWithLast(fd, 0);
-    HexDump(fd);
-
-    CloseFile(fd);
-
-    return 1;
 }

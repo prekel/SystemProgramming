@@ -5,11 +5,11 @@
 
 #define META_INDEX -1
 
-int OpenFile(char* path);
+int OpenFile1(char* path);
 
-int CloseFile(int fd);
+int CloseFile1(int fd);
 
-int CreateFile(char* path, size_t size);
+int CreateFile1(char* path, size_t size);
 
 int OpenOrCreateFile(char* path, size_t size);
 
@@ -33,7 +33,7 @@ void RemoveSwapWithLast(int fd, int indexToRemove);
 
 void RemoveShift(int fd, int index);
 
-size_t GetFileSize(int fd);
+size_t GetFileSize1(int fd);
 
 int ReadToEnd(int fd, void* allData);
 

@@ -46,8 +46,8 @@ typedef struct
     bool IsIsRemoveSwapWithLastGiven;
     bool IsRemoveSwapWithLast;
 
-    bool IsIsAndGiven;
-    bool IsAnd;
+    bool IsIsOrGiven;
+    bool IsOr;
 
     char** pExtraArgs;
 } Args;
