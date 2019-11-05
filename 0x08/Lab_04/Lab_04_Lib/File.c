@@ -111,21 +111,39 @@ int ChangeSize(int fd, int n)
     return ftruncate(fd, sizeof(Meta) + n * meta.Size);
 }
 
-void RemoveSwapWithLast(int fd, int indexToRemove, int indexToLast)
+void RemoveSwapWithLast(int fd, int indexToRemove)
 {
     Meta meta;
     ReadMeta(fd, &meta);
     meta.Count--;
     WriteMeta(fd, &meta);
 
-    if (indexToLast > 0)
+    if (meta.Count > 0)
     {
         char data[meta.Size];
-        ReadRecord(fd, &data, indexToLast);
+        ReadRecord(fd, &data, meta.Count);
         WriteRecord(fd, &data, indexToRemove);
     }
 
-    ChangeSize(fd, indexToLast);
+    ChangeSize(fd, meta.Count);
+}
+
+void RemoveShift(int fd, int index)
+{
+    Meta meta;
+    ReadMeta(fd, &meta);
+    meta.Count--;
+    WriteMeta(fd, &meta);
+
+    if (meta.Count > 0)
+    {
+        int n = meta.Count - index;
+        char dataShift[meta.Size * n];
+        ReadRecord(fd, &dataShift, meta.Count);
+        WriteRecord(fd, &dataShift, index);
+    }
+
+    ChangeSize(fd, meta.Count);
 }
 
 size_t GetFileSize(int fd)

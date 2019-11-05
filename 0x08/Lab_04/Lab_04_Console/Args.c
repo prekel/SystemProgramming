@@ -16,6 +16,7 @@
 #include "Commands.h"
 #include "File.h"
 #include "Args.h"
+#include "Utils.h"
 
 Args* CreateArgs()
 {
@@ -33,6 +34,9 @@ Args* CreateArgs()
     pArgs->IsFormatGiven = false;
     pArgs->Format = DEFAULT_FORMAT;
 
+    pArgs->IsCountFormatGiven = false;
+    pArgs->CountFormat = DEFAULT_COUNT_FORMAT;
+
     pArgs->IsOldNameGiven = false;
     pArgs->OldName = "";
 
@@ -47,6 +51,15 @@ Args* CreateArgs()
 
     pArgs->IsCountInhabitedIslandsGiven = false;
     pArgs->CountInhabitedIslands = 0;
+
+    pArgs->IsIsHexDumpRequiredGiven = false;
+    pArgs->IsHexDumpRequired = false;
+
+    pArgs->IsIsRemoveSwapWithLastGiven = false;
+    pArgs->IsRemoveSwapWithLast = false;
+
+    pArgs->IsIsAndGiven = false;
+    pArgs->IsAnd = false;
 
     return pArgs;
 }
@@ -76,18 +89,21 @@ void DestroyArgs(Args* pArgs)
     free(pArgs);
 }
 
-#define OPT_STRING ":f:pM:F:N:I:n:c:i:d"
+#define OPT_STRING ":f:pM:F:C:N:I:n:c:i:dsa"
 
 #define OPT_FILENAME 'f'
 #define OPT_FORCE_CREATE 'p'
 #define OPT_META_FORMAT 'M'
 #define OPT_FORMAT 'F'
+#define OPT_COUNT_FORMAT 'C'
 #define OPT_OLD_NAME 'N'
 #define OPT_INDEX 'I'
 #define OPT_NAME 'n'
 #define OPT_COUNT_ISLANDS 'c'
 #define OPT_COUNT_INHABITED_ISLANDS 'i'
 #define OPT_HEXDUMP 'd'
+#define OPT_REMOVE_SWAP_WITH_LAST 's'
+#define OPT_AND 'a'
 #define OPT_HELP '?'
 
 Args* ParseArgs(int argc, char** argv)
@@ -124,6 +140,13 @@ Args* ParseArgs(int argc, char** argv)
             assert(pArgs->Format);
             strcpy(pArgs->Format, optarg);
             break;
+        case OPT_COUNT_FORMAT:
+            pArgs->IsCountFormatGiven = true;
+            pArgs->CountFormat = (char*) malloc(
+                    (sizeof(char) + 1) * strlen(optarg));
+            assert(pArgs->CountFormat);
+            strcpy(pArgs->CountFormat, optarg);
+            break;
         case OPT_OLD_NAME:
             pArgs->IsOldNameGiven = true;
             pArgs->OldName = (char*) malloc(
@@ -133,7 +156,7 @@ Args* ParseArgs(int argc, char** argv)
             break;
         case OPT_INDEX:
             pArgs->IsIndexGiven = true;
-            pArgs->Index = atoi(optarg);
+            pArgs->Index = ParseInt(optarg);
             break;
         case OPT_NAME:
             pArgs->IsNameGiven = true;
@@ -144,15 +167,23 @@ Args* ParseArgs(int argc, char** argv)
             break;
         case OPT_COUNT_ISLANDS:
             pArgs->IsCountIslandsGiven = true;
-            pArgs->CountIslands = atoi(optarg);
+            pArgs->CountIslands = ParseInt(optarg);
             break;
         case OPT_COUNT_INHABITED_ISLANDS:
             pArgs->IsCountInhabitedIslandsGiven = true;
-            pArgs->CountInhabitedIslands = atoi(optarg);
+            pArgs->CountInhabitedIslands = ParseInt(optarg);
             break;
         case OPT_HEXDUMP:
             pArgs->IsIsHexDumpRequiredGiven = true;
             pArgs->IsHexDumpRequired = true;
+            break;
+        case OPT_REMOVE_SWAP_WITH_LAST:
+            pArgs->IsIsRemoveSwapWithLastGiven = true;
+            pArgs->IsRemoveSwapWithLast = true;
+            break;
+        case OPT_AND:
+            pArgs->IsIsAndGiven = true;
+            pArgs->IsAnd = true;
             break;
         case ':':
             printf("option needs a value\n");

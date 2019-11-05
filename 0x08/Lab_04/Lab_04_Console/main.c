@@ -48,6 +48,18 @@ int main(int argc, char** argv)
     {
         ModifyCommandExec(pArgs);
     }
+    if (strcmp(command, REMOVE_COMMAND_NAME) == 0)
+    {
+        RemoveCommandExec(pArgs);
+    }
+    if (strcmp(command, HAS_UNINHABITED_COMMAND_NAME) == 0)
+    {
+        HasUninhabitedCommandExec(pArgs);
+    }
+    if (strcmp(command, WHERE_COUNT_ISLANDS_COMMAND_NAME) == 0)
+    {
+        WhereCountIslandsCommandExec(pArgs);
+    }
 
     DestroyArgs(pArgs);
 
@@ -69,7 +81,7 @@ int main(int argc, char** argv)
     AddRecord(fd, &a2);
     HexDump(fd);
 
-    RemoveSwapWithLast(fd, 0, 1);
+    RemoveSwapWithLast(fd, 0);
     HexDump(fd);
 
     CloseFile(fd);

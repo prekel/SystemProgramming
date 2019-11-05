@@ -85,13 +85,16 @@ void ModifyCommandExec(Args* pArgs)
     assert(!pArgs->IsFormatGiven);
     assert(pArgs->IsIndexGiven || pArgs->IsOldNameGiven);
     assert(!(pArgs->IsIndexGiven && pArgs->IsOldNameGiven));
-    assert(pArgs->IsNameGiven || pArgs->IsCountIslandsGiven || pArgs->IsCountInhabitedIslandsGiven);
+    assert(pArgs->IsNameGiven || pArgs->IsCountIslandsGiven ||
+           pArgs->IsCountInhabitedIslandsGiven);
 
     int fd = pArgs->IsForceCreate
              ? CreateFile(pArgs->FileName, sizeof(Archipelago))
              : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
 
-    int index = pArgs->IsIndexGiven ? pArgs->Index : IndexByName(fd, pArgs->OldName);
+    int index = pArgs->IsIndexGiven
+                ? pArgs->Index
+                : IndexByName(fd, pArgs->OldName);
 
     if (pArgs->IsNameGiven)
     {
@@ -105,6 +108,157 @@ void ModifyCommandExec(Args* pArgs)
     {
         ModifyCountInhabitedIslands(fd, index, pArgs->CountInhabitedIslands);
     }
+
+    if (pArgs->IsHexDumpRequired)
+    {
+        HexDump(fd);
+    }
+
+    CloseFile(fd);
+}
+
+void RemoveCommandExec(Args* pArgs)
+{
+    assert(!pArgs->IsMetaFormatGiven);
+    assert(!pArgs->IsFormatGiven);
+    assert(pArgs->IsIndexGiven || pArgs->IsOldNameGiven);
+    assert(!(pArgs->IsIndexGiven && pArgs->IsOldNameGiven));
+
+    int fd = pArgs->IsForceCreate
+             ? CreateFile(pArgs->FileName, sizeof(Archipelago))
+             : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
+
+    int index = pArgs->IsIndexGiven
+                ? pArgs->Index
+                : IndexByName(fd, pArgs->OldName);
+
+    if (pArgs->IsRemoveSwapWithLast)
+    {
+        RemoveSwapWithLast(fd, index);
+    }
+    else
+    {
+        RemoveShift(fd, index);
+    }
+
+    if (pArgs->IsHexDumpRequired)
+    {
+        HexDump(fd);
+    }
+
+    CloseFile(fd);
+}
+
+void HasUninhabitedCommandExec(Args* pArgs)
+{
+    assert(!pArgs->IsMetaFormatGiven);
+    assert(!pArgs->IsFormatGiven);
+    assert(pArgs->IsIndexGiven || pArgs->IsOldNameGiven);
+    assert(!(pArgs->IsIndexGiven && pArgs->IsOldNameGiven));
+
+    int fd = pArgs->IsForceCreate
+             ? CreateFile(pArgs->FileName, sizeof(Archipelago))
+             : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
+
+    Meta meta;
+    ReadMeta(fd, &meta);
+
+    bool has = false;
+    for (int i = 0; i < meta.Count; i++)
+    {
+        Archipelago archipelago;
+        ReadRecord(fd, &archipelago, i);
+        if (archipelago.CountInhabitedIslands == 0)
+        {
+            has = true;
+            break;
+        }
+    }
+
+    if (has)
+    {
+        printf("Имеются архипелаги, состоящие только из необитаемых островов\n");
+    }
+    else
+    {
+        printf("Отсутствуют архипелаги, состоящие только из необитаемых островов\n");
+    }
+
+    if (pArgs->IsHexDumpRequired)
+    {
+        HexDump(fd);
+    }
+
+    CloseFile(fd);
+}
+
+void WhereCountIslandsCommandExec(Args* pArgs)
+{
+    assert(!pArgs->IsMetaFormatGiven);
+    assert(pArgs->IsNameGiven || pArgs->IsCountIslandsGiven ||
+           pArgs->IsCountInhabitedIslandsGiven);
+
+    int fd = pArgs->IsForceCreate
+             ? CreateFile(pArgs->FileName, sizeof(Archipelago))
+             : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
+
+    Meta meta;
+    ReadMeta(fd, &meta);
+
+
+    printf(pArgs->MetaFormat, meta.Version, meta.Size, meta.Count);
+    printf("\n");
+
+    int c = 0;
+    for (int i = 0; i < meta.Count; i++)
+    {
+        Archipelago archipelago;
+        ReadRecord(fd, &archipelago, i);
+
+        bool condOrIsNameGiven =
+                pArgs->IsNameGiven &&
+                strcmp(archipelago.Name, pArgs->Name) == 0;
+        bool condOrIsCountIslandsGiven =
+                pArgs->IsCountIslandsGiven &&
+                archipelago.CountIslands == pArgs->CountIslands;
+        bool condOrIsCountInhabitedIslandsGiven =
+                pArgs->IsCountInhabitedIslandsGiven &&
+                archipelago.CountInhabitedIslands ==
+                pArgs->CountInhabitedIslands;
+
+        bool condAndIsNameGiven =
+                (pArgs->IsNameGiven &&
+                 strcmp(archipelago.Name, pArgs->Name) == 0) ||
+                !pArgs->IsNameGiven;
+        bool condAndIsCountIslandsGiven =
+                (pArgs->IsCountIslandsGiven &&
+                 archipelago.CountIslands == pArgs->CountIslands) ||
+                !pArgs->IsCountIslandsGiven;
+        bool condAndIsCountInhabitedIslandsGiven =
+                (pArgs->IsCountInhabitedIslandsGiven &&
+                 archipelago.CountInhabitedIslands ==
+                 pArgs->CountInhabitedIslands) ||
+                !pArgs->IsCountInhabitedIslandsGiven;
+
+        if (pArgs->IsAnd
+            ? condAndIsNameGiven &&
+              condAndIsCountIslandsGiven &&
+              condAndIsCountInhabitedIslandsGiven
+            : condOrIsNameGiven ||
+              condOrIsCountIslandsGiven ||
+              condOrIsCountInhabitedIslandsGiven)
+        {
+            printf(pArgs->Format,
+                   archipelago.Name,
+                   archipelago.CountIslands,
+                   archipelago.CountInhabitedIslands);
+            printf("\n");
+            c++;
+        }
+    }
+
+    printf(pArgs->CountFormat, c);
+    printf("\n");
 
     if (pArgs->IsHexDumpRequired)
     {

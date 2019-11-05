@@ -15,4 +15,16 @@ void FormatCommandExec(Args* pArgs);
 
 void ModifyCommandExec(Args* pArgs);
 
+#define REMOVE_COMMAND_NAME "remove"
+
+void RemoveCommandExec(Args* pArgs);
+
+#define HAS_UNINHABITED_COMMAND_NAME "has"
+
+void HasUninhabitedCommandExec(Args* pArgs);
+
+#define WHERE_COUNT_ISLANDS_COMMAND_NAME "wherecount"
+
+void WhereCountIslandsCommandExec(Args* pArgs);
+
 #endif //COMMANDS_H

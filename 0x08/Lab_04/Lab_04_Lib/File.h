@@ -29,7 +29,9 @@ int AddRecord(int fd, void* data);
 
 int ChangeSize(int fd, int n);
 
-void RemoveSwapWithLast(int fd, int indexToRemove, int indexToLast);
+void RemoveSwapWithLast(int fd, int indexToRemove);
+
+void RemoveShift(int fd, int index);
 
 size_t GetFileSize(int fd);
 
