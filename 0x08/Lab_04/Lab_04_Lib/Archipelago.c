@@ -60,7 +60,7 @@ int IndexByName(int fd, Meta* pMeta, char* name)
     for (int i = 0; i < pMeta->Count; i++)
     {
         Archipelago archipelago;
-        ReadRecord(fd, pMeta, &archipelago, i);
+        ReadArchipelago(fd, pMeta, &archipelago, i);
         if (strcmp(archipelago.Name, name) == 0)
         {
             return i;
@@ -84,22 +84,23 @@ int ModifyCountIslands(int fd, Meta* pMeta, int index, int newCountIslands)
 {
     assert(newCountIslands > 1);
     Archipelago archipelago;
-    ReadRecord(fd, pMeta, &archipelago, index);
+    ReadArchipelago(fd, pMeta, &archipelago, index);
     assert(newCountIslands >= archipelago.CountInhabitedIslands);
     archipelago.CountIslands = newCountIslands;
-    WriteRecord(fd, pMeta, &archipelago, index);
+    WriteArchipelago(fd, pMeta, &archipelago, index);
     return 0;
 }
 
 int ModifyCountInhabitedIslands(int fd,
+                                Meta* pMeta,
                                 int index,
                                 int newCountInhabitedIslands)
 {
     assert(newCountInhabitedIslands >= 0);
     Archipelago archipelago;
-    ReadArchipelago(fd, NULL, &archipelago, index);
+    ReadArchipelago(fd, pMeta, &archipelago, index);
     assert(newCountInhabitedIslands <= archipelago.CountIslands);
     archipelago.CountInhabitedIslands = newCountInhabitedIslands;
-    WriteArchipelago(fd, NULL, &archipelago, index);
+    WriteArchipelago(fd, pMeta, &archipelago, index);
     return 0;
 }

@@ -3,6 +3,8 @@
 
 #include "Meta.h"
 
+#define READ_WRITE_UNSUCCESSFUL -1
+
 int OpenFile1(char* path);
 
 int CloseFile1(int fd);

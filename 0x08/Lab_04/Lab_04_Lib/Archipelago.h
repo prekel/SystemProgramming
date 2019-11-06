@@ -41,8 +41,7 @@ int ModifyName(int fd, Meta* pMeta, int index, char* newName);
 
 int ModifyCountIslands(int fd, Meta* pMeta, int index, int newCountIslands);
 
-int ModifyCountInhabitedIslands(int fd,
-                                int index,
+int ModifyCountInhabitedIslands(int fd, Meta* pMeta, int index,
                                 int newCountInhabitedIslands);
 
 #endif //ARCHIPELAGO_H

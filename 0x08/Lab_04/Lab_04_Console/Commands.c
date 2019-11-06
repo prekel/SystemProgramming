@@ -38,7 +38,11 @@ void AddCommandExec(Args* pArgs)
                     ? pArgs->CountInhabitedIslands
                     : ParseInt(pArgs->pExtraArgs[2]));
 
-    AddArchipelago(fd, NULL, &archipelago);
+    Meta meta;
+    int readMeta = ReadMeta(fd, &meta);
+    assert(readMeta != READ_WRITE_UNSUCCESSFUL);
+
+    AddArchipelago(fd, &meta, &archipelago);
 
     if (pArgs->IsHexDumpRequired)
     {
@@ -61,21 +65,26 @@ void ModifyCommandExec(Args* pArgs)
              ? CreateFile1(pArgs->FileName, sizeof(Archipelago))
              : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
 
+    Meta meta;
+    int readMeta = ReadMeta(fd, &meta);
+    assert(readMeta != READ_WRITE_UNSUCCESSFUL);
+
     int index = pArgs->IsIndexGiven
                 ? pArgs->Index
-                : IndexByName(fd, NULL, pArgs->OldName);
+                : IndexByName(fd, &meta, pArgs->OldName);
 
     if (pArgs->IsNameGiven)
     {
-        ModifyName(fd, NULL, index, pArgs->Name);
+        ModifyName(fd, &meta, index, pArgs->Name);
     }
     if (pArgs->IsCountIslandsGiven)
     {
-        ModifyCountIslands(fd, NULL, index, pArgs->CountIslands);
+        ModifyCountIslands(fd, &meta, index, pArgs->CountIslands);
     }
     if (pArgs->IsCountInhabitedIslandsGiven)
     {
-        ModifyCountInhabitedIslands(fd, index, pArgs->CountInhabitedIslands);
+        ModifyCountInhabitedIslands(fd, &meta, index,
+                                    pArgs->CountInhabitedIslands);
     }
 
     if (pArgs->IsHexDumpRequired)
@@ -97,17 +106,21 @@ void RemoveCommandExec(Args* pArgs)
              ? CreateFile1(pArgs->FileName, sizeof(Archipelago))
              : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
 
+    Meta meta;
+    int readMeta = ReadMeta(fd, &meta);
+    assert(readMeta != READ_WRITE_UNSUCCESSFUL);
+
     int index = pArgs->IsIndexGiven
                 ? pArgs->Index
-                : IndexByName(fd, NULL, pArgs->OldName);
+                : IndexByName(fd, &meta, pArgs->OldName);
 
     if (pArgs->IsRemoveSwapWithLast)
     {
-        RemoveSwapWithLast(fd, NULL, index, 0);
+        RemoveSwapWithLast(fd, &meta, index);
     }
     else
     {
-        RemoveShift(fd, NULL, index);
+        RemoveShift(fd, &meta, index);
     }
 
     if (pArgs->IsHexDumpRequired)
@@ -140,13 +153,13 @@ void HasUninhabitedCommandExec(Args* pArgs)
 
     Meta meta;
     int readMeta = ReadMeta(fd, &meta);
-    assert(readMeta != -1);
+    assert(readMeta != READ_WRITE_UNSUCCESSFUL);
 
     bool has = false;
     for (int i = 0; i < meta.Count; i++)
     {
         Archipelago archipelago;
-        ReadArchipelago(fd, NULL, &archipelago, i);
+        ReadArchipelago(fd, &meta, &archipelago, i);
         if (archipelago.CountInhabitedIslands == 0)
         {
             has = true;
@@ -181,7 +194,7 @@ void PrintCommandExec(Args* pArgs)
 
     Meta meta;
     int readMeta = ReadMeta(fd, &meta);
-    assert(readMeta != -1);
+    assert(readMeta != READ_WRITE_UNSUCCESSFUL);
 
     printf(pArgs->MetaFormat, meta.Version, meta.Size, meta.Count);
     printf("\n");
@@ -190,7 +203,7 @@ void PrintCommandExec(Args* pArgs)
     for (int i = 0; i < meta.Count; i++)
     {
         Archipelago archipelago;
-        ReadRecord(fd, NULL, &archipelago, i);
+        ReadArchipelago(fd, &meta, &archipelago, i);
 
         bool condOrIsNameGiven =
                 pArgs->IsNameGiven &&
