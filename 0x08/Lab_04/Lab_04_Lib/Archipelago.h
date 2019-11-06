@@ -25,7 +25,7 @@ void FillArchipelago(Archipelago* pArchipelago,
                      int countIslands,
                      int countInhabitedIslands);
 
-int SetName(Archipelago* pArchipelago, char* name);
+int SetName(Archipelago* pArchipelago, const char* name);
 
 ssize_t
 ReadArchipelago(int fd, Meta* pMeta, Archipelago* pArchipelago, int index);

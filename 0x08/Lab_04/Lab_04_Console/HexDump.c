@@ -27,7 +27,7 @@ void HexDump(int fd)
     size_t bytesRead;
     int i;
 
-    SeekToStartRecord(fd, META_INDEX);
+    SeekRecord(fd, NULL, META_INDEX);
 
     printf("\n");
     do

@@ -19,7 +19,7 @@ void FillArchipelago(Archipelago* pArchipelago,
     pArchipelago->CountInhabitedIslands = countInhabitedIslands;
 }
 
-int SetName(Archipelago* pArchipelago, char* name)
+int SetName(Archipelago* pArchipelago, const char* name)
 {
     memset(pArchipelago->Name, '\0', ARCHIPELAGO_NAME_LENGTH);
     int i;
@@ -60,7 +60,11 @@ int IndexByName(int fd, Meta* pMeta, char* name)
     for (int i = 0; i < pMeta->Count; i++)
     {
         Archipelago archipelago;
-        ReadArchipelago(fd, pMeta, &archipelago, i);
+        if (ReadArchipelago(fd, pMeta, &archipelago, i) ==
+            FILE_UNSUCCESSFUL)
+        {
+            return NOT_FOUND;
+        }
         if (strcmp(archipelago.Name, name) == 0)
         {
             return i;
@@ -74,21 +78,27 @@ int ModifyName(int fd, Meta* pMeta, int index, char* newName)
 {
     assert(strlen(newName) + 1 <= ARCHIPELAGO_NAME_LENGTH);
     Archipelago archipelago;
-    ReadArchipelago(fd, pMeta, &archipelago, index);
+    if (ReadArchipelago(fd, pMeta, &archipelago, index) ==
+        FILE_UNSUCCESSFUL)
+    {
+        return FILE_UNSUCCESSFUL;
+    }
     SetName(&archipelago, newName);
-    WriteArchipelago(fd, pMeta, &archipelago, index);
-    return 0;
+    return WriteArchipelago(fd, pMeta, &archipelago, index);
 }
 
 int ModifyCountIslands(int fd, Meta* pMeta, int index, int newCountIslands)
 {
     assert(newCountIslands > 1);
     Archipelago archipelago;
-    ReadArchipelago(fd, pMeta, &archipelago, index);
+    if (ReadArchipelago(fd, pMeta, &archipelago, index) ==
+        FILE_UNSUCCESSFUL)
+    {
+        return FILE_UNSUCCESSFUL;
+    }
     assert(newCountIslands >= archipelago.CountInhabitedIslands);
     archipelago.CountIslands = newCountIslands;
-    WriteArchipelago(fd, pMeta, &archipelago, index);
-    return 0;
+    return WriteArchipelago(fd, pMeta, &archipelago, index);
 }
 
 int ModifyCountInhabitedIslands(int fd,
@@ -98,9 +108,12 @@ int ModifyCountInhabitedIslands(int fd,
 {
     assert(newCountInhabitedIslands >= 0);
     Archipelago archipelago;
-    ReadArchipelago(fd, pMeta, &archipelago, index);
+    if (ReadArchipelago(fd, pMeta, &archipelago, index) ==
+        FILE_UNSUCCESSFUL)
+    {
+        return FILE_UNSUCCESSFUL;
+    }
     assert(newCountInhabitedIslands <= archipelago.CountIslands);
     archipelago.CountInhabitedIslands = newCountInhabitedIslands;
-    WriteArchipelago(fd, pMeta, &archipelago, index);
-    return 0;
+    return WriteArchipelago(fd, pMeta, &archipelago, index);
 }

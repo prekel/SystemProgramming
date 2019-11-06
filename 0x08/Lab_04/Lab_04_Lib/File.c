@@ -29,8 +29,10 @@ int CreateFile1(char* path, size_t size)
     mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH;
     int fd = open(path, O_RDWR | O_CREAT | O_TRUNC, mode);
 
-    int writeMeta = WriteMeta(fd, &meta);
-    assert(writeMeta != -1);
+    if (WriteMeta(fd, &meta) == FILE_UNSUCCESSFUL)
+    {
+        return FILE_UNSUCCESSFUL;
+    }
 
     return fd;
 }
@@ -54,77 +56,113 @@ int CloseFile1(int fd)
     return close(fd);
 }
 
-off_t SeekToStartRecord(int fd, int n)
+off_t SeekRecord(int fd, Meta* pMeta, int index)
 {
-    if (n == -1)
+    if (index == META_INDEX)
     {
         return lseek(fd, 0, SEEK_SET);
     }
 
-    Meta meta;
-    int readMeta = ReadMeta(fd, &meta);
-    assert(readMeta != -1);
-    return lseek(fd, sizeof(meta) + n * meta.Size, SEEK_SET);
+    return lseek(fd, sizeof(Meta) + index * pMeta->Size, SEEK_SET);
 }
 
 ssize_t WriteRecord(int fd, Meta* pMeta, void* data, int n)
 {
-    SeekToStartRecord(fd, n);
+    if (SeekRecord(fd, NULL, n) == FILE_UNSUCCESSFUL)
+    {
+        return FILE_UNSUCCESSFUL;
+    }
     return write(fd, data, pMeta->Size);
 }
 
 ssize_t ReadRecord(int fd, Meta* pMeta, void* data, int n)
 {
-    SeekToStartRecord(fd, n);
+    if (SeekRecord(fd, NULL, n) == FILE_UNSUCCESSFUL)
+    {
+        return FILE_UNSUCCESSFUL;
+    }
     return read(fd, data, pMeta->Size);
 }
 
 ssize_t AddRecord(int fd, Meta* pMeta, void* data)
 {
     pMeta->Count++;
-    WriteMeta(fd, pMeta);
+    if (WriteMeta(fd, pMeta) == FILE_UNSUCCESSFUL)
+    {
+        return FILE_UNSUCCESSFUL;
+    }
 
     return WriteRecord(fd, pMeta, data, pMeta->Count - 1);
 }
 
-int ChangeSize(int fd, int n)
+ssize_t WriteMeta(int fd, Meta* meta)
 {
-    Meta meta;
-    int readMeta = ReadMeta(fd, &meta);
-    assert(readMeta != -1);
-
-    return ftruncate(fd, sizeof(Meta) + n * meta.Size);
+    SeekRecord(fd, NULL, META_INDEX);
+    return write(fd, meta, sizeof(Meta));
 }
 
-void RemoveSwapWithLast(int fd, Meta* pMeta, int indexToRemove)
+ssize_t ReadMeta(int fd, Meta* meta)
 {
-    pMeta->Count--;
-    WriteMeta(fd, pMeta);
+    SeekRecord(fd, NULL, META_INDEX);
+    return read(fd, meta, sizeof(Meta));
+}
 
-    if (pMeta->Count > 0)
+int ChangeSize(int fd, Meta* pMeta, int n)
+{
+    return ftruncate(fd, sizeof(Meta) + n * pMeta->Size);
+}
+
+int RemoveSwapWithLast(int fd, Meta* pMeta, int indexToRemove)
+{
+    if (pMeta->Count > 1)
     {
         char data[pMeta->Size];
-        ReadRecord(fd, pMeta, &data, pMeta->Count);
-        WriteRecord(fd, pMeta, &data, indexToRemove);
+        if (ReadRecord(fd, pMeta, &data, pMeta->Count - 1) ==
+            FILE_UNSUCCESSFUL)
+        {
+            return FILE_UNSUCCESSFUL;
+        }
+        if (WriteRecord(fd, pMeta, &data, indexToRemove) ==
+            FILE_UNSUCCESSFUL)
+        {
+            return FILE_UNSUCCESSFUL;
+        }
     }
 
-    ChangeSize(fd, pMeta->Count);
+    pMeta->Count--;
+    if (WriteMeta(fd, pMeta) == FILE_UNSUCCESSFUL)
+    {
+        return FILE_UNSUCCESSFUL;
+    }
+
+    return ChangeSize(fd, pMeta, pMeta->Count);
 }
 
-void RemoveShift(int fd, Meta* pMeta, int index)
+int RemoveShift(int fd, Meta* pMeta, int index)
 {
     if (pMeta->Count > 1)
     {
         int n = pMeta->Count - index - 1;
         char dataShift[pMeta->Size * n];
-        ReadRecords(fd, pMeta, &dataShift, index + 1, n);
-        WriteRecords(fd, pMeta, &dataShift, index, n);
+        if (ReadRecords(fd, pMeta, &dataShift, index + 1, n) ==
+            FILE_UNSUCCESSFUL)
+        {
+            return FILE_UNSUCCESSFUL;
+        }
+        if (WriteRecords(fd, pMeta, &dataShift, index, n) ==
+            FILE_UNSUCCESSFUL)
+        {
+            return FILE_UNSUCCESSFUL;
+        }
     }
 
     pMeta->Count--;
-    WriteMeta(fd, pMeta);
+    if (WriteMeta(fd, pMeta) == FILE_UNSUCCESSFUL)
+    {
+        return FILE_UNSUCCESSFUL;
+    }
 
-    ChangeSize(fd, pMeta->Count);
+    return ChangeSize(fd, pMeta, pMeta->Count);
 }
 
 size_t CalculatedFileSize(Meta* pMeta)
@@ -132,16 +170,26 @@ size_t CalculatedFileSize(Meta* pMeta)
     return sizeof(Meta) + pMeta->Count * pMeta->Count;
 }
 
-ssize_t ReadRecords(int fd, Meta* pMeta, void* allData, int index, int count)
+ssize_t ReadRecords(int fd, Meta* pMeta, void* pRecords, int index, int count)
 {
-    SeekToStartRecord(fd, index);
-    return read(fd, allData, pMeta->Size * count);
+    if (SeekRecord(fd, pMeta, index) == FILE_UNSUCCESSFUL)
+    {
+        return FILE_UNSUCCESSFUL;
+    }
+    return read(fd, pRecords, pMeta->Size * count);
 }
 
-ssize_t WriteRecords(int fd, Meta* pMeta, void* allData, int index, int count)
+ssize_t WriteRecords(int fd,
+                     Meta* pMeta,
+                     void* pRecords,
+                     int index,
+                     int count)
 {
-    SeekToStartRecord(fd, index);
-    return write(fd, allData, pMeta->Size * count);
+    if (SeekRecord(fd, pMeta, index) == FILE_UNSUCCESSFUL)
+    {
+        return FILE_UNSUCCESSFUL;
+    }
+    return write(fd, pRecords, pMeta->Size * count);
 }
 
 int DeleteFile(char* path)

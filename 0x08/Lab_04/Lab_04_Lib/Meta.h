@@ -16,10 +16,6 @@ typedef struct
 
 void FillMeta(Meta* pMeta, int size);
 
-ssize_t ReadMeta(int fd, Meta* meta);
-
-ssize_t WriteMeta(int fd, Meta* meta);
-
 bool CheckMetaVersion(int fd);
 
 #endif //META_H

@@ -8,22 +8,16 @@ void FillMeta(Meta* pMeta, int size)
     pMeta->Count = 0;
 }
 
-ssize_t WriteMeta(int fd, Meta* meta)
-{
-    SeekToStartRecord(fd, META_INDEX);
-    return write(fd, meta, sizeof(Meta));
-}
-
-ssize_t ReadMeta(int fd, Meta* meta)
-{
-    SeekToStartRecord(fd, META_INDEX);
-    return read(fd, meta, sizeof(Meta));
-}
-
 bool CheckMetaVersion(int fd)
 {
-    SeekToStartRecord(fd, META_INDEX);
+    if (SeekRecord(fd, NULL, META_INDEX) == FILE_UNSUCCESSFUL)
+    {
+        return false;
+    }
     int actualVersion;
-    read(fd, &actualVersion, sizeof(int));
+    if (read(fd, &actualVersion, sizeof(int)) == FILE_UNSUCCESSFUL)
+    {
+        return false;
+    }
     return actualVersion == META_VERSION;
 }

@@ -40,7 +40,7 @@ void AddCommandExec(Args* pArgs)
 
     Meta meta;
     int readMeta = ReadMeta(fd, &meta);
-    assert(readMeta != READ_WRITE_UNSUCCESSFUL);
+    assert(readMeta != FILE_UNSUCCESSFUL);
 
     AddArchipelago(fd, &meta, &archipelago);
 
@@ -68,7 +68,7 @@ void ModifyCommandExec(Args* pArgs)
 
     Meta meta;
     int readMeta = ReadMeta(fd, &meta);
-    assert(readMeta != READ_WRITE_UNSUCCESSFUL);
+    assert(readMeta != FILE_UNSUCCESSFUL);
 
     assert(pArgs->IsIndexGiven && pArgs->Index < meta.Count);
 
@@ -114,7 +114,7 @@ void RemoveCommandExec(Args* pArgs)
 
     Meta meta;
     int readMeta = ReadMeta(fd, &meta);
-    assert(readMeta != READ_WRITE_UNSUCCESSFUL);
+    assert(readMeta != FILE_UNSUCCESSFUL);
 
     assert(pArgs->IsIndexGiven && pArgs->Index < meta.Count);
 
@@ -163,7 +163,7 @@ void HasUninhabitedCommandExec(Args* pArgs)
 
     Meta meta;
     int readMeta = ReadMeta(fd, &meta);
-    assert(readMeta != READ_WRITE_UNSUCCESSFUL);
+    assert(readMeta != FILE_UNSUCCESSFUL);
 
     bool has = false;
     for (int i = 0; i < meta.Count; i++)
@@ -204,7 +204,7 @@ void PrintCommandExec(Args* pArgs)
 
     Meta meta;
     int readMeta = ReadMeta(fd, &meta);
-    assert(readMeta != READ_WRITE_UNSUCCESSFUL);
+    assert(readMeta != FILE_UNSUCCESSFUL);
 
     printf(pArgs->MetaFormat, meta.Version, meta.Size, meta.Count);
     printf("\n");
