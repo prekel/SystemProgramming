@@ -61,6 +61,11 @@ Args* CreateArgs()
     pArgs->IsIsOrGiven = false;
     pArgs->IsOr = false;
 
+    pArgs->IsHelpGiven = false;
+
+    pArgs->IsUnknownOptionGiven = false;
+    pArgs->UnknownOption = '\0';
+
     return pArgs;
 }
 
@@ -191,10 +196,11 @@ Args* ParseArgs(int argc, char** argv)
             pArgs->IsOr = true;
             break;
         case OPT_HELP:
-            printf("help\n");
+            pArgs->IsHelpGiven = true;
             break;
         case OPT_UNKNOWN:
-            printf("unknown option: %c\n", optopt);
+            pArgs->IsUnknownOptionGiven = true;
+            pArgs->UnknownOption = (char)optopt;
             break;
         default:
             assert(false);

@@ -31,6 +31,13 @@ void HasUninhabitedCommandExec(Args* pArgs);
 
 void HexdumpExec(Args* pArgs);
 
+#define HELP_COMMAND_NAME "help"
+#define HELP_OPT_NAME "-h"
+
+void HelpExec(Args* pArgs);
+
+void UnknownOptionExec(Args* pArgs);
+
 int Exec(char* command, Args* pArgs);
 
 #endif //COMMANDS_H

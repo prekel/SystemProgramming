@@ -1,6 +1,8 @@
 #ifndef ARCHIPELAGO_H
 #define ARCHIPELAGO_H
 
+#include "Meta.h"
+
 #define ARCHIPELAGO_NAME_LENGTH 104
 
 #define NOT_FOUND -1
@@ -23,11 +25,21 @@ void FillArchipelago(Archipelago* pArchipelago,
                      int countIslands,
                      int countInhabitedIslands);
 
-int IndexByName(int fd, char* name);
+int SetName(Archipelago* pArchipelago, char* name);
 
-int ModifyName(int fd, int index, char* newName);
+ssize_t
+ReadArchipelago(int fd, Meta* pMeta, Archipelago* pArchipelago, int index);
 
-int ModifyCountIslands(int fd, int index, int newCountIslands);
+ssize_t
+WriteArchipelago(int fd, Meta* pMeta, Archipelago* pArchipelago, int index);
+
+ssize_t AddArchipelago(int fd, Meta* pMeta, Archipelago* pArchipelago);
+
+int IndexByName(int fd, Meta* pMeta, char* name);
+
+int ModifyName(int fd, Meta* pMeta, int index, char* newName);
+
+int ModifyCountIslands(int fd, Meta* pMeta, int index, int newCountIslands);
 
 int ModifyCountInhabitedIslands(int fd,
                                 int index,

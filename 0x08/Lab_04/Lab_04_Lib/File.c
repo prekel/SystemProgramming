@@ -14,7 +14,9 @@ int OpenFile1(char* path)
     mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH;
     int fd = open(path, O_RDWR, mode);
 
-    assert(CheckMetaVersion(fd));
+
+    bool checkMetaVersion = CheckMetaVersion(fd);
+    assert(checkMetaVersion);
 
     return fd;
 }
@@ -27,7 +29,8 @@ int CreateFile1(char* path, size_t size)
     mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH;
     int fd = open(path, O_RDWR | O_CREAT | O_TRUNC, mode);
 
-    WriteMeta(fd, &meta);
+    int writeMeta = WriteMeta(fd, &meta);
+    assert(writeMeta != -1);
 
     return fd;
 }
@@ -51,18 +54,6 @@ int CloseFile1(int fd)
     return close(fd);
 }
 
-int WriteMeta(int fd, Meta* meta)
-{
-    SeekToStartRecord(fd, -1);
-    return write(fd, meta, sizeof(Meta));
-}
-
-int ReadMeta(int fd, Meta* meta)
-{
-    SeekToStartRecord(fd, -1);
-    return read(fd, meta, sizeof(Meta));
-}
-
 off_t SeekToStartRecord(int fd, int n)
 {
     if (n == -1)
@@ -71,92 +62,77 @@ off_t SeekToStartRecord(int fd, int n)
     }
 
     Meta meta;
-    ReadMeta(fd, &meta);
+    int readMeta = ReadMeta(fd, &meta);
+    assert(readMeta != -1);
     return lseek(fd, sizeof(meta) + n * meta.Size, SEEK_SET);
 }
 
-int WriteRecord(int fd, void* data, int n)
+ssize_t WriteRecord(int fd, Meta* pMeta, void* data, int n)
 {
-    Meta meta;
-    ReadMeta(fd, &meta);
-
     SeekToStartRecord(fd, n);
-    return write(fd, data, meta.Size);
+    return write(fd, data, pMeta->Size);
 }
 
-void ReadRecord(int fd, void* data, int n)
+ssize_t ReadRecord(int fd, Meta* pMeta, void* data, int n)
 {
-    Meta meta;
-    ReadMeta(fd, &meta);
-
     SeekToStartRecord(fd, n);
-    read(fd, data, meta.Size);
+    return read(fd, data, pMeta->Size);
 }
 
-int AddRecord(int fd, void* data)
+ssize_t AddRecord(int fd, Meta* pMeta, void* data)
 {
-    Meta meta;
-    ReadMeta(fd, &meta);
-    meta.Count++;
-    WriteMeta(fd, &meta);
+    pMeta->Count++;
 
-    return WriteRecord(fd, data, meta.Count - 1);
+    return WriteRecord(fd, pMeta, data, pMeta->Count - 1);
 }
 
 int ChangeSize(int fd, int n)
 {
     Meta meta;
-    ReadMeta(fd, &meta);
+    int readMeta = ReadMeta(fd, &meta);
+    assert(readMeta != -1);
 
     return ftruncate(fd, sizeof(Meta) + n * meta.Size);
 }
 
-void RemoveSwapWithLast(int fd, int indexToRemove)
+void RemoveSwapWithLast(int fd, Meta* pMeta, int indexToRemove)
 {
-    Meta meta;
-    ReadMeta(fd, &meta);
-    meta.Count--;
-    WriteMeta(fd, &meta);
+    pMeta->Count--;
 
-    if (meta.Count > 0)
+    if (pMeta->Count > 0)
     {
-        char data[meta.Size];
-        ReadRecord(fd, &data, meta.Count);
-        WriteRecord(fd, &data, indexToRemove);
+        char data[pMeta->Size];
+        ReadRecord(fd, pMeta, &data, pMeta->Count);
+        WriteRecord(fd, pMeta, &data, indexToRemove);
     }
 
-    ChangeSize(fd, meta.Count);
+    ChangeSize(fd, pMeta->Count);
 }
 
-void RemoveShift(int fd, int index)
+void RemoveShift(int fd, Meta* pMeta, int index)
 {
-    Meta meta;
-    ReadMeta(fd, &meta);
-    meta.Count--;
-    WriteMeta(fd, &meta);
+    pMeta->Count--;
 
-    if (meta.Count > 0)
+    if (pMeta->Count > 0)
     {
-        int n = meta.Count - index;
-        char dataShift[meta.Size * n];
-        ReadRecord(fd, &dataShift, meta.Count);
-        WriteRecord(fd, &dataShift, index);
+        int n = pMeta->Count - index;
+        char dataShift[pMeta->Size * n];
+        ReadRecord(fd, pMeta, &dataShift, pMeta->Count);
+        WriteRecord(fd, pMeta, &dataShift, index);
     }
 
-    ChangeSize(fd, meta.Count);
+    ChangeSize(fd, pMeta->Count);
 }
 
-size_t GetFileSize1(int fd)
+size_t GetFileSize1(int fd, Meta* pMeta)
 {
-    Meta meta;
-    ReadMeta(fd, &meta);
-    return sizeof(Meta) + meta.Count * meta.Count;
+    return sizeof(Meta) + pMeta->Count * pMeta->Count;
 }
 
-int ReadToEnd(int fd, void* allData)
+ssize_t ReadToEnd(int fd, void* allData)
 {
-    SeekToStartRecord(fd, -1);
-    return read(fd, allData, GetFileSize1(fd));
+    SeekToStartRecord(fd, META_INDEX);
+    return read(fd, allData, GetFileSize1(fd, NULL));
 }
 
 int DeleteFile(char* path)

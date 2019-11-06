@@ -49,6 +49,11 @@ typedef struct
     bool IsIsOrGiven;
     bool IsOr;
 
+    bool IsHelpGiven;
+
+    bool IsUnknownOptionGiven;
+    char UnknownOption;
+
     char** pExtraArgs;
 } Args;
 
