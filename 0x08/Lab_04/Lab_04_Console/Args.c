@@ -200,7 +200,7 @@ Args* ParseArgs(int argc, char** argv)
             break;
         case OPT_UNKNOWN:
             pArgs->IsUnknownOptionGiven = true;
-            pArgs->UnknownOption = (char)optopt;
+            pArgs->UnknownOption = (char) optopt;
             break;
         default:
             assert(false);

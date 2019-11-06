@@ -82,6 +82,7 @@ ssize_t ReadRecord(int fd, Meta* pMeta, void* data, int n)
 ssize_t AddRecord(int fd, Meta* pMeta, void* data)
 {
     pMeta->Count++;
+    WriteMeta(fd, pMeta);
 
     return WriteRecord(fd, pMeta, data, pMeta->Count - 1);
 }
@@ -98,6 +99,7 @@ int ChangeSize(int fd, int n)
 void RemoveSwapWithLast(int fd, Meta* pMeta, int indexToRemove)
 {
     pMeta->Count--;
+    WriteMeta(fd, pMeta);
 
     if (pMeta->Count > 0)
     {
@@ -111,28 +113,35 @@ void RemoveSwapWithLast(int fd, Meta* pMeta, int indexToRemove)
 
 void RemoveShift(int fd, Meta* pMeta, int index)
 {
-    pMeta->Count--;
-
-    if (pMeta->Count > 0)
+    if (pMeta->Count > 1)
     {
-        int n = pMeta->Count - index;
+        int n = pMeta->Count - index - 1;
         char dataShift[pMeta->Size * n];
-        ReadRecord(fd, pMeta, &dataShift, pMeta->Count);
-        WriteRecord(fd, pMeta, &dataShift, index);
+        ReadRecords(fd, pMeta, &dataShift, index + 1, n);
+        WriteRecords(fd, pMeta, &dataShift, index, n);
     }
+
+    pMeta->Count--;
+    WriteMeta(fd, pMeta);
 
     ChangeSize(fd, pMeta->Count);
 }
 
-size_t GetFileSize1(int fd, Meta* pMeta)
+size_t CalculatedFileSize(Meta* pMeta)
 {
     return sizeof(Meta) + pMeta->Count * pMeta->Count;
 }
 
-ssize_t ReadToEnd(int fd, void* allData)
+ssize_t ReadRecords(int fd, Meta* pMeta, void* allData, int index, int count)
 {
-    SeekToStartRecord(fd, META_INDEX);
-    return read(fd, allData, GetFileSize1(fd, NULL));
+    SeekToStartRecord(fd, index);
+    return read(fd, allData, pMeta->Size * count);
+}
+
+ssize_t WriteRecords(int fd, Meta* pMeta, void* allData, int index, int count)
+{
+    SeekToStartRecord(fd, index);
+    return write(fd, allData, pMeta->Size * count);
 }
 
 int DeleteFile(char* path)

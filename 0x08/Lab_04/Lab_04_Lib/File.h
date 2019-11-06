@@ -29,9 +29,11 @@ void RemoveSwapWithLast(int fd, Meta* pMeta, int indexToRemove);
 
 void RemoveShift(int fd, Meta* pMeta, int index);
 
-size_t GetFileSize1(int fd, Meta* pMeta);
+size_t CalculatedFileSize(Meta* pMeta);
 
-ssize_t ReadToEnd(int fd, void* allData);
+ssize_t ReadRecords(int fd, Meta* pMeta, void* allData, int index, int count);
+
+ssize_t WriteRecords(int fd, Meta* pMeta, void* allData, int index, int count);
 
 int DeleteFile(char* path);
 

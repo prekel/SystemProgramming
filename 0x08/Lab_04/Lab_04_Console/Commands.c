@@ -60,6 +60,7 @@ void ModifyCommandExec(Args* pArgs)
     assert(!(pArgs->IsIndexGiven && pArgs->IsOldNameGiven));
     assert(pArgs->IsNameGiven || pArgs->IsCountIslandsGiven ||
            pArgs->IsCountInhabitedIslandsGiven);
+    assert(pArgs->IsIndexGiven && pArgs->Index >= 0);
 
     int fd = pArgs->IsForceCreate
              ? CreateFile1(pArgs->FileName, sizeof(Archipelago))
@@ -69,9 +70,13 @@ void ModifyCommandExec(Args* pArgs)
     int readMeta = ReadMeta(fd, &meta);
     assert(readMeta != READ_WRITE_UNSUCCESSFUL);
 
+    assert(pArgs->IsIndexGiven && pArgs->Index < meta.Count);
+
     int index = pArgs->IsIndexGiven
                 ? pArgs->Index
                 : IndexByName(fd, &meta, pArgs->OldName);
+
+    assert(index != NOT_FOUND);
 
     if (pArgs->IsNameGiven)
     {
@@ -99,8 +104,9 @@ void RemoveCommandExec(Args* pArgs)
 {
     assert(!pArgs->IsMetaFormatGiven);
     assert(!pArgs->IsFormatGiven);
-    assert(pArgs->IsIndexGiven || pArgs->IsOldNameGiven);
-    assert(!(pArgs->IsIndexGiven && pArgs->IsOldNameGiven));
+    assert(pArgs->IsIndexGiven || pArgs->IsNameGiven);
+    assert(!(pArgs->IsIndexGiven && pArgs->IsNameGiven));
+    assert(pArgs->IsIndexGiven && pArgs->Index >= 0);
 
     int fd = pArgs->IsForceCreate
              ? CreateFile1(pArgs->FileName, sizeof(Archipelago))
@@ -110,9 +116,13 @@ void RemoveCommandExec(Args* pArgs)
     int readMeta = ReadMeta(fd, &meta);
     assert(readMeta != READ_WRITE_UNSUCCESSFUL);
 
+    assert(pArgs->IsIndexGiven && pArgs->Index < meta.Count);
+
     int index = pArgs->IsIndexGiven
                 ? pArgs->Index
-                : IndexByName(fd, &meta, pArgs->OldName);
+                : IndexByName(fd, &meta, pArgs->Name);
+
+    assert(index != NOT_FOUND);
 
     if (pArgs->IsRemoveSwapWithLast)
     {
