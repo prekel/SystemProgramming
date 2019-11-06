@@ -18,7 +18,7 @@
 #include "Archipelago.h"
 #include "File.h"
 #include "Meta.h"
-#include "HexDump.h"
+#include "Print.h"
 #include "Commands.h"
 
 /// Главная функция программы.

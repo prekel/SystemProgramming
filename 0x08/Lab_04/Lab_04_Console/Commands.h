@@ -3,17 +3,21 @@
 
 #include "Args.h"
 
+#define BAD_ARGS -4
+#define FILE_NOT_EXIST -5
+#define CLOSE_UNSUCCESSFUL -6
+
 #define ADD_COMMAND_NAME "add"
 
-void AddCommandExec(Args* pArgs);
+int AddCommandExec(int fd, Args* pArgs);
 
 #define MODIFY_COMMAND_NAME "modify"
 
-void ModifyCommandExec(Args* pArgs);
+int ModifyCommandExec(Args* pArgs);
 
 #define REMOVE_COMMAND_NAME "remove"
 
-void RemoveCommandExec(Args* pArgs);
+int RemoveCommandExec(Args* pArgs);
 
 #define DELETE_COMMAND_NAME "delete"
 
@@ -21,22 +25,22 @@ void DeleteCommandExec(Args* pArgs);
 
 #define PRINT_COMMAND_NAME "print"
 
-void PrintCommandExec(Args* pArgs);
+int PrintCommandExec(Args* pArgs);
 
 #define HAS_UNINHABITED_COMMAND_NAME "has"
 
-void HasUninhabitedCommandExec(Args* pArgs);
+int HasUninhabitedCommandExec(Args* pArgs);
 
 #define HEXDUMP_COMMAND_NAME "hexdump"
 
-void HexdumpExec(Args* pArgs);
+int HexdumpCommandExec(Args* pArgs);
 
 #define HELP_COMMAND_NAME "help"
 #define HELP_OPT_NAME "-h"
 
-void HelpExec(Args* pArgs);
+int HelpCommandExec(Args* pArgs);
 
-void UnknownOptionExec(Args* pArgs);
+int UnknownOptionCommandExec(Args* pArgs);
 
 int Exec(char* command, Args* pArgs);
 

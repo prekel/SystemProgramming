@@ -5,7 +5,9 @@
 
 #define ARCHIPELAGO_NAME_LENGTH 104
 
-#define NOT_FOUND -1
+#define NOT_FOUND -3
+
+#define BAD_VALUE -2
 
 /// \struct Archipelago
 ///
@@ -20,10 +22,10 @@ typedef struct
     int CountInhabitedIslands;
 } Archipelago;
 
-void FillArchipelago(Archipelago* pArchipelago,
-                     char* name,
-                     int countIslands,
-                     int countInhabitedIslands);
+int FillArchipelago(Archipelago* pArchipelago,
+                    char* name,
+                    int countIslands,
+                    int countInhabitedIslands);
 
 int SetName(Archipelago* pArchipelago, const char* name);
 

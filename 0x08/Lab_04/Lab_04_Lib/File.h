@@ -23,9 +23,9 @@ ssize_t ReadRecord(int fd, Meta* pMeta, void* data, int n);
 
 ssize_t AddRecord(int fd, Meta* pMeta, void* data);
 
-ssize_t WriteMeta(int fd, Meta* meta);
+ssize_t WriteMeta(int fd, Meta* pMeta);
 
-ssize_t ReadMeta(int fd, Meta* meta);
+ssize_t ReadMeta(int fd, Meta* pMeta);
 
 int ChangeSize(int fd, Meta* pMeta, int n);
 

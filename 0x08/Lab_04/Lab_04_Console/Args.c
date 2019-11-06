@@ -58,6 +58,9 @@ Args* CreateArgs()
     pArgs->IsIsRemoveSwapWithLastGiven = false;
     pArgs->IsRemoveSwapWithLast = false;
 
+    pArgs->IsIsPrintRequiredGiven = false;
+    pArgs->IsPrintRequired = false;
+
     pArgs->IsIsOrGiven = false;
     pArgs->IsOr = false;
 
@@ -98,7 +101,7 @@ void DestroyArgs(Args* pArgs)
     free(pArgs);
 }
 
-#define OPT_STRING ":f:pM:F:C:N:I:n:c:i:dsoh"
+#define OPT_STRING ":f:pM:F:C:N:I:n:c:i:dsoPh"
 
 #define OPT_FILENAME 'f'
 #define OPT_FORCE_CREATE 'p'
@@ -113,6 +116,7 @@ void DestroyArgs(Args* pArgs)
 #define OPT_HEXDUMP 'd'
 #define OPT_REMOVE_SWAP_WITH_LAST 's'
 #define OPT_OR 'o'
+#define OPT_PRINT 'P'
 #define OPT_HELP 'h'
 #define OPT_UNKNOWN '?'
 
@@ -194,6 +198,10 @@ Args* ParseArgs(int argc, char** argv)
         case OPT_OR:
             pArgs->IsIsOrGiven = true;
             pArgs->IsOr = true;
+            break;
+        case OPT_PRINT:
+            pArgs->IsIsPrintRequiredGiven = true;
+            pArgs->IsPrintRequired = true;
             break;
         case OPT_HELP:
             pArgs->IsHelpGiven = true;

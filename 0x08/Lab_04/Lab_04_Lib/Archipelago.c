@@ -5,22 +5,33 @@
 #include "Meta.h"
 #include "File.h"
 
-void FillArchipelago(Archipelago* pArchipelago,
-                     char* name,
-                     int countIslands,
-                     int countInhabitedIslands)
+int FillArchipelago(Archipelago* pArchipelago,
+                    char* name,
+                    int countIslands,
+                    int countInhabitedIslands)
 {
-    assert(strlen(name) + 1 <= ARCHIPELAGO_NAME_LENGTH);
-    assert(countIslands > 1);
-    assert(countInhabitedIslands >= 0);
-    assert(countIslands >= countInhabitedIslands);
-    SetName(pArchipelago, name);
+    if (!(strlen(name) + 1 <= ARCHIPELAGO_NAME_LENGTH && countIslands > 1 &&
+          countInhabitedIslands >= 0 &&
+          countIslands >= countInhabitedIslands))
+    {
+        return BAD_VALUE;
+    }
+    int setName = SetName(pArchipelago, name);
+    if (setName < 0)
+    {
+        return setName;
+    }
     pArchipelago->CountIslands = countIslands;
     pArchipelago->CountInhabitedIslands = countInhabitedIslands;
+    return 0;
 }
 
 int SetName(Archipelago* pArchipelago, const char* name)
 {
+    if (name == NULL || name[0] == '\0')
+    {
+        return BAD_VALUE;
+    }
     memset(pArchipelago->Name, '\0', ARCHIPELAGO_NAME_LENGTH);
     int i;
     for (i = 0; i < ARCHIPELAGO_NAME_LENGTH; i++)
@@ -70,33 +81,45 @@ int IndexByName(int fd, Meta* pMeta, char* name)
             return i;
         }
     }
-
     return NOT_FOUND;
 }
 
 int ModifyName(int fd, Meta* pMeta, int index, char* newName)
 {
-    assert(strlen(newName) + 1 <= ARCHIPELAGO_NAME_LENGTH);
+    if (strlen(newName) + 1 > ARCHIPELAGO_NAME_LENGTH)
+    {
+        return BAD_VALUE;
+    }
     Archipelago archipelago;
     if (ReadArchipelago(fd, pMeta, &archipelago, index) ==
         FILE_UNSUCCESSFUL)
     {
         return FILE_UNSUCCESSFUL;
     }
-    SetName(&archipelago, newName);
+    int setName = SetName(&archipelago, newName);
+    if (setName < 0)
+    {
+        return setName;
+    }
     return WriteArchipelago(fd, pMeta, &archipelago, index);
 }
 
 int ModifyCountIslands(int fd, Meta* pMeta, int index, int newCountIslands)
 {
-    assert(newCountIslands > 1);
+    if (newCountIslands <= 1)
+    {
+        return BAD_VALUE;
+    }
     Archipelago archipelago;
     if (ReadArchipelago(fd, pMeta, &archipelago, index) ==
         FILE_UNSUCCESSFUL)
     {
         return FILE_UNSUCCESSFUL;
     }
-    assert(newCountIslands >= archipelago.CountInhabitedIslands);
+    if (newCountIslands < archipelago.CountInhabitedIslands)
+    {
+        return BAD_VALUE;
+    }
     archipelago.CountIslands = newCountIslands;
     return WriteArchipelago(fd, pMeta, &archipelago, index);
 }
@@ -106,14 +129,20 @@ int ModifyCountInhabitedIslands(int fd,
                                 int index,
                                 int newCountInhabitedIslands)
 {
-    assert(newCountInhabitedIslands >= 0);
+    if (newCountInhabitedIslands < 0)
+    {
+        return BAD_VALUE;
+    }
     Archipelago archipelago;
     if (ReadArchipelago(fd, pMeta, &archipelago, index) ==
         FILE_UNSUCCESSFUL)
     {
         return FILE_UNSUCCESSFUL;
     }
-    assert(newCountInhabitedIslands <= archipelago.CountIslands);
+    if (newCountInhabitedIslands > archipelago.CountIslands)
+    {
+        return BAD_VALUE;
+    }
     archipelago.CountInhabitedIslands = newCountInhabitedIslands;
     return WriteArchipelago(fd, pMeta, &archipelago, index);
 }

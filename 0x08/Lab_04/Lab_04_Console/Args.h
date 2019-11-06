@@ -46,6 +46,9 @@ typedef struct
     bool IsIsRemoveSwapWithLastGiven;
     bool IsRemoveSwapWithLast;
 
+    bool IsIsPrintRequiredGiven;
+    bool IsPrintRequired;
+
     bool IsIsOrGiven;
     bool IsOr;
 

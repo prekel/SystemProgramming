@@ -14,82 +14,171 @@
 #include "Archipelago.h"
 #include "Commands.h"
 #include "File.h"
-#include "HexDump.h"
+#include "Print.h"
 #include "Utils.h"
 
-void AddCommandExec(Args* pArgs)
+int AddCommandExec(int fd, Args* pArgs)
 {
-    assert(!pArgs->IsMetaFormatGiven);
-    assert(!pArgs->IsFormatGiven);
-
     int fd = pArgs->IsForceCreate
              ? CreateFile1(pArgs->FileName, sizeof(Archipelago))
              : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
 
+    if (fd == FILE_UNSUCCESSFUL)
+    {
+        //printf("Не удалось открыть или создать файл");
+        return FILE_UNSUCCESSFUL;
+    }
+
     Archipelago archipelago;
-    FillArchipelago(&archipelago,
-                    pArgs->IsNameGiven
-                    ? pArgs->Name
-                    : pArgs->pExtraArgs[0],
-                    pArgs->IsCountIslandsGiven
-                    ? pArgs->CountIslands
-                    : ParseInt(pArgs->pExtraArgs[1]),
-                    pArgs->IsCountInhabitedIslandsGiven
-                    ? pArgs->CountInhabitedIslands
-                    : ParseInt(pArgs->pExtraArgs[2]));
+    if (!FillArchipelago(&archipelago,
+                         pArgs->IsNameGiven
+                         ? pArgs->Name
+                         : pArgs->pExtraArgs[0],
+                         pArgs->IsCountIslandsGiven
+                         ? pArgs->CountIslands
+                         : ParseInt(pArgs->pExtraArgs[1]),
+                         pArgs->IsCountInhabitedIslandsGiven
+                         ? pArgs->CountInhabitedIslands
+                         : ParseInt(pArgs->pExtraArgs[2])))
+    {
+        //printf("Неверное знаение\n");
+        if (CloseFile1(fd) == FILE_UNSUCCESSFUL)
+        {
+            return CLOSE_UNSUCCESSFUL;
+        }
+        return BAD_VALUE;
+    }
 
     Meta meta;
     int readMeta = ReadMeta(fd, &meta);
-    assert(readMeta != FILE_UNSUCCESSFUL);
+    if (readMeta == FILE_UNSUCCESSFUL)
+    {
+        //printf("Не удалось открыть или создать файл\n");
+        if (CloseFile1(fd) == FILE_UNSUCCESSFUL)
+        {
+            return CLOSE_UNSUCCESSFUL;
+        }
+        return FILE_UNSUCCESSFUL;
+    }
 
-    AddArchipelago(fd, &meta, &archipelago);
+    if (AddArchipelago(fd, &meta, &archipelago) == FILE_UNSUCCESSFUL)
+    {
+        //printf("Не удалось записать в файл\n");
+        if (CloseFile1(fd) == FILE_UNSUCCESSFUL)
+        {
+            return CLOSE_UNSUCCESSFUL;
+        }
+        return FILE_UNSUCCESSFUL;
+    }
+
+    if (pArgs->IsPrintRequired)
+    {
+        int print = Print(fd, pArgs, true);
+        if (print < 0)
+        {
+            if (CloseFile1(fd) == FILE_UNSUCCESSFUL)
+            {
+                return CLOSE_UNSUCCESSFUL;
+            }
+            return print;
+        }
+    }
 
     if (pArgs->IsHexDumpRequired)
     {
-        HexDump(fd);
+        int hexDump = HexDump(fd);
+        if (hexDump < 0)
+        {
+            if (CloseFile1(fd) == FILE_UNSUCCESSFUL)
+            {
+                return CLOSE_UNSUCCESSFUL;
+            }
+            return hexDump;
+        }
     }
 
-    CloseFile1(fd);
+    if (CloseFile1(fd) == FILE_UNSUCCESSFUL)
+    {
+        return CLOSE_UNSUCCESSFUL;
+    }
+
+    return 0;
 }
 
-void ModifyCommandExec(Args* pArgs)
+int ModifyCommandExec(Args* pArgs)
 {
-    assert(!pArgs->IsMetaFormatGiven);
-    assert(!pArgs->IsFormatGiven);
-    assert(pArgs->IsIndexGiven || pArgs->IsOldNameGiven);
-    assert(!(pArgs->IsIndexGiven && pArgs->IsOldNameGiven));
-    assert(pArgs->IsNameGiven || pArgs->IsCountIslandsGiven ||
-           pArgs->IsCountInhabitedIslandsGiven);
-    assert(pArgs->IsIndexGiven && pArgs->Index >= 0);
+    if (!((pArgs->IsIndexGiven || pArgs->IsOldNameGiven) &&
+          !(pArgs->IsIndexGiven && pArgs->IsOldNameGiven)) &&
+        (pArgs->IsNameGiven || pArgs->IsCountIslandsGiven ||
+         pArgs->IsCountInhabitedIslandsGiven) &&
+        (pArgs->IsIndexGiven && pArgs->Index >= 0))
+    {
+        return BAD_ARGS;
+    }
 
     int fd = pArgs->IsForceCreate
              ? CreateFile1(pArgs->FileName, sizeof(Archipelago))
              : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
 
+    if (fd == FILE_UNSUCCESSFUL)
+    {
+        return FILE_UNSUCCESSFUL;
+    }
+
     Meta meta;
     int readMeta = ReadMeta(fd, &meta);
-    assert(readMeta != FILE_UNSUCCESSFUL);
+    if (readMeta == FILE_UNSUCCESSFUL)
+    {
+        return FILE_UNSUCCESSFUL;
+    }
 
-    assert(pArgs->IsIndexGiven && pArgs->Index < meta.Count);
+    if (!(pArgs->IsIndexGiven && pArgs->Index < meta.Count))
+    {
+        return BAD_ARGS;
+    }
 
     int index = pArgs->IsIndexGiven
                 ? pArgs->Index
                 : IndexByName(fd, &meta, pArgs->OldName);
 
-    assert(index != NOT_FOUND);
+    if (index == NOT_FOUND)
+    {
+        return NOT_FOUND;
+    }
 
     if (pArgs->IsNameGiven)
     {
-        ModifyName(fd, &meta, index, pArgs->Name);
+        int modifyName = ModifyName(fd, &meta, index, pArgs->Name);
+        if (modifyName < 0)
+        {
+            return modifyName;
+        }
     }
     if (pArgs->IsCountIslandsGiven)
     {
-        ModifyCountIslands(fd, &meta, index, pArgs->CountIslands);
+        int modifyCountIslands = ModifyCountIslands(fd, &meta, index,
+                                                    pArgs->CountIslands);
+        if (modifyCountIslands < 0)
+        {
+            return modifyCountIslands;
+        }
     }
     if (pArgs->IsCountInhabitedIslandsGiven)
     {
-        ModifyCountInhabitedIslands(fd, &meta, index,
-                                    pArgs->CountInhabitedIslands);
+        int modifyCountInhabitedIslands =
+                ModifyCountInhabitedIslands(fd,
+                                            &meta,
+                                            index,
+                                            pArgs->CountInhabitedIslands);
+        if (modifyCountInhabitedIslands < 0)
+        {
+            return modifyCountInhabitedIslands;
+        }
+    }
+
+    if (pArgs->IsPrintRequired)
+    {
+        Print(fd, pArgs, true);
     }
 
     if (pArgs->IsHexDumpRequired)
@@ -97,13 +186,16 @@ void ModifyCommandExec(Args* pArgs)
         HexDump(fd);
     }
 
-    CloseFile1(fd);
+    if (CloseFile1(fd) == FILE_UNSUCCESSFUL)
+    {
+        return FILE_UNSUCCESSFUL;
+    }
+
+    return 0;
 }
 
-void RemoveCommandExec(Args* pArgs)
+int RemoveCommandExec(Args* pArgs)
 {
-    assert(!pArgs->IsMetaFormatGiven);
-    assert(!pArgs->IsFormatGiven);
     assert(pArgs->IsIndexGiven || pArgs->IsNameGiven);
     assert(!(pArgs->IsIndexGiven && pArgs->IsNameGiven));
     assert(pArgs->IsIndexGiven && pArgs->Index >= 0);
@@ -112,45 +204,88 @@ void RemoveCommandExec(Args* pArgs)
              ? CreateFile1(pArgs->FileName, sizeof(Archipelago))
              : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
 
+    if (fd == FILE_UNSUCCESSFUL)
+    {
+        return FILE_UNSUCCESSFUL;
+    }
+
     Meta meta;
     int readMeta = ReadMeta(fd, &meta);
-    assert(readMeta != FILE_UNSUCCESSFUL);
+    if (readMeta == FILE_UNSUCCESSFUL)
+    {
+        return FILE_UNSUCCESSFUL;
+    }
 
-    assert(pArgs->IsIndexGiven && pArgs->Index < meta.Count);
+    if (!(pArgs->IsIndexGiven && pArgs->Index < meta.Count))
+    {
+        return BAD_ARGS;
+    }
 
     int index = pArgs->IsIndexGiven
                 ? pArgs->Index
                 : IndexByName(fd, &meta, pArgs->Name);
 
-    assert(index != NOT_FOUND);
+    if (index == NOT_FOUND)
+    {
+        return NOT_FOUND;
+    }
 
     if (pArgs->IsRemoveSwapWithLast)
     {
-        RemoveSwapWithLast(fd, &meta, index);
+        int removeSwapWithLast = RemoveSwapWithLast(fd, &meta, index);
+        if (removeSwapWithLast < 0)
+        {
+            return removeSwapWithLast;
+        }
     }
     else
     {
-        RemoveShift(fd, &meta, index);
+        int removeShift = RemoveShift(fd, &meta, index);
+        if (removeShift < 0)
+        {
+            return removeShift;
+        }
+    }
+
+    if (pArgs->IsPrintRequired)
+    {
+        int print = Print(fd, pArgs, true);
+        if (print < 0)
+        {
+            return print;
+        }
     }
 
     if (pArgs->IsHexDumpRequired)
     {
-        HexDump(fd);
+        int hexDump = HexDump(fd);
+        if (hexDump < 0)
+        {
+            return hexDump;
+        }
     }
 
-    CloseFile1(fd);
+    if (CloseFile1(fd) == FILE_UNSUCCESSFUL)
+    {
+        return FILE_UNSUCCESSFUL;
+    }
+
+    return 0;
 }
 
 void DeleteCommandExec(Args* pArgs)
 {
     bool isExist = IsExist(pArgs->FileName);
-    assert(isExist);
+    if (isExist == false)
+    {
+        return FILE_NOT_EXIST;
+    }
 
     int deleteFile = DeleteFile(pArgs->FileName);
     assert(deleteFile == 0);
 }
 
-void HasUninhabitedCommandExec(Args* pArgs)
+int HasUninhabitedCommandExec(Args* pArgs)
 {
     assert(!pArgs->IsMetaFormatGiven);
     assert(!pArgs->IsFormatGiven);
@@ -160,6 +295,11 @@ void HasUninhabitedCommandExec(Args* pArgs)
     int fd = pArgs->IsForceCreate
              ? CreateFile1(pArgs->FileName, sizeof(Archipelago))
              : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
+
+    if (fd == FILE_UNSUCCESSFUL)
+    {
+        return FILE_UNSUCCESSFUL;
+    }
 
     Meta meta;
     int readMeta = ReadMeta(fd, &meta);
@@ -188,77 +328,10 @@ void HasUninhabitedCommandExec(Args* pArgs)
                "островов\n");
     }
 
-    if (pArgs->IsHexDumpRequired)
+    if (pArgs->IsPrintRequired)
     {
-        HexDump(fd);
+        Print(fd, pArgs, true);
     }
-
-    CloseFile1(fd);
-}
-
-void PrintCommandExec(Args* pArgs)
-{
-    int fd = pArgs->IsForceCreate
-             ? CreateFile1(pArgs->FileName, sizeof(Archipelago))
-             : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
-
-    Meta meta;
-    int readMeta = ReadMeta(fd, &meta);
-    assert(readMeta != FILE_UNSUCCESSFUL);
-
-    printf(pArgs->MetaFormat, meta.Version, meta.Size, meta.Count);
-    printf("\n");
-
-    int c = 0;
-    for (int i = 0; i < meta.Count; i++)
-    {
-        Archipelago archipelago;
-        ReadArchipelago(fd, &meta, &archipelago, i);
-
-        bool condOrIsNameGiven =
-                pArgs->IsNameGiven &&
-                strcmp(archipelago.Name, pArgs->Name) == 0;
-        bool condOrIsCountIslandsGiven =
-                pArgs->IsCountIslandsGiven &&
-                archipelago.CountIslands == pArgs->CountIslands;
-        bool condOrIsCountInhabitedIslandsGiven =
-                pArgs->IsCountInhabitedIslandsGiven &&
-                archipelago.CountInhabitedIslands ==
-                pArgs->CountInhabitedIslands;
-
-        bool condAndIsNameGiven =
-                (pArgs->IsNameGiven &&
-                 strcmp(archipelago.Name, pArgs->Name) == 0) ||
-                !pArgs->IsNameGiven;
-        bool condAndIsCountIslandsGiven =
-                (pArgs->IsCountIslandsGiven &&
-                 archipelago.CountIslands == pArgs->CountIslands) ||
-                !pArgs->IsCountIslandsGiven;
-        bool condAndIsCountInhabitedIslandsGiven =
-                (pArgs->IsCountInhabitedIslandsGiven &&
-                 archipelago.CountInhabitedIslands ==
-                 pArgs->CountInhabitedIslands) ||
-                !pArgs->IsCountInhabitedIslandsGiven;
-
-        if (pArgs->IsOr
-            ? condOrIsNameGiven ||
-              condOrIsCountIslandsGiven ||
-              condOrIsCountInhabitedIslandsGiven
-            : condAndIsNameGiven &&
-              condAndIsCountIslandsGiven &&
-              condAndIsCountInhabitedIslandsGiven)
-        {
-            printf(pArgs->Format,
-                   archipelago.Name,
-                   archipelago.CountIslands,
-                   archipelago.CountInhabitedIslands);
-            printf("\n");
-            c++;
-        }
-    }
-
-    printf(pArgs->CountFormat, c);
-    printf("\n");
 
     if (pArgs->IsHexDumpRequired)
     {
@@ -268,23 +341,54 @@ void PrintCommandExec(Args* pArgs)
     CloseFile1(fd);
 }
 
-void HexdumpExec(Args* pArgs)
+int PrintCommandExec(Args* pArgs)
 {
     int fd = pArgs->IsForceCreate
              ? CreateFile1(pArgs->FileName, sizeof(Archipelago))
              : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
+
+    if (fd == FILE_UNSUCCESSFUL)
+    {
+        return FILE_UNSUCCESSFUL;
+    }
+
+    Print(fd, pArgs, false);
+
+    if (pArgs->IsPrintRequired)
+    {
+        Print(fd, pArgs, true);
+    }
+
+    if (pArgs->IsHexDumpRequired)
+    {
+        HexDump(fd);
+    }
+
+    CloseFile1(fd);
+}
+
+int HexdumpCommandExec(Args* pArgs)
+{
+    int fd = pArgs->IsForceCreate
+             ? CreateFile1(pArgs->FileName, sizeof(Archipelago))
+             : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
+
+    if (pArgs->IsPrintRequired)
+    {
+        Print(fd, pArgs, true);
+    }
 
     HexDump(fd);
 
     CloseFile1(fd);
 }
 
-void HelpExec(Args* pArgs)
+int HelpCommandExec(Args* pArgs)
 {
     printf("справка\n");
 }
 
-void UnknownOptionExec(Args* pArgs)
+int UnknownOptionCommandExec(Args* pArgs)
 {
     printf("Неизвестный параметр: %c\n", pArgs->UnknownOption);
 }
@@ -295,15 +399,15 @@ int Exec(char* command, Args* pArgs)
         strcmp(command, HELP_COMMAND_NAME) == 0 ||
         strcmp(command, HELP_OPT_NAME) == 0)
     {
-        HelpExec(pArgs);
+        HelpCommandExec(pArgs);
     }
     else if (pArgs->IsUnknownOptionGiven)
     {
-        UnknownOptionExec(pArgs);
+        UnknownOptionCommandExec(pArgs);
     }
     else if (strcmp(command, ADD_COMMAND_NAME) == 0)
     {
-        AddCommandExec(pArgs);
+        AddCommandExec(0, pArgs);
     }
     else if (strcmp(command, MODIFY_COMMAND_NAME) == 0)
     {
@@ -327,7 +431,7 @@ int Exec(char* command, Args* pArgs)
     }
     else if (strcmp(command, HEXDUMP_COMMAND_NAME) == 0)
     {
-        HexdumpExec(pArgs);
+        HexdumpCommandExec(pArgs);
     }
     else
     {
