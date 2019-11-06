@@ -436,11 +436,11 @@ int Exec(char* command, Args* pArgs)
     }
     else if (pArgs->IsForceCreate)
     {
-        fd = CreateFile1(pArgs->FileName, sizeof(Archipelago))
+        fd = CreateFile1(pArgs->FileName, sizeof(Archipelago));
     }
     else
     {
-        OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago))
+        fd = OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
     }
 
     commandExec(fd, pArgs);
