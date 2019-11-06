@@ -19,15 +19,15 @@
 
 int AddCommandExec(int fd, Args* pArgs)
 {
-    int fd = pArgs->IsForceCreate
-             ? CreateFile1(pArgs->FileName, sizeof(Archipelago))
-             : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
+    //int fd = pArgs->IsForceCreate
+    //         ? CreateFile1(pArgs->FileName, sizeof(Archipelago))
+    //         : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
 
-    if (fd == FILE_UNSUCCESSFUL)
-    {
-        //printf("Не удалось открыть или создать файл");
-        return FILE_UNSUCCESSFUL;
-    }
+    //if (fd == FILE_UNSUCCESSFUL)
+    //{
+    //    //printf("Не удалось открыть или создать файл");
+    //    return FILE_UNSUCCESSFUL;
+    //}
 
     Archipelago archipelago;
     if (!FillArchipelago(&archipelago,
@@ -42,10 +42,6 @@ int AddCommandExec(int fd, Args* pArgs)
                          : ParseInt(pArgs->pExtraArgs[2])))
     {
         //printf("Неверное знаение\n");
-        if (CloseFile1(fd) == FILE_UNSUCCESSFUL)
-        {
-            return CLOSE_UNSUCCESSFUL;
-        }
         return BAD_VALUE;
     }
 
@@ -54,20 +50,12 @@ int AddCommandExec(int fd, Args* pArgs)
     if (readMeta == FILE_UNSUCCESSFUL)
     {
         //printf("Не удалось открыть или создать файл\n");
-        if (CloseFile1(fd) == FILE_UNSUCCESSFUL)
-        {
-            return CLOSE_UNSUCCESSFUL;
-        }
         return FILE_UNSUCCESSFUL;
     }
 
     if (AddArchipelago(fd, &meta, &archipelago) == FILE_UNSUCCESSFUL)
     {
         //printf("Не удалось записать в файл\n");
-        if (CloseFile1(fd) == FILE_UNSUCCESSFUL)
-        {
-            return CLOSE_UNSUCCESSFUL;
-        }
         return FILE_UNSUCCESSFUL;
     }
 
@@ -76,10 +64,6 @@ int AddCommandExec(int fd, Args* pArgs)
         int print = Print(fd, pArgs, true);
         if (print < 0)
         {
-            if (CloseFile1(fd) == FILE_UNSUCCESSFUL)
-            {
-                return CLOSE_UNSUCCESSFUL;
-            }
             return print;
         }
     }
@@ -89,10 +73,6 @@ int AddCommandExec(int fd, Args* pArgs)
         int hexDump = HexDump(fd);
         if (hexDump < 0)
         {
-            if (CloseFile1(fd) == FILE_UNSUCCESSFUL)
-            {
-                return CLOSE_UNSUCCESSFUL;
-            }
             return hexDump;
         }
     }
@@ -105,7 +85,7 @@ int AddCommandExec(int fd, Args* pArgs)
     return 0;
 }
 
-int ModifyCommandExec(Args* pArgs)
+int ModifyCommandExec(int fd, Args* pArgs)
 {
     if (!((pArgs->IsIndexGiven || pArgs->IsOldNameGiven) &&
           !(pArgs->IsIndexGiven && pArgs->IsOldNameGiven)) &&
@@ -194,7 +174,7 @@ int ModifyCommandExec(Args* pArgs)
     return 0;
 }
 
-int RemoveCommandExec(Args* pArgs)
+int RemoveCommandExec(int fd, Args* pArgs)
 {
     assert(pArgs->IsIndexGiven || pArgs->IsNameGiven);
     assert(!(pArgs->IsIndexGiven && pArgs->IsNameGiven));
@@ -273,7 +253,7 @@ int RemoveCommandExec(Args* pArgs)
     return 0;
 }
 
-void DeleteCommandExec(Args* pArgs)
+int DeleteCommandExec(int fd, Args* pArgs)
 {
     bool isExist = IsExist(pArgs->FileName);
     if (isExist == false)
@@ -285,7 +265,7 @@ void DeleteCommandExec(Args* pArgs)
     assert(deleteFile == 0);
 }
 
-int HasUninhabitedCommandExec(Args* pArgs)
+int HasUninhabitedCommandExec(int fd, Args* pArgs)
 {
     assert(!pArgs->IsMetaFormatGiven);
     assert(!pArgs->IsFormatGiven);
@@ -341,7 +321,7 @@ int HasUninhabitedCommandExec(Args* pArgs)
     CloseFile1(fd);
 }
 
-int PrintCommandExec(Args* pArgs)
+int PrintCommandExec(int fd, Args* pArgs)
 {
     int fd = pArgs->IsForceCreate
              ? CreateFile1(pArgs->FileName, sizeof(Archipelago))
@@ -367,7 +347,7 @@ int PrintCommandExec(Args* pArgs)
     CloseFile1(fd);
 }
 
-int HexdumpCommandExec(Args* pArgs)
+int HexdumpCommandExec(int fd, Args* pArgs)
 {
     int fd = pArgs->IsForceCreate
              ? CreateFile1(pArgs->FileName, sizeof(Archipelago))
@@ -383,60 +363,89 @@ int HexdumpCommandExec(Args* pArgs)
     CloseFile1(fd);
 }
 
-int HelpCommandExec(Args* pArgs)
+int HelpCommandExec(int fd, Args* pArgs)
 {
     printf("справка\n");
 }
 
-int UnknownOptionCommandExec(Args* pArgs)
+int UnknownOptionCommandExec(int fd, Args* pArgs)
 {
     printf("Неизвестный параметр: %c\n", pArgs->UnknownOption);
 }
 
 int Exec(char* command, Args* pArgs)
 {
+    int (* commandExec)(int, Args*);
+    bool isFileRequired = false;
+
     if (pArgs->IsHelpGiven ||
         strcmp(command, HELP_COMMAND_NAME) == 0 ||
         strcmp(command, HELP_OPT_NAME) == 0)
     {
-        HelpCommandExec(pArgs);
+        commandExec = HelpCommandExec;
     }
     else if (pArgs->IsUnknownOptionGiven)
     {
-        UnknownOptionCommandExec(pArgs);
+        commandExec = UnknownOptionCommandExec;
     }
     else if (strcmp(command, ADD_COMMAND_NAME) == 0)
     {
-        AddCommandExec(0, pArgs);
+        isFileRequired = true;
+        commandExec = AddCommandExec;
     }
     else if (strcmp(command, MODIFY_COMMAND_NAME) == 0)
     {
-        ModifyCommandExec(pArgs);
+        isFileRequired = true;
+        commandExec = ModifyCommandExec;
     }
     else if (strcmp(command, REMOVE_COMMAND_NAME) == 0)
     {
-        RemoveCommandExec(pArgs);
+        isFileRequired = true;
+        commandExec = RemoveCommandExec;
     }
     else if (strcmp(command, DELETE_COMMAND_NAME) == 0)
     {
-        DeleteCommandExec(pArgs);
+        commandExec = DeleteCommandExec;
     }
     else if (strcmp(command, HAS_UNINHABITED_COMMAND_NAME) == 0)
     {
-        HasUninhabitedCommandExec(pArgs);
+        isFileRequired = true;
+        commandExec = HasUninhabitedCommandExec;
     }
     else if (strcmp(command, PRINT_COMMAND_NAME) == 0)
     {
-        PrintCommandExec(pArgs);
+        isFileRequired = true;
+        commandExec = PrintCommandExec;
     }
     else if (strcmp(command, HEXDUMP_COMMAND_NAME) == 0)
     {
-        HexdumpCommandExec(pArgs);
+        isFileRequired = true;
+        commandExec = HexdumpCommandExec;
     }
     else
     {
         printf("Введена неверная команда\n");
         return 1;
     }
+
+
+    int fd;
+    if (!isFileRequired)
+    {
+        fd = FILE_UNSUCCESSFUL;
+    }
+    else if (pArgs->IsForceCreate)
+    {
+        fd = CreateFile1(pArgs->FileName, sizeof(Archipelago))
+    }
+    else
+    {
+        OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago))
+    }
+
+    commandExec(fd, pArgs);
+
+
+
     return 0;
 }
