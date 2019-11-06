@@ -3,6 +3,7 @@
 
 #include "Args.h"
 
+#define SUCCESSFUL 0
 #define BAD_ARGS -4
 #define FILE_NOT_EXIST -5
 #define CLOSE_UNSUCCESSFUL -6

@@ -17,6 +17,8 @@
 #include "Print.h"
 #include "Utils.h"
 
+int Exec1(Args* pArgs, int (* commandExec)(int, Args*), bool isFileRequired);
+
 int AddCommandExec(int fd, Args* pArgs)
 {
     //int fd = pArgs->IsForceCreate
@@ -59,30 +61,8 @@ int AddCommandExec(int fd, Args* pArgs)
         return FILE_UNSUCCESSFUL;
     }
 
-    if (pArgs->IsPrintRequired)
-    {
-        int print = Print(fd, pArgs, true);
-        if (print < 0)
-        {
-            return print;
-        }
-    }
 
-    if (pArgs->IsHexDumpRequired)
-    {
-        int hexDump = HexDump(fd);
-        if (hexDump < 0)
-        {
-            return hexDump;
-        }
-    }
-
-    if (CloseFile1(fd) == FILE_UNSUCCESSFUL)
-    {
-        return CLOSE_UNSUCCESSFUL;
-    }
-
-    return 0;
+    return SUCCESSFUL;
 }
 
 int ModifyCommandExec(int fd, Args* pArgs)
@@ -94,15 +74,6 @@ int ModifyCommandExec(int fd, Args* pArgs)
         (pArgs->IsIndexGiven && pArgs->Index >= 0))
     {
         return BAD_ARGS;
-    }
-
-    int fd = pArgs->IsForceCreate
-             ? CreateFile1(pArgs->FileName, sizeof(Archipelago))
-             : OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
-
-    if (fd == FILE_UNSUCCESSFUL)
-    {
-        return FILE_UNSUCCESSFUL;
     }
 
     Meta meta;
@@ -166,12 +137,6 @@ int ModifyCommandExec(int fd, Args* pArgs)
         HexDump(fd);
     }
 
-    if (CloseFile1(fd) == FILE_UNSUCCESSFUL)
-    {
-        return FILE_UNSUCCESSFUL;
-    }
-
-    return 0;
 }
 
 int RemoveCommandExec(int fd, Args* pArgs)
@@ -429,6 +394,13 @@ int Exec(char* command, Args* pArgs)
     }
 
 
+    int ret = Exec1(pArgs, commandExec, isFileRequired);
+
+    return 0;
+}
+
+int Exec1(Args* pArgs, int (* commandExec)(int, Args*), bool isFileRequired)
+{
     int fd;
     if (!isFileRequired)
     {
@@ -443,9 +415,32 @@ int Exec(char* command, Args* pArgs)
         fd = OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
     }
 
-    commandExec(fd, pArgs);
+    int commendExecRet = commandExec(fd, pArgs);
+    if (commendExecRet < 0)
+    {
+        return commendExecRet;
+    }
 
+    if (pArgs->IsPrintRequired)
+    {
+        int print = Print(fd, pArgs, true);
+        if (print < 0)
+        {
+            return print;
+        }
+    }
 
+    if (pArgs->IsHexDumpRequired)
+    {
+        int hexDump = HexDump(fd);
+        if (hexDump < 0)
+        {
+            return hexDump;
+        }
+    }
 
-    return 0;
+    if (CloseFile1(fd))
+    {
+        return CLOSE_UNSUCCESSFUL;
+    }
 }
