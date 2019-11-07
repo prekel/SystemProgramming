@@ -7,6 +7,7 @@
 #include "Print.h"
 #include "File.h"
 #include "Archipelago.h"
+#include "Commands.h"
 
 #define FIRST_NON_CONTROL_CHAR ' '
 
@@ -22,6 +23,22 @@ static bool IsBadChar(unsigned char c)
 
 #define DUMP_WIDTH 16
 
+#define COLUMN_SEPARATOR "    "
+
+#define NULL_CHAR_DISPLAY ' '
+
+#define CONTROL_CHAR_DISPLAY '.'
+
+#define FIRST_COLUMN_FORMAT "0x%06zx : "
+
+#define HEX_BYTE_FORMAT "%02x "
+
+#define HEX_BYTE_EMPTY "   "
+
+#define CHAR_EMPTY " "
+
+#define CHAR_FORMAT "%c"
+
 int HexDump(int fd)
 {
     unsigned char buffer[DUMP_WIDTH];
@@ -29,82 +46,94 @@ int HexDump(int fd)
     size_t bytesRead;
     int i;
 
-    SeekRecord(fd, NULL, META_INDEX);
+    if (SeekRecord(fd, NULL, META_INDEX) == FILE_UNSUCCESSFUL)
+    {
+        return FILE_UNSUCCESSFUL;
+    }
 
     printf("\n");
     do
     {
-        /* Read the next lines's worth of bytes.  */
         bytesRead = read(fd, buffer, sizeof(buffer));
 
-        /* Print the offset in the file, followed by the bytes themselves.  */
-        printf("0x%06zx : ", offset);
+        if (bytesRead == FILE_UNSUCCESSFUL)
+        {
+            return FILE_UNSUCCESSFUL;
+        }
+
+        printf(FIRST_COLUMN_FORMAT, offset);
         for (i = 0; i < bytesRead; ++i)
-            printf("%02x ", buffer[i]);
+        {
+            printf(HEX_BYTE_FORMAT, buffer[i]);
+        }
 
         for (i = 0; i < DUMP_WIDTH - bytesRead; i++)
         {
-            printf("   ");
+            printf(HEX_BYTE_EMPTY);
         }
 
-        printf("    ");
+        printf(COLUMN_SEPARATOR);
         for (i = 0; i < bytesRead; ++i)
         {
             unsigned char c;
             if (buffer[i] == '\0')
             {
-                c = ' ';
+                c = NULL_CHAR_DISPLAY;
             }
             else if (IsBadCharFull(buffer[i]))
             {
-                c = '.';
+                c = CONTROL_CHAR_DISPLAY;
             }
             else
             {
                 c = buffer[i];
             }
 
-            printf("%c", c);
+            printf(CHAR_FORMAT, c);
         }
         for (i = 0; i < DUMP_WIDTH - bytesRead; i++)
         {
-            printf(" ");
+            printf(CHAR_EMPTY);
         }
 
-        printf("    ");
+        printf(COLUMN_SEPARATOR);
         for (i = 0; i < bytesRead; ++i)
         {
             unsigned char c;
             if (buffer[i] == '\0')
             {
-                c = ' ';
+                c = NULL_CHAR_DISPLAY;
             }
             else if (IsBadChar(buffer[i]))
             {
-                c = '.';
+                c = CONTROL_CHAR_DISPLAY;
             }
             else
             {
                 c = buffer[i];
             }
 
-            printf("%c", c);
+            printf(CHAR_FORMAT, c);
         }
 
         printf("\n");
 
-        /* Keep count of our position in the file.  */
         offset += bytesRead;
     } while (bytesRead == sizeof(buffer));
 
     printf("\n");
+
+    return SUCCESSFUL;
 }
 
 int Print(int fd, Args* pArgs, bool ignoreCond)
 {
     Meta meta;
     int readMeta = ReadMeta(fd, &meta);
-    assert(readMeta != FILE_UNSUCCESSFUL);
+    if (readMeta == FILE_UNSUCCESSFUL)
+    {
+        return FILE_UNSUCCESSFUL;
+    }
 
     printf(pArgs->MetaFormat, meta.Version, meta.Size, meta.Count);
     printf("\n");
@@ -113,7 +142,10 @@ int Print(int fd, Args* pArgs, bool ignoreCond)
     for (int i = 0; i < meta.Count; i++)
     {
         Archipelago archipelago;
-        ReadArchipelago(fd, &meta, &archipelago, i);
+        if (ReadArchipelago(fd, &meta, &archipelago, i) == FILE_UNSUCCESSFUL)
+        {
+            return FILE_UNSUCCESSFUL;
+        }
 
         bool condOrIsNameGiven =
                 pArgs->IsNameGiven &&
@@ -160,4 +192,6 @@ int Print(int fd, Args* pArgs, bool ignoreCond)
 
     printf(pArgs->CountFormat, c);
     printf("\n");
+
+    return SUCCESSFUL;
 }

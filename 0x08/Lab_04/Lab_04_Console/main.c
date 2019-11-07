@@ -32,13 +32,6 @@ int main(int argc, char** argv)
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
 #endif
-
-    if (argc <= 1)
-    {
-        printf("Не введена команда\n");
-        return 1;
-    }
-
     char* command = argv[1];
     Args* pArgs = ParseArgs(argc - 1, argv + 1);
 

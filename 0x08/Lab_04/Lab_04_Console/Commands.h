@@ -43,6 +43,8 @@ int HelpCommandExec(int fd, Args* pArgs);
 
 int UnknownOptionCommandExec(int fd, Args* pArgs);
 
+int Exec1(Args* pArgs, int (* commandExec)(int, Args*), bool isFileRequired);
+
 int Exec(char* command, Args* pArgs);
 
 #endif //COMMANDS_H
