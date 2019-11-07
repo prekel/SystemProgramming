@@ -1,6 +1,8 @@
 #ifndef ARCHIPELAGO_H
 #define ARCHIPELAGO_H
 
+#include <stdint.h>
+
 #include "Meta.h"
 
 #define ARCHIPELAGO_NAME_LENGTH 104
@@ -17,9 +19,9 @@ typedef struct
     /// Название архипелага.
     char Name[ARCHIPELAGO_NAME_LENGTH];
     /// Кол-во островов.
-    int CountIslands;
+    int32_t CountIslands;
     /// Кол-во обитаемых островов.
-    int CountInhabitedIslands;
+    int32_t CountInhabitedIslands;
 } Archipelago;
 
 int FillArchipelago(Archipelago* pArchipelago,
@@ -29,8 +31,7 @@ int FillArchipelago(Archipelago* pArchipelago,
 
 int SetName(Archipelago* pArchipelago, const char* name);
 
-ssize_t
-ReadArchipelago(int fd, Meta* pMeta, Archipelago* pArchipelago, int index);
+ssize_t ReadArchipelago(int fd, Meta* pMeta, Archipelago* pArchipelago, int index);
 
 ssize_t
 WriteArchipelago(int fd, Meta* pMeta, Archipelago* pArchipelago, int index);

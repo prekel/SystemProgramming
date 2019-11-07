@@ -1,7 +1,6 @@
 #ifndef META_H
 #define META_H
 
-#include <unistd.h>
 #include <stdbool.h>
 
 #define META_VERSION 10
@@ -11,9 +10,9 @@
 
 typedef struct
 {
-    int Version;
-    int Count;
-    size_t Size;
+    uint32_t Version;
+    uint32_t Count;
+    uint64_t Size;
 } Meta;
 
 void FillMeta(Meta* pMeta, int size);
