@@ -17,21 +17,55 @@
 #include "Print.h"
 #include "Utils.h"
 
+#define EXTRA_ARGS_NAME_INDEX 0
+#define EXTRA_ARGS_COUNT_ISLANDS_INDEX 1
+#define EXTRA_ARGS_COUNT_INHABITED_ISLANDS_INDEX 2
+
+#define ARCHIPELAGO_INT_ARGS_COUNT 2
+
 int AddCommandExec(int fd, Args* pArgs)
 {
     Archipelago archipelago;
-    if (!FillArchipelago(&archipelago,
-                         pArgs->IsNameGiven
-                         ? pArgs->Name
-                         : pArgs->pExtraArgs[0],
-                         pArgs->IsCountIslandsGiven
-                         ? pArgs->CountIslands
-                         : ParseInt(pArgs->pExtraArgs[1]),
-                         pArgs->IsCountInhabitedIslandsGiven
-                         ? pArgs->CountInhabitedIslands
-                         : ParseInt(pArgs->pExtraArgs[2])))
+
+    if (pArgs->IsNameGiven && pArgs->IsCountIslandsGiven &&
+        pArgs->IsCountInhabitedIslandsGiven)
     {
-        return BAD_VALUE;
+        if (FillArchipelago(&archipelago,
+                            pArgs->Name,
+                            pArgs->CountIslands,
+                            pArgs->CountInhabitedIslands) == BAD_META)
+        {
+            return BAD_VALUE;
+        }
+    }
+    else
+    {
+        char* name =
+                pArgs->pExtraArgs[EXTRA_ARGS_NAME_INDEX];
+        char* countIslandsString =
+                pArgs->pExtraArgs[EXTRA_ARGS_COUNT_ISLANDS_INDEX];
+        char* countInhabitedIslandsString =
+                pArgs->pExtraArgs[EXTRA_ARGS_COUNT_INHABITED_ISLANDS_INDEX];
+
+        if (name == NULL ||
+            countIslandsString == NULL ||
+            countInhabitedIslandsString == NULL)
+        {
+            return BAD_ARGS;
+        }
+
+        int successfulCount = 0;
+        int fill = FillArchipelago(&archipelago,
+                                   name,
+                                   ParseInt(countIslandsString,
+                                            &successfulCount),
+                                   ParseInt(countInhabitedIslandsString,
+                                            &successfulCount));
+
+        if (successfulCount < ARCHIPELAGO_INT_ARGS_COUNT || fill == BAD_VALUE)
+        {
+            return BAD_VALUE;
+        }
     }
 
     Meta meta;
@@ -169,6 +203,15 @@ int RemoveCommandExec(int fd, Args* pArgs)
     return SUCCESSFUL;
 }
 
+int CreateCommandExec(int fd, Args* pArgs)
+{
+    if (fd == FILE_UNSUCCESSFUL)
+    {
+        return FILE_UNSUCCESSFUL;
+    }
+    return SUCCESSFUL;
+}
+
 int DeleteCommandExec(int fd, Args* pArgs)
 {
     bool isExist = IsExist(pArgs->FileName);
@@ -184,6 +227,10 @@ int DeleteCommandExec(int fd, Args* pArgs)
 
     return SUCCESSFUL;
 }
+
+#define HAS_UNINHABITED_EXIST "Имеются архипелаги, состоящие только из необитаемых островов\n"
+
+#define HAS_UNINHABITED_NOT_EXIST "Отсутствуют архипелаги, состоящие только из необитаемых островов\n"
 
 int HasUninhabitedCommandExec(int fd, Args* pArgs)
 {
@@ -214,13 +261,11 @@ int HasUninhabitedCommandExec(int fd, Args* pArgs)
 
     if (has)
     {
-        printf("Имеются архипелаги, состоящие только из необитаемых "
-               "островов\n");
+        printf(HAS_UNINHABITED_EXIST);
     }
     else
     {
-        printf("Отсутствуют архипелаги, состоящие только из необитаемых "
-               "островов\n");
+        printf(HAS_UNINHABITED_NOT_EXIST);
     }
 
     return SUCCESSFUL;
@@ -228,32 +273,46 @@ int HasUninhabitedCommandExec(int fd, Args* pArgs)
 
 int PrintCommandExec(int fd, Args* pArgs)
 {
-    Print(fd, pArgs, false);
+    int print = Print(fd, pArgs, false);
+    if (print < 0)
+    {
+        return print;
+    }
 
     return SUCCESSFUL;
 }
 
 int HexdumpCommandExec(int fd, Args* pArgs)
 {
-    if (pArgs->IsPrintRequired)
+    int hexDump = HexDump(fd);
+    if (hexDump < 0)
     {
-        Print(fd, pArgs, true);
+        return hexDump;
     }
-
-    HexDump(fd);
 
     return SUCCESSFUL;
 }
+
+#define HELP_MESSAGE "справка\n"
 
 int HelpCommandExec(int fd, Args* pArgs)
 {
-    printf("справка\n");
+    printf(HELP_MESSAGE);
     return SUCCESSFUL;
 }
 
+#define UNKNOWN_OPT_MESSAGE "Неизвестный параметр: %c\n"
+
 int UnknownOptionCommandExec(int fd, Args* pArgs)
 {
-    printf("Неизвестный параметр: %c\n", pArgs->UnknownOption);
+    if (pArgs->UnknownOption == '\0')
+    {
+        return(BAD_ARGS);
+    }
+    else
+    {
+        printf(UNKNOWN_OPT_MESSAGE, pArgs->UnknownOption);
+    }
     return SUCCESSFUL;
 }
 
@@ -268,6 +327,8 @@ int UnknownOptionCommandExec(int fd, Args* pArgs)
 #define FILE_NOT_EXIST_MESSAGE "Файл не существует\n"
 
 #define CLOSE_UNSUCCESSFUL_MESSAGE "Не удалось закрыть файл\n"
+
+#define BAD_META_MESSAGE "Неправильная версия файла\n"
 
 #define UNKNOWN_ERROR_MESSAGE "Неизвестная ошибка\n"
 
@@ -286,8 +347,8 @@ int Exec(char* command, Args* pArgs)
         return EXIT_FAILURE;
     }
     else if (pArgs->IsHelpGiven ||
-        strcmp(command, HELP_COMMAND_NAME) == 0 ||
-        strcmp(command, HELP_OPT_NAME) == 0)
+             strcmp(command, HELP_COMMAND_NAME) == 0 ||
+             strcmp(command, HELP_OPT_NAME) == 0)
     {
         commandExec = HelpCommandExec;
     }
@@ -314,6 +375,11 @@ int Exec(char* command, Args* pArgs)
     {
         commandExec = DeleteCommandExec;
     }
+    else if (strcmp(command, CREATE_COMMAND_NAME) == 0)
+    {
+        isFileRequired = true;
+        commandExec = CreateCommandExec;
+    }
     else if (strcmp(command, HAS_UNINHABITED_COMMAND_NAME) == 0)
     {
         isFileRequired = true;
@@ -334,7 +400,7 @@ int Exec(char* command, Args* pArgs)
         printf(WRONG_COMMAND_MESSAGE);
         return EXIT_FAILURE;
     }
-    
+
     int ret = Exec1(pArgs, commandExec, isFileRequired);
 
     switch (ret)
@@ -343,18 +409,28 @@ int Exec(char* command, Args* pArgs)
         return EXIT_SUCCESS;
     case FILE_UNSUCCESSFUL:
         printf(FILE_UNSUCCESSFUL_MESSAGE);
+        break;
     case BAD_VALUE:
         printf(BAD_VALUE_MESSAGE);
+        break;
     case NOT_FOUND:
         printf(NOT_FOUND_MESSAGE);
+        break;
     case BAD_ARGS:
         printf(BAD_ARGS_MESSAGE);
+        break;
     case FILE_NOT_EXIST:
         printf(FILE_NOT_EXIST_MESSAGE);
+        break;
     case CLOSE_UNSUCCESSFUL:
         printf(CLOSE_UNSUCCESSFUL_MESSAGE);
+        break;
+    case BAD_META:
+        printf(BAD_META_MESSAGE);
+        break;
     default:
         printf(UNKNOWN_ERROR_MESSAGE);
+        break;
     }
 
     return EXIT_FAILURE;
@@ -367,13 +443,26 @@ int Exec1(Args* pArgs, int (* commandExec)(int, Args*), bool isFileRequired)
     {
         fd = FILE_UNSUCCESSFUL;
     }
-    else if (pArgs->IsForceCreate)
+    else if (pArgs->IsOpenOrCreate || commandExec == CreateCommandExec)
     {
-        fd = CreateFile1(pArgs->FileName, sizeof(Archipelago));
+        fd = OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
+    }
+    else if (pArgs->IsReCreate)
+    {
+        fd = CreateOrTruncateFile(pArgs->FileName, sizeof(Archipelago));
     }
     else
     {
-        fd = OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
+        if (!IsExist(pArgs->FileName))
+        {
+            return FILE_NOT_EXIST;
+        }
+        fd = OpenFile1(pArgs->FileName);
+    }
+
+    if (fd == BAD_META)
+    {
+        return BAD_META;
     }
 
     int commendExecRet = commandExec(fd, pArgs);
@@ -400,7 +489,7 @@ int Exec1(Args* pArgs, int (* commandExec)(int, Args*), bool isFileRequired)
         }
     }
 
-    if (CloseFile1(fd))
+    if (isFileRequired && CloseFile1(fd))
     {
         return CLOSE_UNSUCCESSFUL;
     }

@@ -4,8 +4,10 @@
 #include <unistd.h>
 #include <stdbool.h>
 
-#define META_VERSION 9
+#define META_VERSION 10
 #define META_INDEX -1
+
+#define BAD_META -7
 
 typedef struct
 {

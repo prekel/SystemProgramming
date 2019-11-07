@@ -23,10 +23,13 @@ bool TryParseInt(char* string, int* result)
     return true;
 }
 
-int ParseInt(char* string)
+int ParseInt(char* string, int* pSuccessfulCount)
 {
     int result;
     bool tryParseInt = TryParseInt(string, &result);
-    assert(tryParseInt);
+    if (pSuccessfulCount != NULL && tryParseInt)
+    {
+        (*pSuccessfulCount)++;
+    }
     return result;
 }

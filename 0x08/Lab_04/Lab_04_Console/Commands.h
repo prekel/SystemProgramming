@@ -20,6 +20,10 @@ int ModifyCommandExec(int fd, Args* pArgs);
 
 int RemoveCommandExec(int fd, Args* pArgs);
 
+#define CREATE_COMMAND_NAME "create"
+
+int CreateCommandExec(int fd, Args* pArgs);
+
 #define DELETE_COMMAND_NAME "delete"
 
 int DeleteCommandExec(int fd, Args* pArgs);

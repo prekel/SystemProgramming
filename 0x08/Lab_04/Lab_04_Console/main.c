@@ -2,22 +2,10 @@
 /// \brief Главная функция программы
 /// \details Главная функция программы.
 
-#include <stdio.h>
-#include <stdbool.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <string.h>
-#include <assert.h>
-
 #ifdef WIN32
 #include <windows.h>
 #endif
 
-#include "Archipelago.h"
-#include "File.h"
-#include "Meta.h"
 #include "Print.h"
 #include "Commands.h"
 
@@ -25,7 +13,8 @@
 ///
 /// \param argc Кол-во аргументов.
 /// \param argv Массив аргументов.
-/// \return 0 в случае успешного завершения программы.
+/// \return EXIT_SUCCESS (0) в случае успешного завершения программы,
+/// EXIT_FAILURE в случае какой-либо ошибки.
 int main(int argc, char** argv)
 {
 #ifdef WIN32

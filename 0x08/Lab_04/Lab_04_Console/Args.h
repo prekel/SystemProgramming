@@ -13,8 +13,11 @@ typedef struct
     bool IsFileNameGiven;
     char* FileName;
 
-    bool IsIsForceCreateGiven;
-    bool IsForceCreate;
+    bool IsIsReCreateGiven;
+    bool IsReCreate;
+
+    bool IsIsOpenOrCreateGiven;
+    bool IsOpenOrCreate;
 
     bool IsMetaFormatGiven;
     char* MetaFormat;
@@ -56,6 +59,8 @@ typedef struct
 
     bool IsUnknownOptionGiven;
     char UnknownOption;
+
+    bool IsBadOption;
 
     char** pExtraArgs;
 } Args;

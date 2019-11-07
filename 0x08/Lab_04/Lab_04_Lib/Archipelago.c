@@ -10,7 +10,8 @@ int FillArchipelago(Archipelago* pArchipelago,
                     int countIslands,
                     int countInhabitedIslands)
 {
-    if (!(strlen(name) + 1 <= ARCHIPELAGO_NAME_LENGTH && countIslands > 1 &&
+    if (!(strlen(name) + 1 <= ARCHIPELAGO_NAME_LENGTH &&
+          countIslands > 1 &&
           countInhabitedIslands >= 0 &&
           countIslands >= countInhabitedIslands))
     {

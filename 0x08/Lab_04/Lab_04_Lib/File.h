@@ -9,7 +9,7 @@ int OpenFile1(char* path);
 
 int CloseFile1(int fd);
 
-int CreateFile1(char* path, size_t size);
+int CreateOrTruncateFile(char* path, size_t size);
 
 int OpenOrCreateFile(char* path, size_t size);
 

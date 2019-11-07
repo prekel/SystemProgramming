@@ -14,14 +14,16 @@ int OpenFile1(char* path)
     mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH;
     int fd = open(path, O_RDWR, mode);
 
-
     bool checkMetaVersion = CheckMetaVersion(fd);
-    assert(checkMetaVersion);
+    if (!checkMetaVersion)
+    {
+        return BAD_META;
+    }
 
     return fd;
 }
 
-int CreateFile1(char* path, size_t size)
+int CreateOrTruncateFile(char* path, size_t size)
 {
     Meta meta;
     FillMeta(&meta, size);
@@ -43,7 +45,7 @@ int OpenOrCreateFile(char* path, size_t size)
     {
         return OpenFile1(path);
     }
-    return CreateFile1(path, size);
+    return CreateOrTruncateFile(path, size);
 }
 
 bool IsExist(char* path)

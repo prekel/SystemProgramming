@@ -25,8 +25,11 @@ Args* CreateArgs()
     pArgs->IsFileNameGiven = false;
     pArgs->FileName = DEFAULT_FILENAME;
 
-    pArgs->IsIsForceCreateGiven = false;
-    pArgs->IsForceCreate = false;
+    pArgs->IsIsReCreateGiven = false;
+    pArgs->IsReCreate = false;
+
+    pArgs->IsIsOpenOrCreateGiven = false;
+    pArgs->IsOpenOrCreate = false;
 
     pArgs->IsMetaFormatGiven = false;
     pArgs->MetaFormat = DEFAULT_META_FORMAT;
@@ -101,10 +104,11 @@ void DestroyArgs(Args* pArgs)
     free(pArgs);
 }
 
-#define OPT_STRING ":f:pM:F:C:N:I:n:c:i:dsoPh"
+#define OPT_STRING ":f:rpM:F:C:N:I:n:c:i:dsoPh"
 
 #define OPT_FILENAME 'f'
-#define OPT_FORCE_CREATE 'p'
+#define OPT_RECREATE 'r'
+#define OPT_OPEN_OR_CREATE 'p'
 #define OPT_META_FORMAT 'M'
 #define OPT_FORMAT 'F'
 #define OPT_COUNT_FORMAT 'C'
@@ -136,9 +140,13 @@ Args* ParseArgs(int argc, char** argv)
             assert(pArgs->FileName);
             strcpy(pArgs->FileName, optarg);
             break;
-        case OPT_FORCE_CREATE:
-            pArgs->IsIsForceCreateGiven = true;
-            pArgs->IsForceCreate = true;
+        case OPT_RECREATE:
+            pArgs->IsIsReCreateGiven = true;
+            pArgs->IsReCreate = true;
+            break;
+        case OPT_OPEN_OR_CREATE:
+            pArgs->IsIsOpenOrCreateGiven = true;
+            pArgs->IsOpenOrCreate = true;
             break;
         case OPT_META_FORMAT:
             pArgs->IsMetaFormatGiven = true;
@@ -170,7 +178,7 @@ Args* ParseArgs(int argc, char** argv)
             break;
         case OPT_INDEX:
             pArgs->IsIndexGiven = true;
-            pArgs->Index = ParseInt(optarg);
+            pArgs->Index = ParseInt(optarg, NULL);
             break;
         case OPT_NAME:
             pArgs->IsNameGiven = true;
@@ -181,11 +189,11 @@ Args* ParseArgs(int argc, char** argv)
             break;
         case OPT_COUNT_ISLANDS:
             pArgs->IsCountIslandsGiven = true;
-            pArgs->CountIslands = ParseInt(optarg);
+            pArgs->CountIslands = ParseInt(optarg, NULL);
             break;
         case OPT_COUNT_INHABITED_ISLANDS:
             pArgs->IsCountInhabitedIslandsGiven = true;
-            pArgs->CountInhabitedIslands = ParseInt(optarg);
+            pArgs->CountInhabitedIslands = ParseInt(optarg, NULL);
             break;
         case OPT_HEXDUMP:
             pArgs->IsIsHexDumpRequiredGiven = true;
@@ -211,7 +219,7 @@ Args* ParseArgs(int argc, char** argv)
             pArgs->UnknownOption = (char) optopt;
             break;
         default:
-            assert(false);
+            pArgs->IsUnknownOptionGiven = true;
         }
     }
 

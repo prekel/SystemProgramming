@@ -5,6 +5,6 @@
 
 bool TryParseInt(char* string, int* result);
 
-int ParseInt(char* string);
+int ParseInt(char* string, int* pSuccessfulCount);
 
 #endif //UTILS_H
