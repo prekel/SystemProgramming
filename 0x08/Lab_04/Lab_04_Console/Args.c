@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#ifdef _MS_VERC
+#ifdef _MSC_VER
 #include "getopt.h"
 #else
 #include <unistd.h>
@@ -102,7 +102,7 @@ void DestroyArgs(Args* pArgs)
     free(pArgs);
 }
 
-#define OPT_STRING ":f:rpM:F:C:N:I:n:c:i:dsoPh"
+#define OPT_STRING ":f:rpM:F:C:N:I:n:c:i:DsoPh"
 
 #define OPT_FILENAME 'f'
 #define OPT_RECREATE 'r'
@@ -115,7 +115,7 @@ void DestroyArgs(Args* pArgs)
 #define OPT_NAME 'n'
 #define OPT_COUNT_ISLANDS 'c'
 #define OPT_COUNT_INHABITED_ISLANDS 'i'
-#define OPT_HEXDUMP 'd'
+#define OPT_HEXDUMP 'D'
 #define OPT_REMOVE_SWAP_WITH_LAST 's'
 #define OPT_OR 'o'
 #define OPT_PRINT 'P'

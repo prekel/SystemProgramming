@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define META_VERSION 13
+#define META_VERSION 14
 #define META_INDEX (-1)
 
 #define BAD_META (-7)

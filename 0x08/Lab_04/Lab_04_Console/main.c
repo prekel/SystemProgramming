@@ -2,7 +2,9 @@
 /// \brief Главная функция программы
 /// \details Главная функция программы.
 
-#ifdef WIN32
+#ifdef _MSC_VER
+#include <Windows.h>
+#elif _WIN32
 #include <windows.h>
 #endif
 
@@ -17,7 +19,7 @@
 /// EXIT_FAILURE в случае какой-либо ошибки.
 int main(int argc, char** argv)
 {
-#ifdef WIN32
+#ifdef _WIN32
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
 #endif

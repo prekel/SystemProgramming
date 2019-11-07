@@ -38,7 +38,7 @@ int WriteWrap(int fd, void* buf, unsigned int size)
 
 int UnlinkWrap(char* path)
 {
-#ifdef _MS_VERC
+#ifdef _MSC_VER
     return _unlink(path);
 #else
     return unlink(path);
