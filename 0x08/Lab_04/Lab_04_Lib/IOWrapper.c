@@ -1,24 +1,6 @@
-#ifdef _MSC_VER
-
-#include <io.h>
-#include <fcntl.h>
-#include <sys\types.h>
-#include <sys\stat.h>
-
-
-#else
-
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
-
-#endif
-
-
 #include "IOWrapper.h"
 
-int Open1(char* path, int flags, int mode)
+int OpenWrap(char* path, int flags, int mode)
 {
 #ifdef _MSC_VER
     return _open(path, flags, mode);
@@ -27,7 +9,7 @@ int Open1(char* path, int flags, int mode)
 #endif
 }
 
-int Close1(int fd)
+int CloseWrap(int fd)
 {
 #ifdef _MSC_VER
     return _close(fd);
@@ -36,7 +18,7 @@ int Close1(int fd)
 #endif
 }
 
-int Read1(int fd, void* buf, unsigned int size)
+int ReadWrap(int fd, void* buf, unsigned int size)
 {
 #ifdef _MSC_VER
     return _read(fd, buf, size);
@@ -45,7 +27,7 @@ int Read1(int fd, void* buf, unsigned int size)
 #endif
 }
 
-int Write1(int fd, void* buf, unsigned size)
+int WriteWrap(int fd, void* buf, unsigned int size)
 {
 #ifdef _MSC_VER
     return _write(fd, buf, size);
@@ -54,7 +36,7 @@ int Write1(int fd, void* buf, unsigned size)
 #endif
 }
 
-int Unlink1(char* path)
+int UnlinkWrap(char* path)
 {
 #ifdef _MSC_VER
     return _unlink(path);
@@ -63,7 +45,7 @@ int Unlink1(char* path)
 #endif
 }
 
-int Lseek1(int fd, unsigned int offset, int whence)
+int LseekWrap(int fd, unsigned int offset, int whence)
 {
 #ifdef _MSC_VER
     return _lseek(fd, offset, whence);
@@ -72,7 +54,7 @@ int Lseek1(int fd, unsigned int offset, int whence)
 #endif
 }
 
-int Ftruncate1(int fd, unsigned int length)
+int FtruncateWrap(int fd, unsigned int length)
 {
 #ifdef _MSC_VER
     return _ftruncate(fd, length);
@@ -81,7 +63,7 @@ int Ftruncate1(int fd, unsigned int length)
 #endif
 }
 
-int Access1(char* path, int mode)
+int AccessWrap(char* path, int mode)
 {
 #ifdef _MSC_VER
     return _access(path, mode);

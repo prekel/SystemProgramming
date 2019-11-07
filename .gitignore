@@ -543,8 +543,6 @@ MigrationBackup/
 cmake-build-*
 
 
-/.idea/
-
 /.vs/
 /out/
 /CMakeSettings.json
@@ -565,5 +563,3 @@ cmake-build-*
 
 /0x04/Lab_02/Lab_02_Android/Lab_02_Android.iml
 /0x04/Lab_02/Lab_02_Android/local.properties
-
-!/.idea/

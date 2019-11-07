@@ -6,7 +6,7 @@
 
 int OpenFile1(char* path)
 {
-    int fd = Open1(path, OPEN_FLAGS, READ_WRITE_MODE);
+    int fd = OpenWrap(path, OPEN_FLAGS, READ_WRITE_MODE);
 
     return fd;
 }
@@ -16,7 +16,7 @@ int CreateOrTruncateFile(char* path, int recordSize)
     Meta meta;
     FillMeta(&meta, recordSize);
 
-    int fd = Open1(path, CREATE_TRUNCATE_FLAGS, READ_WRITE_MODE);
+    int fd = OpenWrap(path, CREATE_TRUNCATE_FLAGS, READ_WRITE_MODE);
 
     if (WriteMeta(fd, &meta) == FILE_UNSUCCESSFUL)
     {
@@ -37,25 +37,25 @@ int OpenOrCreateFile(char* path, int recordSize)
 
 bool IsExist(char* path)
 {
-    return Access1(path, READ_WRITE_ACCESS) != FILE_UNSUCCESSFUL;
+    return AccessWrap(path, READ_WRITE_ACCESS) != FILE_UNSUCCESSFUL;
 }
 
 int CloseFile1(int fd)
 {
-    return Close1(fd);
+    return CloseWrap(fd);
 }
 
 int SeekRecord(int fd, Meta* pMeta, int index)
 {
     if (index == META_INDEX)
     {
-        return Lseek1(fd, 0, SEEK_SET);
+        return LseekWrap(fd, 0, SEEK_SET);
     }
     if (pMeta == NULL)
     {
         return FILE_UNSUCCESSFUL;
     }
-    return Lseek1(fd, sizeof(Meta) + index * pMeta->RecordSize, SEEK_SET);
+    return LseekWrap(fd, sizeof(Meta) + index * pMeta->RecordSize, SEEK_SET);
 }
 
 int WriteRecord(int fd, Meta* pMeta, void* data, int index)
@@ -64,7 +64,7 @@ int WriteRecord(int fd, Meta* pMeta, void* data, int index)
     {
         return FILE_UNSUCCESSFUL;
     }
-    return Write1(fd, data, pMeta->RecordSize);
+    return WriteWrap(fd, data, pMeta->RecordSize);
 }
 
 int ReadRecord(int fd, Meta* pMeta, void* data, int index)
@@ -73,7 +73,7 @@ int ReadRecord(int fd, Meta* pMeta, void* data, int index)
     {
         return FILE_UNSUCCESSFUL;
     }
-    return Read1(fd, data, pMeta->RecordSize);
+    return ReadWrap(fd, data, pMeta->RecordSize);
 }
 
 int AddRecord(int fd, Meta* pMeta, void* data)
@@ -94,7 +94,7 @@ int WriteMeta(int fd, Meta* pMeta)
     {
         return FILE_UNSUCCESSFUL;
     }
-    return Write1(fd, pMeta, sizeof(Meta));
+    return WriteWrap(fd, pMeta, sizeof(Meta));
 }
 
 int ReadMeta(int fd, Meta* pMeta)
@@ -104,12 +104,12 @@ int ReadMeta(int fd, Meta* pMeta)
     {
         return FILE_UNSUCCESSFUL;
     }
-    return Read1(fd, pMeta, sizeof(Meta));
+    return ReadWrap(fd, pMeta, sizeof(Meta));
 }
 
 int ChangeSize(int fd, Meta* pMeta, int n)
 {
-    return Ftruncate1(fd, sizeof(Meta) + n * pMeta->RecordSize);
+    return FtruncateWrap(fd, sizeof(Meta) + n * pMeta->RecordSize);
 }
 
 int RemoveSwapWithLast(int fd, Meta* pMeta, int index)
@@ -171,7 +171,7 @@ int ReadRecords(int fd, Meta* pMeta, void* pRecords, int index, int count)
     {
         return FILE_UNSUCCESSFUL;
     }
-    return Read1(fd, pRecords, pMeta->RecordSize * count);
+    return ReadWrap(fd, pRecords, pMeta->RecordSize * count);
 }
 
 int WriteRecords(int fd,
@@ -184,12 +184,12 @@ int WriteRecords(int fd,
     {
         return FILE_UNSUCCESSFUL;
     }
-    return Write1(fd, pRecords, pMeta->RecordSize * count);
+    return WriteWrap(fd, pRecords, pMeta->RecordSize * count);
 }
 
 int DeleteFile(char* path)
 {
-    return Unlink1(path);
+    return UnlinkWrap(path);
 }
 
 int CheckMeta(int fd, int recordSize)
@@ -199,7 +199,7 @@ int CheckMeta(int fd, int recordSize)
         return FILE_UNSUCCESSFUL;
     }
     int actualVersion;
-    if (Read1(fd, &actualVersion, sizeof(uint32_t)) == FILE_UNSUCCESSFUL)
+    if (ReadWrap(fd, &actualVersion, sizeof(uint32_t)) == FILE_UNSUCCESSFUL)
     {
         return FILE_UNSUCCESSFUL;
     }
