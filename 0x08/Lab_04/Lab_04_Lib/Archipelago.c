@@ -46,23 +46,23 @@ int SetName(Archipelago* pArchipelago, const char* name)
     return i;
 }
 
-ssize_t ReadArchipelago(int fd,
-                        Meta* pMeta,
-                        Archipelago* pArchipelago,
-                        int index)
+int ReadArchipelago(int fd,
+                    Meta* pMeta,
+                    Archipelago* pArchipelago,
+                    int index)
 {
     return ReadRecord(fd, pMeta, pArchipelago, index);
 }
 
-ssize_t WriteArchipelago(int fd,
-                         Meta* pMeta,
-                         Archipelago* pArchipelago,
-                         int index)
+int WriteArchipelago(int fd,
+                     Meta* pMeta,
+                     Archipelago* pArchipelago,
+                     int index)
 {
     return WriteRecord(fd, pMeta, pArchipelago, index);
 }
 
-ssize_t AddArchipelago(int fd, Meta* pMeta, Archipelago* pArchipelago)
+int AddArchipelago(int fd, Meta* pMeta, Archipelago* pArchipelago)
 {
     return AddRecord(fd, pMeta, pArchipelago);
 }

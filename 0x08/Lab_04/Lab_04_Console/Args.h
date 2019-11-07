@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 #define DEFAULT_FILENAME "1.bin";
-#define DEFAULT_META_FORMAT "Версия: %d; Размер записи: %ld; Кол-во записей: %d";
+#define DEFAULT_META_FORMAT "Версия: %d; Кол-во записей: %d; Размер записи: %d; Размер метаинформации: %d";
 #define DEFAULT_FORMAT "Архипелаг: %s; Кол-во островов: %d; Кол-во обитаемых островов: %d";
 #define DEFAULT_COUNT_FORMAT "Выведено %d записей";
 

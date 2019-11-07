@@ -33,7 +33,7 @@ int AddCommandExec(int fd, Args* pArgs)
         if (FillArchipelago(&archipelago,
                             pArgs->Name,
                             pArgs->CountIslands,
-                            pArgs->CountInhabitedIslands) == BAD_META)
+                            pArgs->CountInhabitedIslands) == BAD_VALUE)
         {
             return BAD_VALUE;
         }
@@ -460,9 +460,13 @@ int Exec1(Args* pArgs, int (* commandExec)(int, Args*), bool isFileRequired)
         fd = OpenFile1(pArgs->FileName);
     }
 
-    if (fd == BAD_META)
+    if (isFileRequired)
     {
-        return BAD_META;
+        int checkMetaReturns = CheckMeta(fd, sizeof(Archipelago));
+        if (checkMetaReturns < 0)
+        {
+            return checkMetaReturns;
+        }
     }
 
     int commendExecRet = commandExec(fd, pArgs);

@@ -11,6 +11,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <unistd.h>
 
 #endif
 
@@ -35,7 +36,7 @@ int Close1(int fd)
 #endif
 }
 
-int Read1(int fd, void* buf, int size)
+int Read1(int fd, void* buf, unsigned int size)
 {
 #ifdef _MSC_VER
     return _read(fd, buf, size);
@@ -44,7 +45,7 @@ int Read1(int fd, void* buf, int size)
 #endif
 }
 
-int Write1(int fd, void* buf, int size)
+int Write1(int fd, void* buf, unsigned size)
 {
 #ifdef _MSC_VER
     return _write(fd, buf, size);
@@ -62,11 +63,29 @@ int Unlink1(char* path)
 #endif
 }
 
-int Lseek1(int fd, int offset, int whence)
+int Lseek1(int fd, unsigned int offset, int whence)
 {
 #ifdef _MSC_VER
     return _lseek(fd, offset, whence);
 #else
     return lseek(fd, offset, whence);
+#endif
+}
+
+int Ftruncate1(int fd, unsigned int length)
+{
+#ifdef _MSC_VER
+    return _ftruncate(fd, length);
+#else
+    return ftruncate(fd, length);
+#endif
+}
+
+int Access1(char* path, int mode)
+{
+#ifdef _MSC_VER
+    return _access(path, mode);
+#else
+    return access(path, mode);
 #endif
 }

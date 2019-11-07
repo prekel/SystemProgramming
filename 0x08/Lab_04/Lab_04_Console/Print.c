@@ -135,7 +135,11 @@ int Print(int fd, Args* pArgs, bool ignoreCond)
         return FILE_UNSUCCESSFUL;
     }
 
-    printf(pArgs->MetaFormat, meta.Version, meta.Size, meta.Count);
+    printf(pArgs->MetaFormat,
+           meta.Version,
+           meta.Count,
+           meta.RecordSize,
+           meta.MetaSize);
     printf("\n");
 
     int c = 0;

@@ -5,11 +5,11 @@
 
 #include "Meta.h"
 
-#define ARCHIPELAGO_NAME_LENGTH 104
+#define ARCHIPELAGO_NAME_LENGTH 120
 
-#define NOT_FOUND -3
+#define NOT_FOUND (-3)
 
-#define BAD_VALUE -2
+#define BAD_VALUE (-2)
 
 /// \struct Archipelago
 ///
@@ -31,12 +31,17 @@ int FillArchipelago(Archipelago* pArchipelago,
 
 int SetName(Archipelago* pArchipelago, const char* name);
 
-ssize_t ReadArchipelago(int fd, Meta* pMeta, Archipelago* pArchipelago, int index);
+int ReadArchipelago(int fd,
+                    Meta* pMeta,
+                    Archipelago* pArchipelago,
+                    int index);
 
-ssize_t
-WriteArchipelago(int fd, Meta* pMeta, Archipelago* pArchipelago, int index);
+int WriteArchipelago(int fd,
+                     Meta* pMeta,
+                     Archipelago* pArchipelago,
+                     int index);
 
-ssize_t AddArchipelago(int fd, Meta* pMeta, Archipelago* pArchipelago);
+int AddArchipelago(int fd, Meta* pMeta, Archipelago* pArchipelago);
 
 int IndexByName(int fd, Meta* pMeta, char* name);
 
