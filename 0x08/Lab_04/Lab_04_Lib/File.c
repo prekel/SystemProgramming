@@ -116,17 +116,23 @@ int RemoveSwapWithLast(int fd, Meta* pMeta, int index)
 {
     if (pMeta->Count > 1)
     {
-        char data[pMeta->RecordSize];
-        if (ReadRecord(fd, pMeta, &data, pMeta->Count - 1) ==
+        //char record[pMeta->RecordSize];
+        void* pRecord = malloc(pMeta->RecordSize);
+        if (pRecord == NULL)
+        {
+            return FILE_UNSUCCESSFUL;
+        }
+        if (ReadRecord(fd, pMeta, pRecord, pMeta->Count - 1) ==
             FILE_UNSUCCESSFUL)
         {
             return FILE_UNSUCCESSFUL;
         }
-        if (WriteRecord(fd, pMeta, &data, index) ==
+        if (WriteRecord(fd, pMeta, pRecord, index) ==
             FILE_UNSUCCESSFUL)
         {
             return FILE_UNSUCCESSFUL;
         }
+        free(pRecord);
     }
 
     pMeta->Count--;
@@ -143,17 +149,23 @@ int RemoveShift(int fd, Meta* pMeta, int index)
     if (pMeta->Count > 1)
     {
         int n = pMeta->Count - index - 1;
-        char dataShift[pMeta->RecordSize * n];
-        if (ReadRecords(fd, pMeta, &dataShift, index + 1, n) ==
+        //char records[pMeta->RecordSize * n];
+        void* pRecords = malloc(pMeta->RecordSize * n);
+        if (pRecords == NULL)
+        {
+            return FILE_UNSUCCESSFUL;
+        }
+        if (ReadRecords(fd, pMeta, pRecords, index + 1, n) ==
             FILE_UNSUCCESSFUL)
         {
             return FILE_UNSUCCESSFUL;
         }
-        if (WriteRecords(fd, pMeta, &dataShift, index, n) ==
+        if (WriteRecords(fd, pMeta, pRecords, index, n) ==
             FILE_UNSUCCESSFUL)
         {
             return FILE_UNSUCCESSFUL;
         }
+        free(pRecords);
     }
 
     pMeta->Count--;

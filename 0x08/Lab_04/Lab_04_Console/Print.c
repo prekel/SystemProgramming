@@ -1,4 +1,4 @@
-#include <unistd.h>
+//#include <unistd.h>
 #include <stdio.h>
 #include <limits.h>
 #include <assert.h>
@@ -8,6 +8,7 @@
 #include "File.h"
 #include "Archipelago.h"
 #include "Commands.h"
+#include "IOWrapper.h"
 
 #define FIRST_NON_CONTROL_CHAR ' '
 
@@ -54,7 +55,7 @@ int HexDump(int fd)
     printf("\n");
     do
     {
-        bytesRead = read(fd, buffer, sizeof(buffer));
+        bytesRead = ReadWrap(fd, buffer, sizeof(buffer));
 
         if (bytesRead == FILE_UNSUCCESSFUL)
         {

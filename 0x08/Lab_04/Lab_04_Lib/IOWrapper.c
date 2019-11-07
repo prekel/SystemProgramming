@@ -38,7 +38,7 @@ int WriteWrap(int fd, void* buf, unsigned int size)
 
 int UnlinkWrap(char* path)
 {
-#ifdef _MSC_VER
+#ifdef _MS_VERC
     return _unlink(path);
 #else
     return unlink(path);
@@ -57,7 +57,7 @@ int LseekWrap(int fd, unsigned int offset, int whence)
 int FtruncateWrap(int fd, unsigned int length)
 {
 #ifdef _MSC_VER
-    return _ftruncate(fd, length);
+    return _chsize(fd, length);
 #else
     return ftruncate(fd, length);
 #endif

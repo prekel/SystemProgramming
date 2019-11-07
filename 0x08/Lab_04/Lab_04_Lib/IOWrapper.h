@@ -4,9 +4,10 @@
 #ifdef _MSC_VER
 
 #include <fcntl.h>
-#include <sys\types.h>
-#include <sys\stat.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <io.h>
+#include <stdio.h>
 
 #else
 

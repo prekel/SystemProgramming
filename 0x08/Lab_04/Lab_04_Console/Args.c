@@ -1,16 +1,14 @@
 #include <malloc.h>
-#include <stdio.h>
 #include <stdbool.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
 #include <string.h>
-#include <malloc.h>
 #include <assert.h>
-#include <stdarg.h>
-#include <stdbool.h>
 #include <stdlib.h>
+
+#ifdef _MS_VERC
+#include "getopt.h"
+#else
+#include <unistd.h>
+#endif
 
 #include "Archipelago.h"
 #include "Commands.h"
