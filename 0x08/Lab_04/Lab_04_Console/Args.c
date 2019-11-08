@@ -15,6 +15,7 @@
 #include "File.h"
 #include "Args.h"
 #include "Utils.h"
+#include "Macro.h"
 
 Args* CreateArgs()
 {
@@ -133,9 +134,9 @@ Args* ParseArgs(int argc, char** argv)
         {
         case OPT_FILENAME:
             pArgs->IsFileNameGiven = true;
-            pArgs->FileName = (char*) malloc(
-                    (sizeof(char) + 1) * strlen(optarg));
-            assert(pArgs->FileName);
+            RETURN_NULL_IF_NULLPTR(pArgs->FileName = (char*) malloc(
+                    (sizeof(char) + 1) * strlen(optarg)));
+            //assert(pArgs->FileName);
             strcpy(pArgs->FileName, optarg);
             break;
         case OPT_RECREATE:
@@ -148,30 +149,30 @@ Args* ParseArgs(int argc, char** argv)
             break;
         case OPT_META_FORMAT:
             pArgs->IsMetaFormatGiven = true;
-            pArgs->MetaFormat = (char*) malloc(
-                    (sizeof(char) + 1) * strlen(optarg));
-            assert(pArgs->MetaFormat);
+            RETURN_NULL_IF_NULLPTR(pArgs->MetaFormat = (char*) malloc(
+                    (sizeof(char) + 1) * strlen(optarg)));
+            //assert(pArgs->MetaFormat);
             strcpy(pArgs->MetaFormat, optarg);
             break;
         case OPT_FORMAT:
             pArgs->IsFormatGiven = true;
-            pArgs->Format = (char*) malloc(
-                    (sizeof(char) + 1) * strlen(optarg));
-            assert(pArgs->Format);
+            RETURN_NULL_IF_NULLPTR(pArgs->Format = (char*) malloc(
+                    (sizeof(char) + 1) * strlen(optarg)));
+            //assert(pArgs->Format);
             strcpy(pArgs->Format, optarg);
             break;
         case OPT_COUNT_FORMAT:
             pArgs->IsCountFormatGiven = true;
-            pArgs->CountFormat = (char*) malloc(
-                    (sizeof(char) + 1) * strlen(optarg));
-            assert(pArgs->CountFormat);
+            RETURN_NULL_IF_NULLPTR(pArgs->CountFormat = (char*) malloc(
+                    (sizeof(char) + 1) * strlen(optarg)));
+            //assert(pArgs->CountFormat);
             strcpy(pArgs->CountFormat, optarg);
             break;
         case OPT_OLD_NAME:
             pArgs->IsOldNameGiven = true;
-            pArgs->OldName = (char*) malloc(
-                    (sizeof(char) + 1) * strlen(optarg));
-            assert(pArgs->OldName);
+            RETURN_NULL_IF_NULLPTR(pArgs->OldName = (char*) malloc(
+                    (sizeof(char) + 1) * strlen(optarg)));
+            //assert(pArgs->OldName);
             strcpy(pArgs->OldName, optarg);
             break;
         case OPT_INDEX:
@@ -180,9 +181,9 @@ Args* ParseArgs(int argc, char** argv)
             break;
         case OPT_NAME:
             pArgs->IsNameGiven = true;
-            pArgs->Name = (char*) malloc(
-                    (sizeof(char) + 1) * strlen(optarg));
-            assert(pArgs->Name);
+            RETURN_NULL_IF_NULLPTR(pArgs->Name = (char*) malloc(
+                    (sizeof(char) + 1) * strlen(optarg)));
+            //assert(pArgs->Name);
             strcpy(pArgs->Name, optarg);
             break;
         case OPT_COUNT_ISLANDS:

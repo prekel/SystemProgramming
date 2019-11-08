@@ -27,4 +27,11 @@
     } \
 } while (0)
 
+#define RETURN_NULL_IF_NULLPTR(ptr) do { \
+    if ((ptr) == NULL) \
+    { \
+        return NULL; \
+    } \
+} while (0)
+
 #endif //MACRO_H

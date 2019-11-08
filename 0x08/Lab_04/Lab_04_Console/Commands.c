@@ -157,8 +157,8 @@ int ModifyCommandExec(int fd, Args* pArgs)
 
 int RemoveCommandExec(int fd, Args* pArgs)
 {
-    if (!(pArgs->IsIndexGiven || pArgs->IsNameGiven) ||
-        (pArgs->IsIndexGiven && pArgs->IsNameGiven) ||
+    if (!(pArgs->IsIndexGiven || pArgs->IsNameGiven) &&
+        (pArgs->IsIndexGiven && pArgs->IsNameGiven) &&
         (pArgs->IsIndexGiven && pArgs->Index >= 0))
     {
         return BAD_VALUE;
@@ -197,7 +197,7 @@ int RemoveCommandExec(int fd, Args* pArgs)
     }
     else
     {
-        RETURN_IF_NOT_SUCCESSFUL(RemoveSwapWithLast(fd, &meta, index));
+        RETURN_IF_NOT_SUCCESSFUL(RemoveShift(fd, &meta, index));
 //        int removeShift = RemoveShift(fd, &meta, index);
 //        if (removeShift < 0)
 //        {
@@ -400,31 +400,31 @@ int Exec(char* command, Args* pArgs)
     case SUCCESSFUL:
         return EXIT_SUCCESS;
     case FILE_UNSUCCESSFUL:
-        printf(FILE_UNSUCCESSFUL_MESSAGE);
+        fprintf(stderr, FILE_UNSUCCESSFUL_MESSAGE);
         break;
     case BAD_VALUE:
-        printf(BAD_VALUE_MESSAGE);
+        fprintf(stderr, BAD_VALUE_MESSAGE);
         break;
     case NOT_FOUND:
-        printf(NOT_FOUND_MESSAGE);
+        fprintf(stderr, NOT_FOUND_MESSAGE);
         break;
     case BAD_ARGS:
-        printf(BAD_ARGS_MESSAGE);
+        fprintf(stderr, BAD_ARGS_MESSAGE);
         break;
     case FILE_NOT_EXIST:
-        printf(FILE_NOT_EXIST_MESSAGE);
+        fprintf(stderr, FILE_NOT_EXIST_MESSAGE);
         break;
     case CLOSE_UNSUCCESSFUL:
-        printf(CLOSE_UNSUCCESSFUL_MESSAGE);
+        fprintf(stderr, CLOSE_UNSUCCESSFUL_MESSAGE);
         break;
     case BAD_META:
-        printf(BAD_META_MESSAGE);
+        fprintf(stderr, BAD_META_MESSAGE);
         break;
     case BAD_RECORD:
-        printf(BAD_RECORD_MESSAGE);
+        fprintf(stderr, BAD_RECORD_MESSAGE);
         break;
     default:
-        printf(UNKNOWN_ERROR_MESSAGE);
+        fprintf(stderr, UNKNOWN_ERROR_MESSAGE);
         break;
     }
 

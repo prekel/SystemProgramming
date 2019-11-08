@@ -2,6 +2,8 @@
 /// \brief Главная функция программы
 /// \details Главная функция программы.
 
+#include <stdio.h>
+
 #ifdef _MSC_VER
 #include <Windows.h>
 #elif _WIN32
@@ -10,6 +12,8 @@
 
 #include "Print.h"
 #include "Commands.h"
+
+#define ALLOCATION_ERROR_MESSAGE "Ошибка выделения памяти\n"
 
 /// Главная функция программы.
 ///
@@ -25,6 +29,12 @@ int main(int argc, char** argv)
 #endif
     char* command = argv[1];
     Args* pArgs = ParseArgs(argc - 1, argv + 1);
+
+    if (pArgs == NULL)
+    {
+        fprintf(stderr, ALLOCATION_ERROR_MESSAGE);
+        return EXIT_FAILURE;
+    }
 
     int ret = Exec(command, pArgs);
 
