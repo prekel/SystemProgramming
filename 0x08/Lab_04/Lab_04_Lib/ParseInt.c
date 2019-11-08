@@ -5,15 +5,15 @@
 #include <assert.h>
 #include <stdarg.h>
 
-#include "Utils.h"
+#include "ParseInt.h"
 
-bool TryParseInt(char* string, int* result)
+bool TryParseInt(char* string, int* pResult)
 {
     size_t length = strlen(string);
 
     int position;
 
-    int sscanfReturns = sscanf(string, "%d%n", result, &position);
+    int sscanfReturns = sscanf(string, "%d%n", pResult, &position);
 
     if (position != length || sscanfReturns < 0)
     {
@@ -30,6 +30,10 @@ int ParseInt(char* string, int* pSuccessfulCount)
     if (pSuccessfulCount != NULL && tryParseInt)
     {
         (*pSuccessfulCount)++;
+    }
+    if (!tryParseInt)
+    {
+        return 0;
     }
     return result;
 }

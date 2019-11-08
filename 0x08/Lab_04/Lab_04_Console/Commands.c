@@ -14,7 +14,7 @@
 #include "Commands.h"
 #include "RecordFile.h"
 #include "Print.h"
-#include "Utils.h"
+#include "ParseInt.h"
 #include "ReturnCodes.h"
 #include "ReturnCodesLib.h"
 
@@ -31,10 +31,11 @@ int AddCommandExec(int fd, Args* pArgs)
     if (pArgs->IsNameGiven && pArgs->IsCountIslandsGiven &&
         pArgs->IsCountInhabitedIslandsGiven)
     {
-        RETURN_IF_NOT_SUCCESSFUL(FillArchipelago(&archipelago,
-                                                 pArgs->Name,
-                                                 pArgs->CountIslands,
-                                                 pArgs->CountInhabitedIslands));
+        RETURN_IF_NOT_SUCCESSFUL(
+                FillArchipelago(&archipelago,
+                                pArgs->Name,
+                                pArgs->CountIslands,
+                                pArgs->CountInhabitedIslands));
     }
     else
     {
@@ -68,17 +69,8 @@ int AddCommandExec(int fd, Args* pArgs)
 
     Meta meta;
     RETURN_IF_NOT_SUCCESSFUL(ReadMeta(fd, &meta));
-//    int readMeta = ReadMeta(fd, &meta);
-//    if (readMeta == FILE_UNSUCCESSFUL)
-//    {
-//        return FILE_UNSUCCESSFUL;
-//    }
 
     RETURN_IF_NOT_SUCCESSFUL(AddArchipelago(fd, &meta, &archipelago));
-//    if (AddArchipelago(fd, &meta, &archipelago) == FILE_UNSUCCESSFUL)
-//    {
-//        return FILE_UNSUCCESSFUL;
-//    }
 
     return SUCCESSFUL;
 }
@@ -96,11 +88,6 @@ int ModifyCommandExec(int fd, Args* pArgs)
 
     Meta meta;
     RETURN_IF_NOT_SUCCESSFUL(ReadMeta(fd, &meta));
-//    int readMeta = ReadMeta(fd, &meta);
-//    if (readMeta == FILE_UNSUCCESSFUL)
-//    {
-//        return FILE_UNSUCCESSFUL;
-//    }
 
     if (!(pArgs->IsIndexGiven && pArgs->Index < meta.Count))
     {
@@ -119,38 +106,20 @@ int ModifyCommandExec(int fd, Args* pArgs)
     if (pArgs->IsNameGiven)
     {
         RETURN_IF_NOT_SUCCESSFUL(ModifyName(fd, &meta, index, pArgs->Name));
-//        int modifyName = ModifyName(fd, &meta, index, pArgs->Name);
-//        if (modifyName < 0)
-//        {
-//            return modifyName;
-//        }
+
     }
     if (pArgs->IsCountIslandsGiven)
     {
         RETURN_IF_NOT_SUCCESSFUL(ModifyCountIslands(fd, &meta, index,
                                                     pArgs->CountIslands));
-//        int modifyCountIslands = ModifyCountIslands(fd, &meta, index,
-//                                                    pArgs->CountIslands);
-//        if (modifyCountIslands < 0)
-//        {
-//            return modifyCountIslands;
-//        }
     }
     if (pArgs->IsCountInhabitedIslandsGiven)
     {
-        RETURN_IF_NOT_SUCCESSFUL(ModifyCountInhabitedIslands(fd,
-                                                             &meta,
-                                                             index,
-                                                             pArgs->CountInhabitedIslands));
-//        int modifyCountInhabitedIslands =
-//                ModifyCountInhabitedIslands(fd,
-//                                            &meta,
-//                                            index,
-//                                            pArgs->CountInhabitedIslands);
-//        if (modifyCountInhabitedIslands < 0)
-//        {
-//            return modifyCountInhabitedIslands;
-//        }
+        RETURN_IF_NOT_SUCCESSFUL(
+                ModifyCountInhabitedIslands(fd,
+                                            &meta,
+                                            index,
+                                            pArgs->CountInhabitedIslands));
     }
 
     return SUCCESSFUL;
@@ -167,11 +136,6 @@ int RemoveCommandExec(int fd, Args* pArgs)
 
     Meta meta;
     RETURN_IF_NOT_SUCCESSFUL(ReadMeta(fd, &meta));
-//    int readMeta = ReadMeta(fd, &meta);
-//    if (readMeta == FILE_UNSUCCESSFUL)
-//    {
-//        return FILE_UNSUCCESSFUL;
-//    }
 
     if (!(pArgs->IsIndexGiven && pArgs->Index < meta.Count))
     {
@@ -190,20 +154,10 @@ int RemoveCommandExec(int fd, Args* pArgs)
     if (pArgs->IsRemoveSwapWithLast)
     {
         RETURN_IF_NOT_SUCCESSFUL(RemoveRecordSwapWithLast(fd, &meta, index));
-//        int removeSwapWithLast = RemoveRecordSwapWithLast(fd, &meta, index);
-//        if (removeSwapWithLast < 0)
-//        {
-//            return removeSwapWithLast;
-//        }
     }
     else
     {
         RETURN_IF_NOT_SUCCESSFUL(RemoveRecordShift(fd, &meta, index));
-//        int removeShift = RemoveRecordShift(fd, &meta, index);
-//        if (removeShift < 0)
-//        {
-//            return removeShift;
-//        }
     }
 
     return SUCCESSFUL;
@@ -239,11 +193,6 @@ int HasUninhabitedCommandExec(int fd, Args* pArgs)
 {
     Meta meta;
     RETURN_IF_NOT_SUCCESSFUL(ReadMeta(fd, &meta));
-//    int readMeta = ReadMeta(fd, &meta);
-//    if (readMeta == FILE_UNSUCCESSFUL)
-//    {
-//        return FILE_UNSUCCESSFUL;
-//    }
 
     bool has = false;
     for (int i = 0; i < meta.Count; i++)
@@ -298,7 +247,7 @@ int UnknownOptionCommandExec(int fd, Args* pArgs)
 {
     if (pArgs->UnknownOption == '\0')
     {
-        return(BAD_ARGS);
+        return (BAD_ARGS);
     }
     else
     {
@@ -373,6 +322,10 @@ int Exec(char* command, Args* pArgs)
     }
 
     int ret = Exec1(pArgs, commandExec, isFileRequired);
+    if (ret > SUCCESSFUL)
+    {
+        ret = SUCCESSFUL;
+    }
 
     switch (ret)
     {
@@ -440,38 +393,18 @@ int Exec1(Args* pArgs, int (* commandExec)(int, Args*), bool isFileRequired)
     if (isFileRequired)
     {
         RETURN_IF_NOT_SUCCESSFUL(CheckRecordFile(fd, sizeof(Archipelago)));
-//        int checkMetaReturns = CheckRecordFile(fd, sizeof(Archipelago));
-//        if (checkMetaReturns < 0)
-//        {
-//            return checkMetaReturns;
-//        }
     }
 
     RETURN_IF_NOT_SUCCESSFUL(commandExec(fd, pArgs));
-//    int commendExecRet = commandExec(fd, pArgs);
-//    if (commendExecRet < 0)
-//    {
-//        return commendExecRet;
-//    }
 
     if (pArgs->IsPrintRequired)
     {
         RETURN_IF_NOT_SUCCESSFUL(Print(fd, pArgs, true));
-//        int print = Print(fd, pArgs, true);
-//        if (print < 0)
-//        {
-//            return print;
-//        }
     }
 
     if (pArgs->IsHexDumpRequired)
     {
         RETURN_IF_NOT_SUCCESSFUL(HexDump(fd));
-//        int hexDump = HexDump(fd);
-//        if (hexDump < 0)
-//        {
-//            return hexDump;
-//        }
     }
 
     if (isFileRequired && CloseRecordFile(fd) == FILE_UNSUCCESSFUL)
