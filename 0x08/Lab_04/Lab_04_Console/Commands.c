@@ -12,7 +12,7 @@
 
 #include "Archipelago.h"
 #include "Commands.h"
-#include "File.h"
+#include "RecordFile.h"
 #include "Print.h"
 #include "Utils.h"
 #include "ReturnCodes.h"
@@ -189,8 +189,8 @@ int RemoveCommandExec(int fd, Args* pArgs)
 
     if (pArgs->IsRemoveSwapWithLast)
     {
-        RETURN_IF_NOT_SUCCESSFUL(RemoveSwapWithLast(fd, &meta, index));
-//        int removeSwapWithLast = RemoveSwapWithLast(fd, &meta, index);
+        RETURN_IF_NOT_SUCCESSFUL(RemoveRecordSwapWithLast(fd, &meta, index));
+//        int removeSwapWithLast = RemoveRecordSwapWithLast(fd, &meta, index);
 //        if (removeSwapWithLast < 0)
 //        {
 //            return removeSwapWithLast;
@@ -198,8 +198,8 @@ int RemoveCommandExec(int fd, Args* pArgs)
     }
     else
     {
-        RETURN_IF_NOT_SUCCESSFUL(RemoveShift(fd, &meta, index));
-//        int removeShift = RemoveShift(fd, &meta, index);
+        RETURN_IF_NOT_SUCCESSFUL(RemoveRecordShift(fd, &meta, index));
+//        int removeShift = RemoveRecordShift(fd, &meta, index);
 //        if (removeShift < 0)
 //        {
 //            return removeShift;
@@ -220,13 +220,13 @@ int CreateCommandExec(int fd, Args* pArgs)
 
 int DeleteCommandExec(int fd, Args* pArgs)
 {
-    bool isExist = IsExist(pArgs->FileName);
+    bool isExist = IsExistWritableReadableRecordFile(pArgs->FileName);
     if (isExist == false)
     {
         return FILE_NOT_EXIST;
     }
 
-    RETURN_IF_NOT_SUCCESSFUL(DeleteFile(pArgs->FileName));
+    RETURN_IF_NOT_SUCCESSFUL(DeleteRecordFile(pArgs->FileName));
 
     return SUCCESSFUL;
 }
@@ -422,25 +422,25 @@ int Exec1(Args* pArgs, int (* commandExec)(int, Args*), bool isFileRequired)
     }
     else if (pArgs->IsOpenOrCreate || commandExec == CreateCommandExec)
     {
-        fd = OpenOrCreateFile(pArgs->FileName, sizeof(Archipelago));
+        fd = OpenOrCreateRecordFile(pArgs->FileName, sizeof(Archipelago));
     }
     else if (pArgs->IsReCreate)
     {
-        fd = CreateOrTruncateFile(pArgs->FileName, sizeof(Archipelago));
+        fd = CreateOrTruncateRecordFile(pArgs->FileName, sizeof(Archipelago));
     }
     else
     {
-        if (!IsExist(pArgs->FileName))
+        if (!IsExistWritableReadableRecordFile(pArgs->FileName))
         {
             return FILE_NOT_EXIST;
         }
-        fd = OpenFile1(pArgs->FileName);
+        fd = OpenRecordFile(pArgs->FileName);
     }
 
     if (isFileRequired)
     {
-        RETURN_IF_NOT_SUCCESSFUL(CheckFile(fd, sizeof(Archipelago)));
-//        int checkMetaReturns = CheckFile(fd, sizeof(Archipelago));
+        RETURN_IF_NOT_SUCCESSFUL(CheckRecordFile(fd, sizeof(Archipelago)));
+//        int checkMetaReturns = CheckRecordFile(fd, sizeof(Archipelago));
 //        if (checkMetaReturns < 0)
 //        {
 //            return checkMetaReturns;
@@ -474,7 +474,7 @@ int Exec1(Args* pArgs, int (* commandExec)(int, Args*), bool isFileRequired)
 //        }
     }
 
-    if (isFileRequired && CloseFile1(fd) == FILE_UNSUCCESSFUL)
+    if (isFileRequired && CloseRecordFile(fd) == FILE_UNSUCCESSFUL)
     {
         return CLOSE_UNSUCCESSFUL;
     }

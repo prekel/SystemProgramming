@@ -3,6 +3,7 @@
 /// \details Главная функция программы.
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #ifdef _MSC_VER
 

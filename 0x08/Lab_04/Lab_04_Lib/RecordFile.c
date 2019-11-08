@@ -1,18 +1,22 @@
+/// \file
+/// \brief Реализация функций из RecordFile.h
+/// \details Реализация функций из RecordFile.h.
+
 #include <stdbool.h>
 
-#include "File.h"
+#include "RecordFile.h"
 #include "Meta.h"
 #include "IOWrapper.h"
 #include "ReturnCodesLib.h"
 
-int OpenFile1(char* path)
+int OpenRecordFile(char* path)
 {
     int fd = OpenWrap(path, OPEN_FLAGS, READ_WRITE_MODE);
 
     return fd;
 }
 
-int CreateOrTruncateFile(char* path, int recordSize)
+int CreateOrTruncateRecordFile(char* path, int recordSize)
 {
     Meta meta;
     FillMeta(&meta, recordSize);
@@ -28,21 +32,21 @@ int CreateOrTruncateFile(char* path, int recordSize)
     return fd;
 }
 
-int OpenOrCreateFile(char* path, int recordSize)
+int OpenOrCreateRecordFile(char* path, int recordSize)
 {
-    if (IsExist(path))
+    if (IsExistWritableReadableRecordFile(path))
     {
-        return OpenFile1(path);
+        return OpenRecordFile(path);
     }
-    return CreateOrTruncateFile(path, recordSize);
+    return CreateOrTruncateRecordFile(path, recordSize);
 }
 
-bool IsExist(char* path)
+bool IsExistWritableReadableRecordFile(char* path)
 {
     return AccessWrap(path, READ_WRITE_ACCESS) != FILE_UNSUCCESSFUL;
 }
 
-int CloseFile1(int fd)
+int CloseRecordFile(int fd)
 {
     return CloseWrap(fd);
 }
@@ -60,27 +64,27 @@ int SeekRecord(int fd, Meta* pMeta, int index)
     return LseekWrap(fd, sizeof(Meta) + index * pMeta->RecordSize, SEEK_SET);
 }
 
-int WriteRecord(int fd, Meta* pMeta, void* data, int index)
+int WriteRecord(int fd, Meta* pMeta, void* pRecord, int index)
 {
     RETURN_IF_NOT_SUCCESSFUL(SeekRecord(fd, pMeta, index));
 //    if (SeekRecord(fd, pMeta, index) == FILE_UNSUCCESSFUL)
 //    {
 //        return FILE_UNSUCCESSFUL;
 //    }
-    return WriteWrap(fd, data, pMeta->RecordSize);
+    return WriteWrap(fd, pRecord, pMeta->RecordSize);
 }
 
-int ReadRecord(int fd, Meta* pMeta, void* data, int index)
+int ReadRecord(int fd, Meta* pMeta, void* pRecord, int index)
 {
     RETURN_IF_NOT_SUCCESSFUL(SeekRecord(fd, pMeta, index));
 //    if (SeekRecord(fd, pMeta, index) == FILE_UNSUCCESSFUL)
 //    {
 //        return FILE_UNSUCCESSFUL;
 //    }
-    return ReadWrap(fd, data, pMeta->RecordSize);
+    return ReadWrap(fd, pRecord, pMeta->RecordSize);
 }
 
-int AddRecord(int fd, Meta* pMeta, void* data)
+int AddRecord(int fd, Meta* pMeta, void* pRecord)
 {
     pMeta->Count++;
     RETURN_IF_NOT_SUCCESSFUL(WriteMeta(fd, pMeta));
@@ -88,7 +92,7 @@ int AddRecord(int fd, Meta* pMeta, void* data)
 //    {
 //        return FILE_UNSUCCESSFUL;
 //    }
-    return WriteRecord(fd, pMeta, data, pMeta->Count - 1);
+    return WriteRecord(fd, pMeta, pRecord, pMeta->Count - 1);
 }
 
 int WriteMeta(int fd, Meta* pMeta)
@@ -113,12 +117,16 @@ int ReadMeta(int fd, Meta* pMeta)
     return ReadWrap(fd, pMeta, sizeof(Meta));
 }
 
-int ChangeSize(int fd, Meta* pMeta, int n)
+int ChangeSizeRecordFile(int fd, Meta* pMeta, int n)
 {
+    if (n > pMeta->Count)
+    {
+        return FILE_UNSUCCESSFUL;
+    }
     return FtruncateWrap(fd, sizeof(Meta) + n * pMeta->RecordSize);
 }
 
-int RemoveSwapWithLast(int fd, Meta* pMeta, int index)
+int RemoveRecordSwapWithLast(int fd, Meta* pMeta, int index)
 {
     if (pMeta->Count > 1)
     {
@@ -126,7 +134,7 @@ int RemoveSwapWithLast(int fd, Meta* pMeta, int index)
         void* pRecord = malloc(pMeta->RecordSize);
         if (pRecord == NULL)
         {
-            return FILE_UNSUCCESSFUL;
+            return ALLOCATION_ERROR;
         }
         RETURN_IF_NOT_SUCCESSFUL(
                 ReadRecord(fd, pMeta, pRecord, pMeta->Count - 1));
@@ -151,10 +159,10 @@ int RemoveSwapWithLast(int fd, Meta* pMeta, int index)
 //        return FILE_UNSUCCESSFUL;
 //    }
 
-    return ChangeSize(fd, pMeta, pMeta->Count);
+    return ChangeSizeRecordFile(fd, pMeta, pMeta->Count);
 }
 
-int RemoveShift(int fd, Meta* pMeta, int index)
+int RemoveRecordShift(int fd, Meta* pMeta, int index)
 {
     if (pMeta->Count > 1)
     {
@@ -188,7 +196,7 @@ int RemoveShift(int fd, Meta* pMeta, int index)
 //        return FILE_UNSUCCESSFUL;
 //    }
 
-    return ChangeSize(fd, pMeta, pMeta->Count);
+    return ChangeSizeRecordFile(fd, pMeta, pMeta->Count);
 }
 
 int ReadRecords(int fd, Meta* pMeta, void* pRecords, int index, int count)
@@ -215,12 +223,12 @@ int WriteRecords(int fd,
     return WriteWrap(fd, pRecords, pMeta->RecordSize * count);
 }
 
-int DeleteFile(char* path)
+int DeleteRecordFile(char* path)
 {
     return UnlinkWrap(path);
 }
 
-int CheckFile(int fd, int recordSize)
+int CheckRecordFile(int fd, int recordSize)
 {
     RETURN_IF_NOT_SUCCESSFUL(SeekRecord(fd, NULL, META_INDEX));
 //    if (SeekRecord(fd, NULL, META_INDEX) == FILE_UNSUCCESSFUL)

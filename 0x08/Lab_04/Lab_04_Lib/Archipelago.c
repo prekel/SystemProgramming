@@ -3,7 +3,7 @@
 
 #include "Archipelago.h"
 #include "Meta.h"
-#include "File.h"
+#include "RecordFile.h"
 #include "ReturnCodesLib.h"
 
 int FillArchipelago(Archipelago* pArchipelago,

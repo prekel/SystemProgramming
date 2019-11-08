@@ -12,7 +12,7 @@
 
 #include "Archipelago.h"
 #include "Commands.h"
-#include "File.h"
+#include "RecordFile.h"
 #include "Args.h"
 #include "Utils.h"
 #include "ReturnCodesLib.h"

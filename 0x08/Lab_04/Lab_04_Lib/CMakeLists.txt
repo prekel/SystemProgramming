@@ -5,7 +5,7 @@ set(CMAKE_C_STANDARD 11)
 
 add_library(Lab_04_Lib
         Archipelago.c Archipelago.h
-        File.c File.h
+        RecordFile.c RecordFile.h
         Meta.c Meta.h
         Utils.c Utils.h
         IOWrapper.c

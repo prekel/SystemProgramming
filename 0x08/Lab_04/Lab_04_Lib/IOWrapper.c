@@ -1,3 +1,7 @@
+/// \file
+/// \brief Реализация функций из IOWrapper.h
+/// \details Реализация функций из IOWrapper.h.
+
 #include "IOWrapper.h"
 
 int OpenWrap(char* path, int flags, int mode)

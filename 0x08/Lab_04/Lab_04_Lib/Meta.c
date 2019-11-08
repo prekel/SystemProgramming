@@ -1,10 +1,14 @@
-#include "Meta.h"
-#include "File.h"
+/// \file
+/// \brief Реализация функций из Meta.h
+/// \details Реализация функций из Meta.h.
 
-void FillMeta(Meta* pMeta, int size)
+#include "Meta.h"
+#include "RecordFile.h"
+
+void FillMeta(Meta* pMeta, int recordSize)
 {
     pMeta->Version = META_VERSION;
     pMeta->Count = 0;
-    pMeta->RecordSize = size;
+    pMeta->RecordSize = recordSize;
     pMeta->MetaSize = sizeof(Meta);
 }
