@@ -13,9 +13,9 @@ bool TryParseInt(char* string, int* result)
 
     int position;
 
-    int sscanfCode = sscanf(string, "%d%n", result, &position);
+    int sscanfReturns = sscanf(string, "%d%n", result, &position);
 
-    if (position != length || sscanfCode < 0)
+    if (position != length || sscanfReturns < 0)
     {
         return false;
     }

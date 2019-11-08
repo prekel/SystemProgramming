@@ -5,8 +5,6 @@
 
 #include "Meta.h"
 
-#define FILE_UNSUCCESSFUL (-1)
-
 int OpenFile1(char* path);
 
 int CloseFile1(int fd);
@@ -41,6 +39,6 @@ int WriteRecords(int fd, Meta* pMeta, void* pRecords, int index, int count);
 
 int DeleteFile(char* path);
 
-int CheckMeta(int fd, int recordSize);
+int CheckFile(int fd, int recordSize);
 
 #endif //FILE_H

@@ -7,8 +7,6 @@
 #define META_VERSION 14
 #define META_INDEX (-1)
 
-#define BAD_META (-7)
-
 typedef struct
 {
     int32_t Version;

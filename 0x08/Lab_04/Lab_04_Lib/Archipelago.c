@@ -4,6 +4,7 @@
 #include "Archipelago.h"
 #include "Meta.h"
 #include "File.h"
+#include "Macro.h"
 
 int FillArchipelago(Archipelago* pArchipelago,
                     char* name,
@@ -17,14 +18,30 @@ int FillArchipelago(Archipelago* pArchipelago,
     {
         return BAD_VALUE;
     }
-    int setName = SetName(pArchipelago, name);
-    if (setName < 0)
-    {
-        return setName;
-    }
+    RETURN_IF_NOT_SUCCESSFUL(SetName(pArchipelago, name));
+//    int setName = SetName(pArchipelago, name);
+//    if (setName < 0)
+//    {
+//        return setName;
+//    }
     pArchipelago->CountIslands = countIslands;
     pArchipelago->CountInhabitedIslands = countInhabitedIslands;
-    return 0;
+    return SUCCESSFUL;
+}
+
+int VerifyArchipelago(Archipelago* pArchipelago)
+{
+    if (pArchipelago->Name[ARCHIPELAGO_NAME_LENGTH - 1] != '\0')
+    {
+        return BAD_META;
+    }
+    if (pArchipelago->CountIslands < 2 ||
+        pArchipelago->CountIslands < pArchipelago->CountInhabitedIslands ||
+        pArchipelago->CountInhabitedIslands < 0)
+    {
+        return BAD_VALUE;
+    }
+    return SUCCESSFUL;
 }
 
 int SetName(Archipelago* pArchipelago, const char* name)
@@ -72,11 +89,13 @@ int IndexByName(int fd, Meta* pMeta, char* name)
     for (int i = 0; i < pMeta->Count; i++)
     {
         Archipelago archipelago;
-        if (ReadArchipelago(fd, pMeta, &archipelago, i) ==
-            FILE_UNSUCCESSFUL)
-        {
-            return NOT_FOUND;
-        }
+        RETURN_IF_NOT_SUCCESSFUL(ReadArchipelago(fd, pMeta, &archipelago, i));
+//        if (ReadArchipelago(fd, pMeta, &archipelago, i) ==
+//            FILE_UNSUCCESSFUL)
+//        {
+//            return NOT_FOUND;
+//        }
+        RETURN_IF_NOT_SUCCESSFUL(VerifyArchipelago(&archipelago));
         if (strcmp(archipelago.Name, name) == 0)
         {
             return i;
@@ -92,16 +111,19 @@ int ModifyName(int fd, Meta* pMeta, int index, char* newName)
         return BAD_VALUE;
     }
     Archipelago archipelago;
-    if (ReadArchipelago(fd, pMeta, &archipelago, index) ==
-        FILE_UNSUCCESSFUL)
-    {
-        return FILE_UNSUCCESSFUL;
-    }
-    int setName = SetName(&archipelago, newName);
-    if (setName < 0)
-    {
-        return setName;
-    }
+    RETURN_IF_NOT_SUCCESSFUL(ReadArchipelago(fd, pMeta, &archipelago, index));
+//    if (ReadArchipelago(fd, pMeta, &archipelago, index) ==
+//        FILE_UNSUCCESSFUL)
+//    {
+//        return FILE_UNSUCCESSFUL;
+//    }
+    RETURN_IF_NOT_SUCCESSFUL(VerifyArchipelago(&archipelago));
+    RETURN_IF_NOT_SUCCESSFUL(SetName(&archipelago, newName));
+//    int setName = SetName(&archipelago, newName);
+//    if (setName < 0)
+//    {
+//        return setName;
+//    }
     return WriteArchipelago(fd, pMeta, &archipelago, index);
 }
 
@@ -112,11 +134,13 @@ int ModifyCountIslands(int fd, Meta* pMeta, int index, int newCountIslands)
         return BAD_VALUE;
     }
     Archipelago archipelago;
-    if (ReadArchipelago(fd, pMeta, &archipelago, index) ==
-        FILE_UNSUCCESSFUL)
-    {
-        return FILE_UNSUCCESSFUL;
-    }
+    RETURN_IF_NOT_SUCCESSFUL(ReadArchipelago(fd, pMeta, &archipelago, index));
+//    if (ReadArchipelago(fd, pMeta, &archipelago, index) ==
+//        FILE_UNSUCCESSFUL)
+//    {
+//        return FILE_UNSUCCESSFUL;
+//    }
+    RETURN_IF_NOT_SUCCESSFUL(VerifyArchipelago(&archipelago));
     if (newCountIslands < archipelago.CountInhabitedIslands)
     {
         return BAD_VALUE;
@@ -135,11 +159,13 @@ int ModifyCountInhabitedIslands(int fd,
         return BAD_VALUE;
     }
     Archipelago archipelago;
-    if (ReadArchipelago(fd, pMeta, &archipelago, index) ==
-        FILE_UNSUCCESSFUL)
-    {
-        return FILE_UNSUCCESSFUL;
-    }
+    RETURN_IF_NOT_SUCCESSFUL(ReadArchipelago(fd, pMeta, &archipelago, index));
+//    if (ReadArchipelago(fd, pMeta, &archipelago, index) ==
+//        FILE_UNSUCCESSFUL)
+//    {
+//        return FILE_UNSUCCESSFUL;
+//    }
+    RETURN_IF_NOT_SUCCESSFUL(VerifyArchipelago(&archipelago));
     if (newCountInhabitedIslands > archipelago.CountIslands)
     {
         return BAD_VALUE;

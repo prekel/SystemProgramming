@@ -9,6 +9,7 @@
 #include "Archipelago.h"
 #include "Commands.h"
 #include "IOWrapper.h"
+#include "Macro.h"
 
 #define FIRST_NON_CONTROL_CHAR ' '
 
@@ -47,20 +48,17 @@ int HexDump(int fd)
     size_t bytesRead;
     int i;
 
-    if (SeekRecord(fd, NULL, META_INDEX) == FILE_UNSUCCESSFUL)
-    {
-        return FILE_UNSUCCESSFUL;
-    }
+    RETURN_IF_NOT_SUCCESSFUL(SeekRecord(fd, NULL, META_INDEX));
+//    if (SeekRecord(fd, NULL, META_INDEX) == FILE_UNSUCCESSFUL)
+//    {
+//        return FILE_UNSUCCESSFUL;
+//    }
 
     printf("\n");
     do
     {
-        bytesRead = ReadWrap(fd, buffer, sizeof(buffer));
-
-        if (bytesRead == FILE_UNSUCCESSFUL)
-        {
-            return FILE_UNSUCCESSFUL;
-        }
+        RETURN_IF_NOT_SUCCESSFUL(
+                bytesRead = ReadWrap(fd, buffer, sizeof(buffer)));
 
         printf(FIRST_COLUMN_FORMAT, offset);
         for (i = 0; i < bytesRead; ++i)
@@ -130,11 +128,12 @@ int HexDump(int fd)
 int Print(int fd, Args* pArgs, bool ignoreCond)
 {
     Meta meta;
-    int readMeta = ReadMeta(fd, &meta);
-    if (readMeta == FILE_UNSUCCESSFUL)
-    {
-        return FILE_UNSUCCESSFUL;
-    }
+    RETURN_IF_NOT_SUCCESSFUL(ReadMeta(fd, &meta));
+//    int readMeta = ReadMeta(fd, &meta);
+//    if (readMeta == FILE_UNSUCCESSFUL)
+//    {
+//        return FILE_UNSUCCESSFUL;
+//    }
 
     printf(pArgs->MetaFormat,
            meta.Version,
@@ -147,10 +146,12 @@ int Print(int fd, Args* pArgs, bool ignoreCond)
     for (int i = 0; i < meta.Count; i++)
     {
         Archipelago archipelago;
-        if (ReadArchipelago(fd, &meta, &archipelago, i) == FILE_UNSUCCESSFUL)
-        {
-            return FILE_UNSUCCESSFUL;
-        }
+        RETURN_IF_NOT_SUCCESSFUL(ReadArchipelago(fd, &meta, &archipelago, i));
+//        if (ReadArchipelago(fd, &meta, &archipelago, i) == FILE_UNSUCCESSFUL)
+//        {
+//            return FILE_UNSUCCESSFUL;
+//        }
+        RETURN_IF_NOT_SUCCESSFUL(VerifyArchipelago(&archipelago));
 
         bool condOrIsNameGiven =
                 pArgs->IsNameGiven &&

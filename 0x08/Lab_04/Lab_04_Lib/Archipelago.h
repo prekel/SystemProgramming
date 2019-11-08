@@ -7,10 +7,6 @@
 
 #define ARCHIPELAGO_NAME_LENGTH 120
 
-#define NOT_FOUND (-3)
-
-#define BAD_VALUE (-2)
-
 /// \struct Archipelago
 ///
 /// Архипелаг.
@@ -28,6 +24,8 @@ int FillArchipelago(Archipelago* pArchipelago,
                     char* name,
                     int countIslands,
                     int countInhabitedIslands);
+
+int VerifyArchipelago(Archipelago* pArchipelago);
 
 int SetName(Archipelago* pArchipelago, const char* name);
 

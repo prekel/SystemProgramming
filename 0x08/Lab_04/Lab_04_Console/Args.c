@@ -218,6 +218,7 @@ Args* ParseArgs(int argc, char** argv)
             break;
         default:
             pArgs->IsUnknownOptionGiven = true;
+            break;
         }
     }
 
