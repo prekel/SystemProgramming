@@ -17,6 +17,8 @@
 
 #define BAD_META (-7)
 
+#define BAD_RECORD (-8)
+
 #define RETURN_IF_NOT_SUCCESSFUL(f) do { \
     int tmp = (f); \
     if (tmp < SUCCESSFUL) \

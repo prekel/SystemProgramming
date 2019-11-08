@@ -320,6 +320,8 @@ int UnknownOptionCommandExec(int fd, Args* pArgs)
 
 #define BAD_META_MESSAGE "Неправильный формат файла\n"
 
+#define BAD_RECORD_MESSAGE "Неправильная запись в файле\n"
+
 #define UNKNOWN_ERROR_MESSAGE "Неизвестная ошибка\n"
 
 #define WRONG_COMMAND_MESSAGE "Введена неверная команда\n"
@@ -417,6 +419,9 @@ int Exec(char* command, Args* pArgs)
         break;
     case BAD_META:
         printf(BAD_META_MESSAGE);
+        break;
+    case BAD_RECORD:
+        printf(BAD_RECORD_MESSAGE);
         break;
     default:
         printf(UNKNOWN_ERROR_MESSAGE);

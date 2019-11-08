@@ -31,15 +31,12 @@ int FillArchipelago(Archipelago* pArchipelago,
 
 int VerifyArchipelago(Archipelago* pArchipelago)
 {
-    if (pArchipelago->Name[ARCHIPELAGO_NAME_LENGTH - 1] != '\0')
-    {
-        return BAD_META;
-    }
-    if (pArchipelago->CountIslands < 2 ||
+    if (pArchipelago->Name[ARCHIPELAGO_NAME_LENGTH - 1] != '\0' ||
+        pArchipelago->CountIslands < 2 ||
         pArchipelago->CountIslands < pArchipelago->CountInhabitedIslands ||
         pArchipelago->CountInhabitedIslands < 0)
     {
-        return BAD_VALUE;
+        return BAD_RECORD;
     }
     return SUCCESSFUL;
 }
