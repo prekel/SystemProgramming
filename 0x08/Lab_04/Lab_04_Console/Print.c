@@ -9,7 +9,7 @@
 #include "Archipelago.h"
 #include "Commands.h"
 #include "IOWrapper.h"
-#include "Macro.h"
+#include "ReturnCodesLib.h"
 
 #define FIRST_NON_CONTROL_CHAR ' '
 

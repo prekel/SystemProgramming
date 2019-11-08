@@ -4,7 +4,7 @@
 #include "Archipelago.h"
 #include "Meta.h"
 #include "File.h"
-#include "Macro.h"
+#include "ReturnCodesLib.h"
 
 int FillArchipelago(Archipelago* pArchipelago,
                     char* name,
@@ -41,7 +41,7 @@ int VerifyArchipelago(Archipelago* pArchipelago)
     return SUCCESSFUL;
 }
 
-int SetName(Archipelago* pArchipelago, const char* name)
+int SetName(Archipelago* pArchipelago, char* name)
 {
     if (name == NULL || name[0] == '\0')
     {

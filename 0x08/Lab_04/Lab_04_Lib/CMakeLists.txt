@@ -9,6 +9,6 @@ add_library(Lab_04_Lib
         Meta.c Meta.h
         Utils.c Utils.h
         IOWrapper.c
-        IOWrapper.h Macro.h)
+        IOWrapper.h ReturnCodesLib.h)
 
 target_include_directories(Lab_04_Lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

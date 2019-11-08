@@ -18,21 +18,21 @@ int CloseWrap(int fd)
 #endif
 }
 
-int ReadWrap(int fd, void* buf, unsigned int size)
+int ReadWrap(int fd, void* pBuffer, unsigned int size)
 {
 #ifdef _MSC_VER
-    return _read(fd, buf, size);
+    return _read(fd, pBuffer, size);
 #else
-    return read(fd, buf, size);
+    return read(fd, pBuffer, size);
 #endif
 }
 
-int WriteWrap(int fd, void* buf, unsigned int size)
+int WriteWrap(int fd, void* pBuffer, unsigned int size)
 {
 #ifdef _MSC_VER
-    return _write(fd, buf, size);
+    return _write(fd, pBuffer, size);
 #else
-    return write(fd, buf, size);
+    return write(fd, pBuffer, size);
 #endif
 }
 
@@ -45,7 +45,7 @@ int UnlinkWrap(char* path)
 #endif
 }
 
-int LseekWrap(int fd, unsigned int offset, int whence)
+int LseekWrap(int fd, int offset, int whence)
 {
 #ifdef _MSC_VER
     return _lseek(fd, offset, whence);

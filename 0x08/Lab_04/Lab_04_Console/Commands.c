@@ -15,7 +15,8 @@
 #include "File.h"
 #include "Print.h"
 #include "Utils.h"
-#include "Macro.h"
+#include "ReturnCodes.h"
+#include "ReturnCodesLib.h"
 
 #define EXTRA_ARGS_NAME_INDEX 0
 #define EXTRA_ARGS_COUNT_ISLANDS_INDEX 1
@@ -306,28 +307,6 @@ int UnknownOptionCommandExec(int fd, Args* pArgs)
     return SUCCESSFUL;
 }
 
-#define FILE_UNSUCCESSFUL_MESSAGE "Не удалось открыть/прочитать/записать файл\n"
-
-#define BAD_VALUE_MESSAGE "Введено неверное значение\n"
-
-#define NOT_FOUND_MESSAGE "Не найдено\n"
-
-#define BAD_ARGS_MESSAGE "Указаны неверные параметры\n"
-
-#define FILE_NOT_EXIST_MESSAGE "Файл не существует\n"
-
-#define CLOSE_UNSUCCESSFUL_MESSAGE "Не удалось закрыть файл\n"
-
-#define BAD_META_MESSAGE "Неправильный формат файла\n"
-
-#define BAD_RECORD_MESSAGE "Неправильная запись в файле\n"
-
-#define UNKNOWN_ERROR_MESSAGE "Неизвестная ошибка\n"
-
-#define WRONG_COMMAND_MESSAGE "Введена неверная команда\n"
-
-#define NO_COMMAND_MESSAGE "Не введена команда\n"
-
 int Exec(char* command, Args* pArgs)
 {
     int (* commandExec)(int, Args*);
@@ -422,6 +401,9 @@ int Exec(char* command, Args* pArgs)
         break;
     case BAD_RECORD:
         fprintf(stderr, BAD_RECORD_MESSAGE);
+        break;
+    case ALLOCATION_ERROR:
+        fprintf(stderr, ALLOCATION_ERROR_MESSAGE);
         break;
     default:
         fprintf(stderr, UNKNOWN_ERROR_MESSAGE);
