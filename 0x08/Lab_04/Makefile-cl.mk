@@ -2,7 +2,7 @@ MAKE = mingw32-make
 
 MAKEFILE = Makefile-cl.mk
 
-all :
+all:
 	$(MAKE) -C getopt-from-mingw -f $(MAKEFILE)
 	$(MAKE) -C Lab_04_Lib -f $(MAKEFILE)
 	$(MAKE) -C Lab_04_Console -f $(MAKEFILE)

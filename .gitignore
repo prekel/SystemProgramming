@@ -568,5 +568,6 @@ cmake-build-*
 *.a
 *.lib
 *.exe
+/0x08/Lab_04/Lab_04_Console/Lab_04_Console
 
 *.bin

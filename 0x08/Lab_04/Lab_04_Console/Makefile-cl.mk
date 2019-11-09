@@ -1,6 +1,6 @@
 CC = cl.exe
-LINK = link.exe
 AR = lib.exe
+LINK = link.exe
 
 CFLAGS = /nologo /W0 /MDd /Ob0 /Od /RTC1
 LDFLAGS = /nologo
@@ -18,7 +18,7 @@ all: $(SOURCES) $(OUTFILE)
 $(OUTFILE): $(OBJECTS)
 	$(LINK) $(LDFLAGS) /OUT:$(OUTFILE) $(OBJECTS) $(LIBS)
 
-%.obj : %.c
+%.obj: %.c
 	$(CC) /c $(INC) $(CFLAGS) $< /Fo$@
 
 .PHONY: clean
