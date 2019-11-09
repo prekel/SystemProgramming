@@ -4,16 +4,18 @@ MAKE = mingw32-make
 
 all : Lab_04_Console Lab_04_Lib getopt-from-mingw
 
+MAKEFILE = Makefile-windows.mk
+
 Lab_04_Lib:
-	$(MAKE) -C $@
+	$(MAKE) -C $@ -f $(MAKEFILE)
 
 getopt-from-mingw:
-	$(MAKE) -C $@
+	$(MAKE) -C $@ -f $(MAKEFILE)
 
 Lab_04_Console: Lab_04_Lib getopt-from-mingw
-	$(MAKE) -C $@
+	$(MAKE) -C $@ -f $(MAKEFILE)
 
 clean:
-	$(MAKE) $@ -C getopt-from-mingw
-	$(MAKE) $@ -C Lab_04_Lib
-	$(MAKE) $@ -C Lab_04_Console
+	$(MAKE) $@ -C getopt-from-mingw -f $(MAKEFILE)
+	$(MAKE) $@ -C Lab_04_Lib -f $(MAKEFILE)
+	$(MAKE) $@ -C Lab_04_Console -f $(MAKEFILE)
