@@ -13,7 +13,7 @@ OUTFILE = Lab_04_Lib.lib
 all: $(SOURCES) $(OUTFILE)
 
 $(OUTFILE): $(OBJECTS)
-	$(AR) /OUT: $(OUTFILE) $(OBJECTS)
+	$(AR) /OUT:$(OUTFILE) $(OBJECTS)
 
 .c.o:
 	$(CC) /c $(CFLAGS) $< /Fo$@
