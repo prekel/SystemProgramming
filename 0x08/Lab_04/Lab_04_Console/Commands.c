@@ -1,3 +1,7 @@
+/// \file
+/// \brief Реализация функций из Commands.h
+/// \details Реализация функций из Commands.h.
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <fcntl.h>
@@ -24,7 +28,7 @@
 
 #define ARCHIPELAGO_INT_ARGS_COUNT 2
 
-int AddCommandExec(int fd, Args* pArgs)
+int AddCommand(int fd, Args* pArgs)
 {
     Archipelago archipelago;
 
@@ -75,7 +79,7 @@ int AddCommandExec(int fd, Args* pArgs)
     return SUCCESSFUL;
 }
 
-int ModifyCommandExec(int fd, Args* pArgs)
+int ModifyCommand(int fd, Args* pArgs)
 {
     if (!((pArgs->IsIndexGiven || pArgs->IsOldNameGiven) &&
           !(pArgs->IsIndexGiven && pArgs->IsOldNameGiven)) &&
@@ -125,7 +129,7 @@ int ModifyCommandExec(int fd, Args* pArgs)
     return SUCCESSFUL;
 }
 
-int RemoveCommandExec(int fd, Args* pArgs)
+int RemoveCommand(int fd, Args* pArgs)
 {
     if (!(pArgs->IsIndexGiven || pArgs->IsNameGiven) &&
         (pArgs->IsIndexGiven && pArgs->IsNameGiven) &&
@@ -163,7 +167,7 @@ int RemoveCommandExec(int fd, Args* pArgs)
     return SUCCESSFUL;
 }
 
-int CreateCommandExec(int fd, Args* pArgs)
+int CreateCommand(int fd, Args* pArgs)
 {
     if (fd == FILE_UNSUCCESSFUL)
     {
@@ -172,7 +176,7 @@ int CreateCommandExec(int fd, Args* pArgs)
     return SUCCESSFUL;
 }
 
-int DeleteCommandExec(int fd, Args* pArgs)
+int DeleteCommand(int fd, Args* pArgs)
 {
     bool isExist = IsExistWritableReadableRecordFile(pArgs->FilePath);
     if (isExist == false)
@@ -189,7 +193,7 @@ int DeleteCommandExec(int fd, Args* pArgs)
 
 #define HAS_UNINHABITED_NOT_EXIST "Отсутствуют архипелаги, состоящие только из необитаемых островов\n"
 
-int HasUninhabitedCommandExec(int fd, Args* pArgs)
+int HasUninhabitedCommand(int fd, Args* pArgs)
 {
     Meta meta;
     RETURN_IF_NOT_SUCCESSFUL(ReadMeta(fd, &meta));
@@ -219,14 +223,14 @@ int HasUninhabitedCommandExec(int fd, Args* pArgs)
     return SUCCESSFUL;
 }
 
-int PrintCommandExec(int fd, Args* pArgs)
+int PrintCommand(int fd, Args* pArgs)
 {
     RETURN_IF_NOT_SUCCESSFUL(Print(fd, pArgs, false));
 
     return SUCCESSFUL;
 }
 
-int HexdumpCommandExec(int fd, Args* pArgs)
+int HexdumpCommand(int fd, Args* pArgs)
 {
     RETURN_IF_NOT_SUCCESSFUL(HexDump(fd));
 
@@ -235,7 +239,7 @@ int HexdumpCommandExec(int fd, Args* pArgs)
 
 #define HELP_MESSAGE "справка\n"
 
-int HelpCommandExec(int fd, Args* pArgs)
+int HelpCommand(int fd, Args* pArgs)
 {
     printf(HELP_MESSAGE);
     return SUCCESSFUL;
@@ -243,7 +247,7 @@ int HelpCommandExec(int fd, Args* pArgs)
 
 #define UNKNOWN_OPT_MESSAGE "Неизвестный параметр: %c\n"
 
-int UnknownOptionCommandExec(int fd, Args* pArgs)
+int UnknownOptionCommand(int fd, Args* pArgs)
 {
     if (pArgs->UnknownOption == '\0' ||
         pArgs->CountValidArgs < pArgs->CountArgs)
@@ -271,51 +275,51 @@ int Exec(char* command, Args* pArgs)
              strcmp(command, HELP_COMMAND_NAME) == 0 ||
              strcmp(command, HELP_OPT_NAME) == 0)
     {
-        commandExec = HelpCommandExec;
+        commandExec = HelpCommand;
     }
     else if (pArgs->IsUnknownOptionGiven ||
              pArgs->CountValidArgs < pArgs->CountArgs)
     {
-        commandExec = UnknownOptionCommandExec;
+        commandExec = UnknownOptionCommand;
     }
     else if (strcmp(command, ADD_COMMAND_NAME) == 0)
     {
         isFileRequired = true;
-        commandExec = AddCommandExec;
+        commandExec = AddCommand;
     }
     else if (strcmp(command, MODIFY_COMMAND_NAME) == 0)
     {
         isFileRequired = true;
-        commandExec = ModifyCommandExec;
+        commandExec = ModifyCommand;
     }
     else if (strcmp(command, REMOVE_COMMAND_NAME) == 0)
     {
         isFileRequired = true;
-        commandExec = RemoveCommandExec;
+        commandExec = RemoveCommand;
     }
     else if (strcmp(command, DELETE_COMMAND_NAME) == 0)
     {
-        commandExec = DeleteCommandExec;
+        commandExec = DeleteCommand;
     }
     else if (strcmp(command, CREATE_COMMAND_NAME) == 0)
     {
         isFileRequired = true;
-        commandExec = CreateCommandExec;
+        commandExec = CreateCommand;
     }
     else if (strcmp(command, HAS_UNINHABITED_COMMAND_NAME) == 0)
     {
         isFileRequired = true;
-        commandExec = HasUninhabitedCommandExec;
+        commandExec = HasUninhabitedCommand;
     }
     else if (strcmp(command, PRINT_COMMAND_NAME) == 0)
     {
         isFileRequired = true;
-        commandExec = PrintCommandExec;
+        commandExec = PrintCommand;
     }
     else if (strcmp(command, HEXDUMP_COMMAND_NAME) == 0)
     {
         isFileRequired = true;
-        commandExec = HexdumpCommandExec;
+        commandExec = HexdumpCommand;
     }
     else
     {
@@ -323,7 +327,7 @@ int Exec(char* command, Args* pArgs)
         return EXIT_FAILURE;
     }
 
-    int ret = Exec1(pArgs, commandExec, isFileRequired);
+    int ret = CommandExec(pArgs, commandExec, isFileRequired);
     if (ret > SUCCESSFUL)
     {
         ret = SUCCESSFUL;
@@ -368,14 +372,14 @@ int Exec(char* command, Args* pArgs)
     return EXIT_FAILURE;
 }
 
-int Exec1(Args* pArgs, int (* commandExec)(int, Args*), bool isFileRequired)
+int CommandExec(Args* pArgs, int (* commandExec)(int, Args*), bool isFileRequired)
 {
     int fd;
     if (!isFileRequired)
     {
         fd = FILE_UNSUCCESSFUL;
     }
-    else if (pArgs->IsOpenOrCreate || commandExec == CreateCommandExec)
+    else if (pArgs->IsOpenOrCreate || commandExec == CreateCommand)
     {
         fd = OpenOrCreateRecordFile(pArgs->FilePath, sizeof(Archipelago));
     }
@@ -397,7 +401,8 @@ int Exec1(Args* pArgs, int (* commandExec)(int, Args*), bool isFileRequired)
         RETURN_IF_NOT_SUCCESSFUL(CheckRecordFile(fd, sizeof(Archipelago)));
     }
 
-    RETURN_IF_NOT_SUCCESSFUL(commandExec(fd, pArgs));
+    int ret = commandExec(fd, pArgs);
+    RETURN_IF_NOT_SUCCESSFUL(ret);
 
     if (pArgs->IsPrintRequired)
     {
@@ -414,5 +419,5 @@ int Exec1(Args* pArgs, int (* commandExec)(int, Args*), bool isFileRequired)
         return CLOSE_UNSUCCESSFUL;
     }
 
-    return SUCCESSFUL;
+    return ret;
 }

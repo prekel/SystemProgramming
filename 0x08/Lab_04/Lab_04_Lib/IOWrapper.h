@@ -32,7 +32,7 @@
 #define CREATE_TRUNCATE_FLAGS (_O_RDWR | _O_CREAT | _O_TRUNC)
 /// Флаги открытия файла
 #define OPEN_FLAGS (_O_RDWR)
-/// Флаг на проверку чтения и записи
+/// Флаги для проверки чтения и записи
 #define READ_WRITE_ACCESS 06
 
 #else
@@ -43,7 +43,7 @@
 #define CREATE_TRUNCATE_FLAGS (O_RDWR | O_CREAT | O_TRUNC)
 /// Флаги открытия файла
 #define OPEN_FLAGS (O_RDWR)
-/// Флаг на проверку чтения и записи
+/// Флаги для проверки чтения и записи
 #define READ_WRITE_ACCESS (F_OK | R_OK | W_OK)
 
 #endif

@@ -1,4 +1,7 @@
-//#include <unistd.h>
+/// \file
+/// \brief Реализация функций из Print.h
+/// \details Реализация функций из Print.h.
+
 #include <stdio.h>
 #include <limits.h>
 #include <assert.h>
@@ -49,10 +52,6 @@ int HexDump(int fd)
     int i;
 
     RETURN_IF_NOT_SUCCESSFUL(SeekRecord(fd, NULL, META_INDEX));
-//    if (SeekRecord(fd, NULL, META_INDEX) == FILE_UNSUCCESSFUL)
-//    {
-//        return FILE_UNSUCCESSFUL;
-//    }
 
     printf("\n");
     do
@@ -129,11 +128,6 @@ int Print(int fd, Args* pArgs, bool ignoreCond)
 {
     Meta meta;
     RETURN_IF_NOT_SUCCESSFUL(ReadMeta(fd, &meta));
-//    int readMeta = ReadMeta(fd, &meta);
-//    if (readMeta == FILE_UNSUCCESSFUL)
-//    {
-//        return FILE_UNSUCCESSFUL;
-//    }
 
     printf(pArgs->MetaFormat,
            meta.Version,
@@ -147,10 +141,6 @@ int Print(int fd, Args* pArgs, bool ignoreCond)
     {
         Archipelago archipelago;
         RETURN_IF_NOT_SUCCESSFUL(ReadArchipelago(fd, &meta, &archipelago, i));
-//        if (ReadArchipelago(fd, &meta, &archipelago, i) == FILE_UNSUCCESSFUL)
-//        {
-//            return FILE_UNSUCCESSFUL;
-//        }
         RETURN_IF_NOT_SUCCESSFUL(VerifyArchipelago(&archipelago));
 
         bool condOrIsNameGiven =

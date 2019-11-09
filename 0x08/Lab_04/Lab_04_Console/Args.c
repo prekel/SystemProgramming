@@ -1,3 +1,7 @@
+/// \file
+/// \brief Реализация функций из Args.h
+/// \details Реализация функций из Args.h.
+
 #include <malloc.h>
 #include <stdbool.h>
 #include <string.h>
@@ -25,10 +29,8 @@ Args* CreateArgs()
     pArgs->IsFilePathGiven = false;
     pArgs->FilePath = DEFAULT_FILENAME;
 
-    pArgs->IsIsReCreateGiven = false;
     pArgs->IsReCreate = false;
 
-    pArgs->IsIsOpenOrCreateGiven = false;
     pArgs->IsOpenOrCreate = false;
 
     pArgs->IsMetaFormatGiven = false;
@@ -55,13 +57,10 @@ Args* CreateArgs()
     pArgs->IsCountInhabitedIslandsGiven = false;
     pArgs->CountInhabitedIslands = 0;
 
-    pArgs->IsIsHexDumpRequiredGiven = false;
     pArgs->IsHexDumpRequired = false;
 
-    pArgs->IsIsRemoveSwapWithLastGiven = false;
     pArgs->IsRemoveSwapWithLast = false;
 
-    pArgs->IsIsPrintRequiredGiven = false;
     pArgs->IsPrintRequired = false;
 
     pArgs->IsIsOrGiven = false;
@@ -131,13 +130,13 @@ void DestroyArgs(Args* pArgs)
 #define OPT_HELP 'h'
 #define OPT_UNKNOWN '?'
 
-Args* ParseArgs(int nargc, char** nargv)
+Args* ParseArgs(int argc, char** pArgv)
 {
     Args* pArgs = CreateArgs();
     RETURN_NULL_IF_NULLPTR(pArgs);
 
     int opt;
-    while ((opt = getopt(nargc, nargv, OPT_STRING)) != -1)
+    while ((opt = getopt(argc, pArgv, OPT_STRING)) != -1)
     {
         switch (opt)
         {
@@ -149,12 +148,10 @@ Args* ParseArgs(int nargc, char** nargv)
             pArgs->CountValidArgs++;
             break;
         case OPT_RECREATE:
-            pArgs->IsIsReCreateGiven = true;
             pArgs->IsReCreate = true;
             pArgs->CountValidArgs++;
             break;
         case OPT_OPEN_OR_CREATE:
-            pArgs->IsIsOpenOrCreateGiven = true;
             pArgs->IsOpenOrCreate = true;
             pArgs->CountValidArgs++;
             break;
@@ -206,12 +203,10 @@ Args* ParseArgs(int nargc, char** nargv)
             pArgs->CountInhabitedIslands = ParseInt(optarg, &pArgs->CountValidArgs);
             break;
         case OPT_HEXDUMP:
-            pArgs->IsIsHexDumpRequiredGiven = true;
             pArgs->IsHexDumpRequired = true;
             pArgs->CountValidArgs++;
             break;
         case OPT_REMOVE_SWAP_WITH_LAST:
-            pArgs->IsIsRemoveSwapWithLastGiven = true;
             pArgs->IsRemoveSwapWithLast = true;
             pArgs->CountValidArgs++;
             break;
@@ -221,7 +216,6 @@ Args* ParseArgs(int nargc, char** nargv)
             pArgs->CountValidArgs++;
             break;
         case OPT_PRINT:
-            pArgs->IsIsPrintRequiredGiven = true;
             pArgs->IsPrintRequired = true;
             pArgs->CountValidArgs++;
             break;
@@ -241,7 +235,7 @@ Args* ParseArgs(int nargc, char** nargv)
         pArgs->CountArgs++;
     }
 
-    pArgs->pExtraArgs = nargv + optind;
+    pArgs->pExtraArgs = pArgv + optind;
 
     return pArgs;
 }

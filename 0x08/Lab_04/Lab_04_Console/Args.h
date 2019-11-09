@@ -22,11 +22,9 @@ typedef struct
     /// Путь до файла. Если не дан, по умолчанию DEFAULT_FILENAME.
     char* FilePath;
 
-    bool IsIsReCreateGiven;
     /// Требуется ли пересоздавание (очистка, если файл существует) файла.
     bool IsReCreate;
 
-    bool IsIsOpenOrCreateGiven;
     /// Требуется ли создать файл если не существует или открыть если сущ.
     bool IsOpenOrCreate;
 
@@ -73,16 +71,13 @@ typedef struct
     /// Кол-во островов архипелага.
     int CountInhabitedIslands;
 
-    bool IsIsHexDumpRequiredGiven;
     /// Требуется вывести шестнадцатиречный дамп файла.
     bool IsHexDumpRequired;
 
-    bool IsIsRemoveSwapWithLastGiven;
     /// Требуется ли при удалении архипелага их файла записать последний
     /// архпелаг на место удаляемого.
     bool IsRemoveSwapWithLast;
 
-    bool IsIsPrintRequiredGiven;
     /// Требуется ли вывод архипелагов.
     bool IsPrintRequired;
 
@@ -123,11 +118,11 @@ void DestroyArgs(Args* pArgs);
 /// Парсит аргументы командкой строки. Требуется очистка с
 /// помощью DestroyArgs().
 ///
-/// \param nargc Кол-во аргументов в массиве (без последнего NULL-элемента).
-/// \param nargv Массив аргументов, начинающийся на название комманды и
-/// заканчивающийся NULL-элементом
+/// \param argc Кол-во аргументов в массиве (без последнего NULL-элемента).
+/// \param pArgv Массив аргументов, начинающийся на название комманды и
+/// заканчивающийся NULL-элементом.
 /// \return Указатель на аргументы коммандной строки. NULL в случае ошибки
 /// аллокации.
-Args* ParseArgs(int nargc, char** nargv);
+Args* ParseArgs(int argc, char** pArgv);
 
 #endif //ARGS_H
