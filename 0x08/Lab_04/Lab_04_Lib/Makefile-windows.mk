@@ -1,7 +1,7 @@
 CC = cl
 AR = lib
 
-CFLAGS= /O0 /Wall
+CFLAGS= /Od /Wall
 LDFLAGS=
 
 SOURCES = Archipelago.c RecordFile.c Meta.c ParseInt.c IOWrapper.c
@@ -15,7 +15,7 @@ $(OUTFILE): $(OBJECTS)
 	$(AR) /OUT $(OUTFILE) $(OBJECTS)
 
 .c.obj:
-	$(CC) /c $(CFLAGS) $< -o $@
+	$(CC) /c $(CFLAGS) $< /o $@
 
 .PHONY: clean
 clean:
