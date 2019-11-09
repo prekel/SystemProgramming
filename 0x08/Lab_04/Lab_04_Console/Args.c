@@ -20,9 +20,10 @@
 Args* CreateArgs()
 {
     Args* pArgs = (Args*) malloc(sizeof(Args));
+    RETURN_NULL_IF_NULLPTR(pArgs);
 
-    pArgs->IsFileNameGiven = false;
-    pArgs->FileName = DEFAULT_FILENAME;
+    pArgs->IsFilePathGiven = false;
+    pArgs->FilePath = DEFAULT_FILENAME;
 
     pArgs->IsIsReCreateGiven = false;
     pArgs->IsReCreate = false;
@@ -71,14 +72,21 @@ Args* CreateArgs()
     pArgs->IsUnknownOptionGiven = false;
     pArgs->UnknownOption = '\0';
 
+    pArgs->CountArgs = 0;
+    pArgs->CountValidArgs = 0;
+
     return pArgs;
 }
 
 void DestroyArgs(Args* pArgs)
 {
-    if (pArgs->IsFileNameGiven)
+    if (pArgs == NULL)
     {
-        free(pArgs->FileName);
+        return;
+    }
+    if (pArgs->IsFilePathGiven)
+    {
+        free(pArgs->FilePath);
     }
     if (pArgs->IsMetaFormatGiven)
     {
@@ -123,107 +131,117 @@ void DestroyArgs(Args* pArgs)
 #define OPT_HELP 'h'
 #define OPT_UNKNOWN '?'
 
-Args* ParseArgs(int argc, char** argv)
+Args* ParseArgs(int nargc, char** nargv)
 {
     Args* pArgs = CreateArgs();
+    RETURN_NULL_IF_NULLPTR(pArgs);
 
     int opt;
-    while ((opt = getopt(argc, argv, OPT_STRING)) != -1)
+    while ((opt = getopt(nargc, nargv, OPT_STRING)) != -1)
     {
         switch (opt)
         {
         case OPT_FILENAME:
-            pArgs->IsFileNameGiven = true;
-            RETURN_NULL_IF_NULLPTR(pArgs->FileName = (char*) malloc(
+            pArgs->IsFilePathGiven = true;
+            RETURN_NULL_IF_NULLPTR(pArgs->FilePath = (char*) malloc(
                     (sizeof(char) + 1) * strlen(optarg)));
-            //assert(pArgs->FileName);
-            strcpy(pArgs->FileName, optarg);
+            strcpy(pArgs->FilePath, optarg);
+            pArgs->CountValidArgs++;
             break;
         case OPT_RECREATE:
             pArgs->IsIsReCreateGiven = true;
             pArgs->IsReCreate = true;
+            pArgs->CountValidArgs++;
             break;
         case OPT_OPEN_OR_CREATE:
             pArgs->IsIsOpenOrCreateGiven = true;
             pArgs->IsOpenOrCreate = true;
+            pArgs->CountValidArgs++;
             break;
         case OPT_META_FORMAT:
             pArgs->IsMetaFormatGiven = true;
             RETURN_NULL_IF_NULLPTR(pArgs->MetaFormat = (char*) malloc(
                     (sizeof(char) + 1) * strlen(optarg)));
-            //assert(pArgs->MetaFormat);
             strcpy(pArgs->MetaFormat, optarg);
+            pArgs->CountValidArgs++;
             break;
         case OPT_FORMAT:
             pArgs->IsFormatGiven = true;
             RETURN_NULL_IF_NULLPTR(pArgs->Format = (char*) malloc(
                     (sizeof(char) + 1) * strlen(optarg)));
-            //assert(pArgs->Format);
             strcpy(pArgs->Format, optarg);
+            pArgs->CountValidArgs++;
             break;
         case OPT_COUNT_FORMAT:
             pArgs->IsCountFormatGiven = true;
             RETURN_NULL_IF_NULLPTR(pArgs->CountFormat = (char*) malloc(
                     (sizeof(char) + 1) * strlen(optarg)));
-            //assert(pArgs->CountFormat);
             strcpy(pArgs->CountFormat, optarg);
+            pArgs->CountValidArgs++;
             break;
         case OPT_OLD_NAME:
             pArgs->IsOldNameGiven = true;
             RETURN_NULL_IF_NULLPTR(pArgs->OldName = (char*) malloc(
                     (sizeof(char) + 1) * strlen(optarg)));
-            //assert(pArgs->OldName);
             strcpy(pArgs->OldName, optarg);
+            pArgs->CountValidArgs++;
             break;
         case OPT_INDEX:
             pArgs->IsIndexGiven = true;
-            pArgs->Index = ParseInt(optarg, NULL);
+            pArgs->Index = ParseInt(optarg, &pArgs->CountValidArgs);
             break;
         case OPT_NAME:
             pArgs->IsNameGiven = true;
             RETURN_NULL_IF_NULLPTR(pArgs->Name = (char*) malloc(
                     (sizeof(char) + 1) * strlen(optarg)));
-            //assert(pArgs->Name);
             strcpy(pArgs->Name, optarg);
+            pArgs->CountValidArgs++;
             break;
         case OPT_COUNT_ISLANDS:
             pArgs->IsCountIslandsGiven = true;
-            pArgs->CountIslands = ParseInt(optarg, NULL);
+            pArgs->CountIslands = ParseInt(optarg, &pArgs->CountValidArgs);
             break;
         case OPT_COUNT_INHABITED_ISLANDS:
             pArgs->IsCountInhabitedIslandsGiven = true;
-            pArgs->CountInhabitedIslands = ParseInt(optarg, NULL);
+            pArgs->CountInhabitedIslands = ParseInt(optarg, &pArgs->CountValidArgs);
             break;
         case OPT_HEXDUMP:
             pArgs->IsIsHexDumpRequiredGiven = true;
             pArgs->IsHexDumpRequired = true;
+            pArgs->CountValidArgs++;
             break;
         case OPT_REMOVE_SWAP_WITH_LAST:
             pArgs->IsIsRemoveSwapWithLastGiven = true;
             pArgs->IsRemoveSwapWithLast = true;
+            pArgs->CountValidArgs++;
             break;
         case OPT_OR:
             pArgs->IsIsOrGiven = true;
             pArgs->IsOr = true;
+            pArgs->CountValidArgs++;
             break;
         case OPT_PRINT:
             pArgs->IsIsPrintRequiredGiven = true;
             pArgs->IsPrintRequired = true;
+            pArgs->CountValidArgs++;
             break;
         case OPT_HELP:
             pArgs->IsHelpGiven = true;
+            pArgs->CountValidArgs++;
             break;
         case OPT_UNKNOWN:
             pArgs->IsUnknownOptionGiven = true;
             pArgs->UnknownOption = (char) optopt;
+            pArgs->CountValidArgs++;
             break;
         default:
             pArgs->IsUnknownOptionGiven = true;
             break;
         }
+        pArgs->CountArgs++;
     }
 
-    pArgs->pExtraArgs = argv + optind;
+    pArgs->pExtraArgs = nargv + optind;
 
     return pArgs;
 }

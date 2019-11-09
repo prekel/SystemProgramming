@@ -1,3 +1,7 @@
+/// \file
+/// \brief Реализация функций из Archipelago.h
+/// \details Реализация функций из Archipelago.h.
+
 #include <string.h>
 #include <assert.h>
 
@@ -19,11 +23,6 @@ int FillArchipelago(Archipelago* pArchipelago,
         return BAD_VALUE;
     }
     RETURN_IF_NOT_SUCCESSFUL(SetName(pArchipelago, name));
-//    int setName = SetName(pArchipelago, name);
-//    if (setName < 0)
-//    {
-//        return setName;
-//    }
     pArchipelago->CountIslands = countIslands;
     pArchipelago->CountInhabitedIslands = countInhabitedIslands;
     return SUCCESSFUL;
@@ -87,11 +86,6 @@ int IndexByName(int fd, Meta* pMeta, char* name)
     {
         Archipelago archipelago;
         RETURN_IF_NOT_SUCCESSFUL(ReadArchipelago(fd, pMeta, &archipelago, i));
-//        if (ReadArchipelago(fd, pMeta, &archipelago, i) ==
-//            FILE_UNSUCCESSFUL)
-//        {
-//            return NOT_FOUND;
-//        }
         RETURN_IF_NOT_SUCCESSFUL(VerifyArchipelago(&archipelago));
         if (strcmp(archipelago.Name, name) == 0)
         {
@@ -109,18 +103,8 @@ int ModifyName(int fd, Meta* pMeta, int index, char* newName)
     }
     Archipelago archipelago;
     RETURN_IF_NOT_SUCCESSFUL(ReadArchipelago(fd, pMeta, &archipelago, index));
-//    if (ReadArchipelago(fd, pMeta, &archipelago, index) ==
-//        FILE_UNSUCCESSFUL)
-//    {
-//        return FILE_UNSUCCESSFUL;
-//    }
     RETURN_IF_NOT_SUCCESSFUL(VerifyArchipelago(&archipelago));
     RETURN_IF_NOT_SUCCESSFUL(SetName(&archipelago, newName));
-//    int setName = SetName(&archipelago, newName);
-//    if (setName < 0)
-//    {
-//        return setName;
-//    }
     return WriteArchipelago(fd, pMeta, &archipelago, index);
 }
 
@@ -132,11 +116,6 @@ int ModifyCountIslands(int fd, Meta* pMeta, int index, int newCountIslands)
     }
     Archipelago archipelago;
     RETURN_IF_NOT_SUCCESSFUL(ReadArchipelago(fd, pMeta, &archipelago, index));
-//    if (ReadArchipelago(fd, pMeta, &archipelago, index) ==
-//        FILE_UNSUCCESSFUL)
-//    {
-//        return FILE_UNSUCCESSFUL;
-//    }
     RETURN_IF_NOT_SUCCESSFUL(VerifyArchipelago(&archipelago));
     if (newCountIslands < archipelago.CountInhabitedIslands)
     {
@@ -157,11 +136,6 @@ int ModifyCountInhabitedIslands(int fd,
     }
     Archipelago archipelago;
     RETURN_IF_NOT_SUCCESSFUL(ReadArchipelago(fd, pMeta, &archipelago, index));
-//    if (ReadArchipelago(fd, pMeta, &archipelago, index) ==
-//        FILE_UNSUCCESSFUL)
-//    {
-//        return FILE_UNSUCCESSFUL;
-//    }
     RETURN_IF_NOT_SUCCESSFUL(VerifyArchipelago(&archipelago));
     if (newCountInhabitedIslands > archipelago.CountIslands)
     {

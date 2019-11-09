@@ -174,13 +174,13 @@ int CreateCommandExec(int fd, Args* pArgs)
 
 int DeleteCommandExec(int fd, Args* pArgs)
 {
-    bool isExist = IsExistWritableReadableRecordFile(pArgs->FileName);
+    bool isExist = IsExistWritableReadableRecordFile(pArgs->FilePath);
     if (isExist == false)
     {
         return FILE_NOT_EXIST;
     }
 
-    RETURN_IF_NOT_SUCCESSFUL(DeleteRecordFile(pArgs->FileName));
+    RETURN_IF_NOT_SUCCESSFUL(DeleteRecordFile(pArgs->FilePath));
 
     return SUCCESSFUL;
 }
@@ -245,9 +245,10 @@ int HelpCommandExec(int fd, Args* pArgs)
 
 int UnknownOptionCommandExec(int fd, Args* pArgs)
 {
-    if (pArgs->UnknownOption == '\0')
+    if (pArgs->UnknownOption == '\0' ||
+        pArgs->CountValidArgs < pArgs->CountArgs)
     {
-        return (BAD_ARGS);
+        return BAD_ARGS;
     }
     else
     {
@@ -272,7 +273,8 @@ int Exec(char* command, Args* pArgs)
     {
         commandExec = HelpCommandExec;
     }
-    else if (pArgs->IsUnknownOptionGiven)
+    else if (pArgs->IsUnknownOptionGiven ||
+             pArgs->CountValidArgs < pArgs->CountArgs)
     {
         commandExec = UnknownOptionCommandExec;
     }
@@ -375,19 +377,19 @@ int Exec1(Args* pArgs, int (* commandExec)(int, Args*), bool isFileRequired)
     }
     else if (pArgs->IsOpenOrCreate || commandExec == CreateCommandExec)
     {
-        fd = OpenOrCreateRecordFile(pArgs->FileName, sizeof(Archipelago));
+        fd = OpenOrCreateRecordFile(pArgs->FilePath, sizeof(Archipelago));
     }
     else if (pArgs->IsReCreate)
     {
-        fd = CreateOrTruncateRecordFile(pArgs->FileName, sizeof(Archipelago));
+        fd = CreateOrTruncateRecordFile(pArgs->FilePath, sizeof(Archipelago));
     }
     else
     {
-        if (!IsExistWritableReadableRecordFile(pArgs->FileName))
+        if (!IsExistWritableReadableRecordFile(pArgs->FilePath))
         {
             return FILE_NOT_EXIST;
         }
-        fd = OpenRecordFile(pArgs->FileName);
+        fd = OpenRecordFile(pArgs->FilePath);
     }
 
     if (isFileRequired)
