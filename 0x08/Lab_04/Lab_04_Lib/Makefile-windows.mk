@@ -15,7 +15,7 @@ $(OUTFILE): $(OBJECTS)
 	$(AR) /OUT $(OUTFILE) $(OBJECTS)
 
 .c.obj:
-	$(CC) /c $(CFLAGS) $< /o $@
+	$(CC) /c $(CFLAGS) $< $@
 
 .PHONY: clean
 clean:
