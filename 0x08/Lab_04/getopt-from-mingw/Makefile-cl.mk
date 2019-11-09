@@ -2,8 +2,11 @@ CC = cl.exe
 LINK = link.exe
 AR = lib.exe
 
-CFLAGS= /nologo /W3 /MDd /Ob0 /Od /RTC1
+CFLAGS = /nologo /W0 /MDd /Ob0 /Od /RTC1
+LDFLAGS = /nologo
 INC = /I.
+
+
 
 SOURCES = getopt.c
 OBJECTS = $(SOURCES:.c=.o)
@@ -13,7 +16,7 @@ OUTFILE = getopt-from-mingw.lib
 all: $(SOURCES) $(OUTFILE)
 
 $(OUTFILE): $(OBJECTS)
-	$(AR) /OUT:$(OUTFILE) $(OBJECTS)
+	$(AR) $(LDFLAGS) /OUT:$(OUTFILE) $(OBJECTS)
 
 .c.o:
 	$(CC) /c $(INC) $(CFLAGS) $< /Fo$@
