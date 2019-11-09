@@ -2,13 +2,13 @@ CC = cl.exe
 LINK = link.exe
 AR = lib.exe
 
-CFLAGS= /Od /Wall
-LDFLAGS=
+CFLAGS= /nologo /W3 /MDd /Ob0 /Od /RTC1
+INC = /I.
 
-SOURCES = Archipelago.c RecordFile.c Meta.c ParseInt.c IOWrapper.c
+SOURCES = getopt.c
 OBJECTS = $(SOURCES:.c=.o)
 
-OUTFILE = Lab_04_Lib.lib
+OUTFILE = getopt-from-mingw.lib
 
 all: $(SOURCES) $(OUTFILE)
 
@@ -16,7 +16,7 @@ $(OUTFILE): $(OBJECTS)
 	$(AR) /OUT:$(OUTFILE) $(OBJECTS)
 
 .c.o:
-	$(CC) /c $(CFLAGS) $< /Fo$@
+	$(CC) /c $(INC) $(CFLAGS) $< /Fo$@
 
 .PHONY: clean
 clean:
