@@ -1,18 +1,18 @@
-CC = gcc
-AR = ar
+CC = cl
+AR = lib
 
-CFLAGS= -O0 -g -Wall --std=gnu11
+CFLAGS = -O0 -g -Wall --std=gnu11
 LDFLAGS=
 
 SOURCES = getopt.c
 OBJECTS = $(SOURCES:.c=.o)
 
-OUTFILE = libgetopt-from-mingw.a
+OUTFILE = getopt-from-mingw.lib
 
 all: $(SOURCES) $(OUTFILE)
 
 $(OUTFILE): $(OBJECTS)
-	$(AR) -r $(OUTFILE) $(OBJECTS)
+	$(AR) $(OBJECTS)
 
 .c.o:
 	$(CC) -c $(CFLAGS) $< -o $@

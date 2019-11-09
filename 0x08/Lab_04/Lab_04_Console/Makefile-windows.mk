@@ -1,4 +1,4 @@
-CC = gcc
+CC = cl
 
 CFLAGS = -O0 -g -Wall --std=gnu11
 LDFLAGS = -L../Lab_04_Lib/ -lLab_04_Lib -L../getopt-from-mingw/ -lgetopt-from-mingw
