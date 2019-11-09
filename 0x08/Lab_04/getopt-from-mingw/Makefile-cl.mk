@@ -9,7 +9,7 @@ INC = /I.
 
 
 SOURCES = getopt.c
-OBJECTS = $(SOURCES:.c=.o)
+OBJECTS = $(SOURCES:.c=.obj)
 
 OUTFILE = getopt-from-mingw.lib
 
@@ -18,10 +18,10 @@ all: $(SOURCES) $(OUTFILE)
 $(OUTFILE): $(OBJECTS)
 	$(AR) $(LDFLAGS) /OUT:$(OUTFILE) $(OBJECTS)
 
-.c.o:
+%.obj : %.c
 	$(CC) /c $(INC) $(CFLAGS) $< /Fo$@
 
 .PHONY: clean
 clean:
 	del $(OUTFILE)
-	del *.o
+	del *.obj
