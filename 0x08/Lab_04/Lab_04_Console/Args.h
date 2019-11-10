@@ -25,13 +25,13 @@
 #define OPT_OPEN_OR_CREATE_DESCRIPTION "Требуется ли создание файла."
 #define OPT_META_FORMAT 'M'
 #define OPT_META_FORMAT_USAGE "-M строка"
-#define OPT_META_FORMAT_DESCRIPTION "Форматирование метаинформации."
+#define OPT_META_FORMAT_DESCRIPTION "Форматирование метаинформации, например \"%%d %%d %%d %%d\"."
 #define OPT_FORMAT 'F'
 #define OPT_FORMAT_USAGE "-F строка"
-#define OPT_FORMAT_DESCRIPTION "Форматирование архипелага."
+#define OPT_FORMAT_DESCRIPTION "Форматирование архипелага, например \"%%s %%d %%d\"."
 #define OPT_COUNT_FORMAT 'C'
 #define OPT_COUNT_FORMAT_USAGE "-C строка"
-#define OPT_COUNT_FORMAT_DESCRIPTION "Форматирование кол-ва выведенных архипелагов."
+#define OPT_COUNT_FORMAT_DESCRIPTION "Форматирование кол-ва выведенных архипелагов, например \"%%d\"."
 #define OPT_OLD_NAME 'N'
 #define OPT_OLD_NAME_USAGE "-N строка"
 #define OPT_OLD_NAME_DESCRIPTION "Старое название архипелага (для изменения)."

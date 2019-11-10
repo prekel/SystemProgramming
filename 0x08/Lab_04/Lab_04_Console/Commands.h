@@ -1,3 +1,7 @@
+/// \file
+/// \brief Команды
+/// \details Команды и функции которые их вызывает.
+
 #ifndef COMMANDS_H
 #define COMMANDS_H
 

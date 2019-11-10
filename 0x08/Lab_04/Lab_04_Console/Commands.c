@@ -93,7 +93,7 @@ int ModifyCommand(int fd, Args* pArgs)
     Meta meta;
     RETURN_IF_NOT_SUCCESSFUL(ReadMeta(fd, &meta));
 
-    if (!(pArgs->IsIndexGiven && pArgs->Index < meta.Count))
+    if (pArgs->IsIndexGiven && pArgs->Index >= meta.Count)
     {
         return BAD_ARGS;
     }
