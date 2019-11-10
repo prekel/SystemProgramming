@@ -2,7 +2,7 @@ CC = gcc
 
 
 
-CFLAGS = -O0 -g -Wall --std=gnu11
+CFLAGS = -O0 -g -Wall
 LDFLAGS = -L../Lab_04_Lib/ -lLab_04_Lib
 INC = -I../Lab_04_Lib/
 
