@@ -11,7 +11,9 @@
 #ifdef _MSC_VER
 #include "getopt.h"
 #else
+
 #include <unistd.h>
+
 #endif
 
 #include "Archipelago.h"
@@ -63,7 +65,6 @@ Args* CreateArgs()
 
     pArgs->IsPrintRequired = false;
 
-    pArgs->IsIsOrGiven = false;
     pArgs->IsOr = false;
 
     pArgs->IsHelpGiven = false;
@@ -109,26 +110,6 @@ void DestroyArgs(Args* pArgs)
     }
     free(pArgs);
 }
-
-#define OPT_STRING ":f:rpM:F:C:N:I:n:c:i:DsoPh"
-
-#define OPT_FILENAME 'f'
-#define OPT_RECREATE 'r'
-#define OPT_OPEN_OR_CREATE 'p'
-#define OPT_META_FORMAT 'M'
-#define OPT_FORMAT 'F'
-#define OPT_COUNT_FORMAT 'C'
-#define OPT_OLD_NAME 'N'
-#define OPT_INDEX 'I'
-#define OPT_NAME 'n'
-#define OPT_COUNT_ISLANDS 'c'
-#define OPT_COUNT_INHABITED_ISLANDS 'i'
-#define OPT_HEXDUMP 'D'
-#define OPT_REMOVE_SWAP_WITH_LAST 's'
-#define OPT_OR 'o'
-#define OPT_PRINT 'P'
-#define OPT_HELP 'h'
-#define OPT_UNKNOWN '?'
 
 Args* ParseArgs(int argc, char** pArgv)
 {
@@ -187,6 +168,26 @@ Args* ParseArgs(int argc, char** pArgv)
             pArgs->IsIndexGiven = true;
             pArgs->Index = ParseInt(optarg, &pArgs->CountValidArgs);
             break;
+        case OPT_HEXDUMP:
+            pArgs->IsHexDumpRequired = true;
+            pArgs->CountValidArgs++;
+            break;
+        case OPT_REMOVE_SWAP_WITH_LAST:
+            pArgs->IsRemoveSwapWithLast = true;
+            pArgs->CountValidArgs++;
+            break;
+        case OPT_OR:
+            pArgs->IsOr = true;
+            pArgs->CountValidArgs++;
+            break;
+        case OPT_PRINT:
+            pArgs->IsPrintRequired = true;
+            pArgs->CountValidArgs++;
+            break;
+        case OPT_HELP:
+            pArgs->IsHelpGiven = true;
+            pArgs->CountValidArgs++;
+            break;
         case OPT_NAME:
             pArgs->IsNameGiven = true;
             RETURN_NULL_IF_NULLPTR(pArgs->Name = (char*) malloc(
@@ -200,28 +201,8 @@ Args* ParseArgs(int argc, char** pArgv)
             break;
         case OPT_COUNT_INHABITED_ISLANDS:
             pArgs->IsCountInhabitedIslandsGiven = true;
-            pArgs->CountInhabitedIslands = ParseInt(optarg, &pArgs->CountValidArgs);
-            break;
-        case OPT_HEXDUMP:
-            pArgs->IsHexDumpRequired = true;
-            pArgs->CountValidArgs++;
-            break;
-        case OPT_REMOVE_SWAP_WITH_LAST:
-            pArgs->IsRemoveSwapWithLast = true;
-            pArgs->CountValidArgs++;
-            break;
-        case OPT_OR:
-            pArgs->IsIsOrGiven = true;
-            pArgs->IsOr = true;
-            pArgs->CountValidArgs++;
-            break;
-        case OPT_PRINT:
-            pArgs->IsPrintRequired = true;
-            pArgs->CountValidArgs++;
-            break;
-        case OPT_HELP:
-            pArgs->IsHelpGiven = true;
-            pArgs->CountValidArgs++;
+            pArgs->CountInhabitedIslands = ParseInt(optarg,
+                                                    &pArgs->CountValidArgs);
             break;
         case OPT_UNKNOWN:
             pArgs->IsUnknownOptionGiven = true;

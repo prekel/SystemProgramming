@@ -3,7 +3,14 @@
 
 #include "Args.h"
 
+#define DEFAULT_USAGES OPT_FILENAME_USAGE "] [" OPT_RECREATE_USAGE " | " OPT_OPEN_OR_CREATE_USAGE \
+"] [" OPT_META_FORMAT_USAGE "] [" OPT_FORMAT_USAGE "] [" OPT_COUNT_FORMAT_USAGE \
+"] [" OPT_HEXDUMP_USAGE "] [" OPT_PRINT_USAGE
+
 #define ADD_COMMAND_NAME "add"
+#define ADD_COMMAND_DESCRIPTION "Добавление архипелагa. " \
+"[" DEFAULT_USAGES \
+"] [" OPT_NAME_USAGE " " OPT_COUNT_ISLANDS_USAGE " " OPT_COUNT_INHABITED_ISLANDS_USAGE "] | [строка целое целое]"
 
 /// Команда добавления архипелага в файл с записями.
 ///
@@ -14,6 +21,10 @@
 int AddCommand(int fd, Args* pArgs);
 
 #define MODIFY_COMMAND_NAME "modify"
+#define MODIFY_COMMAND_DESCRIPTION "Изменение значений архипелага. " \
+"[" DEFAULT_USAGES \
+"] [" OPT_OLD_NAME_USAGE " | " OPT_INDEX_USAGE "] [" OPT_NAME_USAGE \
+"] [" OPT_COUNT_ISLANDS_USAGE "] [" OPT_COUNT_INHABITED_ISLANDS_USAGE "]"
 
 /// Команда изменения содержимого записи архипелага в файле с записями.
 ///
@@ -24,6 +35,9 @@ int AddCommand(int fd, Args* pArgs);
 int ModifyCommand(int fd, Args* pArgs);
 
 #define REMOVE_COMMAND_NAME "remove"
+#define REMOVE_COMMAND_DESCRIPTION "Удаление архипелага из файла с записями. " \
+"[" DEFAULT_USAGES \
+"] [ " OPT_NAME_USAGE " | " OPT_INDEX_USAGE "] [" OPT_REMOVE_SWAP_WITH_LAST_USAGE "]"
 
 /// Команда удаления архипелага из файла с записями.
 ///
@@ -34,6 +48,8 @@ int ModifyCommand(int fd, Args* pArgs);
 int RemoveCommand(int fd, Args* pArgs);
 
 #define CREATE_COMMAND_NAME "create"
+#define CREATE_COMMAND_DESCRIPTION "Создание файла с записями. " \
+"[" DEFAULT_USAGES "]"
 
 /// Команда создания пустого файла с записями.
 ///
@@ -44,6 +60,8 @@ int RemoveCommand(int fd, Args* pArgs);
 int CreateCommand(int fd, Args* pArgs);
 
 #define DELETE_COMMAND_NAME "delete"
+#define DELETE_COMMAND_DESCRIPTION "Удаление файла с записями. " \
+"[" DEFAULT_USAGES "]"
 
 /// Команда удаления файла с записями.
 ///
@@ -54,6 +72,9 @@ int CreateCommand(int fd, Args* pArgs);
 int DeleteCommand(int fd, Args* pArgs);
 
 #define PRINT_COMMAND_NAME "print"
+#define PRINT_COMMAND_DESCRIPTION "Вывод архипелагов по условию или без по заданнаму формату из файла с записями. " \
+"[" DEFAULT_USAGES "] [" OPT_OR_USAGE "] [" OPT_NAME_USAGE \
+"] [" OPT_COUNT_ISLANDS_USAGE "] [" OPT_COUNT_INHABITED_ISLANDS_USAGE "]"
 
 /// Команда вывода архипелагов по условию или без по заданнаму формату из
 /// файла с записями.
@@ -65,6 +86,7 @@ int DeleteCommand(int fd, Args* pArgs);
 int PrintCommand(int fd, Args* pArgs);
 
 #define HAS_UNINHABITED_COMMAND_NAME "has_un"
+#define HAS_UNINHABITED_COMMAND_DESCRIPTION "выполнения запроса, выясняющего имеются ли архипелаги, состоящие только из необитаемых островов"
 
 /// Команда выполнения запроса, выясняющего имеются ли архипелаги, состоящие
 /// только из необитаемых островов.
@@ -76,6 +98,7 @@ int PrintCommand(int fd, Args* pArgs);
 int HasUninhabitedCommand(int fd, Args* pArgs);
 
 #define HEXDUMP_COMMAND_NAME "hexdump"
+#define HEXDUMP_COMMAND_DESCRIPTION "вывод шестнадцатиричного дампа файла"
 
 /// Команда вывода шестнадцатиричного дампа файла.
 ///
@@ -87,6 +110,7 @@ int HexdumpCommand(int fd, Args* pArgs);
 
 #define HELP_COMMAND_NAME "help"
 #define HELP_OPT_NAME "-h"
+#define HELP_COMMAND_DESCRIPTION "вывод справки"
 
 /// Команда вывода справки.
 ///

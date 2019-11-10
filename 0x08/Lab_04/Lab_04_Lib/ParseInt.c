@@ -1,3 +1,7 @@
+/// \file
+/// \brief Реализация функций из ParseInt.h
+/// \details Реализация функций из ParseInt.h.
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
