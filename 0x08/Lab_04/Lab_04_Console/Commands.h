@@ -17,7 +17,7 @@
 int AddCommand(int fd, Args* pArgs);
 
 #define MODIFY_COMMAND_NAME "modify"
-#define MODIFY_COMMAND_DESCRIPTION "Изменение значений архипелага. " \
+#define MODIFY_COMMAND_DESCRIPTION "Изменение значений полей архипелага. " \
 "[" OPT_OLD_NAME_USAGE " | " OPT_INDEX_USAGE "] [" OPT_NAME_USAGE \
 "] [" OPT_COUNT_ISLANDS_USAGE "] [" OPT_COUNT_INHABITED_ISLANDS_USAGE "]"
 
@@ -65,7 +65,7 @@ int CreateCommand(int fd, Args* pArgs);
 int DeleteCommand(int fd, Args* pArgs);
 
 #define PRINT_COMMAND_NAME "print"
-#define PRINT_COMMAND_DESCRIPTION "Вывод архипелагов по условию или без по заданнаму формату из файла с записями. " \
+#define PRINT_COMMAND_DESCRIPTION "Вывод архипелагов, поля которых совпадают с заданными по заданнаму формату из файла с записями. " \
 "[" OPT_OR_USAGE "] [" OPT_NAME_USAGE \
 "] [" OPT_COUNT_ISLANDS_USAGE "] [" OPT_COUNT_INHABITED_ISLANDS_USAGE "]"
 
@@ -79,7 +79,7 @@ int DeleteCommand(int fd, Args* pArgs);
 int PrintCommand(int fd, Args* pArgs);
 
 #define HAS_UNINHABITED_COMMAND_NAME "has_un"
-#define HAS_UNINHABITED_COMMAND_DESCRIPTION "Выполнения запроса, выясняющего имеются ли архипелаги, состоящие только из необитаемых островов."
+#define HAS_UNINHABITED_COMMAND_DESCRIPTION "Имеются ли архипелаги, состоящие только из необитаемых островов."
 
 /// Команда выполнения запроса, выясняющего имеются ли архипелаги, состоящие
 /// только из необитаемых островов.
@@ -91,7 +91,7 @@ int PrintCommand(int fd, Args* pArgs);
 int HasUninhabitedCommand(int fd, Args* pArgs);
 
 #define HEXDUMP_COMMAND_NAME "hexdump"
-#define HEXDUMP_COMMAND_DESCRIPTION "Вывод шестнадцатиричного дампа файла."
+#define HEXDUMP_COMMAND_DESCRIPTION "Вывод шестнадцатиричного дампа файла с записями."
 
 /// Команда вывода шестнадцатиричного дампа файла.
 ///

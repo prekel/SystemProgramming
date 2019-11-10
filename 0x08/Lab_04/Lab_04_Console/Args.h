@@ -28,40 +28,40 @@
 #define OPT_META_FORMAT_DESCRIPTION "Форматирование метаинформации."
 #define OPT_FORMAT 'F'
 #define OPT_FORMAT_USAGE "-F строка"
-#define OPT_FORMAT_DESCRIPTION "Форматирвание архипелага."
+#define OPT_FORMAT_DESCRIPTION "Форматирование архипелага."
 #define OPT_COUNT_FORMAT 'C'
 #define OPT_COUNT_FORMAT_USAGE "-C строка"
-#define OPT_COUNT_FORMAT_DESCRIPTION "Форматирование архипелага."
+#define OPT_COUNT_FORMAT_DESCRIPTION "Форматирование кол-ва выведенных архипелагов."
 #define OPT_OLD_NAME 'N'
 #define OPT_OLD_NAME_USAGE "-N строка"
-#define OPT_OLD_NAME_DESCRIPTION "Старое название (для изменения)."
+#define OPT_OLD_NAME_DESCRIPTION "Старое название архипелага (для изменения)."
 #define OPT_INDEX 'I'
 #define OPT_INDEX_USAGE "-I целое"
-#define OPT_INDEX_DESCRIPTION "Индекс."
+#define OPT_INDEX_DESCRIPTION "Индекс архипелага."
 #define OPT_HEXDUMP 'D'
 #define OPT_HEXDUMP_USAGE "-D"
-#define OPT_HEXDUMP_DESCRIPTION "Требуется ли вывод шестнадцатиричного дампа."
+#define OPT_HEXDUMP_DESCRIPTION "Требуется ли вывод шестнадцатиричного дампа файла."
 #define OPT_REMOVE_SWAP_WITH_LAST 's'
 #define OPT_REMOVE_SWAP_WITH_LAST_USAGE "-s"
-#define OPT_REMOVE_SWAP_WITH_LAST_DESCRIPTION "Требуется ли удалять архипелага заменой его на последний."
+#define OPT_REMOVE_SWAP_WITH_LAST_DESCRIPTION "Требуется ли удалять архипелаг заменой его на последний."
 #define OPT_OR 'o'
 #define OPT_OR_USAGE "-o"
-#define OPT_OR_DESCRIPTION "Требуется ли при выводе учитывать условия используя дизъюнкцию."
+#define OPT_OR_DESCRIPTION "Требуется ли при выводе выводить если хотя бы одно поле совпадает, а не все из указанных."
 #define OPT_PRINT 'P'
 #define OPT_PRINT_USAGE "-P"
-#define OPT_PRINT_DESCRIPTION "Требуется ли вывод."
+#define OPT_PRINT_DESCRIPTION "Требуется ли вывод архипелагов."
 #define OPT_HELP 'h'
 #define OPT_HELP_USAGE "-h"
 #define OPT_HELP_DESCRIPTION "Требуется ли вывод справки."
 #define OPT_NAME 'n'
 #define OPT_NAME_USAGE "-n строка"
-#define OPT_NAME_DESCRIPTION "Название."
+#define OPT_NAME_DESCRIPTION "Название архипелага."
 #define OPT_COUNT_ISLANDS 'c'
 #define OPT_COUNT_ISLANDS_USAGE "-c целое"
-#define OPT_COUNT_ISLANDS_DESCRIPTION "Кол-во островов."
+#define OPT_COUNT_ISLANDS_DESCRIPTION "Кол-во островов островов."
 #define OPT_COUNT_INHABITED_ISLANDS 'i'
 #define OPT_COUNT_INHABITED_ISLANDS_USAGE "-i целое"
-#define OPT_COUNT_INHABITED_ISLANDS_DESCRIPTION "Кол-во обитаемых островов."
+#define OPT_COUNT_INHABITED_ISLANDS_DESCRIPTION "Кол-во обитаемых островов архипелага."
 #define OPT_UNKNOWN '?'
 
 /// \struct Args
