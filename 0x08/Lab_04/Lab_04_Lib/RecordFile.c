@@ -57,7 +57,7 @@ int SeekRecord(int fd, Meta* pMeta, int index)
     {
         return FILE_UNSUCCESSFUL;
     }
-    return LseekWrap(fd, sizeof(Meta) + index * pMeta->RecordSize, SEEK_SET);
+    return LseekWrap(fd, sizeof (Meta) + index * pMeta->RecordSize, SEEK_SET);
 }
 
 int WriteRecord(int fd, Meta* pMeta, void* pRecord, int index)
@@ -82,13 +82,13 @@ int AddRecord(int fd, Meta* pMeta, void* pRecord)
 int WriteMeta(int fd, Meta* pMeta)
 {
     RETURN_IF_NOT_SUCCESSFUL(SeekRecord(fd, pMeta, META_INDEX));
-    return WriteWrap(fd, pMeta, sizeof(Meta));
+    return WriteWrap(fd, pMeta, sizeof (Meta));
 }
 
 int ReadMeta(int fd, Meta* pMeta)
 {
     RETURN_IF_NOT_SUCCESSFUL(SeekRecord(fd, pMeta, META_INDEX));
-    return ReadWrap(fd, pMeta, sizeof(Meta));
+    return ReadWrap(fd, pMeta, sizeof (Meta));
 }
 
 int ChangeSizeRecordFile(int fd, Meta* pMeta, int n)
@@ -97,7 +97,7 @@ int ChangeSizeRecordFile(int fd, Meta* pMeta, int n)
     {
         return FILE_UNSUCCESSFUL;
     }
-    return FtruncateWrap(fd, sizeof(Meta) + n * pMeta->RecordSize);
+    return FtruncateWrap(fd, sizeof (Meta) + n * pMeta->RecordSize);
 }
 
 int RemoveRecordSwapWithLast(int fd, Meta* pMeta, int index)
@@ -170,7 +170,7 @@ int CheckRecordFile(int fd, int recordSize)
 {
     RETURN_IF_NOT_SUCCESSFUL(SeekRecord(fd, NULL, META_INDEX));
     int actualVersion;
-    RETURN_IF_NOT_SUCCESSFUL(ReadWrap(fd, &actualVersion, sizeof(uint32_t)));
+    RETURN_IF_NOT_SUCCESSFUL(ReadWrap(fd, &actualVersion, sizeof (uint32_t)));
     if (actualVersion != META_VERSION)
     {
         return BAD_META;
@@ -179,7 +179,7 @@ int CheckRecordFile(int fd, int recordSize)
     RETURN_IF_NOT_SUCCESSFUL(ReadMeta(fd, &meta));
     if (meta.Version != META_VERSION ||
         meta.RecordSize != recordSize ||
-        meta.MetaSize != sizeof(Meta))
+        meta.MetaSize != sizeof (Meta))
     {
         return BAD_META;
     }

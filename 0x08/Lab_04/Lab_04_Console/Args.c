@@ -25,7 +25,7 @@
 
 Args* CreateArgs()
 {
-    Args* pArgs = (Args*) malloc(sizeof(Args));
+    Args* pArgs = (Args*) malloc(sizeof (Args));
     RETURN_NULL_IF_NULLPTR(pArgs);
 
     pArgs->IsFilePathGiven = false;
@@ -124,7 +124,7 @@ Args* ParseArgs(int argc, char** pArgv)
         case OPT_FILENAME:
             pArgs->IsFilePathGiven = true;
             RETURN_NULL_IF_NULLPTR(pArgs->FilePath = (char*) malloc(
-                    (sizeof(char) + 1) * strlen(optarg)));
+                    (sizeof (char) + 1) * strlen(optarg)));
             strcpy(pArgs->FilePath, optarg);
             pArgs->CountValidArgs++;
             break;
@@ -139,28 +139,28 @@ Args* ParseArgs(int argc, char** pArgv)
         case OPT_META_FORMAT:
             pArgs->IsMetaFormatGiven = true;
             RETURN_NULL_IF_NULLPTR(pArgs->MetaFormat = (char*) malloc(
-                    (sizeof(char) + 1) * strlen(optarg)));
+                    (sizeof (char) + 1) * strlen(optarg)));
             strcpy(pArgs->MetaFormat, optarg);
             pArgs->CountValidArgs++;
             break;
         case OPT_FORMAT:
             pArgs->IsFormatGiven = true;
             RETURN_NULL_IF_NULLPTR(pArgs->Format = (char*) malloc(
-                    (sizeof(char) + 1) * strlen(optarg)));
+                    (sizeof (char) + 1) * strlen(optarg)));
             strcpy(pArgs->Format, optarg);
             pArgs->CountValidArgs++;
             break;
         case OPT_COUNT_FORMAT:
             pArgs->IsCountFormatGiven = true;
             RETURN_NULL_IF_NULLPTR(pArgs->CountFormat = (char*) malloc(
-                    (sizeof(char) + 1) * strlen(optarg)));
+                    (sizeof (char) + 1) * strlen(optarg)));
             strcpy(pArgs->CountFormat, optarg);
             pArgs->CountValidArgs++;
             break;
         case OPT_OLD_NAME:
             pArgs->IsOldNameGiven = true;
             RETURN_NULL_IF_NULLPTR(pArgs->OldName = (char*) malloc(
-                    (sizeof(char) + 1) * strlen(optarg)));
+                    (sizeof (char) + 1) * strlen(optarg)));
             strcpy(pArgs->OldName, optarg);
             pArgs->CountValidArgs++;
             break;
@@ -191,7 +191,7 @@ Args* ParseArgs(int argc, char** pArgv)
         case OPT_NAME:
             pArgs->IsNameGiven = true;
             RETURN_NULL_IF_NULLPTR(pArgs->Name = (char*) malloc(
-                    (sizeof(char) + 1) * strlen(optarg)));
+                    (sizeof (char) + 1) * strlen(optarg)));
             strcpy(pArgs->Name, optarg);
             pArgs->CountValidArgs++;
             break;

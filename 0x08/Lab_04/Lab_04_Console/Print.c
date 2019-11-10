@@ -57,7 +57,7 @@ int HexDump(int fd)
     do
     {
         RETURN_IF_NOT_SUCCESSFUL(
-                bytesRead = ReadWrap(fd, buffer, sizeof(buffer)));
+                bytesRead = ReadWrap(fd, buffer, sizeof (buffer)));
 
         printf(FIRST_COLUMN_FORMAT, offset);
         for (i = 0; i < bytesRead; ++i)
@@ -117,7 +117,7 @@ int HexDump(int fd)
         printf("\n");
 
         offset += bytesRead;
-    } while (bytesRead == sizeof(buffer));
+    } while (bytesRead == sizeof (buffer));
 
     printf("\n");
 

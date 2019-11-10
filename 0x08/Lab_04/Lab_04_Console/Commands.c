@@ -420,11 +420,11 @@ int CommandExec(Args* pArgs,
     }
     else if (pArgs->IsOpenOrCreate || commandExec == CreateCommand)
     {
-        fd = OpenOrCreateRecordFile(pArgs->FilePath, sizeof(Archipelago));
+        fd = OpenOrCreateRecordFile(pArgs->FilePath, sizeof (Archipelago));
     }
     else if (pArgs->IsReCreate)
     {
-        fd = CreateOrTruncateRecordFile(pArgs->FilePath, sizeof(Archipelago));
+        fd = CreateOrTruncateRecordFile(pArgs->FilePath, sizeof (Archipelago));
     }
     else
     {
@@ -437,7 +437,7 @@ int CommandExec(Args* pArgs,
 
     if (isFileRequired)
     {
-        RETURN_IF_NOT_SUCCESSFUL(CheckRecordFile(fd, sizeof(Archipelago)));
+        RETURN_IF_NOT_SUCCESSFUL(CheckRecordFile(fd, sizeof (Archipelago)));
     }
 
     int ret = commandExec(fd, pArgs);

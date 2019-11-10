@@ -10,5 +10,5 @@ void FillMeta(Meta* pMeta, int recordSize)
     pMeta->Version = META_VERSION;
     pMeta->Count = 0;
     pMeta->RecordSize = recordSize;
-    pMeta->MetaSize = sizeof(Meta);
+    pMeta->MetaSize = sizeof (Meta);
 }
