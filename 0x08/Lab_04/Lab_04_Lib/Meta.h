@@ -9,7 +9,7 @@
 #include <stdint.h>
 
 /// Текущая версия файла (метаинформации).
-#define META_VERSION 14
+#define META_VERSION 15
 /// Индекс метаинформации для функции SeekRecord() итд.
 #define META_INDEX (-1)
 
