@@ -22,14 +22,14 @@
           </excludedPaths>
         </serverdata>
       </paths>
-      <paths name="WSL (5003bfc4-5b26-4aeb-8b8e-ef153dbb2214)">
+      <paths name="WSL (Clang) (5d711f74-2c89-43e2-9d3d-317b8ad7217e)">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
-      <paths name="WSL (Clang) (5d711f74-2c89-43e2-9d3d-317b8ad7217e)">
+      <paths name="WSL (GCC) (5003bfc4-5b26-4aeb-8b8e-ef153dbb2214)">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />

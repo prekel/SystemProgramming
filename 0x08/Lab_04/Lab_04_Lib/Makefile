@@ -2,7 +2,7 @@ CC = gcc
 AR = ar
 
 
-CFLAGS = -O0 -g -Wall
+CFLAGS = -O0 -g -Wall -std=gnu99
 LDFLAGS =
 INC =
 
