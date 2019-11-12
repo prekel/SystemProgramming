@@ -2,7 +2,7 @@ MAKE = make
 
 MAKEFILE = Makefile-llvm.mk
 
-.PHONY: Lab_04_Lib Lab_04_Console clean
+.PHONY: Lab_04_Lib Lab_04_Console clean dot
 
 all: Lab_04_Console Lab_04_Lib
 
@@ -13,6 +13,6 @@ Lab_04_Console: Lab_04_Lib
 	$(MAKE) -C  $@ -f $(MAKEFILE)
 
 clean:
-	$(MAKE) $@ -C Lab_04_Lib -f $(MAKEFILE)
-	$(MAKE) $@ -C Lab_04_Console -f $(MAKEFILE)
+	$(MAKE) $@ -C Lab_04_Lib -f $(MAKEFILE); $(MAKE) $@ -C Lab_04_Console -f $(MAKEFILE)
+
 
