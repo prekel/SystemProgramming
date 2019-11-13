@@ -57,7 +57,7 @@ int HexDump(int fd)
     do
     {
         RETURN_IF_NOT_SUCCESSFUL(
-                bytesRead = ReadWrap(fd, buffer, sizeof (buffer)));
+                bytesRead = ReadWrap(fd, buffer, sizeof(buffer)));
 
         printf(FIRST_COLUMN_FORMAT, offset);
         for (i = 0; i < bytesRead; ++i)
@@ -117,14 +117,14 @@ int HexDump(int fd)
         printf("\n");
 
         offset += bytesRead;
-    } while (bytesRead == sizeof (buffer));
+    } while (bytesRead == sizeof(buffer));
 
     printf("\n");
 
     return SUCCESSFUL;
 }
 
-int Print(int fd, Args* pArgs, bool ignoreCond)
+int Print(int fd, Args* pArgs, bool pPredicate(Archipelago*))
 {
     Meta meta;
     RETURN_IF_NOT_SUCCESSFUL(ReadMeta(fd, &meta));
@@ -143,39 +143,51 @@ int Print(int fd, Args* pArgs, bool ignoreCond)
         RETURN_IF_NOT_SUCCESSFUL(ReadArchipelago(fd, &meta, &archipelago, i));
         RETURN_IF_NOT_SUCCESSFUL(VerifyArchipelago(&archipelago));
 
-        bool condOrIsNameGiven =
-                pArgs->IsNameGiven &&
-                strcmp(archipelago.Name, pArgs->Name) == 0;
-        bool condOrIsCountIslandsGiven =
-                pArgs->IsCountIslandsGiven &&
-                archipelago.CountIslands == pArgs->CountIslands;
-        bool condOrIsCountInhabitedIslandsGiven =
-                pArgs->IsCountInhabitedIslandsGiven &&
-                archipelago.CountInhabitedIslands ==
-                pArgs->CountInhabitedIslands;
+        bool finalCond;
 
-        bool condAndIsNameGiven =
-                (pArgs->IsNameGiven &&
-                 strcmp(archipelago.Name, pArgs->Name) == 0) ||
-                !pArgs->IsNameGiven;
-        bool condAndIsCountIslandsGiven =
-                (pArgs->IsCountIslandsGiven &&
-                 archipelago.CountIslands == pArgs->CountIslands) ||
-                !pArgs->IsCountIslandsGiven;
-        bool condAndIsCountInhabitedIslandsGiven =
-                (pArgs->IsCountInhabitedIslandsGiven &&
-                 archipelago.CountInhabitedIslands ==
-                 pArgs->CountInhabitedIslands) ||
-                !pArgs->IsCountInhabitedIslandsGiven;
+        if (pPredicate == NULL)
+        {
 
-        if (ignoreCond ||
-            (pArgs->IsOr
-             ? condOrIsNameGiven ||
-               condOrIsCountIslandsGiven ||
-               condOrIsCountInhabitedIslandsGiven
-             : condAndIsNameGiven &&
-               condAndIsCountIslandsGiven &&
-               condAndIsCountInhabitedIslandsGiven))
+            bool condOrIsNameGiven =
+                    pArgs->IsNameGiven &&
+                    strcmp(archipelago.Name, pArgs->Name) == 0;
+            bool condOrIsCountIslandsGiven =
+                    pArgs->IsCountIslandsGiven &&
+                    archipelago.CountIslands == pArgs->CountIslands;
+            bool condOrIsCountInhabitedIslandsGiven =
+                    pArgs->IsCountInhabitedIslandsGiven &&
+                    archipelago.CountInhabitedIslands ==
+                    pArgs->CountInhabitedIslands;
+
+            bool condAndIsNameGiven =
+                    (pArgs->IsNameGiven &&
+                     strcmp(archipelago.Name, pArgs->Name) == 0) ||
+                    !pArgs->IsNameGiven;
+            bool condAndIsCountIslandsGiven =
+                    (pArgs->IsCountIslandsGiven &&
+                     archipelago.CountIslands == pArgs->CountIslands) ||
+                    !pArgs->IsCountIslandsGiven;
+            bool condAndIsCountInhabitedIslandsGiven =
+                    (pArgs->IsCountInhabitedIslandsGiven &&
+                     archipelago.CountInhabitedIslands ==
+                     pArgs->CountInhabitedIslands) ||
+                    !pArgs->IsCountInhabitedIslandsGiven;
+
+            finalCond = pArgs->IsOr
+                        ? condOrIsNameGiven ||
+                          condOrIsCountIslandsGiven ||
+                          condOrIsCountInhabitedIslandsGiven
+                        : condAndIsNameGiven &&
+                          condAndIsCountIslandsGiven &&
+                          condAndIsCountInhabitedIslandsGiven;
+        }
+        else
+        {
+            finalCond = pPredicate(&archipelago);
+        }
+
+
+        if (finalCond)
         {
             printf(pArgs->Format,
                    archipelago.Name,

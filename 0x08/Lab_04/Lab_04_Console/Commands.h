@@ -16,7 +16,7 @@
 ///
 /// \param fd Файловый деескриптор.
 /// \param pArgs Указатель на аргументы коммандной строки.
-/// \return Неотрицательное число у случае успеха, или один из отрицательных
+/// \return Неотрицательное число в случае успеха, или один из отрицательных
 /// кодов возврата из ReturnCodes.h или ReturnCodesLib.h.
 int AddCommand(int fd, Args* pArgs);
 
@@ -29,7 +29,7 @@ int AddCommand(int fd, Args* pArgs);
 ///
 /// \param fd Файловый деескриптор.
 /// \param pArgs Указатель на аргументы коммандной строки.
-/// \return Неотрицательное число у случае успеха, или один из отрицательных
+/// \return Неотрицательное число в случае успеха, или один из отрицательных
 /// кодов возврата из ReturnCodes.h или ReturnCodesLib.h.
 int ModifyCommand(int fd, Args* pArgs);
 
@@ -42,7 +42,7 @@ int ModifyCommand(int fd, Args* pArgs);
 ///
 /// \param fd Файловый деескриптор.
 /// \param pArgs Указатель на аргументы коммандной строки.
-/// \return Неотрицательное число у случае успеха, или один из отрицательных
+/// \return Неотрицательное число в случае успеха, или один из отрицательных
 /// кодов возврата из ReturnCodes.h или ReturnCodesLib.h.
 int RemoveCommand(int fd, Args* pArgs);
 
@@ -53,7 +53,7 @@ int RemoveCommand(int fd, Args* pArgs);
 ///
 /// \param fd Файловый деескриптор.
 /// \param pArgs Указатель на аргументы коммандной строки.
-/// \return Неотрицательное число у случае успеха, или один из отрицательных
+/// \return Неотрицательное число в случае успеха, или один из отрицательных
 /// кодов возврата из ReturnCodes.h или ReturnCodesLib.h.
 int CreateCommand(int fd, Args* pArgs);
 
@@ -64,7 +64,7 @@ int CreateCommand(int fd, Args* pArgs);
 ///
 /// \param fd Файловый деескриптор.
 /// \param pArgs Указатель на аргументы коммандной строки.
-/// \return Неотрицательное число у случае успеха, или один из отрицательных
+/// \return Неотрицательное число в случае успеха, или один из отрицательных
 /// кодов возврата из ReturnCodes.h или ReturnCodesLib.h.
 int DeleteCommand(int fd, Args* pArgs);
 
@@ -78,7 +78,7 @@ int DeleteCommand(int fd, Args* pArgs);
 ///
 /// \param fd Файловый деескриптор.
 /// \param pArgs Указатель на аргументы коммандной строки.
-/// \return Неотрицательное число у случае успеха, или один из отрицательных
+/// \return Неотрицательное число в случае успеха, или один из отрицательных
 /// кодов возврата из ReturnCodes.h или ReturnCodesLib.h.
 int PrintCommand(int fd, Args* pArgs);
 
@@ -90,9 +90,20 @@ int PrintCommand(int fd, Args* pArgs);
 ///
 /// \param fd Файловый деескриптор.
 /// \param pArgs Указатель на аргументы коммандной строки.
-/// \return Неотрицательное число у случае успеха, или один из отрицательных
+/// \return Неотрицательное число в случае успеха, или один из отрицательных
 /// кодов возврата из ReturnCodes.h или ReturnCodesLib.h.
 int HasUninhabitedCommand(int fd, Args* pArgs);
+
+#define PRINT_INHABITED_COMMAND_NAME "inhabited"
+#define PRINT_INHABITED_COMMAND_DESCRIPTION "Вывод обитаемых архипелагов."
+
+/// Команда, выводящая обитаемые архипелаги.
+///
+/// \param fd Файловый деескриптор.
+/// \param pArgs Указатель на аргументы коммандной строки.
+/// \return Неотрицательное число в случае успеха, или один из отрицательных
+/// кодов возврата из ReturnCodes.h или ReturnCodesLib.h.
+int PrintInhabitedCommand(int fd, Args* pArgs);
 
 #define HEXDUMP_COMMAND_NAME "hexdump"
 #define HEXDUMP_COMMAND_DESCRIPTION "Вывод шестнадцатиричного дампа файла с записями."
@@ -101,7 +112,7 @@ int HasUninhabitedCommand(int fd, Args* pArgs);
 ///
 /// \param fd Файловый деескриптор.
 /// \param pArgs Указатель на аргументы коммандной строки.
-/// \return Неотрицательное число у случае успеха, или один из отрицательных
+/// \return Неотрицательное число в случае успеха, или один из отрицательных
 /// кодов возврата из ReturnCodes.h или ReturnCodesLib.h.
 int HexdumpCommand(int fd, Args* pArgs);
 
@@ -113,7 +124,7 @@ int HexdumpCommand(int fd, Args* pArgs);
 ///
 /// \param fd Файловый деескриптор.
 /// \param pArgs Указатель на аргументы коммандной строки.
-/// \return Неотрицательное число у случае успеха, или один из отрицательных
+/// \return Неотрицательное число в случае успеха, или один из отрицательных
 /// кодов возврата из ReturnCodes.h или ReturnCodesLib.h.
 int HelpCommand(int fd, Args* pArgs);
 
@@ -121,7 +132,7 @@ int HelpCommand(int fd, Args* pArgs);
 ///
 /// \param fd Файловый деескриптор.
 /// \param pArgs Указатель на аргументы коммандной строки.
-/// \return Неотрицательное число у случае успеха, или один из отрицательных
+/// \return Неотрицательное число в случае успеха, или один из отрицательных
 /// кодов возврата из ReturnCodes.h или ReturnCodesLib.h.
 int UnknownOptionCommand(int fd, Args* pArgs);
 

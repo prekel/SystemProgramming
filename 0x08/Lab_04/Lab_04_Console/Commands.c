@@ -223,9 +223,21 @@ int HasUninhabitedCommand(int fd, Args* pArgs)
     return SUCCESSFUL;
 }
 
+static bool InhabitedPredicate(Archipelago* pArchipelago)
+{
+    return pArchipelago->CountIslands == pArchipelago->CountInhabitedIslands;
+}
+
+int PrintInhabitedCommand(int fd, Args* pArgs)
+{
+    RETURN_IF_NOT_SUCCESSFUL(Print(fd, pArgs, InhabitedPredicate));
+
+    return SUCCESSFUL;
+}
+
 int PrintCommand(int fd, Args* pArgs)
 {
-    RETURN_IF_NOT_SUCCESSFUL(Print(fd, pArgs, false));
+    RETURN_IF_NOT_SUCCESSFUL(Print(fd, pArgs, NULL));
 
     return SUCCESSFUL;
 }
@@ -255,6 +267,7 @@ CREATE_COMMAND_NAME HELP_SEP CREATE_COMMAND_DESCRIPTION HELP_SUFFIX \
 DELETE_COMMAND_NAME HELP_SEP DELETE_COMMAND_DESCRIPTION HELP_SUFFIX \
 PRINT_COMMAND_NAME HELP_SEP PRINT_COMMAND_DESCRIPTION HELP_SUFFIX \
 HAS_UNINHABITED_COMMAND_NAME HELP_SEP HAS_UNINHABITED_COMMAND_DESCRIPTION HELP_SUFFIX \
+PRINT_INHABITED_COMMAND_NAME HELP_SEP PRINT_INHABITED_COMMAND_DESCRIPTION HELP_SUFFIX \
 HEXDUMP_COMMAND_NAME HELP_SEP HEXDUMP_COMMAND_DESCRIPTION HELP_SUFFIX \
 HELP_COMMAND_NAME HELP_SEP HELP_COMMAND_DESCRIPTION HELP_SUFFIX \
 "Опции: " HELP_SUFFIX \
@@ -348,6 +361,11 @@ int Exec(char* command, Args* pArgs)
         isFileRequired = true;
         commandExec = HasUninhabitedCommand;
     }
+    else if (strcmp(command, PRINT_INHABITED_COMMAND_NAME) == 0)
+    {
+        isFileRequired = true;
+        commandExec = PrintInhabitedCommand;
+    }
     else if (strcmp(command, PRINT_COMMAND_NAME) == 0)
     {
         isFileRequired = true;
@@ -409,6 +427,11 @@ int Exec(char* command, Args* pArgs)
     return EXIT_FAILURE;
 }
 
+static bool AlwaysPrintPredicate(Archipelago* pArchipelago)
+{
+    return true;
+}
+
 int CommandExec(Args* pArgs,
                 int (* commandExec)(int, Args*),
                 bool isFileRequired)
@@ -445,7 +468,7 @@ int CommandExec(Args* pArgs,
 
     if (pArgs->IsPrintRequired)
     {
-        RETURN_IF_NOT_SUCCESSFUL(Print(fd, pArgs, true));
+        RETURN_IF_NOT_SUCCESSFUL(Print(fd, pArgs, AlwaysPrintPredicate));
     }
 
     if (pArgs->IsHexDumpRequired)

@@ -8,6 +8,7 @@
 #include <stdbool.h>
 
 #include "Args.h"
+#include "Archipelago.h"
 
 /// Выводит шестнадцатиричный дамп файла с архипелагами.
 /// В предпоследнюю колонку выводит символьное представление байтов,
@@ -28,10 +29,10 @@ int HexDump(int fd);
 ///
 /// \param fd Файловый дескриптор.
 /// \param pArgs Указатель на аргументы коммандной строки.
-/// \param ignoreCond Требуется ли игнорировать поля архипелага, заданные в
-/// аргументах.
+/// \param pPredicate Условие вывода. Если равно NULL, то используется условие
+/// как в описании.
 /// \return SUCCESSFUL в случае успешного выполнения, FILE_UNSUCCESSFUL в
 /// случае ошибки чтения.
-int Print(int fd, Args* pArgs, bool ignoreCond);
+int Print(int fd, Args* pArgs, bool pPredicate(Archipelago*));
 
 #endif //PRINT_H
