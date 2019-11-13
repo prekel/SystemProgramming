@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Lab_04" pattern="file[SystemProgramming]:0x08/Lab_04/Lab_04_Console//*||file[SystemProgramming]:0x08/Lab_04/Lab_04_Lib//*" />
+</component>
