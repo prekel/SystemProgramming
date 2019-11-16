@@ -6,6 +6,8 @@
 #ifndef RETURNCODESLIB_H
 #define RETURNCODESLIB_H
 
+#include <stddef.h>
+
 /// Код возврата успешного завершения функции.
 #define SUCCESSFUL 0
 
