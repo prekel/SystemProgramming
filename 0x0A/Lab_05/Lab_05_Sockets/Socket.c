@@ -40,10 +40,10 @@ int ShutdownSockets()
     return NO_ERROR;
 }
 
-SocketHandle SocketCreate(int domain, int type, int protocol)
-{
-    return socket(domain, type, protocol);
-}
+//SocketHandle SocketCreate(int domain, int type, int protocol)
+//{
+//    return socket(domain, type, protocol);
+//}
 
 int CloseSocket(SocketHandle sockfd)
 {
@@ -54,33 +54,33 @@ int CloseSocket(SocketHandle sockfd)
 #endif
 }
 
-int ConnectSocket(SocketHandle sockfd,
-                  const struct sockaddr* addr, int addrlen)
-{
-    return connect(sockfd, addr, addrlen);
-}
-
-int BindSocket(SocketHandle sockfd, const struct sockaddr* addr, int addrlen)
-{
-    return bind(sockfd, addr, addrlen);
-}
-
-int ListenSocket(SocketHandle sockfd, int backlog)
-{
-    return listen(sockfd, backlog);
-}
-
-int AcceptSocket(SocketHandle socket, struct sockaddr* addr, int* addrlen)
-{
-    return accept(socket, addr, addrlen);
-}
-
-int RecvSocket(SocketHandle fd, void* pBuf, int count, int flags)
-{
-    return recv(fd, pBuf, count, flags);
-}
-
-int SendSocket(SocketHandle fd, void* pBuf, int count, int flags)
-{
-    return send(fd, pBuf, count, flags);
-}
+//int ConnectSocket(SocketHandle sockfd,
+//                  const struct sockaddr* addr, int addrlen)
+//{
+//    return connect(sockfd, addr, addrlen);
+//}
+//
+//int BindSocket(SocketHandle sockfd, const struct sockaddr* addr, int addrlen)
+//{
+//    return bind(sockfd, addr, addrlen);
+//}
+//
+//int ListenSocket(SocketHandle sockfd, int backlog)
+//{
+//    return listen(sockfd, backlog);
+//}
+//
+//int AcceptSocket(SocketHandle socket, struct sockaddr* addr, int* addrlen)
+//{
+//    return accept(socket, addr, addrlen);
+//}
+//
+//int RecvSocket(SocketHandle fd, void* pBuf, int count, int flags)
+//{
+//    return recv(fd, pBuf, count, flags);
+//}
+//
+//int SendSocket(SocketHandle fd, void* pBuf, int count, int flags)
+//{
+//    return send(fd, pBuf, count, flags);
+//}
