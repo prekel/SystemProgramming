@@ -38,6 +38,8 @@ int SendMatrix(SocketHandle socket, Request* pRequest, Matrix* pMatrix)
         }
     }
 
+    free(pBuf);
+
     return send(socket, pBuf, size, 0);
 }
 
@@ -62,5 +64,8 @@ int ReceiveMatrix(SocketHandle socket, Request* pRequest, Matrix* pMatrix)
             pMatrix->pData[i][j] = ntohl(pBuf[k++]);
         }
     }
+
+    free(pBuf);
+
     return NO_ERROR;
 }
