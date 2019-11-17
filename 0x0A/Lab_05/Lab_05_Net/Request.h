@@ -7,11 +7,15 @@
 
 typedef struct
 {
-    uint32_t NetFirstIndex;
-    uint32_t NetSecondIndex;
-    uint32_t NetCount;
-    uint32_t NetMatrixDataSize;
+    uint32_t FirstIndex;
+    uint32_t SecondIndex;
+    uint32_t Count;
+    uint32_t MatrixDataSize;
 } Request;
+
+void HtoNRequest(Request* pRequest);
+
+void NtoHRequest(Request* pRequest);
 
 void FillRequest(Request* pRequest, Matrix* pMatrix, int firstIndex,
                  int secondIndex);

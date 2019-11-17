@@ -1,22 +1,42 @@
 #include <malloc.h>
 
 #include "Socket.h"
-#include "Macro.h"
+#include "ReturnCodesLib.h"
 #include "Matrix.h"
 #include "Request.h"
 
 void FillRequest(Request* pRequest, Matrix* pMatrix, int firstIndex,
-                  int secondIndex)
+                 int secondIndex)
 {
-    pRequest->NetFirstIndex = htonl(firstIndex);
+    pRequest->FirstIndex = firstIndex;
 
-    pRequest->NetSecondIndex = htonl(secondIndex);
+    pRequest->SecondIndex = secondIndex;
 
-    pRequest->NetCount = htonl(pMatrix->FirstCount);
+    pRequest->Count = pMatrix->FirstCount;
 
     size_t matrixDataSize =
             (pMatrix->FirstCount * pMatrix->SecondCount) * sizeof(uint32_t);
-    pRequest->NetMatrixDataSize = htonl(matrixDataSize);
+    pRequest->MatrixDataSize = matrixDataSize;
+}
+
+void HtoNRequest(Request* pRequest)
+{
+    for (uint32_t* i = &(pRequest->FirstIndex);
+         i != &(pRequest->MatrixDataSize) + 1;
+         i++)
+    {
+        *i = htonl(*i);
+    }
+}
+
+void NtoHRequest(Request* pRequest)
+{
+    for (uint32_t* i = &(pRequest->FirstIndex);
+         i != &(pRequest->MatrixDataSize) + 1;
+         i++)
+    {
+        *i = ntohl(*i);
+    }
 }
 
 int SendRequest(SocketHandle socket, Request* pRequest)
@@ -26,7 +46,8 @@ int SendRequest(SocketHandle socket, Request* pRequest)
 
 int SendMatrix(SocketHandle socket, Request* pRequest, Matrix* pMatrix)
 {
-    size_t size = pMatrix->FirstCount * pMatrix->SecondCount * sizeof(uint32_t);
+    size_t size =
+            pMatrix->FirstCount * pMatrix->SecondCount * sizeof(uint32_t);
     uint32_t* pBuf = (uint32_t*) malloc(size);
 
     int k = 0;
@@ -38,9 +59,11 @@ int SendMatrix(SocketHandle socket, Request* pRequest, Matrix* pMatrix)
         }
     }
 
+    RETURN_IF_NOT_SUCCESSFUL(send(socket, pBuf, size, 0));
+
     free(pBuf);
 
-    return send(socket, pBuf, size, 0);
+    return SUCCESSFUL;
 }
 
 int ReceiveRequest(SocketHandle socket, Request* pRequest)
@@ -50,11 +73,11 @@ int ReceiveRequest(SocketHandle socket, Request* pRequest)
 
 int ReceiveMatrix(SocketHandle socket, Request* pRequest, Matrix* pMatrix)
 {
-    size_t size = ntohl(pRequest->NetMatrixDataSize);
+    size_t size = pRequest->MatrixDataSize;
     uint32_t* pBuf = (uint32_t*) malloc(size);
     recv(socket, pBuf, size, 0);
 
-    pMatrix->FirstCount = pMatrix->SecondCount = ntohl(pRequest->NetCount);
+    pMatrix->FirstCount = pMatrix->SecondCount = pRequest->Count;
 
     int k = 0;
     for (int i = 0; i < pMatrix->FirstCount; i++)

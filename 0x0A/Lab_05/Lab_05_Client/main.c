@@ -1,52 +1,68 @@
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "Matrix.h"
 #include "Socket.h"
 #include "Request.h"
+#include "Args.h"
+#include "ParseInt.h"
+#include "ReturnCodes.h"
+#include "Input.h"
+#include "LastErrorMessage.h"
 
 int main(int argc, char** argv)
 {
-    int port = 12345;
-    char* loopback = "127.0.0.1";
+    Args* pArgs = ParseArgs(argc, argv);
+    if (pArgs == NULL)
+    {
+        perror(ALLOCATION_ERROR_MESSAGE);
+        return EXIT_FAILURE;
+    }
 
-    Matrix* m = CreateEmptyMatrix(3, 3);
-    m->pData[0][0] = 1;
-    m->pData[0][1] = 2;
-    m->pData[0][2] = 3;
-    m->pData[1][0] = 4;
-    m->pData[1][1] = 5;
-    m->pData[1][2] = 6;
-    m->pData[2][0] = 7;
-    m->pData[2][1] = 8;
-    m->pData[2][2] = 9;
+    if (InputAllOption(pArgs) != SUCCESSFUL)
+    {
+        perror(UNKNOWN_ERROR_MESSAGE);
+        return EXIT_FAILURE;
+    }
+
+    Matrix* pMatrix = CreateEmptyMatrix(pArgs->Degree, pArgs->Degree);
+    if (pMatrix == NULL)
+    {
+        perror(ALLOCATION_ERROR_MESSAGE);
+        return EXIT_FAILURE;
+    }
+
+    if (InputOrFillMatrix(pArgs, pMatrix))
 
     Request request;
-    FillRequest(&request, m, 1, 1);
+    FillRequest(&request, pMatrix, pArgs->FirstIndex, pArgs->SecondIndex);
 
     InitializeSockets();
 
     SocketHandle sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
     struct sockaddr_in name;
-
     name.sin_family = AF_INET;
-    name.sin_addr.s_addr = inet_addr(loopback);
+    name.sin_port = htons((uint16_t) pArgs->Port);
+    name.sin_addr.s_addr = inet_addr(pArgs->IpAddress);
 
-    name.sin_port = htons((uint16_t) port);
-
-    if (connect(sock, (struct sockaddr*) &name, sizeof(name)) == -1)
+    if (connect(sock, (struct sockaddr*) &name, sizeof(name)) == SOCKET_ERROR)
     {
+        perror(LastErrorMessage());
         closesocket(sock);
-        return 1;
+        ShutdownSockets();
+        return EXIT_FAILURE;
     }
 
+    HtoNRequest(&request);
     SendRequest(sock, &request);
+    NtoHRequest(&request);
 
-    SendMatrix(sock, &request, m);
-
-    //shutdown(sock, SHUT_WR);
+    SendMatrix(sock, &request, pMatrix);
 
     closesocket(sock);
-
     ShutdownSockets();
 
-    return 0;
+    return EXIT_SUCCESS;
 }

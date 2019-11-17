@@ -21,6 +21,17 @@
 #ifndef NO_ERROR
 #define NO_ERROR 0
 #endif
+#ifndef SOCKET_ERROR
+#define SOCKET_ERROR -1
+#endif
+
+#define RETURN_IF_SOCKET_ERROR(f) do { \
+    int tmp = (f); \
+    if (tmp == SOCKET_ERROR) \
+    { \
+        return tmp; \
+    } \
+} while (0)
 
 #ifdef _WIN32
 typedef SOCKET SocketHandle;

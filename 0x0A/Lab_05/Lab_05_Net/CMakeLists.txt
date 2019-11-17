@@ -5,8 +5,10 @@ set(CMAKE_C_STANDARD 99)
 
 add_library(Lab_05_Net
         Socket.c Socket.h
-        Request.c Request.h)
+        Request.c Request.h
+        LastErrorMessage.c LastErrorMessage.h)
 
 target_link_libraries(Lab_05_Net PRIVATE Lab_05_Lib)
+target_link_libraries(Lab_05_Net PRIVATE Lab_05_MatrixLib)
 
 target_include_directories(Lab_05_Net PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

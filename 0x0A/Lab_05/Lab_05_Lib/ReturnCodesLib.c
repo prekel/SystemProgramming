@@ -1,0 +1,12 @@
+#include "ReturnCodesLib.h"
+
+char* ReturnCodeLibMessage(int returnCode)
+{
+    switch (returnCode)
+    {
+    case ALLOCATION_ERROR:
+        return ALLOCATION_ERROR_MESSAGE;
+    default:
+        return UNKNOWN_ERROR_MESSAGE;
+    }
+}

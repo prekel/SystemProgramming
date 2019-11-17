@@ -12,9 +12,6 @@ int main(int argc, char** argv)
 
     int port = 12345;
     struct sockaddr_in name;
-
-    sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-
     name.sin_family = AF_INET;
     name.sin_port = htons((u_short) port);
     name.sin_addr.s_addr = INADDR_ANY;
@@ -32,18 +29,20 @@ int main(int argc, char** argv)
     }
 
     struct sockaddr_in clientName;
-    int clientNameLength = sizeof(clientName);
+    unsigned int clientNameLength = sizeof(clientName);
     SocketHandle clientSocketFileDescriptor;
 
-    clientSocketFileDescriptor = accept(sock,
-                                        (struct sockaddr*) &clientName,
-                                        &clientNameLength);
+    clientSocketFileDescriptor =
+            accept(sock,
+                   (struct sockaddr*) &clientName,
+                   &clientNameLength);
 
     Request request;
     ReceiveRequest(clientSocketFileDescriptor, &request);
+    NtoHRequest(&request);
 
-    Matrix* m = CreateEmptyMatrix(ntohl(request.NetCount),
-                                  ntohl(request.NetCount));
+    Matrix* m = CreateEmptyMatrix(request.Count,
+                                  request.Count);
 
     ReceiveMatrix(clientSocketFileDescriptor, &request, m);
 

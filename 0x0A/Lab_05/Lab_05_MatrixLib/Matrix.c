@@ -7,7 +7,7 @@
 #include <assert.h>
 
 #include "Matrix.h"
-#include "Macro.h"
+#include "ReturnCodesLib.h"
 
 Matrix* CreateBlankMatrix(int firstCount, int secondCount)
 {
