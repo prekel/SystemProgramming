@@ -18,6 +18,12 @@ int main(int argc, char** argv)
     }
 
     Args* pArgs = ParseArgs(argc, argv);
+    if (pArgs == NULL)
+    {
+        PrintErrorMessage(ALLOCATION_ERROR);
+        ShutdownSockets();
+        return EXIT_FAILURE;
+    }
 
     Matrix* pMatrix = NULL;
     Request request;

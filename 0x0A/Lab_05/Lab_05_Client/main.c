@@ -14,29 +14,35 @@
 
 int main(int argc, char** argv)
 {
-    if (InitializeSockets() == SOCKET_ERROR)
+    int initializeSockets = InitializeSockets();
+    if (initializeSockets != NO_ERROR)
     {
-        PrintLastErrorMessage();
+        PrintErrorMessage(initializeSockets);
         return EXIT_FAILURE;
     }
 
     Args* pArgs = ParseArgs(argc, argv);
     if (pArgs == NULL)
     {
-        perror(ALLOCATION_ERROR_MESSAGE);
+        PrintErrorMessage(ALLOCATION_ERROR);
+        ShutdownSockets();
         return EXIT_FAILURE;
     }
 
     if (InputAllOption(pArgs) != SUCCESSFUL)
     {
-        perror(UNKNOWN_ERROR_MESSAGE);
+        PrintErrorMessage(UNSUCCESSFUL);
+        DestroyArgs(pArgs);
+        ShutdownSockets();
         return EXIT_FAILURE;
     }
 
     Matrix* pMatrix = CreateEmptyMatrix(pArgs->Degree, pArgs->Degree);
     if (pMatrix == NULL)
     {
-        perror(ALLOCATION_ERROR_MESSAGE);
+        PrintErrorMessage(ALLOCATION_ERROR);
+        DestroyArgs(pArgs);
+        ShutdownSockets();
         return EXIT_FAILURE;
     }
 
@@ -44,6 +50,9 @@ int main(int argc, char** argv)
     if (inputMatrix < SUCCESSFUL)
     {
         perror(ReturnCodeLibMessage(inputMatrix));
+        DestroyMatrix(pMatrix);
+        DestroyArgs(pArgs);
+        ShutdownSockets();
         return EXIT_FAILURE;
     }
 
@@ -51,15 +60,19 @@ int main(int argc, char** argv)
 
     if (clientReturn != SUCCESSFUL)
     {
-        perror(ErrorMessage(clientReturn));
+        perror(ReturnCodeLibMessage(clientReturn));
         if (clientReturn == UNSUCCESSFUL)
         {
-            perror(LastErrorMessage());
+            PrintLastErrorMessage();
         }
+        DestroyMatrix(pMatrix);
+        DestroyArgs(pArgs);
+        ShutdownSockets();
         return EXIT_FAILURE;
     }
 
     DestroyMatrix(pMatrix);
+    DestroyArgs(pArgs);
     ShutdownSockets();
 
     return EXIT_SUCCESS;
