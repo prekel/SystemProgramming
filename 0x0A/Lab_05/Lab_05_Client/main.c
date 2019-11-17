@@ -10,9 +10,16 @@
 #include "ReturnCodesLib.h"
 #include "Input.h"
 #include "LastErrorMessage.h"
+#include "Client.h"
 
 int main(int argc, char** argv)
 {
+    if (InitializeSockets() == SOCKET_ERROR)
+    {
+        PrintLastErrorMessage();
+        return EXIT_FAILURE;
+    }
+
     Args* pArgs = ParseArgs(argc, argv);
     if (pArgs == NULL)
     {
@@ -40,51 +47,19 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
     }
 
-    Request request;
-    FillRequest(&request, pMatrix, pArgs->FirstIndex, pArgs->SecondIndex);
+    int clientReturn = Client(pArgs, pMatrix);
 
-    if (InitializeSockets() == SOCKET_ERROR)
+    if (clientReturn != SUCCESSFUL)
     {
-        perror(LastErrorMessage());
+        perror(ErrorMessage(clientReturn));
+        if (clientReturn == UNSUCCESSFUL)
+        {
+            perror(LastErrorMessage());
+        }
         return EXIT_FAILURE;
     }
 
-    SocketHandle sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (sock == SOCKET_ERROR)
-    {
-        perror(LastErrorMessage());
-        ShutdownSockets();
-        return EXIT_FAILURE;
-    }
-
-    struct sockaddr_in name;
-    name.sin_family = AF_INET;
-    name.sin_port = htons((uint16_t) pArgs->Port);
-    name.sin_addr.s_addr = inet_addr(pArgs->IpAddress);
-
-    if (name.sin_addr.s_addr == INADDR_NONE)
-    {
-        perror(ErrorMessage(BAD_VALUE));
-        closesocket(sock);
-        ShutdownSockets();
-        return EXIT_FAILURE;
-    }
-
-    if (connect(sock, (struct sockaddr*) &name, sizeof(name)) == SOCKET_ERROR)
-    {
-        perror(LastErrorMessage());
-        closesocket(sock);
-        ShutdownSockets();
-        return EXIT_FAILURE;
-    }
-
-    HtoNRequest(&request);
-    SendRequest(sock, &request);
-    NtoHRequest(&request);
-
-    SendMatrix(sock, &request, pMatrix);
-
-    closesocket(sock);
+    DestroyMatrix(pMatrix);
     ShutdownSockets();
 
     return EXIT_SUCCESS;

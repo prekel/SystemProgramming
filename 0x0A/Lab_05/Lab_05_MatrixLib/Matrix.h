@@ -92,7 +92,7 @@ int CalculateDeterminant2x2(Matrix* pMatrix);
  *  \param pMatrix Matrix to calculate determinant.
  *  \return Determinant integer.
  */
-int CalculateDeterminant(Matrix* pMatrix, int* pError);
+int CalculateDeterminant(Matrix* pMatrix);
 
 /*! \brief Frees up matrix memory
  *
@@ -100,6 +100,6 @@ int CalculateDeterminant(Matrix* pMatrix, int* pError);
  *
  *  \param pMatrix Matrix to free.
  */
-void FreeMatrix(Matrix* pMatrix);
+void DestroyMatrix(Matrix* pMatrix);
 
 #endif // MATRIX_H

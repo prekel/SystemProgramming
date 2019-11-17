@@ -1,67 +1,55 @@
 #include <stdio.h>
+#include <stdlib.h>
 
+#include "LastErrorMessage.h"
 #include "Matrix.h"
 #include "Socket.h"
 #include "Request.h"
+#include "Server.h"
+#include "ReturnCodesLib.h"
 
 int main(int argc, char** argv)
 {
-    InitializeSockets();
-
-    SocketHandle sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-
-    int port = 12345;
-    struct sockaddr_in name;
-    name.sin_family = AF_INET;
-    name.sin_port = htons((u_short) port);
-    name.sin_addr.s_addr = INADDR_ANY;
-
-    if (bind(sock, (const struct sockaddr*) &name, sizeof(name)) == -1)
+    int initializeSockets = InitializeSockets();
+    if (initializeSockets != NO_ERROR)
     {
-        closesocket(sock);
-        return 1;
+        PrintErrorMessage(initializeSockets);
+        return EXIT_FAILURE;
     }
 
-    if (listen(sock, 5) == -1)
-    {
-        closesocket(sock);
-        return 1;
-    }
+    Args* pArgs = ParseArgs(argc, argv);
 
-    struct sockaddr_in clientName;
-    unsigned int clientNameLength = sizeof(clientName);
-    SocketHandle clientSocketFileDescriptor;
-
-    clientSocketFileDescriptor =
-            accept(sock,
-                   (struct sockaddr*) &clientName,
-                   &clientNameLength);
-
+    Matrix* pMatrix = NULL;
     Request request;
-    ReceiveRequest(clientSocketFileDescriptor, &request);
-    NtoHRequest(&request);
-
-    Matrix* m = CreateEmptyMatrix(request.Count,
-                                  request.Count);
-
-    ReceiveMatrix(clientSocketFileDescriptor, &request, m);
-
-    closesocket(clientSocketFileDescriptor);
-
-    //shutdown(sock, SHUT_WR);
-
-    closesocket(sock);
-
-    ShutdownSockets();
-
-    for (int i = 0; i < m->FirstCount; i++)
+    if (Server(pArgs, &request, &pMatrix) != SUCCESSFUL)
     {
-        for (int j = 0; j < m->SecondCount; j++)
+        PrintLastErrorMessage();
+        DestroyMatrix(pMatrix);
+        DestroyArgs(pArgs);
+        ShutdownSockets();
+        return EXIT_FAILURE;
+    }
+
+    Matrix* pMinor = GetMinor(NULL, pMatrix, request.FirstIndex, request.SecondIndex);
+
+    int det = CalculateDeterminant(pMinor);
+
+    for (int i = 0; i < pMinor->FirstCount; i++)
+    {
+        for (int j = 0; j < pMinor->SecondCount; j++)
         {
-            printf("%d ", m->pData[i][j]);
+            printf("%d ", pMinor->pData[i][j]);
         }
         printf("\n");
     }
+    printf("Определитель: %d", det);
+
+    DestroyMatrix(pMatrix);
+    DestroyMatrix(pMinor);
+
+    DestroyArgs(pArgs);
+
+    ShutdownSockets();
 
     return 0;
 }

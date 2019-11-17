@@ -3,7 +3,7 @@
 /// \details Коды возврата функций в библиотеке, сообщения для вывода
 /// сообщений об ошибках и макросы для возвращения значений из функций.
 
-#ifndef RETURNCODES_H
+#ifndef RETURNCODESLIB_H
 #define RETURNCODESLIB_H
 
 #include <stddef.h>
@@ -97,4 +97,4 @@
 
 char* ReturnCodeLibMessage(int returnCode);
 
-#endif //RETURNCODES_H
+#endif //RETURNCODESLIB_H

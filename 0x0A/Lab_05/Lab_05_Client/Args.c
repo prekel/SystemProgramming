@@ -17,8 +17,7 @@
 
 #include "Args.h"
 #include "ParseInt.h"
-#include "ReturnCodes.h"
-#include "ReturnCodes.h"
+#include "ReturnCodesLib.h"
 #include "Input.h"
 #include "Matrix.h"
 
@@ -126,12 +125,12 @@ Args* ParseArgs(int argc, char** pArgv)
 
 static bool DegreeChecker(int n)
 {
-    return n > 1;
+    return n >= 1;
 }
 
 static bool IndexChecker(int n)
 {
-    return n > 1;
+    return n >= 0;
 }
 
 static bool ElementChecker(int n)
@@ -165,7 +164,7 @@ int InputAllOption(Args* pArgs)
 
 int InputOrFillMatrix(Args* pArgs, Matrix* pMatrix)
 {
-    if (pArgs->pExtraArgs == NULL)
+    if (pArgs->pExtraArgs[0] == NULL)
     {
         for (int i = 0; i < pMatrix->FirstCount; i++)
         {

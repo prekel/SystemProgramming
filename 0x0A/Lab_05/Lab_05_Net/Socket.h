@@ -29,7 +29,16 @@
     int tmp = (f); \
     if (tmp == SOCKET_ERROR) \
     { \
-        return tmp; \
+        return SOCKET_ERROR; \
+    } \
+} while (0)
+
+#define RETURN_AND_CLOSE_SOCKET_IF_SOCKET_ERROR(f, sock) do { \
+    int tmp = (f); \
+    if (tmp == SOCKET_ERROR) \
+    { \
+        closesocket(sock); \
+        return SOCKET_ERROR; \
     } \
 } while (0)
 

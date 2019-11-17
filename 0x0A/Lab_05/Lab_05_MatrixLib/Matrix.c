@@ -7,16 +7,15 @@
 #include <assert.h>
 
 #include "Matrix.h"
-#include "ReturnCodesLib.h"
 
 Matrix* CreateBlankMatrix(int firstCount, int secondCount)
 {
     Matrix* pRet = (Matrix*) malloc(sizeof(Matrix));
-    RETURN_NULL_IF_NULLPTR(pRet);
+    assert(pRet);
     pRet->SecondCount = secondCount;
     pRet->FirstCount = firstCount;
     pRet->pData = (int**) malloc(pRet->FirstCount * sizeof(int*));
-    RETURN_NULL_IF_NULLPTR(pRet->pData);
+    assert(pRet->pData);
 
     for (int i = 0; i < pRet->FirstCount; i++)
     {
@@ -27,7 +26,7 @@ Matrix* CreateBlankMatrix(int firstCount, int secondCount)
 //            pRet->pData[i][j] = 0;
 //        }
         pRet->pData[i] = (int*) calloc(pRet->SecondCount, sizeof(int));
-        RETURN_NULL_IF_NULLPTR(pRet->pData[i]);
+        assert(pRet->pData[i]);
     }
 
     return pRet;
@@ -36,16 +35,16 @@ Matrix* CreateBlankMatrix(int firstCount, int secondCount)
 Matrix* CreateEmptyMatrix(int firstCount, int secondCount)
 {
     Matrix* pRet = (Matrix*) malloc(sizeof(Matrix));
-    RETURN_NULL_IF_NULLPTR(pRet);
+    assert(pRet);
     pRet->SecondCount = secondCount;
     pRet->FirstCount = firstCount;
     pRet->pData = (int**) malloc(pRet->FirstCount * sizeof(int*));
-    RETURN_NULL_IF_NULLPTR(pRet->pData);
+    assert(pRet->pData);
 
     for (int i = 0; i < pRet->FirstCount; i++)
     {
         pRet->pData[i] = (int*) malloc(pRet->SecondCount * sizeof(int));
-        RETURN_NULL_IF_NULLPTR(pRet->pData[i]);
+        assert(pRet->pData[i]);
     }
     return pRet;
 }
@@ -54,9 +53,6 @@ Matrix* SumMatrices(Matrix* pMatrixResult, Matrix* pMatrixA, Matrix* pMatrixB)
 {
     assert(pMatrixA->SecondCount == pMatrixB->SecondCount);
     assert(pMatrixA->FirstCount == pMatrixB->FirstCount);
-
-    //Matrix* pRet =
-    //        CreateEmptyMatrix(pMatrixA->FirstCount, pMatrixA->SecondCount);
 
     for (int i = 0; i < pMatrixResult->FirstCount; i++)
     {
@@ -79,7 +75,7 @@ Matrix* GetMinor(Matrix* pMinorResult, Matrix* pMatrix, int firstIndex,
         pRet = CreateEmptyMatrix(
                 pMatrix->FirstCount - 1,
                 pMatrix->SecondCount - 1);
-        RETURN_NULL_IF_NULLPTR(pRet);
+        assert(pRet);
     }
     else
     {
@@ -120,7 +116,7 @@ int CalculateDeterminant2x2(Matrix* pMatrix)
     return a * d - c * b;
 }
 
-int CalculateDeterminant(Matrix* pMatrix, int* pError)
+int CalculateDeterminant(Matrix* pMatrix)
 {
     assert(pMatrix->FirstCount == pMatrix->SecondCount);
     assert(pMatrix->FirstCount >= 1);
@@ -138,30 +134,29 @@ int CalculateDeterminant(Matrix* pMatrix, int* pError)
     else
     {
         int ret = 0;
-        Matrix* minor = CreateEmptyMatrix(
+        Matrix* pMinor = CreateEmptyMatrix(
                 pMatrix->FirstCount - 1,
                 pMatrix->SecondCount - 1);
-        if (pError != NULL && minor == NULL)
-        {
-            *pError = ALLOCATION_ERROR;
-            return ALLOCATION_ERROR;
-        }
+        assert(pMinor);
         for (int i = 0; i < pMatrix->FirstCount; i++)
         {
             int sign = (i % 2) ? -1 : 1;
-            minor = GetMinor(minor, pMatrix, 0, i);
-            int det = CalculateDeterminant(minor, pError);
-            RETURN_IF_NOT_SUCCESSFUL(*pError);
+            pMinor = GetMinor(pMinor, pMatrix, 0, i);
+            int det = CalculateDeterminant(pMinor);
             int firstRow = pMatrix->pData[0][i];
             ret += sign * firstRow * det;
         }
-        FreeMatrix(minor);
+        DestroyMatrix(pMinor);
         return ret;
     }
 }
 
-void FreeMatrix(Matrix* pMatrix)
+void DestroyMatrix(Matrix* pMatrix)
 {
+    if (pMatrix == NULL)
+    {
+        return;
+    }
     for (int i = 0; i < pMatrix->FirstCount; i++)
     {
         free(pMatrix->pData[i]);

@@ -1,4 +1,5 @@
 #include <errno.h>
+#include <stdio.h>
 
 #include "Socket.h"
 #include "LastErrorMessage.h"
@@ -17,17 +18,21 @@
 #endif
 #define MY_ETIMEDOUT_MESSAGE "Tайм-аут соеденения.\n"
 
-#define UNKNOWN_MESSAGE "Неизвестная ошибка\n"
+#define UNKNOWN_MESSAGE "Неизвестная ошибка: %d\n"
+
+
+int LastError()
+{
+#ifdef _WIN32
+    return WSAGetLastError();
+#else
+    return errno;
+#endif
+}
 
 char* LastErrorMessage()
 {
-    int error;
-#ifdef _WIN32
-    error = WSAGetLastError();
-#else
-    error = errno;
-#endif
-    return ErrorMessage(error);
+    return ErrorMessage(LastError());
 }
 
 char* ErrorMessage(int error)
@@ -40,5 +45,28 @@ char* ErrorMessage(int error)
         return MY_ETIMEDOUT_MESSAGE;
     default:
         return UNKNOWN_MESSAGE;
+    }
+}
+
+void PrintLastErrorMessage()
+{
+    int error = LastError();
+    PrintErrorMessage(error);
+}
+
+void PrintErrorMessage(int error)
+{
+    char* message = ErrorMessage(error);
+    if (error == NO_ERROR)
+    {
+        return;
+    }
+    else if (message == UNKNOWN_MESSAGE)
+    {
+        fprintf(stderr, UNKNOWN_MESSAGE, error);
+    }
+    else
+    {
+        fprintf(stderr, "%s", message);
     }
 }
