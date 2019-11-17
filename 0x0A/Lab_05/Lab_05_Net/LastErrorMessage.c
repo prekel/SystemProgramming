@@ -15,7 +15,7 @@
 #else
 #define MY_ETIMEDOUT ETIMEDOUT
 #endif
-#define MY_ETIMEDOUT_MESSAGE "Timeout while attempting connection.\n"
+#define MY_ETIMEDOUT_MESSAGE "Tайм-аут соеденения.\n"
 
 #define UNKNOWN_MESSAGE "Неизвестная ошибка\n"
 

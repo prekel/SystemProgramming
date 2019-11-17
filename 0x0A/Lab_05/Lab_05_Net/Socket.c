@@ -10,11 +10,9 @@ int InitializeSockets()
 #endif
 }
 
-int ShutdownSockets()
+void ShutdownSockets()
 {
 #ifdef _WIN32
     WSACleanup();
-    return NO_ERROR;
 #endif
-    return NO_ERROR;
 }

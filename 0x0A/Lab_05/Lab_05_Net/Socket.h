@@ -45,6 +45,6 @@ typedef int SocketHandle;
 
 int InitializeSockets();
 
-int ShutdownSockets();
+void ShutdownSockets();
 
 #endif //SOCKET_H
