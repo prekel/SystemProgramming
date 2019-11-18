@@ -3,8 +3,10 @@
 
 #ifdef _MSC_VER
 #include <WinSock2.h>
+#include <Windows.h>
 #elif _WIN32
 #include <winsock2.h>
+#include <windows.h>
 #include <sys/types.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -23,6 +25,10 @@
 #endif
 #ifndef SOCKET_ERROR
 #define SOCKET_ERROR -1
+#endif
+
+#ifndef MSG_NOSIGNAL
+#define MSG_NOSIGNAL 0
 #endif
 
 #define RETURN_IF_SOCKET_ERROR(f) do { \

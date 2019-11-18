@@ -3,10 +3,6 @@
 
 int LastError();
 
-char* LastErrorMessage();
-
-char* ErrorMessage(int error);
-
 void PrintLastErrorMessage();
 
 void PrintErrorMessage(int error);

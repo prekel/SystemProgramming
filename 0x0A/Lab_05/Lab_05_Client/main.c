@@ -2,6 +2,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifdef _MSC_VER
+#include <Windows.h>
+#elif _WIN32
+#include <windows.h>
+#endif
+
 #include "Matrix.h"
 #include "Socket.h"
 #include "Request.h"
@@ -14,6 +20,11 @@
 
 int main(int argc, char** argv)
 {
+#ifdef _WIN32
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+#endif
+
     int initializeSockets = InitializeSockets();
     if (initializeSockets != NO_ERROR)
     {
@@ -61,10 +72,6 @@ int main(int argc, char** argv)
     if (clientReturn != SUCCESSFUL)
     {
         PrintReturnCodeMessage(clientReturn);
-        if (clientReturn == UNSUCCESSFUL)
-        {
-            PrintLastErrorMessage();
-        }
         DestroyMatrix(pMatrix);
         DestroyArgs(pArgs);
         ShutdownSockets();

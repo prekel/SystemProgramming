@@ -1,6 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifdef _MSC_VER
+#include <Windows.h>
+#elif _WIN32
+#include <windows.h>
+#endif
+
 #include "LastErrorMessage.h"
 #include "Matrix.h"
 #include "Socket.h"
@@ -10,6 +16,11 @@
 
 int main(int argc, char** argv)
 {
+#ifdef _WIN32
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+#endif
+
     int initializeSockets = InitializeSockets();
     if (initializeSockets != NO_ERROR)
     {

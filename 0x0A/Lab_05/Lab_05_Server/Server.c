@@ -48,11 +48,12 @@ SocketHandle ServerConnect(Args* pArgs)
     unsigned int clientNameLength = sizeof(clientName);
     SocketHandle clientSock;
 
-    RETURN_AND_CLOSE_SOCKET_IF_SOCKET_ERROR(clientSock =
-                                                    accept(sock,
-                                                           (struct sockaddr*) &clientName,
-                                                           &clientNameLength),
-                                            sock);
+    RETURN_AND_CLOSE_SOCKET_IF_SOCKET_ERROR(
+            clientSock =
+                    accept(sock,
+                           (struct sockaddr*) &clientName,
+                           &clientNameLength),
+            sock);
 
     RETURN_IF_SOCKET_ERROR(closesocket(sock));
 

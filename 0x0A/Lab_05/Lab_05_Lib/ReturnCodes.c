@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "ReturnCodes.h"
+#include "LastErrorMessage.h"
 
 char* ReturnCodeMessage(int returnCode)
 {
@@ -22,4 +23,5 @@ char* ReturnCodeMessage(int returnCode)
 void PrintReturnCodeMessage(int returnCode)
 {
     fprintf(stderr, "%s", ReturnCodeMessage(returnCode));
+    PrintLastErrorMessage();
 }

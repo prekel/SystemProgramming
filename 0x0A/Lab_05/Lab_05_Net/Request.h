@@ -20,12 +20,12 @@ void NtoHRequest(Request* pRequest);
 void FillRequest(Request* pRequest, Matrix* pMatrix, int firstIndex,
                  int secondIndex);
 
-int SendRequest(SocketHandle socket, Request* pRequest);
+int SendRequest(SocketHandle sock, Request* pRequest);
 
-int SendMatrix(SocketHandle socket, Request* pRequest, Matrix* pMatrix);
+int SendMatrix(SocketHandle sock, Request* pRequest, Matrix* pMatrix);
 
-int ReceiveRequest(SocketHandle socket, Request* pRequest);
+int ReceiveRequest(SocketHandle sock, Request* pRequest);
 
-int ReceiveMatrix(SocketHandle socket, Request* pRequest, Matrix* pMatrix);
+int ReceiveMatrix(SocketHandle sock, Request* pRequest, Matrix* pMatrix);
 
 #endif //REQUEST_H

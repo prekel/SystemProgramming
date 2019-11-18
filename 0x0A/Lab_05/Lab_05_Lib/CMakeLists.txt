@@ -8,4 +8,6 @@ add_library(Lab_05_Lib
         ParseInt.h ParseInt.c
         Input.c Input.h ReturnCodes.c)
 
+target_link_libraries(Lab_05_Lib PRIVATE Lab_05_Net)
+
 target_include_directories(Lab_05_Lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

@@ -39,12 +39,13 @@ void NtoHRequest(Request* pRequest)
     }
 }
 
-int SendRequest(SocketHandle socket, Request* pRequest)
+int SendRequest(SocketHandle sock, Request* pRequest)
 {
-    return send(socket, pRequest, sizeof(Request), 0);
+    RETURN_IF_SOCKET_ERROR(send(sock, pRequest, sizeof(Request), MSG_NOSIGNAL));
+    return SUCCESSFUL;
 }
 
-int SendMatrix(SocketHandle socket, Request* pRequest, Matrix* pMatrix)
+int SendMatrix(SocketHandle sock, Request* pRequest, Matrix* pMatrix)
 {
     size_t size =
             pMatrix->FirstCount * pMatrix->SecondCount * sizeof(uint32_t);
@@ -59,23 +60,24 @@ int SendMatrix(SocketHandle socket, Request* pRequest, Matrix* pMatrix)
         }
     }
 
-    RETURN_IF_NOT_SUCCESSFUL(send(socket, pBuf, size, 0));
+    RETURN_IF_NOT_SUCCESSFUL(send(sock, pBuf, size, MSG_NOSIGNAL));
 
     free(pBuf);
 
     return SUCCESSFUL;
 }
 
-int ReceiveRequest(SocketHandle socket, Request* pRequest)
+int ReceiveRequest(SocketHandle sock, Request* pRequest)
 {
-    return recv(socket, pRequest, sizeof(Request), 0);
+    RETURN_IF_SOCKET_ERROR(recv(sock, pRequest, sizeof(Request), 0));
+    return SUCCESSFUL;
 }
 
-int ReceiveMatrix(SocketHandle socket, Request* pRequest, Matrix* pMatrix)
+int ReceiveMatrix(SocketHandle sock, Request* pRequest, Matrix* pMatrix)
 {
     size_t size = pRequest->MatrixDataSize;
     uint32_t* pBuf = (uint32_t*) malloc(size);
-    recv(socket, pBuf, size, 0);
+    RETURN_IF_SOCKET_ERROR(recv(sock, pBuf, size, 0));
 
     pMatrix->FirstCount = pMatrix->SecondCount = pRequest->Count;
 
