@@ -6,7 +6,7 @@
 #include "Socket.h"
 #include "Request.h"
 #include "Server.h"
-#include "ReturnCodesLib.h"
+#include "ReturnCodes.h"
 
 int main(int argc, char** argv)
 {

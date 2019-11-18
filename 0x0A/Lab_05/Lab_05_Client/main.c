@@ -7,7 +7,7 @@
 #include "Request.h"
 #include "Args.h"
 #include "ParseInt.h"
-#include "ReturnCodesLib.h"
+#include "ReturnCodes.h"
 #include "Input.h"
 #include "LastErrorMessage.h"
 #include "Client.h"
@@ -49,7 +49,7 @@ int main(int argc, char** argv)
     int inputMatrix = InputOrFillMatrix(pArgs, pMatrix);
     if (inputMatrix < SUCCESSFUL)
     {
-        perror(ReturnCodeLibMessage(inputMatrix));
+        PrintReturnCodeMessage(inputMatrix);
         DestroyMatrix(pMatrix);
         DestroyArgs(pArgs);
         ShutdownSockets();
@@ -60,7 +60,7 @@ int main(int argc, char** argv)
 
     if (clientReturn != SUCCESSFUL)
     {
-        perror(ReturnCodeLibMessage(clientReturn));
+        PrintReturnCodeMessage(clientReturn);
         if (clientReturn == UNSUCCESSFUL)
         {
             PrintLastErrorMessage();

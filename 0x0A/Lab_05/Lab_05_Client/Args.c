@@ -17,7 +17,7 @@
 
 #include "Args.h"
 #include "ParseInt.h"
-#include "ReturnCodesLib.h"
+#include "ReturnCodes.h"
 #include "Input.h"
 #include "Matrix.h"
 

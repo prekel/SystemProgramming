@@ -6,7 +6,7 @@
 #ifndef RETURNCODES_H
 #define RETURNCODES_H
 
-#include "ReturnCodesLib.h"
+#include "ReturnCodes.h"
 
 
 #define BAD_ARGS_MESSAGE "Указаны неверные параметры, введите параметр -h для вывода справки\n"

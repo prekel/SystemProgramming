@@ -20,7 +20,7 @@
 #include "Print.h"
 #include "ParseInt.h"
 #include "ReturnCodes.h"
-#include "ReturnCodesLib.h"
+#include "ReturnCodes.h"
 
 #define EXTRA_ARGS_NAME_INDEX 0
 #define EXTRA_ARGS_COUNT_ISLANDS_INDEX 1

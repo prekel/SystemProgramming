@@ -21,7 +21,7 @@
 #include "RecordFile.h"
 #include "Args.h"
 #include "ParseInt.h"
-#include "ReturnCodesLib.h"
+#include "ReturnCodes.h"
 
 Args* CreateArgs()
 {

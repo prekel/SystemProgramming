@@ -12,7 +12,7 @@
 #include "Archipelago.h"
 #include "Commands.h"
 #include "IOWrapper.h"
-#include "ReturnCodesLib.h"
+#include "ReturnCodes.h"
 
 #define FIRST_NON_CONTROL_CHAR ' '
 
