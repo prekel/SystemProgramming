@@ -12,20 +12,18 @@ int Server(Args* pArgs, Request* pRequest, Matrix** ppMatrix,
            SocketHandle* pSocketToClose1, SocketHandle* pSocketToClose2)
 {
     SocketHandle clientSock;
-    RETURN_IF_SOCKET_ERROR(clientSock = ServerConnect(pArgs, pSocketToClose1));
+    RETURN_IF_SOCKET_ERROR(
+            clientSock = ServerConnect(pArgs, pSocketToClose1));
     if (pSocketToClose2) *pSocketToClose2 = clientSock;
 
     Request request;
-    RETURN_IF_SOCKET_ERROR(
-            ServerReceiveRequest(clientSock, &request));
+    RETURN_IF_SOCKET_ERROR(ServerReceiveRequest(clientSock, &request));
 
     Matrix* pMatrix = CreateEmptyMatrix(request.Count,
                                         request.Count);
 
     RETURN_IF_SOCKET_ERROR(
             ServerReceiveMatrix(clientSock, &request, pMatrix));
-
-    //RETURN_IF_SOCKET_ERROR(ServerClose(clientSock));
 
     *pRequest = request;
     *ppMatrix = pMatrix;
@@ -52,15 +50,18 @@ SocketHandle ServerConnect(Args* pArgs, SocketHandle* pSocketToClose)
     RETURN_IF_SOCKET_ERROR(listen(sock, BACKLOG));
 
     struct sockaddr_in clientName;
-    int clientNameLength = sizeof(clientName);
+#ifdef _WIN32
+    int clientNameLength;
+#else
+    unsigned int clientNameLength;
+#endif
+    clientNameLength = sizeof(clientName);
     SocketHandle clientSock;
 
     RETURN_IF_SOCKET_ERROR(
             clientSock = accept(sock,
                                 (struct sockaddr*) &clientName,
                                 &clientNameLength));
-
-    //RETURN_IF_SOCKET_ERROR(closesocket(sock));
 
     return clientSock;
 }
@@ -76,11 +77,5 @@ int ServerReceiveMatrix(SocketHandle sock, Request* pRequest,
                         Matrix* pMatrix)
 {
     RETURN_IF_NOT_SUCCESSFUL(ReceiveMatrix(sock, pRequest, pMatrix));
-    return SUCCESSFUL;
-}
-
-int ServerClose(SocketHandle sock)
-{
-    RETURN_IF_SOCKET_ERROR(closesocket(sock));
     return SUCCESSFUL;
 }

@@ -3,22 +3,12 @@
 /// \details Главная функция клиента (вариант 17).
 
 #include <errno.h>
-#include <stdio.h>
 #include <stdlib.h>
 
-//#ifdef _MSC_VER
-//#include <Windows.h>
-//#elif _WIN32
-//#include <windows.h>
-//#endif
-
-#include "Matrix.h"
 #include "Socket.h"
-#include "Request.h"
+#include "Matrix.h"
 #include "Args.h"
-#include "ParseInt.h"
 #include "ReturnCodes.h"
-#include "Input.h"
 #include "LastErrorMessage.h"
 #include "Client.h"
 

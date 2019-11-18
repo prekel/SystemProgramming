@@ -5,12 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//#ifdef _MSC_VER
-//#include <Windows.h>
-//#elif _WIN32
-//#include <windows.h>
-//#endif
-
 #include "LastErrorMessage.h"
 #include "Matrix.h"
 #include "Socket.h"
