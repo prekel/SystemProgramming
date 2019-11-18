@@ -78,10 +78,22 @@ void DestroyArgs(Args* pArgs);
 /// аллокации.
 Args* ParseArgs(int argc, char** pArgv);
 
+/// Считывает из стандарного ввода недостающие опции.
+///
+/// \param pArgs Указатель на аргументы командной строки.
+/// \return SUCCESSFUL (0) в случае успеха.
 int InputAllOption(Args* pArgs);
 
+/// Считывает матрицу из стандарного ввода, если не была задана в аргументах
+/// командной строки.
+///
+/// \param pArgs Указатель на аргументы командной строки.
+/// \param pMatrix Указатель на матрицу.
+/// \return SUCCESSFUL (0) в случае успеха, BAD_ARGS или BAD_VALUE в случае
+/// ошибки.
 int InputOrFillMatrix(Args* pArgs, Matrix* pMatrix);
 
+/// Выводит справку.
 void PrintHelp();
 
 #endif //ARGS_H

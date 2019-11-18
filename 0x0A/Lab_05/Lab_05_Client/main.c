@@ -1,3 +1,7 @@
+/// \file
+/// \brief Главная функция клиента
+/// \details Главная функция клиента (вариант 17).
+
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,6 +22,12 @@
 #include "LastErrorMessage.h"
 #include "Client.h"
 
+/// Главная функция клиента. Вариант 17.
+///
+/// \param argc Кол-во аргументов.
+/// \param argv Массив аргументов.
+/// \return EXIT_SUCCESS (0) в случае успеха,
+/// EXIT_FAILURE (1) в случае неудачи.
 int main(int argc, char** argv)
 {
 #ifdef _WIN32

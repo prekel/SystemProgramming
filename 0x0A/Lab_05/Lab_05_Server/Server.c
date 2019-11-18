@@ -1,3 +1,7 @@
+/// \file
+/// \brief Реализация функций из Server.h
+/// \details Реализация функций из Server.h.
+
 #include "Socket.h"
 
 #include "Server.h"

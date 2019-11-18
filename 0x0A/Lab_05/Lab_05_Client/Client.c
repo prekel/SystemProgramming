@@ -1,3 +1,7 @@
+/// \file
+/// \brief Реализация функций из Client.h
+/// \details Реализация функций из Client.h.
+
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
