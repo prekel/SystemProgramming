@@ -1,3 +1,7 @@
+/// \file
+/// \brief Реализация функций из LastErrorMessage.h
+/// \details Реализация функций из LastErrorMessage.h.
+
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
@@ -24,8 +28,6 @@ void PrintLastErrorMessage()
 void PrintErrorMessage(int error)
 {
     char message[MESSAGE_BUF_SIZE] = "";
-
-    //message[0] = '\0';
 
 #ifdef _WIN32
     FormatMessage (FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,

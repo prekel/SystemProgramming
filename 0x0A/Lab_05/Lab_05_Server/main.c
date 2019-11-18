@@ -64,7 +64,10 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
     }
 
-    Matrix* pMinor = GetMinor(NULL, pMatrix, request.FirstIndex, request.SecondIndex);
+    Matrix* pMinor = GetMinor(NULL,
+                              pMatrix,
+                              request.FirstIndex,
+                              request.SecondIndex);
 
     int det = CalculateDeterminant(pMinor);
 
