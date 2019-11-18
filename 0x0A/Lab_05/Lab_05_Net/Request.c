@@ -1,3 +1,7 @@
+/// \file
+/// \brief Реализация функций из Request.h
+/// \details Реализация функций из Request.h.
+
 #include <malloc.h>
 
 #include "Socket.h"
@@ -41,7 +45,8 @@ void NtoHRequest(Request* pRequest)
 
 int SendRequest(SocketHandle sock, Request* pRequest)
 {
-    RETURN_IF_SOCKET_ERROR(send(sock, pRequest, sizeof(Request), MSG_NOSIGNAL));
+    RETURN_IF_SOCKET_ERROR(
+            send(sock, pRequest, sizeof(Request), MSG_NOSIGNAL));
     return SUCCESSFUL;
 }
 
@@ -50,6 +55,10 @@ int SendMatrix(SocketHandle sock, Request* pRequest, Matrix* pMatrix)
     size_t size =
             pMatrix->FirstCount * pMatrix->SecondCount * sizeof(uint32_t);
     uint32_t* pBuf = (uint32_t*) malloc(size);
+    if (pBuf == NULL)
+    {
+        return ALLOCATION_ERROR;
+    }
 
     int k = 0;
     for (int i = 0; i < pMatrix->FirstCount; i++)
@@ -77,6 +86,10 @@ int ReceiveMatrix(SocketHandle sock, Request* pRequest, Matrix* pMatrix)
 {
     size_t size = pRequest->MatrixDataSize;
     uint32_t* pBuf = (uint32_t*) malloc(size);
+    if (pBuf == NULL)
+    {
+        return ALLOCATION_ERROR;
+    }
     RETURN_IF_SOCKET_ERROR(recv(sock, pBuf, size, 0));
 
     pMatrix->FirstCount = pMatrix->SecondCount = pRequest->Count;

@@ -1,5 +1,5 @@
 /// \file
-/// \brief Сокеты.
+/// \brief Сокеты
 /// \details Заголовочные файлы, константы, макросы, типы, функции для
 /// совместимости BSD-сокетов и WinSock.
 
@@ -59,6 +59,20 @@
     { \
         closesocket(sock); \
         return SOCKET_ERROR; \
+    } \
+} while (0)
+
+/// Если f < SUCCESSFUL (0), то закрывает сокет и вызывающая функция
+/// возвращает f.
+///
+/// \param f Проверяемое целое число или выражение, возвращающее целое число.
+/// \param sock Сокет для закрытия.
+#define RETURN_AND_CLOSE_SOCKET_IF_UNSUCCESSFUL(f, sock) do { \
+    int tmp = (f); \
+    if (tmp < SUCCESSFUL) \
+    { \
+        closesocket(sock); \
+        return tmp; \
     } \
 } while (0)
 

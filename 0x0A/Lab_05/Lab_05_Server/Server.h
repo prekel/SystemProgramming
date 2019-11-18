@@ -17,6 +17,7 @@
 /// \param pRequest Указатель на запрос.
 /// \param ppMatrix Указатель на указатель на матрицу.
 /// \return SOCKET_ERROR (-1) в случае ошибки сокета,
+/// ALLOCATION_ERROR (-9) в случае ошибки аллокации,
 /// SUCCESSFUL (0) в случае успеха.
 int Server(Args* pArgs, Request* pRequest, Matrix** ppMatrix);
 
@@ -41,6 +42,7 @@ int ServerReceiveRequest(SocketHandle sock, Request* pRequest);
 /// \param pRequest Указатель на запрос.
 /// \param pMatrix Указатель на матрицу.
 /// \return SOCKET_ERROR (-1) в случае ошибки сокета,
+/// ALLOCATION_ERROR (-9) в случае ошибки аллокации,
 /// SUCCESSFUL (0) в случае успеха.
 int ServerReceiveMatrix(SocketHandle sock, Request* pRequest,
                         Matrix* pMatrix);

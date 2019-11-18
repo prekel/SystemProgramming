@@ -36,15 +36,19 @@ int Client(Args* pArgs, Matrix* pMatrix)
         return BAD_VALUE;
     }
 
-    RETURN_IF_SOCKET_ERROR(connect(sock,
-                                   (struct sockaddr*) &name,
-                                   sizeof(name)) == SOCKET_ERROR);
+    RETURN_AND_CLOSE_SOCKET_IF_SOCKET_ERROR(
+            connect(sock,
+                    (struct sockaddr*) &name,
+                    sizeof(name)),
+            sock);
 
     HtoNRequest(&request);
-    RETURN_IF_SOCKET_ERROR(SendRequest(sock, &request));
+    RETURN_AND_CLOSE_SOCKET_IF_SOCKET_ERROR(
+            SendRequest(sock, &request), sock);
     NtoHRequest(&request);
 
-    RETURN_IF_SOCKET_ERROR(SendMatrix(sock, &request, pMatrix));
+    RETURN_AND_CLOSE_SOCKET_IF_UNSUCCESSFUL(
+            SendMatrix(sock, &request, pMatrix), sock);
 
     RETURN_IF_SOCKET_ERROR(closesocket(sock));
 

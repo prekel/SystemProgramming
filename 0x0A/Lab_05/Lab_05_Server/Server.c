@@ -20,7 +20,7 @@ int Server(Args* pArgs, Request* pRequest, Matrix** ppMatrix)
     Matrix* pMatrix = CreateEmptyMatrix(request.Count,
                                         request.Count);
 
-    RETURN_AND_CLOSE_SOCKET_IF_SOCKET_ERROR(
+    RETURN_AND_CLOSE_SOCKET_IF_UNSUCCESSFUL(
             ServerReceiveMatrix(clientSock, &request, pMatrix), clientSock);
 
     RETURN_IF_SOCKET_ERROR(ServerClose(clientSock));
@@ -74,7 +74,7 @@ int ServerReceiveRequest(SocketHandle sock, Request* pRequest)
 int ServerReceiveMatrix(SocketHandle sock, Request* pRequest,
                         Matrix* pMatrix)
 {
-    RETURN_IF_SOCKET_ERROR(ReceiveMatrix(sock, pRequest, pMatrix));
+    RETURN_IF_NOT_SUCCESSFUL(ReceiveMatrix(sock, pRequest, pMatrix));
     return SUCCESSFUL;
 }
 
