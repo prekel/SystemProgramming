@@ -35,7 +35,6 @@ int main(int argc, char** argv)
     if (pArgs == NULL)
     {
         PrintErrorMessage(ALLOCATION_ERROR);
-        ShutdownSockets();
         return EXIT_FAILURE;
     }
     if (pArgs->IsHelpGiven)
