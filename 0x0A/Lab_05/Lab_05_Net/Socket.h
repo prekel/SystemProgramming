@@ -1,3 +1,8 @@
+/// \file
+/// \brief Сокеты.
+/// \details Заголовочные файлы, константы, макросы, типы, функции для
+/// совместимости BSD-сокетов и WinSock.
+
 #ifndef SOCKET_H
 #define SOCKET_H
 
@@ -31,6 +36,10 @@
 #define MSG_NOSIGNAL 0
 #endif
 
+/// Если f == SOCKET_ERROR, то вызывающая функция
+/// возвращает SOCKET_ERROR.
+///
+/// \param f Проверяемое целое число или выражение, возвращающее целое число.
 #define RETURN_IF_SOCKET_ERROR(f) do { \
     int tmp = (f); \
     if (tmp == SOCKET_ERROR) \
@@ -39,6 +48,11 @@
     } \
 } while (0)
 
+/// Если f == SOCKET_ERROR, то закрывает сокет и вызывающая функция
+/// возвращает SOCKET_ERROR.
+///
+/// \param f Проверяемое целое число или выражение, возвращающее целое число.
+/// \param sock Сокет для закрытия.
 #define RETURN_AND_CLOSE_SOCKET_IF_SOCKET_ERROR(f, sock) do { \
     int tmp = (f); \
     if (tmp == SOCKET_ERROR) \
@@ -58,8 +72,14 @@ typedef int SocketHandle;
 #define closesocket(sock) close(sock)
 #endif
 
+/// Инициализирует сокеты. На Linux ничего не делает.
+///
+/// \return NO_ERROR (0) в случае успеха или Linux, результат
+/// выполнения WSAStartup() на Windows в случае неудачи.
 int InitializeSockets();
 
+/// Завершает использование сокетов. На Linux ничего не делает. На Windows
+/// вызывает WSACleanup().
 void ShutdownSockets();
 
 #endif //SOCKET_H

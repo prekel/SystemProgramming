@@ -1,3 +1,7 @@
+/// \file
+/// \brief Реализация функций из ReturnCodes.h
+/// \details Реализация функций из ReturnCodes.h.
+
 #include <stdio.h>
 
 #include "ReturnCodes.h"

@@ -60,7 +60,7 @@ int SendMatrix(SocketHandle sock, Request* pRequest, Matrix* pMatrix)
         }
     }
 
-    RETURN_IF_NOT_SUCCESSFUL(send(sock, pBuf, size, MSG_NOSIGNAL));
+    RETURN_IF_SOCKET_ERROR(send(sock, pBuf, size, MSG_NOSIGNAL));
 
     free(pBuf);
 

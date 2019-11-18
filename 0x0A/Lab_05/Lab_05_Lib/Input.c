@@ -11,9 +11,11 @@
 
 #include "Input.h"
 
+#define MIN_STEPSIZE 2
+
 char* InputLineRealloc(int stepSize, bool isFinalReallocRequired)
 {
-    assert(stepSize >= 2);
+    assert(stepSize >= MIN_STEPSIZE);
     unsigned int currentSize = stepSize;
     char* string = (char*) malloc((currentSize + 1) * sizeof(char));
     assert(string);
@@ -75,11 +77,14 @@ int InputLine(char* stringToInput, int maxStringLength)
     return INPUTLINE_LESS_THAN_MAXSTRINGLENGTH;
 }
 
+#define MIN_MAXINTLENGTH 3
+
 int CycleInputInt(int maxIntLength,
                   bool(* pChecker)(int),
                   char* formatToOutput,
                   ...)
 {
+    assert(maxIntLength >= MIN_MAXINTLENGTH);
     int number;
     int position;
     char* stringNumber = (char*) malloc(maxIntLength * sizeof(char));
@@ -101,22 +106,4 @@ int CycleInputInt(int maxIntLength,
     }
     free(stringNumber);
     return number;
-}
-
-char* CycleInputString(bool (* pChecker)(char*), char* formatToOutput, ...)
-{
-    char* string = NULL;
-    do
-    {
-        free(string);
-
-        va_list vaPtr;
-        va_start(vaPtr, formatToOutput);
-        vprintf(formatToOutput, vaPtr);
-        va_end(vaPtr);
-        fflush(stdout);
-
-        string = InputLineRealloc(10, true);
-    } while (pChecker && !pChecker(string));
-    return string;
 }

@@ -1,7 +1,6 @@
-/*! \file
- *
- *  \brief Implements functions of Matrix.h
- */
+/// \file
+/// \brief Реализация функций из Matrix.h
+/// \details Реализация функций из Matrix.h.
 
 #include <malloc.h>
 #include <assert.h>
@@ -10,6 +9,8 @@
 
 Matrix* CreateBlankMatrix(int firstCount, int secondCount)
 {
+    assert(firstCount > 0);
+    assert(secondCount > 0);
     Matrix* pRet = (Matrix*) malloc(sizeof(Matrix));
     assert(pRet);
     pRet->SecondCount = secondCount;
@@ -19,12 +20,6 @@ Matrix* CreateBlankMatrix(int firstCount, int secondCount)
 
     for (int i = 0; i < pRet->FirstCount; i++)
     {
-//        pRet->pData[i] = (int*) malloc(pRet->SecondCount * sizeof(int));
-//        RETURN_NULL_IF_NULLPTR(pRet->pData[i]);
-//        for (int j = 0; j < pRet->SecondCount; j++)
-//        {
-//            pRet->pData[i][j] = 0;
-//        }
         pRet->pData[i] = (int*) calloc(pRet->SecondCount, sizeof(int));
         assert(pRet->pData[i]);
     }
@@ -34,6 +29,8 @@ Matrix* CreateBlankMatrix(int firstCount, int secondCount)
 
 Matrix* CreateEmptyMatrix(int firstCount, int secondCount)
 {
+    assert(firstCount > 0);
+    assert(secondCount > 0);
     Matrix* pRet = (Matrix*) malloc(sizeof(Matrix));
     assert(pRet);
     pRet->SecondCount = secondCount;
@@ -49,26 +46,13 @@ Matrix* CreateEmptyMatrix(int firstCount, int secondCount)
     return pRet;
 }
 
-Matrix* SumMatrices(Matrix* pMatrixResult, Matrix* pMatrixA, Matrix* pMatrixB)
-{
-    assert(pMatrixA->SecondCount == pMatrixB->SecondCount);
-    assert(pMatrixA->FirstCount == pMatrixB->FirstCount);
-
-    for (int i = 0; i < pMatrixResult->FirstCount; i++)
-    {
-        for (int j = 0; j < pMatrixResult->SecondCount; j++)
-        {
-            pMatrixResult->pData[i][j] =
-                    pMatrixA->pData[i][j] + pMatrixB->pData[i][j];
-        }
-    }
-
-    return pMatrixResult;
-}
-
 Matrix* GetMinor(Matrix* pMinorResult, Matrix* pMatrix, int firstIndex,
                  int secondIndex)
 {
+    assert(pMatrix);
+    assert(0 <= firstIndex && firstIndex < pMatrix->FirstCount);
+    assert(0 <= secondIndex && secondIndex < pMatrix->SecondCount);
+
     Matrix* pRet;
     if (pMinorResult == NULL)
     {
@@ -79,6 +63,8 @@ Matrix* GetMinor(Matrix* pMinorResult, Matrix* pMatrix, int firstIndex,
     }
     else
     {
+        assert(pMinorResult->FirstCount == pMatrix->FirstCount - 1);
+        assert(pMinorResult->SecondCount == pMatrix->SecondCount - 1);
         pRet = pMinorResult;
     }
 

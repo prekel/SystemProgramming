@@ -1,3 +1,7 @@
+/// \file
+/// \brief Главная функция сервера
+/// \details Главная функция сервера (вариант 17).
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -14,6 +18,12 @@
 #include "Server.h"
 #include "ReturnCodes.h"
 
+/// Главная функция сервера. Вариант 17.
+///
+/// \param argc Кол-во аргументов.
+/// \param argv Массив аргументов.
+/// \return EXIT_SUCCESS (0) в случае успеха,
+/// EXIT_FAILURE (1) в случае неудачи.
 int main(int argc, char** argv)
 {
 #ifdef _WIN32

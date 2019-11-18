@@ -1,6 +1,7 @@
 /// \file
-/// \brief Аргументы коммандной строки
+/// \brief Аргументы коммандной строки сервера
 /// \details Аргументы коммандной строки и их парсинг.
+
 
 #ifndef ARGS_H
 #define ARGS_H
@@ -56,6 +57,7 @@ void DestroyArgs(Args* pArgs);
 /// аллокации.
 Args* ParseArgs(int argc, char** pArgv);
 
+/// Вывод справки.
 void PrintHelp();
 
 #endif //ARGS_H

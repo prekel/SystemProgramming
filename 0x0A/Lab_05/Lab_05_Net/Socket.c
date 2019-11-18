@@ -1,3 +1,7 @@
+/// \file
+/// \brief Реализация функций из Socket.h
+/// \details Реализация функций из Socket.h.
+
 #include "Socket.h"
 
 int InitializeSockets()

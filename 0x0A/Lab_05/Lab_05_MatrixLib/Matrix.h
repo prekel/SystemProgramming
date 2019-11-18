@@ -1,105 +1,73 @@
-/*! \file
-
- *  \brief   Matrix structure and functions to use it
- *
- *  \details Matrix structure and functions to calculate sum, determinant,
- *           etc...
- *  \bug     Unclear first and second indices are row or column.
- */
+/// \file
+/// \brief Матрица.
+/// \details Матрица, её структура, функции для создания, использования итд.
 
 #ifndef MATRIX_H
 #define MATRIX_H
 
-/*! \struct Matrix
- *  \brief Matrix struct
- *
- *  \details Matrix structure. Uses memory allocation, needs frees up memory.
- */
+/// \struct Matrix
+///
+/// Матрица.
 typedef struct
 {
-    /*!
-     * Maximum 1st index.
-     */
+    /// Кол-во столбцов.
     int FirstCount;
-    /*!
-     * SecondCount Maximum 2nd index.
-     */
+    /// Кол-во строк.
     int SecondCount;
-    /*!
-     * pData Matrix array. To get element use
-     * matrix->pData[firstindex][secondindex].
-     */
+    /// Элементы матрицы.
     int** pData;
 } Matrix;
 
-/*! \brief Create matrix filled with zeros
- *
- *  \details Allocate memory for new matrix and initialize with zeros.
- *
- *  \param firstCount Maximum 1st index.
- *  \param secondCount Maximum 2nd index.
- *  \return Pointer to new matrix.
- */
+/// Создаёт матрицу, заполенную нулями. Требуется очистка с
+/// помощью DestroyMatrix(). В случае ошибки аллокации или неположительных
+/// входных значениях срабатывает assert().
+///
+/// \param firstCount Кол-во строк
+/// \param secondCount Кол-во столбцов
+/// \return Указатель на матрицу.
 Matrix* CreateBlankMatrix(int firstCount, int secondCount);
 
-/*! \brief Create non-initialized matrix
- *
- *  \details Allocate memory for new matrix. Matrix filled with garbage.
- *
- *  \param firstCount Maximum 1st index.
- *  \param secondCount Maximum 2nd index.
- *  \return Pointer to new matrix.
- */
+/// Создаёт матрицу с неинициализированными элементами. Требуется очистка с
+/// помощью DestroyMatrix(). В случае ошибки аллокации или неположительных
+/// входных значениях срабатывает assert().
+///
+/// \param firstCount Кол-во строк
+/// \param secondCount Кол-во столбцов
+/// \return Указатель на матрицу.
 Matrix* CreateEmptyMatrix(int firstCount, int secondCount);
 
-/*! \brief Adds matrices
- *
- *  \details Allocate memory for new matrix equals to matrixA + matrixB.
- *
- *  \param pMatrixA 1st matrix to add.
- *  \param pMatrixB 2nd matrix to add.
- *  \return Pointer to sum.
- */
-Matrix*
-SumMatrices(Matrix* pMatrixResult, Matrix* pMatrixA, Matrix* pMatrixB);
-
-/*! \brief Calculates minor of matrix
- *
- *  \details Allocate memory for new matrix which has't specified row and
- *           column.
- *
- *  \param pMatrix Matrix to create minor.
- *  \param firstIndex 1st-dimension to exclude (column).
- *  \param secondIndex 2nd-dimension to exclude (row).
- *  \return Pointer to created minor.
- */
+/// Вычисляет матрицу, в которой отсутствует заданная строка и ряд.
+/// Если pMinorResult == NULL, то выделяется память и требуется очистка с
+/// помощью DestroyMatrix(). В случае ошибки аллокации или неверных входных
+/// данных срабатывает assert().
+///
+/// \param pMinorResult Указатель на матрицу, в которую записывается
+/// результат. Должна быть степенью на 1 меньше чем pMatrix.
+/// \param pMatrix Указатель на матрицу.
+/// \param firstIndex Индекс строки.
+/// \param secondIndex Индекс ряда.
+/// \return Указатель на матрицу-результат. Если pMinorResult != NULL,
+/// то pMinorResult.
 Matrix* GetMinor(Matrix* pMinorResult, Matrix* pMatrix, int firstIndex,
                  int secondIndex);
 
-/*! \brief Calculates determinant of 2x2 matrix
- *
- *  \details Calculates determinant only for 2x2 matrices.
- *
- *  \param pMatrix 2x2 matrix to calculate determinant.
- *  \return Determinant integer.
- */
+/// Вычисляет опредеитель для матрицы с порядком 2. Срабатывает assert(),
+/// если порядок не 2.
+///
+/// \param pMatrix Указатель на матрицу.
+/// \return Определитель.
 int CalculateDeterminant2x2(Matrix* pMatrix);
 
-/*! \brief Calculates determinant matrix
- *
- *  \details Calculates matrix determinant.
- *
- *  \param pMatrix Matrix to calculate determinant.
- *  \return Determinant integer.
- */
+/// Вычисляет определитель матрицы. Срабатывает assert(), матрица не
+/// квадратная или в случае ошибки аллокации.
+///
+/// \param pMatrix
+/// \return
 int CalculateDeterminant(Matrix* pMatrix);
 
-/*! \brief Frees up matrix memory
- *
- *  \details Frees up memory to destroy matrix
- *
- *  \param pMatrix Matrix to free.
- */
+/// Уничтожает матрицу.
+///
+/// \param pMatrix Указатель на матрицу.
 void DestroyMatrix(Matrix* pMatrix);
 
 #endif // MATRIX_H
