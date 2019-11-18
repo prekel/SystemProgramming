@@ -7,18 +7,6 @@
 
 #include <stdbool.h>
 
-#define DEFAULT_PORT 20522
-
-#define OPT_STRING ":p:"
-
-#define OPT_PORT 'p'
-#define OPT_PORT_USAGE "-p целое"
-#define OPT_PORT_DESCRIPTION "Порт."
-#define OPT_HELP 'h'
-#define OPT_HELP_USAGE "-h"
-#define OPT_HELP_DESCRIPTION "Требуется ли вывод справки."
-#define OPT_UNKNOWN '?'
-
 /// \struct Args
 ///
 /// Аргументы коммандной строки.
@@ -67,5 +55,7 @@ void DestroyArgs(Args* pArgs);
 /// \return Указатель на аргументы коммандной строки. NULL в случае ошибки
 /// аллокации.
 Args* ParseArgs(int argc, char** pArgv);
+
+void PrintHelp();
 
 #endif //ARGS_H

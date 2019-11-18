@@ -25,26 +25,23 @@ int main(int argc, char** argv)
     SetConsoleCP(CP_UTF8);
 #endif
 
-    int initializeSockets = InitializeSockets();
-    if (initializeSockets != NO_ERROR)
-    {
-        PrintErrorMessage(initializeSockets);
-        return EXIT_FAILURE;
-    }
-
     Args* pArgs = ParseArgs(argc, argv);
     if (pArgs == NULL)
     {
         PrintErrorMessage(ALLOCATION_ERROR);
-        ShutdownSockets();
         return EXIT_FAILURE;
+    }
+    if (pArgs->IsHelpGiven)
+    {
+        PrintHelp();
+        DestroyArgs(pArgs);
+        return EXIT_SUCCESS;
     }
 
     if (InputAllOption(pArgs) != SUCCESSFUL)
     {
         PrintErrorMessage(UNSUCCESSFUL);
         DestroyArgs(pArgs);
-        ShutdownSockets();
         return EXIT_FAILURE;
     }
 
@@ -53,7 +50,6 @@ int main(int argc, char** argv)
     {
         PrintErrorMessage(ALLOCATION_ERROR);
         DestroyArgs(pArgs);
-        ShutdownSockets();
         return EXIT_FAILURE;
     }
 
@@ -63,7 +59,15 @@ int main(int argc, char** argv)
         PrintReturnCodeMessage(inputMatrix);
         DestroyMatrix(pMatrix);
         DestroyArgs(pArgs);
-        ShutdownSockets();
+        return EXIT_FAILURE;
+    }
+
+    int initializeSockets = InitializeSockets();
+    if (initializeSockets != NO_ERROR)
+    {
+        PrintErrorMessage(initializeSockets);
+        DestroyMatrix(pMatrix);
+        DestroyArgs(pArgs);
         return EXIT_FAILURE;
     }
 

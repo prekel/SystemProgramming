@@ -21,6 +21,31 @@
 #include "Input.h"
 #include "Matrix.h"
 
+#define DEFAULT_IP_ADDRESS "127.0.0.1"
+#define DEFAULT_PORT 20522
+
+#define OPT_STRING ":a:p:n:f:s:h"
+
+#define OPT_IP_ADDRESS 'a'
+#define OPT_IP_ADDRESS_USAGE "-a целое.целое.целое.целое"
+#define OPT_IP_ADDRESS_DESCRIPTION "IP-адрес сервера."
+#define OPT_PORT 'p'
+#define OPT_PORT_USAGE "-p целое"
+#define OPT_PORT_DESCRIPTION "Порт."
+#define OPT_DEGREE 'n'
+#define OPT_DEGREE_USAGE "-n целое"
+#define OPT_DEGREE_DESCRIPTION "Степень матрицы."
+#define OPT_FIRST_INDEX 'f'
+#define OPT_FIRST_INDEX_USAGE "-f целое"
+#define OPT_FIRST_INDEX_DESCRIPTION "Первый индекс."
+#define OPT_SECOND_INDEX 's'
+#define OPT_SECOND_INDEX_USAGE "-s целое"
+#define OPT_SECOND_INDEX_DESCRIPTION "Второй индекс."
+#define OPT_HELP 'h'
+#define OPT_HELP_USAGE "-h"
+#define OPT_HELP_DESCRIPTION "Требуется ли вывод справки."
+#define OPT_UNKNOWN '?'
+
 Args* CreateArgs()
 {
     Args* pArgs = (Args*) malloc(sizeof(Args));
@@ -40,6 +65,8 @@ Args* CreateArgs()
 
     pArgs->IsSecondIndexGiven = false;
     pArgs->SecondIndex = 0;
+
+    pArgs->IsHelpGiven = false;
 
     pArgs->IsUnknownOptionGiven = false;
     pArgs->UnknownOption = '\0';
@@ -170,10 +197,11 @@ int InputOrFillMatrix(Args* pArgs, Matrix* pMatrix)
         {
             for (int j = 0; j < pMatrix->SecondCount; j++)
             {
-                pMatrix->pData[i][j] = CycleInputInt(MAX_INT_LEN,
-                        ElementChecker,
-                        "Введите элемент матрицы m[%d][%d]\n",
-                        i, j);
+                pMatrix->pData[i][j] =
+                        CycleInputInt(MAX_INT_LEN,
+                                      ElementChecker,
+                                      "Введите элемент матрицы m[%d][%d]: ",
+                                      i, j);
             }
         }
     }
@@ -189,7 +217,8 @@ int InputOrFillMatrix(Args* pArgs, Matrix* pMatrix)
                 {
                     return BAD_ARGS;
                 }
-                pMatrix->pData[i][j] = ParseInt(pArgs->pExtraArgs[k++], &count);
+                pMatrix->pData[i][j] = ParseInt(pArgs->pExtraArgs[k++],
+                                                &count);
             }
         }
         if (count != pMatrix->FirstCount * pMatrix->SecondCount)
@@ -199,4 +228,24 @@ int InputOrFillMatrix(Args* pArgs, Matrix* pMatrix)
     }
 
     return SUCCESSFUL;
+}
+
+#define APP_NAME "Lab_05_Client"
+#define HELP_SEP ": "
+#define HELP_SUFFIX "\n"
+
+#define HELP_MESSAGE \
+"Использование: ./" APP_NAME " [опции...]" HELP_SUFFIX \
+"Опции: " HELP_SUFFIX \
+OPT_IP_ADDRESS_USAGE HELP_SEP OPT_IP_ADDRESS_DESCRIPTION HELP_SUFFIX \
+OPT_PORT_USAGE HELP_SEP OPT_PORT_DESCRIPTION HELP_SUFFIX \
+OPT_DEGREE_USAGE HELP_SEP OPT_DEGREE_DESCRIPTION HELP_SUFFIX \
+OPT_FIRST_INDEX_USAGE HELP_SEP OPT_FIRST_INDEX_DESCRIPTION HELP_SUFFIX \
+OPT_SECOND_INDEX_USAGE HELP_SEP OPT_SECOND_INDEX_DESCRIPTION HELP_SUFFIX \
+OPT_HELP_USAGE HELP_SEP OPT_HELP_DESCRIPTION HELP_SUFFIX \
+
+
+void PrintHelp()
+{
+    printf(HELP_MESSAGE);
 }

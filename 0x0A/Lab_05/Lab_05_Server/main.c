@@ -21,18 +21,25 @@ int main(int argc, char** argv)
     SetConsoleCP(CP_UTF8);
 #endif
 
-    int initializeSockets = InitializeSockets();
-    if (initializeSockets != NO_ERROR)
-    {
-        PrintErrorMessage(initializeSockets);
-        return EXIT_FAILURE;
-    }
-
     Args* pArgs = ParseArgs(argc, argv);
     if (pArgs == NULL)
     {
         PrintErrorMessage(ALLOCATION_ERROR);
         ShutdownSockets();
+        return EXIT_FAILURE;
+    }
+    if (pArgs->IsHelpGiven)
+    {
+        PrintHelp();
+        DestroyArgs(pArgs);
+        return EXIT_SUCCESS;
+    }
+
+    int initializeSockets = InitializeSockets();
+    if (initializeSockets != NO_ERROR)
+    {
+        PrintErrorMessage(initializeSockets);
+        DestroyArgs(pArgs);
         return EXIT_FAILURE;
     }
 
@@ -59,7 +66,7 @@ int main(int argc, char** argv)
         }
         printf("\n");
     }
-    printf("Определитель: %d", det);
+    printf("Определитель: %d\n", det);
 
     DestroyMatrix(pMatrix);
     DestroyMatrix(pMinor);

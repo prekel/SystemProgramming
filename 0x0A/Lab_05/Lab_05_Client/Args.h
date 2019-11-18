@@ -1,5 +1,5 @@
 /// \file
-/// \brief Аргументы коммандной строки
+/// \brief Аргументы коммандной строки клиента
 /// \details Аргументы коммандной строки и их парсинг.
 
 #ifndef ARGS_H
@@ -8,31 +8,6 @@
 #include <stdbool.h>
 
 #include "Matrix.h"
-
-#define DEFAULT_IP_ADDRESS "127.0.0.1"
-#define DEFAULT_PORT 20522
-
-#define OPT_STRING ":a:p:n:f:s:"
-
-#define OPT_IP_ADDRESS 'a'
-#define OPT_IP_ADDRESS_USAGE "-a целое.целое.целое.целое"
-#define OPT_IP_ADDRESS_DESCRIPTION "IP-адрес сервера."
-#define OPT_PORT 'p'
-#define OPT_PORT_USAGE "-p целое"
-#define OPT_PORT_DESCRIPTION "Порт."
-#define OPT_DEGREE 'n'
-#define OPT_DEGREE_USAGE "-n целое"
-#define OPT_DEGREE_DESCRIPTION "Степень матрицы."
-#define OPT_FIRST_INDEX 'f'
-#define OPT_FIRST_INDEX_USAGE "-f целое"
-#define OPT_FIRST_INDEX_DESCRIPTION "Первый индекс."
-#define OPT_SECOND_INDEX 's'
-#define OPT_SECOND_INDEX_USAGE "-s целое"
-#define OPT_SECOND_INDEX_DESCRIPTION "Второй индекс."
-#define OPT_HELP 'h'
-#define OPT_HELP_USAGE "-h"
-#define OPT_HELP_DESCRIPTION "Требуется ли вывод справки."
-#define OPT_UNKNOWN '?'
 
 /// \struct Args
 ///
@@ -106,5 +81,7 @@ Args* ParseArgs(int argc, char** pArgv);
 int InputAllOption(Args* pArgs);
 
 int InputOrFillMatrix(Args* pArgs, Matrix* pMatrix);
+
+void PrintHelp();
 
 #endif //ARGS_H
