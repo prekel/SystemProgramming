@@ -12,6 +12,7 @@
 /// \param pMatrix Указатель на матрицу.
 /// \return SOCKET_ERROR (-1) в случае ошибки сокета,
 /// ALLOCATION_ERROR (-9) в случае ошибки аллокации,
+/// BAD_VALUE (-2) в случае неверных введёных значений,
 /// SUCCESSFUL (0) в случае успеха.
 int Client(Args* pArgs, Matrix* pMatrix);
 

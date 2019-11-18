@@ -30,13 +30,13 @@ void PrintErrorMessage(int error)
     char message[MESSAGE_BUF_SIZE] = "";
 
 #ifdef _WIN32
-    FormatMessage (FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-                   NULL,
-                   error,
-                   MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),
-                   message,
-                   MESSAGE_BUF_SIZE,
-                   NULL);
+    FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+                  NULL,
+                  error,
+                  MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                  message,
+                  MESSAGE_BUF_SIZE,
+                  NULL);
 #else
     strerror_r(error, message, MESSAGE_BUF_SIZE);
 #endif

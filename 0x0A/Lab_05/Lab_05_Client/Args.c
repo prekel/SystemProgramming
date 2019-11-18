@@ -3,6 +3,7 @@
 /// \details Реализация функций из Args.h.
 
 #include <malloc.h>
+#include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
 #include <assert.h>

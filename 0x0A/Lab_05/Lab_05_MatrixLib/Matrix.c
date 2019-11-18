@@ -4,6 +4,7 @@
 
 #include <malloc.h>
 #include <assert.h>
+#include <stddef.h>
 
 #include "Matrix.h"
 
