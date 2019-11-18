@@ -14,6 +14,6 @@
 /// ALLOCATION_ERROR (-9) в случае ошибки аллокации,
 /// BAD_VALUE (-2) в случае неверных введёных значений,
 /// SUCCESSFUL (0) в случае успеха.
-int Client(Args* pArgs, Matrix* pMatrix);
+int Client(Args* pArgs, Matrix* pMatrix, SocketHandle* pSocketToClose);
 
 #endif //CLIENT_H

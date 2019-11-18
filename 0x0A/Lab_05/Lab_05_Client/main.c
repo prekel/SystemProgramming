@@ -81,17 +81,20 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
     }
 
-    int clientReturn = Client(pArgs, pMatrix);
+    SocketHandle socketToClose;
+    int clientReturn = Client(pArgs, pMatrix, &socketToClose);
 
     if (clientReturn != SUCCESSFUL)
     {
         PrintReturnCodeMessage(clientReturn);
+        closesocket(socketToClose);
         DestroyMatrix(pMatrix);
         DestroyArgs(pArgs);
         ShutdownSockets();
         return EXIT_FAILURE;
     }
 
+    closesocket(socketToClose);
     DestroyMatrix(pMatrix);
     DestroyArgs(pArgs);
     ShutdownSockets();

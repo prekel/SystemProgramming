@@ -54,9 +54,14 @@ int main(int argc, char** argv)
 
     Matrix* pMatrix = NULL;
     Request request;
-    if (Server(pArgs, &request, &pMatrix) != SUCCESSFUL)
+    SocketHandle socketToClose1;
+    SocketHandle socketToClose2;
+    if (Server(pArgs, &request, &pMatrix, &socketToClose1, &socketToClose2)
+        != SUCCESSFUL)
     {
         PrintLastErrorMessage();
+        closesocket(socketToClose1);
+        closesocket(socketToClose2);
         DestroyMatrix(pMatrix);
         DestroyArgs(pArgs);
         ShutdownSockets();
@@ -79,6 +84,9 @@ int main(int argc, char** argv)
         printf("\n");
     }
     printf("Определитель: %d\n", det);
+
+    closesocket(socketToClose1);
+    closesocket(socketToClose2);
 
     DestroyMatrix(pMatrix);
     DestroyMatrix(pMinor);

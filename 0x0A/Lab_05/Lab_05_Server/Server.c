@@ -8,22 +8,24 @@
 #include "Request.h"
 #include "ReturnCodes.h"
 
-int Server(Args* pArgs, Request* pRequest, Matrix** ppMatrix)
+int Server(Args* pArgs, Request* pRequest, Matrix** ppMatrix,
+           SocketHandle* pSocketToClose1, SocketHandle* pSocketToClose2)
 {
     SocketHandle clientSock;
-    RETURN_IF_SOCKET_ERROR(clientSock = ServerConnect(pArgs));
+    RETURN_IF_SOCKET_ERROR(clientSock = ServerConnect(pArgs, pSocketToClose1));
+    if (pSocketToClose2) *pSocketToClose2 = clientSock;
 
     Request request;
-    RETURN_AND_CLOSE_SOCKET_IF_SOCKET_ERROR(
-            ServerReceiveRequest(clientSock, &request), clientSock);
+    RETURN_IF_SOCKET_ERROR(
+            ServerReceiveRequest(clientSock, &request));
 
     Matrix* pMatrix = CreateEmptyMatrix(request.Count,
                                         request.Count);
 
-    RETURN_AND_CLOSE_SOCKET_IF_UNSUCCESSFUL(
-            ServerReceiveMatrix(clientSock, &request, pMatrix), clientSock);
+    RETURN_IF_SOCKET_ERROR(
+            ServerReceiveMatrix(clientSock, &request, pMatrix));
 
-    RETURN_IF_SOCKET_ERROR(ServerClose(clientSock));
+    //RETURN_IF_SOCKET_ERROR(ServerClose(clientSock));
 
     *pRequest = request;
     *ppMatrix = pMatrix;
@@ -33,33 +35,32 @@ int Server(Args* pArgs, Request* pRequest, Matrix** ppMatrix)
 
 #define BACKLOG 5
 
-SocketHandle ServerConnect(Args* pArgs)
+SocketHandle ServerConnect(Args* pArgs, SocketHandle* pSocketToClose)
 {
     SocketHandle sock;
     RETURN_IF_SOCKET_ERROR(sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP));
+    if (pSocketToClose) *pSocketToClose = sock;
 
     struct sockaddr_in name;
     name.sin_family = AF_INET;
     name.sin_port = htons((u_short) pArgs->Port);
     name.sin_addr.s_addr = INADDR_ANY;
 
-    RETURN_AND_CLOSE_SOCKET_IF_SOCKET_ERROR(
-            bind(sock, (const struct sockaddr*) &name, sizeof(name)), sock);
+    RETURN_IF_SOCKET_ERROR(
+            bind(sock, (const struct sockaddr*) &name, sizeof(name)));
 
-    RETURN_AND_CLOSE_SOCKET_IF_SOCKET_ERROR(listen(sock, BACKLOG), sock);
+    RETURN_IF_SOCKET_ERROR(listen(sock, BACKLOG));
 
     struct sockaddr_in clientName;
-    unsigned int clientNameLength = sizeof(clientName);
+    int clientNameLength = sizeof(clientName);
     SocketHandle clientSock;
 
-    RETURN_AND_CLOSE_SOCKET_IF_SOCKET_ERROR(
-            clientSock =
-                    accept(sock,
-                           (struct sockaddr*) &clientName,
-                           &clientNameLength),
-            sock);
+    RETURN_IF_SOCKET_ERROR(
+            clientSock = accept(sock,
+                                (struct sockaddr*) &clientName,
+                                &clientNameLength));
 
-    RETURN_IF_SOCKET_ERROR(closesocket(sock));
+    //RETURN_IF_SOCKET_ERROR(closesocket(sock));
 
     return clientSock;
 }

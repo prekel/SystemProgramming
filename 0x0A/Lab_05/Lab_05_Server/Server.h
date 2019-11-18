@@ -19,14 +19,15 @@
 /// \return SOCKET_ERROR (-1) в случае ошибки сокета,
 /// ALLOCATION_ERROR (-9) в случае ошибки аллокации,
 /// SUCCESSFUL (0) в случае успеха.
-int Server(Args* pArgs, Request* pRequest, Matrix** ppMatrix);
+int Server(Args* pArgs, Request* pRequest, Matrix** ppMatrix,
+           SocketHandle* pSocketToClose1, SocketHandle* pSocketToClose2);
 
 /// Устанавливает соеденение.
 ///
 /// \param pArgs Указатель на аргумент коммандной строки.
 /// \return Сокет, готовый к приёму данных в случае успеха или
 /// SOCKET_ERROR (-1) в случае ошибки сокета.
-SocketHandle ServerConnect(Args* pArgs);
+SocketHandle ServerConnect(Args* pArgs, SocketHandle* pSocketToClose);
 
 /// Принимает запрос.
 ///

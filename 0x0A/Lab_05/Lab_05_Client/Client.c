@@ -16,7 +16,7 @@
 #include "LastErrorMessage.h"
 #include "Client.h"
 
-int Client(Args* pArgs, Matrix* pMatrix)
+int Client(Args* pArgs, Matrix* pMatrix, SocketHandle* pSocketToClose)
 {
     Request request;
     FillRequest(&request, pMatrix, pArgs->FirstIndex, pArgs->SecondIndex);
@@ -25,6 +25,7 @@ int Client(Args* pArgs, Matrix* pMatrix)
 
     SocketHandle sock;
     RETURN_IF_SOCKET_ERROR(sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP));
+    if (pSocketToClose) *pSocketToClose = sock;
 
     struct sockaddr_in name;
     name.sin_family = AF_INET;
@@ -36,21 +37,21 @@ int Client(Args* pArgs, Matrix* pMatrix)
         return BAD_VALUE;
     }
 
-    RETURN_AND_CLOSE_SOCKET_IF_SOCKET_ERROR(
+    RETURN_IF_SOCKET_ERROR(
             connect(sock,
                     (struct sockaddr*) &name,
-                    sizeof(name)),
-            sock);
+                    sizeof(name))
+            );
 
     HtoNRequest(&request);
-    RETURN_AND_CLOSE_SOCKET_IF_SOCKET_ERROR(
-            SendRequest(sock, &request), sock);
+    RETURN_IF_SOCKET_ERROR(
+            SendRequest(sock, &request));
     NtoHRequest(&request);
 
-    RETURN_AND_CLOSE_SOCKET_IF_UNSUCCESSFUL(
-            SendMatrix(sock, &request, pMatrix), sock);
+    RETURN_IF_SOCKET_ERROR(
+            SendMatrix(sock, &request, pMatrix));
 
-    RETURN_IF_SOCKET_ERROR(closesocket(sock));
+    //RETURN_IF_SOCKET_ERROR(closesocket(sock));
 
     ShutdownSockets();
 
