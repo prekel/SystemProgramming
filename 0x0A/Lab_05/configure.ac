@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([FULL-PACKAGE-NAME], [VERSION], [BUG-REPORT-ADDRESS])
+AC_INIT([Lab_05], [0.1], [misterptits@yandex.ru])
 AC_CONFIG_SRCDIR([Lab_05_Client/main.c])
 #AC_CONFIG_HEADERS([config.h])
 
@@ -29,6 +29,6 @@ AC_CHECK_FUNCS([socket strchr])
 AM_INIT_AUTOMAKE
 AC_PROG_RANLIB
 
-AC_CONFIG_FILES([autobuild/Makefile
+AC_CONFIG_FILES([build/Makefile
     Makefile])
 AC_OUTPUT

@@ -1,1 +1,1 @@
-SUBDIRS = autobuild
+SUBDIRS = build
