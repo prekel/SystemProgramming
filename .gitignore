@@ -573,3 +573,5 @@ cmake-build-*
 *.bin
 
 html/
+/0x0A/Lab_05/autom4te.cache/
+.deps

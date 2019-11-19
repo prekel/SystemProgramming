@@ -1,0 +1,1 @@
+SUBDIRS = Lab_05_MatrixLib Lab_05_Net Lab_05_Lib Lab_05_Client Lab_05_MatrixLibTests Lab_05_Server
