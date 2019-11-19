@@ -37,7 +37,6 @@ out/
 
 # Gradle files
 .gradle/
-build/
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -549,7 +548,6 @@ cmake-build-*
 
 /CMakeLists.txt.user
 
-/build/
 /0x04/html
 /0x04/Lab_02/build/
 /0x04/Lab_02/html/
@@ -573,3 +571,5 @@ cmake-build-*
 *.bin
 
 html/
+/0x0A/Lab_05/autom4te.cache/
+.deps

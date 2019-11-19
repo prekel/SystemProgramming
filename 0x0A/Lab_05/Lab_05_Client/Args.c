@@ -25,7 +25,7 @@
 #define DEFAULT_IP_ADDRESS "127.0.0.1"
 #define DEFAULT_PORT 20522
 
-#define OPT_STRING ":a:p:n:f:s:h"
+#define OPT_STRING ":a:p:n:M:N:h"
 
 #define OPT_IP_ADDRESS 'a'
 #define OPT_IP_ADDRESS_USAGE "-a целое.целое.целое.целое"
@@ -36,12 +36,12 @@
 #define OPT_DEGREE 'n'
 #define OPT_DEGREE_USAGE "-n целое"
 #define OPT_DEGREE_DESCRIPTION "Степень матрицы."
-#define OPT_FIRST_INDEX 'f'
-#define OPT_FIRST_INDEX_USAGE "-f целое"
-#define OPT_FIRST_INDEX_DESCRIPTION "Первый индекс."
-#define OPT_SECOND_INDEX 's'
-#define OPT_SECOND_INDEX_USAGE "-s целое"
-#define OPT_SECOND_INDEX_DESCRIPTION "Второй индекс."
+#define OPT_FIRST_INDEX 'M'
+#define OPT_FIRST_INDEX_USAGE "-M целое"
+#define OPT_FIRST_INDEX_DESCRIPTION "Номер строки (первый индекс matrix[M][N])."
+#define OPT_SECOND_INDEX 'N'
+#define OPT_SECOND_INDEX_USAGE "-N целое"
+#define OPT_SECOND_INDEX_DESCRIPTION "Номер столбца (второй индекс matrix[M][N])."
 #define OPT_HELP 'h'
 #define OPT_HELP_USAGE "-h"
 #define OPT_HELP_DESCRIPTION "Требуется ли вывод справки."
@@ -170,21 +170,34 @@ int InputAllOption(Args* pArgs)
 {
     if (!pArgs->IsDegreeGiven)
     {
+        printf("Степерь матрицы натуральное число.\n");
         pArgs->Degree = CycleInputInt(MAX_INT_LEN,
                                       DegreeChecker,
                                       "Введите степень матрицы: ");
     }
     if (!pArgs->IsFirstIndexGiven)
     {
-        pArgs->FirstIndex = CycleInputInt(MAX_INT_LEN,
-                                          IndexChecker,
-                                          "Введите первый индекс матрицы: ");
+        printf("Индексы не менее 0 и не более %d.\n", pArgs->Degree - 1);
+    }
+    if (!pArgs->IsFirstIndexGiven)
+    {
+        do
+        {
+            pArgs->FirstIndex =
+                    CycleInputInt(MAX_INT_LEN,
+                                  IndexChecker,
+                                  "Введите номер строки M (первый индекс matrix[M][N]): ");
+        } while (pArgs->FirstIndex >= pArgs->Degree);
     }
     if (!pArgs->IsSecondIndexGiven)
     {
-        pArgs->SecondIndex = CycleInputInt(MAX_INT_LEN,
-                                           IndexChecker,
-                                           "Введите второй индекс матрицы: ");
+        do
+        {
+            pArgs->SecondIndex =
+                    CycleInputInt(MAX_INT_LEN,
+                                  IndexChecker,
+                                  "Введите номер столбца N (второй индекс matrix[M][N]): ");
+        } while (pArgs->SecondIndex >= pArgs->Degree);
     }
 
     return SUCCESSFUL;
