@@ -9,7 +9,6 @@ add_executable(Lab_05_Client main.c
 
 target_link_libraries(Lab_05_Client PRIVATE Lab_05_Lib)
 target_link_libraries(Lab_05_Client PRIVATE Lab_05_MatrixLib)
-target_link_libraries(Lab_05_Client PRIVATE Lab_05_Net)
 
 if (WIN32 AND NOT MINGW)
 target_link_libraries(Lab_05_Client PRIVATE getopt-from-mingw)

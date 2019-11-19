@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.69])
 AC_INIT([FULL-PACKAGE-NAME], [VERSION], [BUG-REPORT-ADDRESS])
-AC_CONFIG_SRCDIR([getopt-from-mingw/getopt.c])
+AC_CONFIG_SRCDIR([Lab_05_Client/main.c])
 #AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
@@ -29,9 +29,6 @@ AC_CHECK_FUNCS([socket strchr])
 AM_INIT_AUTOMAKE
 AC_PROG_RANLIB
 
-AC_CONFIG_FILES([Lab_05_Client/Makefile
-                 Lab_05_Lib/Makefile
-                 Lab_05_MatrixLib/Makefile
-                 Lab_05_Net/Makefile
-                 Makefile])
+AC_CONFIG_FILES([autobuild/Makefile
+    Makefile])
 AC_OUTPUT
