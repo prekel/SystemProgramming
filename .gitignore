@@ -573,3 +573,9 @@ cmake-build-*
 html/
 /0x0A/Lab_05/autom4te.cache/
 .deps
+/0x0A/Lab_05/config.status
+*.dirstamp
+/0x0A/Lab_05/build/Makefile
+/0x0A/Lab_05/Makefile
+/0x0A/Lab_05/build/Lab_05_Client
+/0x0A/Lab_05/build/Lab_05_Server
