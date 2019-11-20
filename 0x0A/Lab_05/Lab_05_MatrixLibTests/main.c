@@ -1,3 +1,7 @@
+/// \file
+/// \brief Главная функция тестов
+/// \details Главная функция тестов.
+
 #include <stdlib.h>
 
 #ifdef _MSC_VER
@@ -11,6 +15,9 @@
 #include "Suite.h"
 #include "MatrixTests.h"
 
+/// Главная функция тестов.
+///
+/// \return Результат работы функции CU_get_error().
 int main()
 {
 #ifdef _WIN32

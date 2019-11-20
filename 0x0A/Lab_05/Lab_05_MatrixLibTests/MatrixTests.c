@@ -17,8 +17,7 @@ static void MatrixTestsAddTests(CU_pSuite* pSuite)
 
 CU_pSuite* MatrixTestsSuiteCreate()
 {
-    return SuiteCreate("MatrixTests",
-                       MatrixTestsAddTests);
+    return SuiteCreate("MatrixTests", MatrixTestsAddTests);
 }
 
 
