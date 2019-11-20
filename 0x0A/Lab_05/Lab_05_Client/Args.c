@@ -247,7 +247,7 @@ int InputOrFillMatrices(Args* pArgs, Matrix* pMatrixA, Matrix* pMatrixB)
 #define HELP_SUFFIX "\n"
 
 #define HELP_MESSAGE \
-"Использование: ./" APP_NAME " [опции...] [2 * n * n положительных целых чисел - элементы матриц]" HELP_SUFFIX \
+"Использование: ./" APP_NAME " [" OPT_IP_ADDRESS_USAGE "] [" OPT_PORT_USAGE "] [" OPT_PROTOCOL_USAGE "] [" OPT_DEGREE_USAGE "] [" OPT_HELP_USAGE "] [2 * n * n положительных целых чисел - элементы матриц]" HELP_SUFFIX \
 "Опции: " HELP_SUFFIX \
 OPT_IP_ADDRESS_USAGE HELP_SEP OPT_IP_ADDRESS_DESCRIPTION HELP_SUFFIX \
 OPT_PORT_USAGE HELP_SEP OPT_PORT_DESCRIPTION HELP_SUFFIX \
