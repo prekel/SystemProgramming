@@ -21,27 +21,32 @@
 #include "ReturnCodes.h"
 #include "Input.h"
 #include "Matrix.h"
+#include "Socket.h"
 
 #define DEFAULT_IP_ADDRESS "127.0.0.1"
 #define DEFAULT_PORT 20522
+#define DEFAULT_PORT_STR "20522"
 
-#define OPT_STRING ":a:p:n:M:N:h"
+#define PROTOCOL_UDP "udp"
+#define PROTOCOL_TCP "tcp"
+#define DEFAULT_PROTOCOL PROTOCOL_UDP
+#define DEFAULT_SOCKET_TYPE SOCK_DGRAM
+#define DEFAULT_IPPROTO IPPROTO_UDP
+
+#define OPT_STRING ":a:p:P:n:M:N:h"
 
 #define OPT_IP_ADDRESS 'a'
 #define OPT_IP_ADDRESS_USAGE "-a целое.целое.целое.целое"
-#define OPT_IP_ADDRESS_DESCRIPTION "IP-адрес сервера."
+#define OPT_IP_ADDRESS_DESCRIPTION "IP-адрес сервера. По умолчанию " DEFAULT_IP_ADDRESS "."
 #define OPT_PORT 'p'
 #define OPT_PORT_USAGE "-p целое"
-#define OPT_PORT_DESCRIPTION "Порт."
+#define OPT_PORT_DESCRIPTION "Порт. По умолчанию " DEFAULT_PORT_STR "."
+#define OPT_PROTOCOL 'P'
+#define OPT_PROTOCOL_USAGE "-P строка"
+#define OPT_PROTOCOL_DESCRIPTION "Протокол " PROTOCOL_UDP " с дейтаграммными сокетами или " PROTOCOL_TCP " с потоковыми. По умолчанию " DEFAULT_PROTOCOL "."
 #define OPT_DEGREE 'n'
 #define OPT_DEGREE_USAGE "-n целое"
 #define OPT_DEGREE_DESCRIPTION "Степень матрицы."
-#define OPT_FIRST_INDEX 'M'
-#define OPT_FIRST_INDEX_USAGE "-M целое"
-#define OPT_FIRST_INDEX_DESCRIPTION "Номер строки (первый индекс matrix[M][N])."
-#define OPT_SECOND_INDEX 'N'
-#define OPT_SECOND_INDEX_USAGE "-N целое"
-#define OPT_SECOND_INDEX_DESCRIPTION "Номер столбца (второй индекс matrix[M][N])."
 #define OPT_HELP 'h'
 #define OPT_HELP_USAGE "-h"
 #define OPT_HELP_DESCRIPTION "Требуется ли вывод справки."
@@ -58,14 +63,14 @@ Args* CreateArgs()
     pArgs->IsPortGiven = false;
     pArgs->Port = DEFAULT_PORT;
 
+    pArgs->IsProtocolGiven = false;
+    pArgs->Protocol = DEFAULT_PROTOCOL;
+    pArgs->SocketType = DEFAULT_SOCKET_TYPE;
+    pArgs->IpProto = DEFAULT_IPPROTO;
+    pArgs->IsTcp = false;
+
     pArgs->IsDegreeGiven = false;
     pArgs->Degree = 0;
-
-    pArgs->IsFirstIndexGiven = false;
-    pArgs->FirstIndex = 0;
-
-    pArgs->IsSecondIndexGiven = false;
-    pArgs->SecondIndex = 0;
 
     pArgs->IsHelpGiven = false;
 
@@ -113,19 +118,26 @@ Args* ParseArgs(int argc, char** pArgv)
             pArgs->Port = ParseInt(optarg, &pArgs->CountValidArgs);
             pArgs->CountValidArgs++;
             break;
+        case OPT_PROTOCOL:
+            pArgs->IsProtocolGiven = true;
+            RETURN_NULL_IF_NULLPTR(pArgs->Protocol = (char*) malloc(
+                    (sizeof(char) + 1) * strlen(optarg)));
+            strcpy(pArgs->Protocol, optarg);
+            if (strcmp(pArgs->Protocol, PROTOCOL_TCP) == 0)
+            {
+                pArgs->IpProto = IPPROTO_TCP;
+                pArgs->SocketType = SOCK_STREAM;
+                pArgs->IsTcp = true;
+                pArgs->CountValidArgs++;
+            }
+            else if (strcmp(pArgs->Protocol, PROTOCOL_UDP) == 0)
+            {
+                pArgs->CountValidArgs++;
+            }
+            break;
         case OPT_DEGREE:
             pArgs->IsDegreeGiven = true;
             pArgs->Degree = ParseInt(optarg, &pArgs->CountValidArgs);
-            pArgs->CountValidArgs++;
-            break;
-        case OPT_FIRST_INDEX:
-            pArgs->IsFirstIndexGiven = true;
-            pArgs->FirstIndex = ParseInt(optarg, &pArgs->CountValidArgs);
-            pArgs->CountValidArgs++;
-            break;
-        case OPT_SECOND_INDEX:
-            pArgs->IsSecondIndexGiven = true;
-            pArgs->SecondIndex = ParseInt(optarg, &pArgs->CountValidArgs);
             pArgs->CountValidArgs++;
             break;
         case OPT_HELP:
@@ -156,11 +168,6 @@ static bool DegreeChecker(int n)
     return n >= 1;
 }
 
-static bool IndexChecker(int n)
-{
-    return n >= 0;
-}
-
 static bool ElementChecker(int n)
 {
     return true;
@@ -173,74 +180,65 @@ int InputAllOption(Args* pArgs)
         printf("Степерь матрицы натуральное число.\n");
         pArgs->Degree = CycleInputInt(MAX_INT_LEN,
                                       DegreeChecker,
-                                      "Введите степень матрицы: ");
+                                      "Введите степень матриц: ");
     }
-    if (!pArgs->IsFirstIndexGiven)
-    {
-        printf("Индексы не менее 0 и не более %d.\n", pArgs->Degree - 1);
-    }
-    if (!pArgs->IsFirstIndexGiven)
-    {
-        do
-        {
-            pArgs->FirstIndex =
-                    CycleInputInt(MAX_INT_LEN,
-                                  IndexChecker,
-                                  "Введите номер строки M (первый индекс matrix[M][N]): ");
-        } while (pArgs->FirstIndex >= pArgs->Degree);
-    }
-    if (!pArgs->IsSecondIndexGiven)
-    {
-        do
-        {
-            pArgs->SecondIndex =
-                    CycleInputInt(MAX_INT_LEN,
-                                  IndexChecker,
-                                  "Введите номер столбца N (второй индекс matrix[M][N]): ");
-        } while (pArgs->SecondIndex >= pArgs->Degree);
-    }
-
     return SUCCESSFUL;
 }
 
-int InputOrFillMatrix(Args* pArgs, Matrix* pMatrix)
+#define ENTER_MATRIX_ELEMENT_MESSAGE "Введите элемент матрицы %s[%d][%d]: "
+
+static void InputMatrix(Matrix* pMatrix, char* matrixName)
+{
+    for (int i = 0; i < pMatrix->FirstCount; i++)
+    {
+        for (int j = 0; j < pMatrix->SecondCount; j++)
+        {
+            pMatrix->ppData[i][j] =
+                    CycleInputInt(MAX_INT_LEN,
+                                  ElementChecker,
+                                  ENTER_MATRIX_ELEMENT_MESSAGE,
+                                  matrixName, i, j);
+        }
+    }
+}
+
+static int FillMatrix(Matrix* pMatrix, char** pElements)
+{
+    int count = 0;
+    int k = 0;
+    for (int i = 0; i < pMatrix->FirstCount; i++)
+    {
+        for (int j = 0; j < pMatrix->SecondCount; j++)
+        {
+            if (pElements[k] == NULL)
+            {
+                return BAD_ARGS;
+            }
+            pMatrix->ppData[i][j] = ParseInt(pElements[k++], &count);
+        }
+    }
+    if (count != pMatrix->FirstCount * pMatrix->SecondCount)
+    {
+        return BAD_VALUE;
+    }
+    return SUCCESSFUL;
+}
+
+int InputOrFillMatrices(Args* pArgs, Matrix* pMatrixA, Matrix* pMatrixB)
 {
     if (pArgs->pExtraArgs[0] == NULL)
     {
-        for (int i = 0; i < pMatrix->FirstCount; i++)
-        {
-            for (int j = 0; j < pMatrix->SecondCount; j++)
-            {
-                pMatrix->pData[i][j] =
-                        CycleInputInt(MAX_INT_LEN,
-                                      ElementChecker,
-                                      "Введите элемент матрицы m[%d][%d]: ",
-                                      i, j);
-            }
-        }
+        printf("Элементы матриц - целые числа\n");
+        InputMatrix(pMatrixA, "A");
+        InputMatrix(pMatrixB, "B");
     }
     else
     {
-        int count = 0;
-        int k = 0;
-        for (int i = 0; i < pMatrix->FirstCount; i++)
-        {
-            for (int j = 0; j < pMatrix->SecondCount; j++)
-            {
-                if (pArgs->pExtraArgs[k] == NULL)
-                {
-                    return BAD_ARGS;
-                }
-                pMatrix->pData[i][j] = ParseInt(pArgs->pExtraArgs[k++],
-                                                &count);
-            }
-        }
-        if (count != pMatrix->FirstCount * pMatrix->SecondCount)
-        {
-            return BAD_VALUE;
-        }
+        RETURN_IF_NOT_SUCCESSFUL(FillMatrix(pMatrixA, pArgs->pExtraArgs));
+        RETURN_IF_NOT_SUCCESSFUL(FillMatrix(pMatrixB, pArgs->pExtraArgs
+                                                      + pMatrixA->FirstCount *
+                                                        pMatrixA->FirstCount));
     }
-
     return SUCCESSFUL;
 }
 
@@ -249,17 +247,20 @@ int InputOrFillMatrix(Args* pArgs, Matrix* pMatrix)
 #define HELP_SUFFIX "\n"
 
 #define HELP_MESSAGE \
-"Использование: ./" APP_NAME " [опции...]" HELP_SUFFIX \
+"Использование: ./" APP_NAME " [" OPT_IP_ADDRESS_USAGE "] [" OPT_PORT_USAGE "] [" OPT_PROTOCOL_USAGE "] [" OPT_DEGREE_USAGE "] [" OPT_HELP_USAGE "] [2 * n * n положительных целых чисел - элементы матриц]" HELP_SUFFIX \
 "Опции: " HELP_SUFFIX \
 OPT_IP_ADDRESS_USAGE HELP_SEP OPT_IP_ADDRESS_DESCRIPTION HELP_SUFFIX \
 OPT_PORT_USAGE HELP_SEP OPT_PORT_DESCRIPTION HELP_SUFFIX \
+OPT_PROTOCOL_USAGE HELP_SEP OPT_PROTOCOL_DESCRIPTION HELP_SUFFIX \
 OPT_DEGREE_USAGE HELP_SEP OPT_DEGREE_DESCRIPTION HELP_SUFFIX \
-OPT_FIRST_INDEX_USAGE HELP_SEP OPT_FIRST_INDEX_DESCRIPTION HELP_SUFFIX \
-OPT_SECOND_INDEX_USAGE HELP_SEP OPT_SECOND_INDEX_DESCRIPTION HELP_SUFFIX \
 OPT_HELP_USAGE HELP_SEP OPT_HELP_DESCRIPTION HELP_SUFFIX \
-
 
 void PrintHelp()
 {
     printf(HELP_MESSAGE);
+}
+
+void UnknownOption(Args* pArgs)
+{
+    printf("Неизвестный параметр: %c\n", pArgs->UnknownOption);
 }

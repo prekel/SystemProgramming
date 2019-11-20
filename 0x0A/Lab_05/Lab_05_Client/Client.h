@@ -9,11 +9,12 @@
 /// отсылает матрицу, закрывает соеденение.
 ///
 /// \param pArgs Указатель на аргументы коммандной строки.
-/// \param pMatrix Указатель на матрицу.
+/// \param pMatrixA Указатель на матрицу.
 /// \return SOCKET_ERROR (-1) в случае ошибки сокета,
 /// ALLOCATION_ERROR (-9) в случае ошибки аллокации,
 /// BAD_VALUE (-2) в случае неверных введёных значений,
 /// SUCCESSFUL (0) в случае успеха.
-int Client(Args* pArgs, Matrix* pMatrix, SocketHandle* pSocketToClose);
+int Client(Args* pArgs, Matrix* pMatrixA, Matrix* pMatrixB,
+           SocketHandle* pSocketToClose);
 
 #endif //CLIENT_H

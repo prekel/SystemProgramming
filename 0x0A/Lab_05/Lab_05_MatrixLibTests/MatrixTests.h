@@ -1,3 +1,7 @@
+/// \file
+/// \brief Набор тестов матрицы
+/// \details Набор тестов матрицы.
+
 #ifndef MATRIXTESTS_H
 #define MATRIXTESTS_H
 
@@ -14,7 +18,6 @@ void Det3x3_MatrixTest(void);
 void Det7x7_MatrixTest(void);
 
 void Minor3x4_MatrixTest(void);
-
 
 #endif //MATRIXTESTS_H
 

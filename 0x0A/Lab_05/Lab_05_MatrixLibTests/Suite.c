@@ -1,3 +1,7 @@
+/// \file
+/// \brief Реализация функций из Suite.h
+/// \details Реализация функций из Suite.h.
+
 #include <stdbool.h>
 #include <malloc.h>
 
@@ -5,7 +9,7 @@
 
 #include "Suite.h"
 
-CU_pSuite* SuiteCreate(char* name, void (* pAddTests)(CU_pSuite*))
+CU_pSuite* SuiteCreate(char* name, void(* pAddTests)(CU_pSuite*))
 {
     CU_pSuite* pSuite = (CU_pSuite*) malloc(sizeof(CU_pSuite));
     *pSuite = CU_add_suite(name, NULL, NULL);

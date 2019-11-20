@@ -16,13 +16,13 @@ Matrix* CreateBlankMatrix(int firstCount, int secondCount)
     assert(pRet);
     pRet->SecondCount = secondCount;
     pRet->FirstCount = firstCount;
-    pRet->pData = (int**) malloc(pRet->FirstCount * sizeof(int*));
-    assert(pRet->pData);
+    pRet->ppData = (int**) malloc(pRet->FirstCount * sizeof(int*));
+    assert(pRet->ppData);
 
     for (int i = 0; i < pRet->FirstCount; i++)
     {
-        pRet->pData[i] = (int*) calloc(pRet->SecondCount, sizeof(int));
-        assert(pRet->pData[i]);
+        pRet->ppData[i] = (int*) calloc(pRet->SecondCount, sizeof(int));
+        assert(pRet->ppData[i]);
     }
 
     return pRet;
@@ -36,15 +36,53 @@ Matrix* CreateEmptyMatrix(int firstCount, int secondCount)
     assert(pRet);
     pRet->SecondCount = secondCount;
     pRet->FirstCount = firstCount;
-    pRet->pData = (int**) malloc(pRet->FirstCount * sizeof(int*));
-    assert(pRet->pData);
+    pRet->ppData = (int**) malloc(pRet->FirstCount * sizeof(int*));
+    assert(pRet->ppData);
 
     for (int i = 0; i < pRet->FirstCount; i++)
     {
-        pRet->pData[i] = (int*) malloc(pRet->SecondCount * sizeof(int));
-        assert(pRet->pData[i]);
+        pRet->ppData[i] = (int*) malloc(pRet->SecondCount * sizeof(int));
+        assert(pRet->ppData[i]);
     }
     return pRet;
+}
+
+void PrintMatrix(Matrix* pMatrix)
+{
+    for (int i = 0; i < pMatrix->FirstCount; i++)
+    {
+        for (int j = 0; j < pMatrix->SecondCount; j++)
+        {
+            printf("%d ", pMatrix->ppData[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+Matrix* SumMatrices(Matrix* pSumResult, Matrix* pMatrixA, Matrix* pMatrixB)
+{
+    assert(pMatrixA->FirstCount == pMatrixB->FirstCount);
+    assert(pMatrixA->SecondCount == pMatrixB->SecondCount);
+
+    Matrix* pSum;
+    if (pSumResult)
+    {
+        pSum = pSumResult;
+    }
+    else
+    {
+        pSum = CreateEmptyMatrix(pMatrixA->FirstCount, pMatrixA->SecondCount);
+    }
+
+    for (int i = 0; i < pMatrixA->FirstCount; i++)
+    {
+        for (int j = 0; j < pMatrixA->SecondCount; j++)
+        {
+            pSum->ppData[i][j] =
+                    pMatrixA->ppData[i][j] + pMatrixB->ppData[i][j];
+        }
+    }
+    return pSum;
 }
 
 Matrix* GetMinor(Matrix* pMinorResult, Matrix* pMatrix, int firstIndex,
@@ -83,7 +121,7 @@ Matrix* GetMinor(Matrix* pMinorResult, Matrix* pMatrix, int firstIndex,
             {
                 oldJ++;
             }
-            pRet->pData[i][j] = pMatrix->pData[oldI][oldJ];
+            pRet->ppData[i][j] = pMatrix->ppData[oldI][oldJ];
         }
     }
 
@@ -95,10 +133,10 @@ int CalculateDeterminant2x2(Matrix* pMatrix)
     assert(pMatrix->FirstCount == 2);
     assert(pMatrix->SecondCount == 2);
 
-    int a = pMatrix->pData[0][0];
-    int b = pMatrix->pData[0][1];
-    int c = pMatrix->pData[1][0];
-    int d = pMatrix->pData[1][1];
+    int a = pMatrix->ppData[0][0];
+    int b = pMatrix->ppData[0][1];
+    int c = pMatrix->ppData[1][0];
+    int d = pMatrix->ppData[1][1];
 
     return a * d - c * b;
 }
@@ -112,7 +150,7 @@ int CalculateDeterminant(Matrix* pMatrix)
 
     if (n == 1)
     {
-        return pMatrix->pData[0][0];
+        return pMatrix->ppData[0][0];
     }
     else if (n == 2)
     {
@@ -130,7 +168,7 @@ int CalculateDeterminant(Matrix* pMatrix)
             int sign = (i % 2) ? -1 : 1;
             pMinor = GetMinor(pMinor, pMatrix, 0, i);
             int det = CalculateDeterminant(pMinor);
-            int firstRow = pMatrix->pData[0][i];
+            int firstRow = pMatrix->ppData[0][i];
             ret += sign * firstRow * det;
         }
         DestroyMatrix(pMinor);
@@ -146,8 +184,8 @@ void DestroyMatrix(Matrix* pMatrix)
     }
     for (int i = 0; i < pMatrix->FirstCount; i++)
     {
-        free(pMatrix->pData[i]);
+        free(pMatrix->ppData[i]);
     }
-    free(pMatrix->pData);
+    free(pMatrix->ppData);
     free(pMatrix);
 }

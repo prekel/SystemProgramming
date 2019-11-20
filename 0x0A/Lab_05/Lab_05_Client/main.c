@@ -1,9 +1,10 @@
 /// \file
 /// \brief Главная функция клиента
-/// \details Главная функция клиента (вариант 17).
+/// \details Главная функция клиента (вариант 16).
 
 #include <errno.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "Socket.h"
 #include "Matrix.h"
@@ -12,7 +13,7 @@
 #include "LastErrorMessage.h"
 #include "Client.h"
 
-/// Главная функция клиента. Вариант 17.
+/// Главная функция клиента. Вариант 16.
 ///
 /// \param argc Кол-во аргументов.
 /// \param argv Массив аргументов.
@@ -37,6 +38,10 @@ int main(int argc, char** argv)
         DestroyArgs(pArgs);
         return EXIT_SUCCESS;
     }
+    if (pArgs->IsUnknownOptionGiven)
+    {
+        UnknownOption(pArgs);
+    }
 
     if (InputAllOption(pArgs) != SUCCESSFUL)
     {
@@ -45,19 +50,23 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
     }
 
-    Matrix* pMatrix = CreateEmptyMatrix(pArgs->Degree, pArgs->Degree);
-    if (pMatrix == NULL)
+    Matrix* pMatrixA = CreateEmptyMatrix(pArgs->Degree, pArgs->Degree);
+    Matrix* pMatrixB = CreateEmptyMatrix(pArgs->Degree, pArgs->Degree);
+    if (pMatrixA == NULL || pMatrixB == NULL)
     {
         PrintErrorMessage(ALLOCATION_ERROR);
+        DestroyMatrix(pMatrixA);
+        DestroyMatrix(pMatrixB);
         DestroyArgs(pArgs);
         return EXIT_FAILURE;
     }
 
-    int inputMatrix = InputOrFillMatrix(pArgs, pMatrix);
+    int inputMatrix = InputOrFillMatrices(pArgs, pMatrixA, pMatrixB);
     if (inputMatrix < SUCCESSFUL)
     {
         PrintReturnCodeMessage(inputMatrix);
-        DestroyMatrix(pMatrix);
+        DestroyMatrix(pMatrixA);
+        DestroyMatrix(pMatrixB);
         DestroyArgs(pArgs);
         return EXIT_FAILURE;
     }
@@ -66,26 +75,48 @@ int main(int argc, char** argv)
     if (initializeSockets != NO_ERROR)
     {
         PrintErrorMessage(initializeSockets);
-        DestroyMatrix(pMatrix);
+        DestroyMatrix(pMatrixA);
+        DestroyMatrix(pMatrixB);
         DestroyArgs(pArgs);
         return EXIT_FAILURE;
     }
 
-    SocketHandle socketToClose;
-    int clientReturn = Client(pArgs, pMatrix, &socketToClose);
+    printf("Введённые матрицы: \n");
+    printf("Матрица A: \n");
+    PrintMatrix(pMatrixA);
+    printf("Матрица B: \n");
+    PrintMatrix(pMatrixB);
 
-    if (clientReturn != SUCCESSFUL)
+    printf("\nПередача на %s:%d по протоколу %s...\n",
+           pArgs->IpAddress, pArgs->Port, pArgs->Protocol);
+
+    SocketHandle socketToClose;
+    int clientReturns = Client(pArgs, pMatrixA, pMatrixB, &socketToClose);
+
+    if (clientReturns != SUCCESSFUL)
     {
-        PrintReturnCodeMessage(clientReturn);
+        PrintReturnCodeMessage(clientReturns);
         closesocket(socketToClose);
-        DestroyMatrix(pMatrix);
+        DestroyMatrix(pMatrixA);
+        DestroyMatrix(pMatrixB);
         DestroyArgs(pArgs);
         ShutdownSockets();
         return EXIT_FAILURE;
     }
 
-    closesocket(socketToClose);
-    DestroyMatrix(pMatrix);
+    printf("Успешно передано.\n");
+
+    if (closesocket(socketToClose) == SOCKET_ERROR)
+    {
+        PrintLastErrorMessage();
+        DestroyMatrix(pMatrixA);
+        DestroyMatrix(pMatrixB);
+        DestroyArgs(pArgs);
+        ShutdownSockets();
+        return EXIT_FAILURE;
+    }
+    DestroyMatrix(pMatrixA);
+    DestroyMatrix(pMatrixB);
     DestroyArgs(pArgs);
     ShutdownSockets();
 
