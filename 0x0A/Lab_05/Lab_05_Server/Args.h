@@ -18,6 +18,12 @@ typedef struct
     /// Порт.
     int Port;
 
+    bool IsProtocolGiven;
+    char* Protocol;
+    int SocketType;
+    int IpProto;
+    bool IsTcp;
+
     /// Требуется ли вывод справки.
     bool IsHelpGiven;
 

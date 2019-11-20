@@ -24,7 +24,7 @@ int Client(Args* pArgs, Matrix* pMatrix, SocketHandle* pSocketToClose)
     RETURN_IF_SOCKET_ERROR(InitializeSockets());
 
     SocketHandle sock;
-    RETURN_IF_SOCKET_ERROR(sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP));
+    RETURN_IF_SOCKET_ERROR(sock = socket(AF_INET, pArgs->SocketType, pArgs->IpProto));
     if (pSocketToClose) *pSocketToClose = sock;
 
     struct sockaddr_in name;

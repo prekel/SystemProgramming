@@ -24,6 +24,12 @@ typedef struct
     /// Порт.
     int Port;
 
+    bool IsProtocolGiven;
+    char* Protocol;
+    int SocketType;
+    int IpProto;
+    bool IsTcp;
+
     /// Дана ли степень матрицы.
     bool IsDegreeGiven;
     /// Степень матрицы.
