@@ -10,18 +10,19 @@
 
 #include "Matrix.h"
 
+// Кол-во передаваемых матриц в задании
+#define MATRICES_COUNT 2
+
 /// \struct Request
 ///
 /// Запрос
 typedef struct
 {
-    /// Первый индекс (строка)
-    uint32_t FirstIndex;
-    /// Второй индекс (ряд)
-    uint32_t SecondIndex;
     /// Порядок матрицы
-    uint32_t Count;
-    /// Размер передаваемого массива с элементами матрицы
+    uint32_t Degree;
+    /// Кол-во передаваемых матриц
+    uint32_t CountMatrices;
+    /// Размер передаваемого массива с элементами матриц
     uint32_t MatrixDataSize;
 } Request;
 
@@ -38,11 +39,9 @@ void NtoHRequest(Request* pRequest);
 /// Заполняет поля запроса.
 ///
 /// \param pRequest Указатель на запрос.
-/// \param pMatrix Уазатель на матрицу.
-/// \param firstIndex Первый индекс (строка).
-/// \param secondIndex Второй индекс (ряд).
-void FillRequest(Request* pRequest, Matrix* pMatrix, int firstIndex,
-                 int secondIndex);
+/// \param pMatrixA Указатель на первую матрицу.
+/// \param pMatrixB Указатель на вторую матрицу.
+void FillRequest(Request* pRequest, int degree, int count);
 
 /// Отправляет запрос.
 ///

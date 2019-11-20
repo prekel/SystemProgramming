@@ -16,15 +16,17 @@
 #include "LastErrorMessage.h"
 #include "Client.h"
 
-int Client(Args* pArgs, Matrix* pMatrix, SocketHandle* pSocketToClose)
+int Client(Args* pArgs, Matrix* pMatrixA, Matrix* pMatrixB,
+           SocketHandle* pSocketToClose)
 {
     Request request;
-    FillRequest(&request, pMatrix, pArgs->FirstIndex, pArgs->SecondIndex);
+    FillRequest(&request, pMatrixA->FirstCount, MATRICES_COUNT);
 
     RETURN_IF_SOCKET_ERROR(InitializeSockets());
 
     SocketHandle sock;
-    RETURN_IF_SOCKET_ERROR(sock = socket(AF_INET, pArgs->SocketType, pArgs->IpProto));
+    RETURN_IF_SOCKET_ERROR(
+            sock = socket(AF_INET, pArgs->SocketType, pArgs->IpProto));
     if (pSocketToClose) *pSocketToClose = sock;
 
     struct sockaddr_in name;
@@ -45,7 +47,8 @@ int Client(Args* pArgs, Matrix* pMatrix, SocketHandle* pSocketToClose)
     RETURN_IF_SOCKET_ERROR(SendRequest(sock, &request));
     NtoHRequest(&request);
 
-    RETURN_IF_SOCKET_ERROR(SendMatrix(sock, &request, pMatrix));
+    RETURN_IF_SOCKET_ERROR(SendMatrix(sock, &request, pMatrixA));
+    RETURN_IF_SOCKET_ERROR(SendMatrix(sock, &request, pMatrixB));
 
     return SUCCESSFUL;
 }

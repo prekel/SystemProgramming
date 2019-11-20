@@ -37,6 +37,10 @@ int main(int argc, char** argv)
         DestroyArgs(pArgs);
         return EXIT_SUCCESS;
     }
+    if (pArgs->IsUnknownOptionGiven)
+    {
+        UnknownOption(pArgs);
+    }
 
     int initializeSockets = InitializeSockets();
     if (initializeSockets != NO_ERROR)
@@ -46,48 +50,78 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
     }
 
-    Matrix* pMatrix = NULL;
+    printf("Сервер запущен, ожидание подключения и приёма данных на "
+           "порт %d по протоколу %s...\n", pArgs->Port, pArgs->Protocol);
+
+    Matrix* pMatrixA = NULL;
+    Matrix* pMatrixB = NULL;
     Request request;
     SocketHandle socketToClose1;
     SocketHandle socketToClose2;
-    if (Server(pArgs, &request, &pMatrix, &socketToClose1, &socketToClose2)
-        != SUCCESSFUL)
+    int serverReturns = Server(pArgs, &request, &pMatrixA, &pMatrixB,
+                               &socketToClose1,
+                               &socketToClose2);
+    if (serverReturns != SUCCESSFUL)
     {
-        PrintLastErrorMessage();
-        closesocket(socketToClose1);
-        closesocket(socketToClose2);
-        DestroyMatrix(pMatrix);
+        PrintReturnCodeMessage(serverReturns);
+        if (closesocket(socketToClose1) == SOCKET_ERROR)
+        {
+            PrintLastErrorMessage();
+        }
+        if (closesocket(socketToClose2) == SOCKET_ERROR)
+        {
+            PrintLastErrorMessage();
+        }
+        DestroyMatrix(pMatrixA);
+        DestroyMatrix(pMatrixB);
         DestroyArgs(pArgs);
         ShutdownSockets();
         return EXIT_FAILURE;
     }
 
-    Matrix* pMinor = GetMinor(NULL,
-                              pMatrix,
-                              request.FirstIndex,
-                              request.SecondIndex);
+    printf("Принятые матрицы: \n");
+    printf("Матрица A: \n");
+    PrintMatrix(pMatrixA);
+    printf("Матрица B: \n");
+    PrintMatrix(pMatrixB);
 
-    int det = CalculateDeterminant(pMinor);
+    Matrix* pSum = SumMatrices(NULL, pMatrixA, pMatrixB);
 
-    for (int i = 0; i < pMinor->FirstCount; i++)
+    printf("\nМатрица A+B: \n");
+    PrintMatrix(pSum);
+
+    int det = CalculateDeterminant(pSum);
+    printf("\nОпределитель: %d\n", det);
+
+    if (closesocket(socketToClose1) == SOCKET_ERROR)
     {
-        for (int j = 0; j < pMinor->SecondCount; j++)
-        {
-            printf("%d ", pMinor->pData[i][j]);
-        }
-        printf("\n");
+        PrintReturnCodeMessage(SOCKET_ERROR);
+        DestroyMatrix(pMatrixA);
+        DestroyMatrix(pMatrixB);
+        DestroyMatrix(pSum);
+        DestroyArgs(pArgs);
+        ShutdownSockets();
+        return EXIT_SUCCESS;
     }
-    printf("Определитель: %d\n", det);
+    if (socketToClose1 != socketToClose2 &&
+        closesocket(socketToClose2) == SOCKET_ERROR)
+    {
+        PrintReturnCodeMessage(SOCKET_ERROR);
+        DestroyMatrix(pMatrixA);
+        DestroyMatrix(pMatrixB);
+        DestroyMatrix(pSum);
+        DestroyArgs(pArgs);
+        ShutdownSockets();
+        return EXIT_SUCCESS;
+    }
 
-    closesocket(socketToClose1);
-    closesocket(socketToClose2);
-
-    DestroyMatrix(pMatrix);
-    DestroyMatrix(pMinor);
+    DestroyMatrix(pMatrixA);
+    DestroyMatrix(pMatrixB);
+    DestroyMatrix(pSum);
 
     DestroyArgs(pArgs);
 
     ShutdownSockets();
 
-    return 0;
+    return EXIT_SUCCESS;
 }

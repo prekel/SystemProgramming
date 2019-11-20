@@ -8,8 +8,9 @@
 #include "Request.h"
 #include "ReturnCodes.h"
 
-int Server(Args* pArgs, Request* pRequest, Matrix** ppMatrix,
-           SocketHandle* pSocketToClose1, SocketHandle* pSocketToClose2)
+int Server(Args* pArgs, Request* pRequest, Matrix** ppMatrixA,
+           Matrix** ppMatrixB, SocketHandle* pSocketToClose1,
+           SocketHandle* pSocketToClose2)
 {
     SocketHandle receiveSock;
     RETURN_IF_SOCKET_ERROR(
@@ -19,14 +20,19 @@ int Server(Args* pArgs, Request* pRequest, Matrix** ppMatrix,
     Request request;
     RETURN_IF_SOCKET_ERROR(ServerReceiveRequest(receiveSock, &request));
 
-    Matrix* pMatrix = CreateEmptyMatrix(request.Count,
-                                        request.Count);
+    Matrix* pMatrixA = CreateEmptyMatrix(request.Degree,
+                                         request.Degree);
+    Matrix* pMatrixB = CreateEmptyMatrix(request.Degree,
+                                         request.Degree);
 
     RETURN_IF_SOCKET_ERROR(
-            ServerReceiveMatrix(receiveSock, &request, pMatrix));
+            ServerReceiveMatrix(receiveSock, &request, pMatrixA));
+    RETURN_IF_SOCKET_ERROR(
+            ServerReceiveMatrix(receiveSock, &request, pMatrixB));
 
     *pRequest = request;
-    *ppMatrix = pMatrix;
+    *ppMatrixA = pMatrixA;
+    *ppMatrixB = pMatrixB;
 
     return SUCCESSFUL;
 }
@@ -36,7 +42,8 @@ int Server(Args* pArgs, Request* pRequest, Matrix** ppMatrix,
 SocketHandle ServerConnect(Args* pArgs, SocketHandle* pSocketToClose)
 {
     SocketHandle sock;
-    RETURN_IF_SOCKET_ERROR(sock = socket(AF_INET, pArgs->SocketType, pArgs->IpProto));
+    RETURN_IF_SOCKET_ERROR(
+            sock = socket(AF_INET, pArgs->SocketType, pArgs->IpProto));
     if (pSocketToClose) *pSocketToClose = sock;
 
     struct sockaddr_in name;

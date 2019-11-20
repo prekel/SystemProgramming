@@ -66,4 +66,9 @@ Args* ParseArgs(int argc, char** pArgv);
 /// Вывод справки.
 void PrintHelp();
 
+/// Действие при неизвестном параметре.
+///
+/// \param pArgs
+void UnknownOption(Args* pArgs);
+
 #endif //ARGS_H

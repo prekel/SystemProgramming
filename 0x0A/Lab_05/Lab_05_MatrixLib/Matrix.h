@@ -15,7 +15,7 @@ typedef struct
     /// Кол-во строк.
     int SecondCount;
     /// Элементы матрицы.
-    int** pData;
+    int** ppData;
 } Matrix;
 
 /// Создаёт матрицу, заполенную нулями. Требуется очистка с
@@ -35,6 +35,21 @@ Matrix* CreateBlankMatrix(int firstCount, int secondCount);
 /// \param secondCount Кол-во столбцов
 /// \return Указатель на матрицу.
 Matrix* CreateEmptyMatrix(int firstCount, int secondCount);
+
+/// Выводит матрицу.
+///
+/// \param pMatrix Указатель на матрицу.
+void PrintMatrix(Matrix* pMatrix);
+
+/// Складывает матрицы Sum = A + B. Если pSumResult == NULL, то выделяется память и требуется очистка с
+/// помощью DestroyMatrix(). В случае ошибки аллокации или неверных входных
+/// данных срабатывает assert().
+/// \param pSumResult Указтель на матрицу Sum, в которую записывается результат.
+/// \param pMatrixA Указатель на матрицу A.
+/// \param pMatrixB Указатель на матрицу B.
+/// \return Указатель на матрицу-результат Sum. Если pSumResult != NULL,
+/// то pSumResult.
+Matrix* SumMatrices(Matrix* pSumResult, Matrix* pMatrixA, Matrix* pMatrixB);
 
 /// Вычисляет матрицу, в которой отсутствует заданная строка и ряд.
 /// Если pMinorResult == NULL, то выделяется память и требуется очистка с
@@ -61,8 +76,8 @@ int CalculateDeterminant2x2(Matrix* pMatrix);
 /// Вычисляет определитель матрицы. Срабатывает assert(), матрица не
 /// квадратная или в случае ошибки аллокации.
 ///
-/// \param pMatrix
-/// \return
+/// \param pMatrix Указатель на матрицу.
+/// \return Определитель матрицы.
 int CalculateDeterminant(Matrix* pMatrix);
 
 /// Уничтожает матрицу.

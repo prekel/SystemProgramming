@@ -144,3 +144,8 @@ void PrintHelp()
 {
     printf(HELP_MESSAGE);
 }
+
+void UnknownOption(Args* pArgs)
+{
+    printf("Неизвестный параметр: %c\n", pArgs->UnknownOption);
+}

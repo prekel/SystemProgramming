@@ -35,16 +35,6 @@ typedef struct
     /// Степень матрицы.
     int Degree;
 
-    /// Дан ли первый индекс.
-    bool IsFirstIndexGiven;
-    /// Первый индекс.
-    int FirstIndex;
-
-    /// Дан ли второй индекс.
-    bool IsSecondIndexGiven;
-    /// Второй индекс.
-    int SecondIndex;
-
     /// Требуется ли вывод справки.
     bool IsHelpGiven;
 
@@ -94,12 +84,17 @@ int InputAllOption(Args* pArgs);
 /// командной строки.
 ///
 /// \param pArgs Указатель на аргументы командной строки.
-/// \param pMatrix Указатель на матрицу.
+/// \param pMatrixA Указатель на матрицу.
 /// \return SUCCESSFUL (0) в случае успеха, BAD_ARGS или BAD_VALUE в случае
 /// ошибки.
-int InputOrFillMatrix(Args* pArgs, Matrix* pMatrix);
+int InputOrFillMatrices(Args* pArgs, Matrix* pMatrixA, Matrix* pMatrixB);
 
 /// Выводит справку.
 void PrintHelp();
+
+/// Действие при неизвестном параметре.
+///
+/// \param pArgs
+void UnknownOption(Args* pArgs);
 
 #endif //ARGS_H
