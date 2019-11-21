@@ -15,7 +15,7 @@ void FillRequest(Request* pRequest, int degree, int count)
 
     pRequest->CountMatrices = count;
 
-    pRequest->MatrixDataSize = degree * degree * count * sizeof(uint32_t);
+    pRequest->MatrixDataSize = degree * degree * count * sizeof (uint32_t);
 }
 
 void HtoNRequest(Request* pRequest)
@@ -41,8 +41,8 @@ void NtoHRequest(Request* pRequest)
 int SendRequest(SocketHandle sock, Request* pRequest)
 {
     RETURN_UNSUCCESSFUL_IF_NOT_EQUAL(
-            send(sock, pRequest, sizeof(Request), MSG_NOSIGNAL),
-            sizeof(Request));
+            send(sock, pRequest, sizeof (Request), MSG_NOSIGNAL),
+            sizeof (Request));
     return SUCCESSFUL;
 }
 
@@ -74,8 +74,8 @@ int SendMatrix(SocketHandle sock, Request* pRequest, Matrix* pMatrix)
 
 int ReceiveRequest(SocketHandle sock, Request* pRequest)
 {
-    RETURN_UNSUCCESSFUL_IF_NOT_EQUAL(recv(sock, pRequest, sizeof(Request), 0),
-                                     sizeof(Request));
+    RETURN_UNSUCCESSFUL_IF_NOT_EQUAL(recv(sock, pRequest, sizeof (Request), 0),
+                                     sizeof (Request));
     return SUCCESSFUL;
 }
 

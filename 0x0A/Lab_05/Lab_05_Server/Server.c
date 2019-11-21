@@ -52,7 +52,7 @@ SocketHandle ServerConnect(Args* pArgs, SocketHandle* pSocketToClose)
     name.sin_addr.s_addr = INADDR_ANY;
 
     RETURN_IF_SOCKET_ERROR(
-            bind(sock, (const struct sockaddr*) &name, sizeof(name)));
+            bind(sock, (const struct sockaddr*) &name, sizeof (name)));
 
     if (!pArgs->IsTcp)
     {
@@ -67,7 +67,7 @@ SocketHandle ServerConnect(Args* pArgs, SocketHandle* pSocketToClose)
 #else
     unsigned int clientNameLength;
 #endif
-    clientNameLength = sizeof(clientName);
+    clientNameLength = sizeof (clientName);
     SocketHandle clientSock;
 
     RETURN_IF_SOCKET_ERROR(

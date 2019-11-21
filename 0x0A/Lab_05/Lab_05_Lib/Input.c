@@ -17,7 +17,7 @@ char* InputLineRealloc(int stepSize, bool isFinalReallocRequired)
 {
     assert(stepSize >= MIN_STEPSIZE);
     unsigned int currentSize = stepSize;
-    char* string = (char*) malloc((currentSize + 1) * sizeof(char));
+    char* string = (char*) malloc((currentSize + 1) * sizeof (char));
     assert(string);
     char* currentStep = string;
     int i = 1;
@@ -34,13 +34,13 @@ char* InputLineRealloc(int stepSize, bool isFinalReallocRequired)
             if (isFinalReallocRequired)
             {
                 currentSize = strlen(string) + 1;
-                string = realloc(string, currentSize * sizeof(char));
+                string = realloc(string, currentSize * sizeof (char));
                 assert(string);
             }
             break;
         }
         currentSize += stepSize;
-        string = realloc(string, currentSize * sizeof(char));
+        string = realloc(string, currentSize * sizeof (char));
         assert(string);
         currentStep = string + currentSize - stepSize - i++;
     }
@@ -87,7 +87,7 @@ int CycleInputInt(int maxIntLength,
     assert(maxIntLength >= MIN_MAXINTLENGTH);
     int number;
     int position;
-    char* stringNumber = (char*) malloc(maxIntLength * sizeof(char));
+    char* stringNumber = (char*) malloc(maxIntLength * sizeof (char));
     assert(stringNumber);
     while (true)
     {

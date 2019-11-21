@@ -43,7 +43,7 @@
 
 Args* CreateArgs()
 {
-    Args* pArgs = (Args*) malloc(sizeof(Args));
+    Args* pArgs = (Args*) malloc(sizeof (Args));
     RETURN_NULL_IF_NULLPTR(pArgs);
 
     pArgs->IsPortGiven = false;
@@ -94,7 +94,7 @@ Args* ParseArgs(int argc, char** pArgv)
         case OPT_PROTOCOL:
             pArgs->IsProtocolGiven = true;
             RETURN_NULL_IF_NULLPTR(pArgs->Protocol = (char*) malloc(
-                    (sizeof(char) + 1) * strlen(optarg)));
+                    (sizeof (char) + 1) * strlen(optarg)));
             strcpy(pArgs->Protocol, optarg);
             if (strcmp(pArgs->Protocol, PROTOCOL_TCP) == 0)
             {
