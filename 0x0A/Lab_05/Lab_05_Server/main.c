@@ -58,19 +58,13 @@ int main(int argc, char** argv)
     Matrix* pMatrixA = NULL;
     Matrix* pMatrixB = NULL;
     Request request;
-    SocketHandle socketToClose1;
-    SocketHandle socketToClose2;
+    SocketHandle socketToClose;
     int serverReturns = Server(pArgs, &request, &pMatrixA, &pMatrixB,
-                               &socketToClose1,
-                               &socketToClose2);
+                               &socketToClose);
     if (serverReturns != SUCCESSFUL)
     {
         PrintReturnCodeMessage(serverReturns);
-        if (closesocket(socketToClose1) == SOCKET_ERROR)
-        {
-            PrintLastErrorMessage();
-        }
-        if (closesocket(socketToClose2) == SOCKET_ERROR)
+        if (closesocket(socketToClose) == SOCKET_ERROR)
         {
             PrintLastErrorMessage();
         }
@@ -95,18 +89,7 @@ int main(int argc, char** argv)
     int det = CalculateDeterminant(pSum);
     printf("\nОпределитель: %d\n", det);
 
-    if (closesocket(socketToClose1) == SOCKET_ERROR)
-    {
-        PrintReturnCodeMessage(SOCKET_ERROR);
-        DestroyMatrix(pMatrixA);
-        DestroyMatrix(pMatrixB);
-        DestroyMatrix(pSum);
-        DestroyArgs(pArgs);
-        ShutdownSockets();
-        return EXIT_SUCCESS;
-    }
-    if (socketToClose1 != socketToClose2 &&
-        closesocket(socketToClose2) == SOCKET_ERROR)
+    if (closesocket(socketToClose) == SOCKET_ERROR)
     {
         PrintReturnCodeMessage(SOCKET_ERROR);
         DestroyMatrix(pMatrixA);

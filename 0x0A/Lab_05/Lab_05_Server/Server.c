@@ -9,13 +9,12 @@
 #include "ReturnCodes.h"
 
 int Server(Args* pArgs, Request* pRequest, Matrix** ppMatrixA,
-           Matrix** ppMatrixB, SocketHandle* pSocketToClose1,
-           SocketHandle* pSocketToClose2)
+           Matrix** ppMatrixB, SocketHandle* pSocketToClose)
 {
     SocketHandle receiveSock;
     RETURN_IF_SOCKET_ERROR(
-            receiveSock = ServerConnect(pArgs, pSocketToClose1));
-    if (pSocketToClose2) *pSocketToClose2 = receiveSock;
+            receiveSock = ServerConnect(pArgs));
+    if (pSocketToClose) *pSocketToClose = receiveSock;
 
     Request request;
     RETURN_IF_SOCKET_ERROR(ServerReceiveRequest(receiveSock, &request));
@@ -37,12 +36,11 @@ int Server(Args* pArgs, Request* pRequest, Matrix** ppMatrixA,
     return SUCCESSFUL;
 }
 
-SocketHandle ServerConnect(Args* pArgs, SocketHandle* pSocketToClose)
+SocketHandle ServerConnect(Args* pArgs)
 {
     SocketHandle sock;
     RETURN_IF_SOCKET_ERROR(
             sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP));
-    if (pSocketToClose) *pSocketToClose = sock;
 
     struct sockaddr_in name;
     name.sin_family = AF_INET;
