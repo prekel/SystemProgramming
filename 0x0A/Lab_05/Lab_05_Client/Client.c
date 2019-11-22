@@ -26,7 +26,7 @@ int Client(Args* pArgs, Matrix* pMatrixA, Matrix* pMatrixB,
 
     SocketHandle sock;
     RETURN_IF_SOCKET_ERROR(
-            sock = socket(AF_INET, pArgs->SocketType, pArgs->IpProto));
+            sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP));
     if (pSocketToClose) *pSocketToClose = sock;
 
     struct sockaddr_in name;

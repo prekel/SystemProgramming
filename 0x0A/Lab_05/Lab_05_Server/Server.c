@@ -37,13 +37,11 @@ int Server(Args* pArgs, Request* pRequest, Matrix** ppMatrixA,
     return SUCCESSFUL;
 }
 
-#define BACKLOG 5
-
 SocketHandle ServerConnect(Args* pArgs, SocketHandle* pSocketToClose)
 {
     SocketHandle sock;
     RETURN_IF_SOCKET_ERROR(
-            sock = socket(AF_INET, pArgs->SocketType, pArgs->IpProto));
+            sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP));
     if (pSocketToClose) *pSocketToClose = sock;
 
     struct sockaddr_in name;
@@ -54,28 +52,7 @@ SocketHandle ServerConnect(Args* pArgs, SocketHandle* pSocketToClose)
     RETURN_IF_SOCKET_ERROR(
             bind(sock, (const struct sockaddr*) &name, sizeof(name)));
 
-    if (!pArgs->IsTcp)
-    {
-        return sock;
-    }
-
-    RETURN_IF_SOCKET_ERROR(listen(sock, BACKLOG));
-
-    struct sockaddr_in clientName;
-#ifdef _WIN32
-    int clientNameLength;
-#else
-    unsigned int clientNameLength;
-#endif
-    clientNameLength = sizeof(clientName);
-    SocketHandle clientSock;
-
-    RETURN_IF_SOCKET_ERROR(
-            clientSock = accept(sock,
-                                (struct sockaddr*) &clientName,
-                                &clientNameLength));
-
-    return clientSock;
+    return sock;
 }
 
 int ServerReceiveRequest(SocketHandle sock, Request* pRequest)

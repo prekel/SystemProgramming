@@ -32,15 +32,17 @@ int main(int argc, char** argv)
         PrintErrorMessage(ALLOCATION_ERROR);
         return EXIT_FAILURE;
     }
+    if (pArgs->IsUnknownOptionGiven)
+    {
+        UnknownOption(pArgs);
+        DestroyArgs(pArgs);
+        return EXIT_FAILURE;
+    }
     if (pArgs->IsHelpGiven)
     {
         PrintHelp();
         DestroyArgs(pArgs);
         return EXIT_SUCCESS;
-    }
-    if (pArgs->IsUnknownOptionGiven)
-    {
-        UnknownOption(pArgs);
     }
 
     if (InputAllOption(pArgs) != SUCCESSFUL)
@@ -87,8 +89,8 @@ int main(int argc, char** argv)
     printf("Матрица B: \n");
     PrintMatrix(pMatrixB);
 
-    printf("\nПередача на %s:%d по протоколу %s...\n",
-           pArgs->IpAddress, pArgs->Port, pArgs->Protocol);
+    printf("\nПередача на %s:%d...\n",
+           pArgs->IpAddress, pArgs->Port);
 
     SocketHandle socketToClose;
     int clientReturns = Client(pArgs, pMatrixA, pMatrixB, &socketToClose);

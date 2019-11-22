@@ -27,13 +27,7 @@
 #define DEFAULT_PORT 20522
 #define DEFAULT_PORT_STR "20522"
 
-#define PROTOCOL_UDP "udp"
-#define PROTOCOL_TCP "tcp"
-#define DEFAULT_PROTOCOL PROTOCOL_UDP
-#define DEFAULT_SOCKET_TYPE SOCK_DGRAM
-#define DEFAULT_IPPROTO IPPROTO_UDP
-
-#define OPT_STRING ":a:p:P:n:M:N:h"
+#define OPT_STRING ":a:p:n:M:N:h"
 
 #define OPT_IP_ADDRESS 'a'
 #define OPT_IP_ADDRESS_USAGE "-a целое.целое.целое.целое"
@@ -41,9 +35,6 @@
 #define OPT_PORT 'p'
 #define OPT_PORT_USAGE "-p целое"
 #define OPT_PORT_DESCRIPTION "Порт. По умолчанию " DEFAULT_PORT_STR "."
-#define OPT_PROTOCOL 'P'
-#define OPT_PROTOCOL_USAGE "-P строка"
-#define OPT_PROTOCOL_DESCRIPTION "Протокол " PROTOCOL_UDP " с дейтаграммными сокетами или " PROTOCOL_TCP " с потоковыми. По умолчанию " DEFAULT_PROTOCOL "."
 #define OPT_DEGREE 'n'
 #define OPT_DEGREE_USAGE "-n целое"
 #define OPT_DEGREE_DESCRIPTION "Степень матрицы."
@@ -62,12 +53,6 @@ Args* CreateArgs()
 
     pArgs->IsPortGiven = false;
     pArgs->Port = DEFAULT_PORT;
-
-    pArgs->IsProtocolGiven = false;
-    pArgs->Protocol = DEFAULT_PROTOCOL;
-    pArgs->SocketType = DEFAULT_SOCKET_TYPE;
-    pArgs->IpProto = DEFAULT_IPPROTO;
-    pArgs->IsTcp = false;
 
     pArgs->IsDegreeGiven = false;
     pArgs->Degree = 0;
@@ -117,23 +102,6 @@ Args* ParseArgs(int argc, char** pArgv)
             pArgs->IsPortGiven = true;
             pArgs->Port = ParseInt(optarg, &pArgs->CountValidArgs);
             pArgs->CountValidArgs++;
-            break;
-        case OPT_PROTOCOL:
-            pArgs->IsProtocolGiven = true;
-            RETURN_NULL_IF_NULLPTR(pArgs->Protocol = (char*) malloc(
-                    (sizeof(char) + 1) * strlen(optarg)));
-            strcpy(pArgs->Protocol, optarg);
-            if (strcmp(pArgs->Protocol, PROTOCOL_TCP) == 0)
-            {
-                pArgs->IpProto = IPPROTO_TCP;
-                pArgs->SocketType = SOCK_STREAM;
-                pArgs->IsTcp = true;
-                pArgs->CountValidArgs++;
-            }
-            else if (strcmp(pArgs->Protocol, PROTOCOL_UDP) == 0)
-            {
-                pArgs->CountValidArgs++;
-            }
             break;
         case OPT_DEGREE:
             pArgs->IsDegreeGiven = true;
@@ -247,11 +215,12 @@ int InputOrFillMatrices(Args* pArgs, Matrix* pMatrixA, Matrix* pMatrixB)
 #define HELP_SUFFIX "\n"
 
 #define HELP_MESSAGE \
-"Использование: ./" APP_NAME " [" OPT_IP_ADDRESS_USAGE "] [" OPT_PORT_USAGE "] [" OPT_PROTOCOL_USAGE "] [" OPT_DEGREE_USAGE "] [" OPT_HELP_USAGE "] [2 * n * n положительных целых чисел - элементы матриц]" HELP_SUFFIX \
+"Использование: " APP_NAME " [" OPT_IP_ADDRESS_USAGE "] [" OPT_PORT_USAGE \
+"] [" OPT_DEGREE_USAGE "] [" OPT_HELP_USAGE \
+"] [2 * n * n положительных целых чисел - элементы матриц]" HELP_SUFFIX \
 "Опции: " HELP_SUFFIX \
 OPT_IP_ADDRESS_USAGE HELP_SEP OPT_IP_ADDRESS_DESCRIPTION HELP_SUFFIX \
 OPT_PORT_USAGE HELP_SEP OPT_PORT_DESCRIPTION HELP_SUFFIX \
-OPT_PROTOCOL_USAGE HELP_SEP OPT_PROTOCOL_DESCRIPTION HELP_SUFFIX \
 OPT_DEGREE_USAGE HELP_SEP OPT_DEGREE_DESCRIPTION HELP_SUFFIX \
 OPT_HELP_USAGE HELP_SEP OPT_HELP_DESCRIPTION HELP_SUFFIX \
 
@@ -262,5 +231,6 @@ void PrintHelp()
 
 void UnknownOption(Args* pArgs)
 {
-    printf("Неизвестный параметр: %c\n", pArgs->UnknownOption);
+    printf("Неизвестный параметр: %c, введите " OPT_HELP_USAGE
+           " для справки\n", pArgs->UnknownOption);
 }

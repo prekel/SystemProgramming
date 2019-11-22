@@ -41,5 +41,12 @@ void PrintErrorMessage(int error)
     strerror_r(error, message, MESSAGE_BUF_SIZE);
 #endif
 
-    fprintf(stderr, "%s\n", message);
+    if (message[strlen(message) - 1] == '\n')
+    {
+        fprintf(stderr, "%s", message);
+    }
+    else
+    {
+        fprintf(stderr, "%s\n", message);
+    }
 }

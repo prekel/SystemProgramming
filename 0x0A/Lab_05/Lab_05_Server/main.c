@@ -31,15 +31,17 @@ int main(int argc, char** argv)
         PrintErrorMessage(ALLOCATION_ERROR);
         return EXIT_FAILURE;
     }
+    if (pArgs->IsUnknownOptionGiven)
+    {
+        UnknownOption(pArgs);
+        DestroyArgs(pArgs);
+        return EXIT_FAILURE;
+    }
     if (pArgs->IsHelpGiven)
     {
         PrintHelp();
         DestroyArgs(pArgs);
         return EXIT_SUCCESS;
-    }
-    if (pArgs->IsUnknownOptionGiven)
-    {
-        UnknownOption(pArgs);
     }
 
     int initializeSockets = InitializeSockets();
@@ -51,7 +53,7 @@ int main(int argc, char** argv)
     }
 
     printf("Сервер запущен, ожидание подключения и приёма данных на "
-           "порт %d по протоколу %s...\n", pArgs->Port, pArgs->Protocol);
+           "порт %d...\n", pArgs->Port);
 
     Matrix* pMatrixA = NULL;
     Matrix* pMatrixB = NULL;
