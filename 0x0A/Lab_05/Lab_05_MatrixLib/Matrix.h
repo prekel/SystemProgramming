@@ -73,7 +73,7 @@ Matrix* GetMinor(Matrix* pMinorResult, Matrix* pMatrix, int firstIndex,
 /// \return Определитель.
 int CalculateDeterminant2x2(Matrix* pMatrix);
 
-/// Вычисляет определитель матрицы. Срабатывает assert(), матрица не
+/// Вычисляет определитель матрицы. Срабатывает assert() если, матрица не
 /// квадратная или в случае ошибки аллокации.
 ///
 /// \param pMatrix Указатель на матрицу.

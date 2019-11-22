@@ -3,6 +3,8 @@ AUTOMAKE_OPTIONS = subdir-objects
 noinst_LIBRARIES = libLab_05_Lib.a libLab_05_MatrixLib.a 
 bin_PROGRAMS = Lab_05_Client Lab_05_Server
 
+CFLAGS = -std=gnu99
+
 libLab_05_MatrixLib_a_SOURCES = \
     ../Lab_05_MatrixLib/Matrix.c
 
