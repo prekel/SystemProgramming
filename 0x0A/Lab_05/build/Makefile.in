@@ -118,7 +118,7 @@ libLab_05_Lib_a_OBJECTS = $(am_libLab_05_Lib_a_OBJECTS)
 libLab_05_MatrixLib_a_AR = $(AR) $(ARFLAGS)
 libLab_05_MatrixLib_a_LIBADD =
 am_libLab_05_MatrixLib_a_OBJECTS =  \
-	../Lab_05_MatrixLib/Matrix.$(OBJEXT)
+	../Lab_05_MatrixLib/libLab_05_MatrixLib_a-Matrix.$(OBJEXT)
 libLab_05_MatrixLib_a_OBJECTS = $(am_libLab_05_MatrixLib_a_OBJECTS)
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
@@ -210,7 +210,7 @@ AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
-CFLAGS = -std=gnu99
+CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CYGPATH_W = @CYGPATH_W@
@@ -295,6 +295,7 @@ noinst_LIBRARIES = libLab_05_Lib.a libLab_05_MatrixLib.a
 libLab_05_MatrixLib_a_SOURCES = \
     ../Lab_05_MatrixLib/Matrix.c
 
+libLab_05_MatrixLib_a_CFLAGS = -std=gnu99
 libLab_05_Lib_a_SOURCES = \
     ../Lab_05_Lib/Input.c \
     ../Lab_05_Lib/ParseInt.c \
@@ -303,21 +304,21 @@ libLab_05_Lib_a_SOURCES = \
     ../Lab_05_Lib/Request.c \
     ../Lab_05_Lib/Socket.c
 
-libLab_05_Lib_a_CFLAGS = -I../Lab_05_MatrixLib 
+libLab_05_Lib_a_CFLAGS = -I../Lab_05_MatrixLib -std=gnu99
 libLab_05_Lib_a_LIBADD = libLab_05_MatrixLib.a
 Lab_05_Client_SOURCES = \
     ../Lab_05_Client/Args.c \
     ../Lab_05_Client/Client.c \
     ../Lab_05_Client/main.c
 
-Lab_05_Client_CFLAGS = -I../Lab_05_MatrixLib -I../Lab_05_Lib
+Lab_05_Client_CFLAGS = -I../Lab_05_MatrixLib -I../Lab_05_Lib -std=gnu99
 Lab_05_Client_LDADD = libLab_05_MatrixLib.a libLab_05_Lib.a
 Lab_05_Server_SOURCES = \
     ../Lab_05_Server/Args.c \
     ../Lab_05_Server/Server.c \
     ../Lab_05_Server/main.c
 
-Lab_05_Server_CFLAGS = -I../Lab_05_MatrixLib -I../Lab_05_Lib
+Lab_05_Server_CFLAGS = -I../Lab_05_MatrixLib -I../Lab_05_Lib -std=gnu99
 Lab_05_Server_LDADD = libLab_05_MatrixLib.a libLab_05_Lib.a
 all: all-am
 
@@ -390,7 +391,7 @@ libLab_05_Lib.a: $(libLab_05_Lib_a_OBJECTS) $(libLab_05_Lib_a_DEPENDENCIES) $(EX
 ../Lab_05_MatrixLib/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) ../Lab_05_MatrixLib/$(DEPDIR)
 	@: > ../Lab_05_MatrixLib/$(DEPDIR)/$(am__dirstamp)
-../Lab_05_MatrixLib/Matrix.$(OBJEXT):  \
+../Lab_05_MatrixLib/libLab_05_MatrixLib_a-Matrix.$(OBJEXT):  \
 	../Lab_05_MatrixLib/$(am__dirstamp) \
 	../Lab_05_MatrixLib/$(DEPDIR)/$(am__dirstamp)
 
@@ -498,7 +499,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@../Lab_05_Lib/$(DEPDIR)/libLab_05_Lib_a-Request.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../Lab_05_Lib/$(DEPDIR)/libLab_05_Lib_a-ReturnCodes.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../Lab_05_Lib/$(DEPDIR)/libLab_05_Lib_a-Socket.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@../Lab_05_MatrixLib/$(DEPDIR)/Matrix.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../Lab_05_MatrixLib/$(DEPDIR)/libLab_05_MatrixLib_a-Matrix.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../Lab_05_Server/$(DEPDIR)/Lab_05_Server-Args.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../Lab_05_Server/$(DEPDIR)/Lab_05_Server-Server.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../Lab_05_Server/$(DEPDIR)/Lab_05_Server-main.Po@am__quote@
@@ -602,6 +603,20 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../Lab_05_Lib/Socket.c' object='../Lab_05_Lib/libLab_05_Lib_a-Socket.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libLab_05_Lib_a_CFLAGS) $(CFLAGS) -c -o ../Lab_05_Lib/libLab_05_Lib_a-Socket.obj `if test -f '../Lab_05_Lib/Socket.c'; then $(CYGPATH_W) '../Lab_05_Lib/Socket.c'; else $(CYGPATH_W) '$(srcdir)/../Lab_05_Lib/Socket.c'; fi`
+
+../Lab_05_MatrixLib/libLab_05_MatrixLib_a-Matrix.o: ../Lab_05_MatrixLib/Matrix.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libLab_05_MatrixLib_a_CFLAGS) $(CFLAGS) -MT ../Lab_05_MatrixLib/libLab_05_MatrixLib_a-Matrix.o -MD -MP -MF ../Lab_05_MatrixLib/$(DEPDIR)/libLab_05_MatrixLib_a-Matrix.Tpo -c -o ../Lab_05_MatrixLib/libLab_05_MatrixLib_a-Matrix.o `test -f '../Lab_05_MatrixLib/Matrix.c' || echo '$(srcdir)/'`../Lab_05_MatrixLib/Matrix.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../Lab_05_MatrixLib/$(DEPDIR)/libLab_05_MatrixLib_a-Matrix.Tpo ../Lab_05_MatrixLib/$(DEPDIR)/libLab_05_MatrixLib_a-Matrix.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../Lab_05_MatrixLib/Matrix.c' object='../Lab_05_MatrixLib/libLab_05_MatrixLib_a-Matrix.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libLab_05_MatrixLib_a_CFLAGS) $(CFLAGS) -c -o ../Lab_05_MatrixLib/libLab_05_MatrixLib_a-Matrix.o `test -f '../Lab_05_MatrixLib/Matrix.c' || echo '$(srcdir)/'`../Lab_05_MatrixLib/Matrix.c
+
+../Lab_05_MatrixLib/libLab_05_MatrixLib_a-Matrix.obj: ../Lab_05_MatrixLib/Matrix.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libLab_05_MatrixLib_a_CFLAGS) $(CFLAGS) -MT ../Lab_05_MatrixLib/libLab_05_MatrixLib_a-Matrix.obj -MD -MP -MF ../Lab_05_MatrixLib/$(DEPDIR)/libLab_05_MatrixLib_a-Matrix.Tpo -c -o ../Lab_05_MatrixLib/libLab_05_MatrixLib_a-Matrix.obj `if test -f '../Lab_05_MatrixLib/Matrix.c'; then $(CYGPATH_W) '../Lab_05_MatrixLib/Matrix.c'; else $(CYGPATH_W) '$(srcdir)/../Lab_05_MatrixLib/Matrix.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../Lab_05_MatrixLib/$(DEPDIR)/libLab_05_MatrixLib_a-Matrix.Tpo ../Lab_05_MatrixLib/$(DEPDIR)/libLab_05_MatrixLib_a-Matrix.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../Lab_05_MatrixLib/Matrix.c' object='../Lab_05_MatrixLib/libLab_05_MatrixLib_a-Matrix.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libLab_05_MatrixLib_a_CFLAGS) $(CFLAGS) -c -o ../Lab_05_MatrixLib/libLab_05_MatrixLib_a-Matrix.obj `if test -f '../Lab_05_MatrixLib/Matrix.c'; then $(CYGPATH_W) '../Lab_05_MatrixLib/Matrix.c'; else $(CYGPATH_W) '$(srcdir)/../Lab_05_MatrixLib/Matrix.c'; fi`
 
 ../Lab_05_Client/Lab_05_Client-Args.o: ../Lab_05_Client/Args.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(Lab_05_Client_CFLAGS) $(CFLAGS) -MT ../Lab_05_Client/Lab_05_Client-Args.o -MD -MP -MF ../Lab_05_Client/$(DEPDIR)/Lab_05_Client-Args.Tpo -c -o ../Lab_05_Client/Lab_05_Client-Args.o `test -f '../Lab_05_Client/Args.c' || echo '$(srcdir)/'`../Lab_05_Client/Args.c
