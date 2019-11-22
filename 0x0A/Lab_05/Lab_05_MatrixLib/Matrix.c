@@ -13,16 +13,16 @@ Matrix* CreateBlankMatrix(int firstCount, int secondCount)
 {
     assert(firstCount > 0);
     assert(secondCount > 0);
-    Matrix* pRet = (Matrix*) malloc(sizeof(Matrix));
+    Matrix* pRet = (Matrix*) malloc(sizeof (Matrix));
     assert(pRet);
     pRet->SecondCount = secondCount;
     pRet->FirstCount = firstCount;
-    pRet->ppData = (int**) malloc(pRet->FirstCount * sizeof(int*));
+    pRet->ppData = (int**) malloc(pRet->FirstCount * sizeof (int*));
     assert(pRet->ppData);
 
     for (int i = 0; i < pRet->FirstCount; i++)
     {
-        pRet->ppData[i] = (int*) calloc(pRet->SecondCount, sizeof(int));
+        pRet->ppData[i] = (int*) calloc(pRet->SecondCount, sizeof (int));
         assert(pRet->ppData[i]);
     }
 
@@ -33,16 +33,16 @@ Matrix* CreateEmptyMatrix(int firstCount, int secondCount)
 {
     assert(firstCount > 0);
     assert(secondCount > 0);
-    Matrix* pRet = (Matrix*) malloc(sizeof(Matrix));
+    Matrix* pRet = (Matrix*) malloc(sizeof (Matrix));
     assert(pRet);
     pRet->SecondCount = secondCount;
     pRet->FirstCount = firstCount;
-    pRet->ppData = (int**) malloc(pRet->FirstCount * sizeof(int*));
+    pRet->ppData = (int**) malloc(pRet->FirstCount * sizeof (int*));
     assert(pRet->ppData);
 
     for (int i = 0; i < pRet->FirstCount; i++)
     {
-        pRet->ppData[i] = (int*) malloc(pRet->SecondCount * sizeof(int));
+        pRet->ppData[i] = (int*) malloc(pRet->SecondCount * sizeof (int));
         assert(pRet->ppData[i]);
     }
     return pRet;

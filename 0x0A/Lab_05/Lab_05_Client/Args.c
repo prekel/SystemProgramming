@@ -45,7 +45,7 @@
 
 Args* CreateArgs()
 {
-    Args* pArgs = (Args*) malloc(sizeof(Args));
+    Args* pArgs = (Args*) malloc(sizeof (Args));
     RETURN_NULL_IF_NULLPTR(pArgs);
 
     pArgs->IsIpAddressGiven = false;
@@ -94,7 +94,7 @@ Args* ParseArgs(int argc, char** pArgv)
         case OPT_IP_ADDRESS:
             pArgs->IsIpAddressGiven = true;
             RETURN_NULL_IF_NULLPTR(pArgs->IpAddress = (char*) malloc(
-                    (sizeof(char) + 1) * strlen(optarg)));
+                    (sizeof (char) + 1) * strlen(optarg)));
             strcpy(pArgs->IpAddress, optarg);
             pArgs->CountValidArgs++;
             break;

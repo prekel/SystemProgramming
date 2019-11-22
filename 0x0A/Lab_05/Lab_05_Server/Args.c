@@ -34,7 +34,7 @@
 
 Args* CreateArgs()
 {
-    Args* pArgs = (Args*) malloc(sizeof(Args));
+    Args* pArgs = (Args*) malloc(sizeof (Args));
     RETURN_NULL_IF_NULLPTR(pArgs);
 
     pArgs->IsPortGiven = false;

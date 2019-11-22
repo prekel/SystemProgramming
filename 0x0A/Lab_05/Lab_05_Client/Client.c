@@ -41,7 +41,7 @@ int Client(Args* pArgs, Matrix* pMatrixA, Matrix* pMatrixB,
 
     RETURN_IF_SOCKET_ERROR(connect(sock,
                                    (struct sockaddr*) &name,
-                                   sizeof(name)));
+                                   sizeof (name)));
 
     HtoNRequest(&request);
     RETURN_IF_SOCKET_ERROR(SendRequest(sock, &request));
