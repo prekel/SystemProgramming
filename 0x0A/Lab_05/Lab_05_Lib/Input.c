@@ -86,7 +86,7 @@ int CycleInputInt(int maxIntLength,
 {
     assert(maxIntLength >= MIN_MAXINTLENGTH);
     int number;
-    int position;
+    int position = 0;
     char* stringNumber = (char*) malloc(maxIntLength * sizeof (char));
     assert(stringNumber);
     while (true)
@@ -97,12 +97,13 @@ int CycleInputInt(int maxIntLength,
         va_end(vaPtr);
         fflush(stdout);
 
-        int inputLineCode = InputLine(stringNumber, maxIntLength);
-        if (inputLineCode < 0) continue;
-        int sscanfCode = sscanf(stringNumber, "%d%n", &number, &position);
-        if (position != inputLineCode) continue;
+        int inputLineReturns = InputLine(stringNumber, maxIntLength);
+        if (inputLineReturns < 0) continue;
+        int sscanfReturns =
+                sscanf(stringNumber, "%d%n", &number, &position);
+        if (position != inputLineReturns) continue;
         if (pChecker != NULL && !pChecker(number)) continue;
-        if (sscanfCode > 0) break;
+        if (sscanfReturns > 0) break;
     }
     free(stringNumber);
     return number;
