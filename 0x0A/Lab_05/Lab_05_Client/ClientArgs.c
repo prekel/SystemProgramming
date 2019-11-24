@@ -1,6 +1,6 @@
 /// \file
-/// \brief Реализация функций из Args.h
-/// \details Реализация функций из Args.h.
+/// \brief Реализация функций из ClientArgs.h
+/// \details Реализация функций из ClientArgs.h.
 
 #include <malloc.h>
 #include <stdio.h>
@@ -17,9 +17,8 @@
 #endif
 
 #include "ClientArgs.h"
-#include "ParseInt.h"
 #include "ReturnCodes.h"
-#include "Input.h"
+#include "Utils.h"
 #include "Matrix.h"
 #include "Socket.h"
 #include "ArgsPrivate.h"

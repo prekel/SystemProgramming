@@ -10,9 +10,8 @@
 #include "Socket.h"
 #include "Request.h"
 #include "ClientArgs.h"
-#include "ParseInt.h"
 #include "ReturnCodes.h"
-#include "Input.h"
+#include "Utils.h"
 #include "LastErrorMessage.h"
 #include "Client.h"
 

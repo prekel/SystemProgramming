@@ -1,11 +1,21 @@
 /// \file
-/// \brief Функции для ввода с проверкой
-/// \details Функции для ввода с проверками.
+/// \brief Прочие функции и макросы
+/// \details Функции и макросы для ввода итд...
 
-#ifndef INPUT_H
-#define INPUT_H
+#ifndef UTILS_H
+#define UTILS_H
 
 #include <stdbool.h>
+
+/// Вспомогательный макрос для STRINGIZE(s).
+///
+/// \param s Оборачиваемое макроопределение.
+#define STRINGIZE_NX(s) #s
+
+/// Оборачивает макроопределение s в кавычки.
+///
+/// \param s Оборачиваемое макроопределение.
+#define STRINGIZE(s) STRINGIZE_NX(s)
 
 /// Считывает строку до передода строки в динамическую строку. Требуется
 /// очистка с помощью free(). Срабатывает assert(), если stepSize меньше 2, в
@@ -44,4 +54,19 @@ int CycleInputInt(int maxIntLength,
                   char* formatToOutput,
                   ...);
 
-#endif //INPUT_H
+/// Пытается считать число из строки.
+///
+/// \param string Строка, из которой считывается число.
+/// \param pResult Указатель, куда записывается результат.
+/// \return Истина если удалось считать, ложб если не удалось.
+bool TryParseInt(char* string, int* pResult);
+
+/// Считывает целое число из строки. Если удалось считать, инкрементируется
+/// счётчик по указателю pSuccessfulCount.
+///
+/// \param string Строка, из которой считывается число.
+/// \param pSuccessfulCount Указатель на счётчик успешных считываний.
+/// \return Считанное число. 0, если не удалось считать.
+int ParseInt(char* string, int* pSuccessfulCount);
+
+#endif //UTILS_H

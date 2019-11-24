@@ -1,3 +1,7 @@
+/// \file
+/// \brief Реализация функций из Args.h
+/// \details Реализация некоторых функций из Args.h.
+
 #include <stdio.h>
 
 #include "Args.h"

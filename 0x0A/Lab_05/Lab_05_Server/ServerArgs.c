@@ -1,6 +1,6 @@
 /// \file
-/// \brief Реализация функций из Args.h
-/// \details Реализация функций из Args.h.
+/// \brief Реализация функций из ServerArgs.h
+/// \details Реализация функций из ServerArgs.h.
 
 #include <malloc.h>
 #include <stdbool.h>

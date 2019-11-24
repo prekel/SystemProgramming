@@ -2,8 +2,8 @@
 /// \brief Аргументы коммандной строки клиента
 /// \details Аргументы коммандной строки и их парсинг.
 
-#ifndef CLIENT_ARGS_H
-#define CLIENT_ARGS_H
+#ifndef CLIENTARGS_H
+#define CLIENTARGS_H
 
 #include <stdbool.h>
 
@@ -58,9 +58,10 @@ int InputAllOption(Args* pArgs);
 /// командной строки.
 ///
 /// \param pArgs Указатель на аргументы командной строки.
-/// \param pMatrixA Указатель на матрицу.
+/// \param pMatrixA Указатель на матрицу A.
+/// \param pMatrixB Указатель на матрицу B.
 /// \return SUCCESSFUL (0) в случае успеха, BAD_ARGS или BAD_VALUE в случае
 /// ошибки.
 int InputOrFillMatrices(Args* pArgs, Matrix* pMatrixA, Matrix* pMatrixB);
 
-#endif //CLIENT_ARGS_H
+#endif //CLIENTARGS_H

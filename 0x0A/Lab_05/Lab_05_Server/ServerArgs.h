@@ -3,8 +3,8 @@
 /// \details Аргументы коммандной строки и их парсинг.
 
 
-#ifndef SERVER_ARGS_H
-#define SERVER_ARGS_H
+#ifndef SERVERARGS_H
+#define SERVERARGS_H
 
 #include <stdbool.h>
 
@@ -12,7 +12,7 @@
 
 /// \struct Args
 ///
-/// Аргументы коммандной строки.
+/// Аргументы коммандной строки сервера.
 struct Args
 {
     /// Дан ли порт.
@@ -37,12 +37,4 @@ struct Args
     char** pExtraArgs;
 };
 
-/// Вывод справки.
-void PrintHelp();
-
-/// Действие при неизвестном параметре.
-///
-/// \param pArgs
-void UnknownOption(Args* pArgs);
-
-#endif //SERVER_ARGS_H
+#endif //SERVERARGS_H

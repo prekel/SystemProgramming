@@ -4,8 +4,7 @@ project(Lab_05_Lib C)
 set(CMAKE_C_STANDARD 99)
 
 add_library(Lab_05_Lib
-        ParseInt.h ParseInt.c
-        Input.c Input.h
+        Utils.c Utils.h
         ReturnCodes.c ReturnCodes.h
         Socket.c Socket.h
         Request.c Request.h
