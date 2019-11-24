@@ -67,7 +67,9 @@ int SendMatrix(SocketHandle sock, Request* pRequest, Matrix* pMatrix);
 /// \param pRequest Указатель на запрос.
 /// \return SOCKET_ERROR (-1) в случае ошибки сокета,
 /// SUCCESSFUL (0) в случае успеха.
-int ReceiveRequest(SocketHandle sock, Request* pRequest);
+int ReceiveRequest(SocketHandle sock, Request* pRequest,
+                   struct sockaddr* pClientAddress,
+                   socklen_t* pAddressLength);
 
 /// Принимает матрицу.
 ///

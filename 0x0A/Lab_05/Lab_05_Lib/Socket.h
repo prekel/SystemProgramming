@@ -58,6 +58,10 @@ typedef int SocketHandle;
 #define closesocket(sock) close(sock)
 #endif
 
+#ifndef __socklen_t_defined
+#define socklen_t int
+#endif
+
 /// Инициализирует сокеты. На Linux ничего не делает.
 ///
 /// \return NO_ERROR (0) в случае успеха или Linux, результат

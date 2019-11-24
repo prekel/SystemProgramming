@@ -58,10 +58,11 @@ int main(int argc, char** argv)
 
     Matrix* pMatrixA = NULL;
     Matrix* pMatrixB = NULL;
+    char* clientAddress = NULL;
     Request request;
     SocketHandle socketToClose;
     int serverReturns = Server(pArgs, &request, &pMatrixA, &pMatrixB,
-                               &socketToClose);
+                               &clientAddress, &socketToClose);
     if (serverReturns != SUCCESSFUL)
     {
         PrintReturnCodeMessage(serverReturns);
@@ -71,12 +72,13 @@ int main(int argc, char** argv)
         }
         DestroyMatrix(pMatrixA);
         DestroyMatrix(pMatrixB);
+        free(clientAddress);
         DestroyArgs(pArgs);
         ShutdownSockets();
         return EXIT_FAILURE;
     }
 
-    printf("Принятые матрицы: \n");
+    printf("Принятые матрицы от клиента %s: \n", clientAddress);
     printf("Матрица A: \n");
     PrintMatrix(pMatrixA);
     printf("Матрица B: \n");
@@ -95,6 +97,7 @@ int main(int argc, char** argv)
         PrintReturnCodeMessage(SOCKET_ERROR);
         DestroyMatrix(pMatrixA);
         DestroyMatrix(pMatrixB);
+        free(clientAddress);
         DestroyMatrix(pSum);
         DestroyArgs(pArgs);
         ShutdownSockets();
@@ -103,6 +106,7 @@ int main(int argc, char** argv)
 
     DestroyMatrix(pMatrixA);
     DestroyMatrix(pMatrixB);
+    free(clientAddress);
     DestroyMatrix(pSum);
 
     DestroyArgs(pArgs);
