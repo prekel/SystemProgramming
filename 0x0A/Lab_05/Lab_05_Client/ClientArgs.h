@@ -7,12 +7,14 @@
 
 #include <stdbool.h>
 
+#include "Args.h"
+
 #include "Matrix.h"
 
 /// \struct Args
 ///
 /// Аргументы коммандной строки.
-typedef struct
+struct Args
 {
     /// Дан ли IP-адрес сервера.
     bool IsIpAddressGiven;
@@ -44,29 +46,7 @@ typedef struct
 
     /// Указатель на дополнительные аргуенты после параметров.
     char** pExtraArgs;
-} Args;
-
-/// Создаёт аргументы командной строки, инициализируя значениями по умолчанию.
-/// Требуется очистка с помощью DestroyArgs().
-///
-/// \return Указатель на аргументы коммандной строки. NULL в случае ошибки
-/// аллокации.
-Args* CreateArgs();
-
-/// Уничтожает аргументы командной строки.
-///
-/// \param pArgs Указатель на аргументы коммандной строки.
-void DestroyArgs(Args* pArgs);
-
-/// Парсит аргументы командкой строки. Требуется очистка с
-/// помощью DestroyArgs().
-///
-/// \param argc Кол-во аргументов в массиве (без последнего NULL-элемента).
-/// \param pArgv Массив аргументов, начинающийся на название комманды и
-/// заканчивающийся NULL-элементом.
-/// \return Указатель на аргументы коммандной строки. NULL в случае ошибки
-/// аллокации.
-Args* ParseArgs(int argc, char** pArgv);
+};
 
 /// Считывает из стандарного ввода недостающие опции.
 ///
@@ -82,13 +62,5 @@ int InputAllOption(Args* pArgs);
 /// \return SUCCESSFUL (0) в случае успеха, BAD_ARGS или BAD_VALUE в случае
 /// ошибки.
 int InputOrFillMatrices(Args* pArgs, Matrix* pMatrixA, Matrix* pMatrixB);
-
-/// Выводит справку.
-void PrintHelp();
-
-/// Действие при неизвестном параметре.
-///
-/// \param pArgs
-void UnknownOption(Args* pArgs);
 
 #endif //CLIENT_ARGS_H

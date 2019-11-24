@@ -18,19 +18,9 @@
 #include "ParseInt.h"
 #include "ReturnCodes.h"
 #include "Socket.h"
-
-#define DEFAULT_PORT 20522
-#define DEFAULT_PORT_STR "20522"
+#include "ArgsPrivate.h"
 
 #define OPT_STRING ":p:h"
-
-#define OPT_PORT 'p'
-#define OPT_PORT_USAGE "-p целое"
-#define OPT_PORT_DESCRIPTION "Порт. По умолчанию " DEFAULT_PORT_STR "."
-#define OPT_HELP 'h'
-#define OPT_HELP_USAGE "-h"
-#define OPT_HELP_DESCRIPTION "Требуется ли вывод справки."
-#define OPT_UNKNOWN '?'
 
 Args* CreateArgs()
 {
@@ -98,8 +88,6 @@ Args* ParseArgs(int argc, char** pArgv)
 }
 
 #define APP_NAME "Lab_05_Server"
-#define HELP_SEP ": "
-#define HELP_SUFFIX "\n"
 
 #define HELP_MESSAGE \
 "Использование: " APP_NAME " ["OPT_PORT_USAGE "] [" OPT_HELP_USAGE "] " HELP_SUFFIX \
@@ -107,14 +95,11 @@ Args* ParseArgs(int argc, char** pArgv)
 OPT_PORT_USAGE HELP_SEP OPT_PORT_DESCRIPTION HELP_SUFFIX \
 OPT_HELP_USAGE HELP_SEP OPT_HELP_DESCRIPTION HELP_SUFFIX \
 
+const char* g_HelpMessage = HELP_MESSAGE;
 
-void PrintHelp()
-{
-    printf(HELP_MESSAGE);
-}
+const char* g_OptHelpUsage = OPT_HELP_USAGE;
 
 void UnknownOption(Args* pArgs)
 {
-    printf("Неизвестный параметр: %c, введите " OPT_HELP_USAGE
-           " для справки\n", pArgs->UnknownOption);
+    UnknownOptionInternal(pArgs->UnknownOption);
 }

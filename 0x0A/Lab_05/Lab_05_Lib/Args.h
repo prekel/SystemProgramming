@@ -26,4 +26,8 @@ void DestroyArgs(Args* pArgs);
 /// аллокации.
 Args* ParseArgs(int argc, char** pArgv);
 
+void PrintHelp();
+
+void UnknownOption(Args* pArgs);
+
 #endif //ARGS_H

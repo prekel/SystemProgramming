@@ -9,7 +9,9 @@ add_library(Lab_05_Lib
         ReturnCodes.c ReturnCodes.h
         Socket.c Socket.h
         Request.c Request.h
-        LastErrorMessage.c LastErrorMessage.h Args.c Args.h)
+        LastErrorMessage.c LastErrorMessage.h
+        Args.h Args.c
+        ArgsPrivate.h ArgsPrivate.c)
 
 target_link_libraries(Lab_05_Lib PRIVATE Lab_05_MatrixLib)
 

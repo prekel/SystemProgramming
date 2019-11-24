@@ -22,26 +22,16 @@
 #include "Input.h"
 #include "Matrix.h"
 #include "Socket.h"
-
-#define DEFAULT_IP_ADDRESS "127.0.0.1"
-#define DEFAULT_PORT 20522
-#define DEFAULT_PORT_STR "20522"
+#include "ArgsPrivate.h"
 
 #define OPT_STRING ":a:p:n:M:N:h"
 
 #define OPT_IP_ADDRESS 'a'
 #define OPT_IP_ADDRESS_USAGE "-a целое.целое.целое.целое"
 #define OPT_IP_ADDRESS_DESCRIPTION "IP-адрес сервера. По умолчанию " DEFAULT_IP_ADDRESS "."
-#define OPT_PORT 'p'
-#define OPT_PORT_USAGE "-p целое"
-#define OPT_PORT_DESCRIPTION "Порт. По умолчанию " DEFAULT_PORT_STR "."
 #define OPT_DEGREE 'n'
 #define OPT_DEGREE_USAGE "-n целое"
 #define OPT_DEGREE_DESCRIPTION "Степень матрицы."
-#define OPT_HELP 'h'
-#define OPT_HELP_USAGE "-h"
-#define OPT_HELP_DESCRIPTION "Требуется ли вывод справки."
-#define OPT_UNKNOWN '?'
 
 Args* CreateArgs()
 {
@@ -211,8 +201,6 @@ int InputOrFillMatrices(Args* pArgs, Matrix* pMatrixA, Matrix* pMatrixB)
 }
 
 #define APP_NAME "Lab_05_Client"
-#define HELP_SEP ": "
-#define HELP_SUFFIX "\n"
 
 #define HELP_MESSAGE \
 "Использование: " APP_NAME " [" OPT_IP_ADDRESS_USAGE "] [" OPT_PORT_USAGE \
@@ -224,13 +212,11 @@ OPT_PORT_USAGE HELP_SEP OPT_PORT_DESCRIPTION HELP_SUFFIX \
 OPT_DEGREE_USAGE HELP_SEP OPT_DEGREE_DESCRIPTION HELP_SUFFIX \
 OPT_HELP_USAGE HELP_SEP OPT_HELP_DESCRIPTION HELP_SUFFIX \
 
-void PrintHelp()
-{
-    printf(HELP_MESSAGE);
-}
+const char* g_HelpMessage = HELP_MESSAGE;
+
+const char* g_OptHelpUsage = OPT_HELP_USAGE;
 
 void UnknownOption(Args* pArgs)
 {
-    printf("Неизвестный параметр: %c, введите " OPT_HELP_USAGE
-           " для справки\n", pArgs->UnknownOption);
+    UnknownOptionInternal(pArgs->UnknownOption);
 }
