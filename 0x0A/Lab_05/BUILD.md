@@ -18,37 +18,50 @@ make
 ./build/Lab_05_Server -h
 
 # linux, cmake, make, gcc
-cd build
+mkdir buildcmake
+cd buildcmake
 cmake ..
 make
 ./Lab_05_Client/Lab_05_Client -h
 ./Lab_05_Server/Lab_05_Server -h
 
 # linux, cmake, make, clang
-cd build
+mkdir buildcmake
+cd buildcmake
 cmake -DCMAKE_C_COMPILER=clang ..
 make
 ./Lab_05_Client/Lab_05_Client -h
 ./Lab_05_Server/Lab_05_Server -h
 
 # windows, cmake, msbuild, msvc
-cd build
-cmake ..
+mkdir buildcmake
+cd buildcmake 
+cmake -G "Visual Studio 16 2019" ..
 msbuild .\ALL_BUILD.vcxproj
 .\Lab_05_Client\Debug\Lab_05_Client.exe -h
 .\Lab_05_Server\Debug\Lab_05_Server.exe -h
 
 # windows, cmake, mingw32-make, mingw
-cd build
+mkdir buildcmake
+cd buildcmake
 cmake -G "MinGW Makefiles" ..
 mingw32-make
 .\Lab_05_Client\Lab_05_Client.exe -h
 .\Lab_05_Server\Lab_05_Server.exe -h
 
 # windows, cmake, mingw32-make, clang
-cd build
+mkdir buildcmake
+cd buildcmake
 cmake -G "MinGW Makefiles" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ ..
 mingw32-make
+.\Lab_05_Client\Lab_05_Client.exe -h
+.\Lab_05_Server\Lab_05_Server.exe -h
+
+# windows, cmake, ninja, clang
+mkdir buildcmake
+cd buildcmake
+cmake -G "Ninja" -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_RC_COMPILER=llvm-rc ..
+ninja
 .\Lab_05_Client\Lab_05_Client.exe -h
 .\Lab_05_Server\Lab_05_Server.exe -h
 ```
