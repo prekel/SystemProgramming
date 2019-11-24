@@ -14,7 +14,7 @@
 #include <unistd.h>
 #endif
 
-#include "Args.h"
+#include "ServerArgs.h"
 #include "ParseInt.h"
 #include "ReturnCodes.h"
 #include "Socket.h"

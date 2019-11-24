@@ -3,7 +3,7 @@ project(Lab_05_Server C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(Lab_05_Server main.c Server.c Server.h Args.c Args.h)
+add_executable(Lab_05_Server main.c Server.c Server.h ServerArgs.c ServerArgs.h)
 
 target_link_libraries(Lab_05_Server PRIVATE Lab_05_Lib)
 target_link_libraries(Lab_05_Server PRIVATE Lab_05_MatrixLib)

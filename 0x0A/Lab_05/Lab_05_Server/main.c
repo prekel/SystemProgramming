@@ -11,6 +11,7 @@
 #include "Request.h"
 #include "Server.h"
 #include "ReturnCodes.h"
+#include "ServerArgs.h"
 
 /// Главная функция сервера. Вариант 16.
 ///

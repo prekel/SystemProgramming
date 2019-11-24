@@ -5,7 +5,7 @@ set(CMAKE_C_STANDARD 99)
 
 add_executable(Lab_05_Client main.c
         Client.c Client.h
-        Args.c Args.h)
+        ClientArgs.c ClientArgs.h)
 
 target_link_libraries(Lab_05_Client PRIVATE Lab_05_Lib)
 target_link_libraries(Lab_05_Client PRIVATE Lab_05_MatrixLib)

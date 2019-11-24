@@ -16,7 +16,7 @@
 #include <unistd.h>
 #endif
 
-#include "Args.h"
+#include "ClientArgs.h"
 #include "ParseInt.h"
 #include "ReturnCodes.h"
 #include "Input.h"
@@ -87,7 +87,7 @@ Args* ParseArgs(int argc, char** pArgv)
     RETURN_NULL_IF_NULLPTR(pArgs);
 
     int opt;
-    while ((opt = getopt(argc, pArgv, OPT_STRING)) != -1)
+    while ((opt = getopt(argc, pArgv, OPT_STRING)) != UNSUCCESSFUL)
     {
         switch (opt)
         {

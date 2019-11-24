@@ -1,22 +1,33 @@
 /// \file
-/// \brief Аргументы коммандной строки сервера
+/// \brief Аргументы коммандной строки клиента
 /// \details Аргументы коммандной строки и их парсинг.
 
-
-#ifndef ARGS_H
-#define ARGS_H
+#ifndef CLIENT_ARGS_H
+#define CLIENT_ARGS_H
 
 #include <stdbool.h>
+
+#include "Matrix.h"
 
 /// \struct Args
 ///
 /// Аргументы коммандной строки.
 typedef struct
 {
+    /// Дан ли IP-адрес сервера.
+    bool IsIpAddressGiven;
+    /// IP-адрес сервера.
+    char* IpAddress;
+
     /// Дан ли порт.
     bool IsPortGiven;
     /// Порт.
     int Port;
+
+    /// Дана ли степень матрицы.
+    bool IsDegreeGiven;
+    /// Степень матрицы.
+    int Degree;
 
     /// Требуется ли вывод справки.
     bool IsHelpGiven;
@@ -57,7 +68,22 @@ void DestroyArgs(Args* pArgs);
 /// аллокации.
 Args* ParseArgs(int argc, char** pArgv);
 
-/// Вывод справки.
+/// Считывает из стандарного ввода недостающие опции.
+///
+/// \param pArgs Указатель на аргументы командной строки.
+/// \return SUCCESSFUL (0) в случае успеха.
+int InputAllOption(Args* pArgs);
+
+/// Считывает матрицу из стандарного ввода, если не была задана в аргументах
+/// командной строки.
+///
+/// \param pArgs Указатель на аргументы командной строки.
+/// \param pMatrixA Указатель на матрицу.
+/// \return SUCCESSFUL (0) в случае успеха, BAD_ARGS или BAD_VALUE в случае
+/// ошибки.
+int InputOrFillMatrices(Args* pArgs, Matrix* pMatrixA, Matrix* pMatrixB);
+
+/// Выводит справку.
 void PrintHelp();
 
 /// Действие при неизвестном параметре.
@@ -65,4 +91,4 @@ void PrintHelp();
 /// \param pArgs
 void UnknownOption(Args* pArgs);
 
-#endif //ARGS_H
+#endif //CLIENT_ARGS_H

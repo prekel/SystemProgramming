@@ -5,7 +5,7 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include "Args.h"
+#include "ServerArgs.h"
 #include "Matrix.h"
 #include "Request.h"
 
