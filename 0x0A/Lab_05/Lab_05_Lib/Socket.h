@@ -8,9 +8,11 @@
 
 #ifdef _MSC_VER
 #include <WinSock2.h>
+#include <Ws2tcpip.h>
 #include <Windows.h>
 #elif _WIN32
 #include <winsock2.h>
+#include <ws2tcpip.h>
 #include <windows.h>
 #include <sys/types.h>
 #include <fcntl.h>
@@ -23,7 +25,6 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #endif
-
 
 #ifndef NO_ERROR
 #define NO_ERROR 0
