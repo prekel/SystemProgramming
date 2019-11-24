@@ -2,9 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([Lab_05], [2.0], [misterptits@yandex.ru])
+AC_INIT([Lab_05], [3.0], [misterptits@yandex.ru])
 AC_CONFIG_SRCDIR([Lab_05_Client/main.c])
-#AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
 AC_PROG_CC

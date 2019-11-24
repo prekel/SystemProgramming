@@ -21,7 +21,7 @@ int Server(Args* pArgs, Request* pRequest, Matrix** ppMatrixA,
     if (pSocketToClose) *pSocketToClose = receiveSock;
 
     struct sockaddr clientAddress;
-    socklen_t addressLength;
+    socklen_t addressLength = sizeof (struct sockaddr);
 
     Request request;
     RETURN_IF_SOCKET_ERROR(ServerReceiveRequest(receiveSock,
