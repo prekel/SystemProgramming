@@ -33,6 +33,14 @@ make
 ./Lab_05_Client/Lab_05_Client -h
 ./Lab_05_Server/Lab_05_Server -h
 
+# linux, cmake, ninja, clang
+mkdir buildcmake
+cd buildcmake
+cmake -G "Ninja" -DCMAKE_C_COMPILER=clang ..
+ninja
+./Lab_05_Client/Lab_05_Client -h
+./Lab_05_Server/Lab_05_Server -h
+
 # windows, cmake, msbuild, msvc
 mkdir buildcmake
 cd buildcmake 
