@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData">
+    <serverData>
+      <paths name="MySandbox (2ccbddf4-c5ad-4a65-bf5a-565a1a916334)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/tmp.uMhj7NIJzN" local="$PROJECT_DIR$" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug" />
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug-mingw" />
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug-mysandbox" />
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug-wsl-clang" />
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug-wsl-clang" />
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug-wsl" />
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug-mysandbox" />
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug-mysandbox-clang" />
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug-wsl" />
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug-mingw" />
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug-visual-studio" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+      <paths name="WSL (Clang) (5d711f74-2c89-43e2-9d3d-317b8ad7217e)">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="WSL (GCC) (5003bfc4-5b26-4aeb-8b8e-ef153dbb2214)">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>

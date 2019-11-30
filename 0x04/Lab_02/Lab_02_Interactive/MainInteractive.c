@@ -42,8 +42,6 @@ bool PhilosophersCountChecker(int philosophersCount)
     return 2 <= philosophersCount;
 }
 
-static FILE* g_pOutputFile;
-
 //int PrintToFile(char* format)
 //{
 //    //int ret = fprintf(g_pOutputFile, format);
@@ -153,10 +151,8 @@ int main(int argc, char** args)
                                 maxDurationEat,
                                 isInfinityDuration);
 
-    //InitLogger(pTable, stdout, false, fopen("5.txt", "w+"), false);
-    g_pOutputFile = fopen("3.log", "w+");
-    FILE* file2 = fopen("4.log", "w+");
-    InitLogger(pTable, true, stdout, file2, NULL, NULL);
+    FILE* pLogFile = fopen("log.log", "w+");
+    InitLogger(pTable, true, stdout, pLogFile, NULL, NULL);
     LOG("Введены данные, создание объектов, запуск потоков");
 
     MainWindow* pMainWindow = CreateMainWindow(
@@ -179,8 +175,7 @@ int main(int argc, char** args)
     DestroyMainWindow(pMainWindow);
     DestroyTable(pTable);
 
-    fclose(g_pOutputFile);
-    fclose(file2);
+    fclose(pLogFile);
 
     return ret;
 }

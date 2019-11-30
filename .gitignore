@@ -5,7 +5,7 @@ CMakeCache.txt
 CMakeFiles
 CMakeScripts
 Testing
-Makefile
+#Makefile
 cmake_install.cmake
 install_manifest.txt
 compile_commands.json
@@ -37,7 +37,6 @@ out/
 
 # Gradle files
 .gradle/
-build/
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -543,15 +542,12 @@ MigrationBackup/
 cmake-build-*
 
 
-/.idea/
-
 /.vs/
 /out/
 /CMakeSettings.json
 
 /CMakeLists.txt.user
 
-/build/
 /0x04/html
 /0x04/Lab_02/build/
 /0x04/Lab_02/html/
@@ -565,3 +561,22 @@ cmake-build-*
 
 /0x04/Lab_02/Lab_02_Android/Lab_02_Android.iml
 /0x04/Lab_02/Lab_02_Android/local.properties
+
+*.o
+*.a
+*.lib
+*.exe
+/0x08/Lab_04/Lab_04_Console/Lab_04_Console
+
+*.bin
+
+html/
+/0x0A/Lab_05/autom4te.cache/
+.deps
+/0x0A/Lab_05/config.status
+*.dirstamp
+/0x0A/Lab_05/build/Makefile
+/0x0A/Lab_05/Makefile
+/0x0A/Lab_05/build/Lab_05_Client
+/0x0A/Lab_05/build/Lab_05_Server
+/0x0A/Lab_05/buildcmake
