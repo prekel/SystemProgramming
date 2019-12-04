@@ -1,7 +1,8 @@
-AS = as
-LD = gcc
+CLANG = clang
+AS = $(CLANG)
+LD = $(CLANG)
 
-ASFLAGS = --32
+ASFLAGS = -c -target i386
 LDFLAGS = -m32
 
 all : read-records write-records
