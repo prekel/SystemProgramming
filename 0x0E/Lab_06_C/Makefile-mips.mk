@@ -9,27 +9,27 @@ ASFLAGS =
 CLANGFLAGS = -c -target mips
 LDFLAGS = 
 
-all : clang_O0.s clang_O2.s gcc_O0.s gcc_O2.s
+all : clang_O0.s clang_Os.s gcc_O0.s gcc_Os.s
 
 
 clang_O0.ll : main.c
 	$(CLANG) $(CLANGFLAGS) -S -emit-llvm -O0 $^ -o $@
 
-clang_O2.ll : main.c
-	$(CLANG) $(CLANGFLAGS) -S -emit-llvm -O2 $^ -o $@
+clang_Os.ll : main.c
+	$(CLANG) $(CLANGFLAGS) -S -emit-llvm -Os $^ -o $@
 
 clang_O0.s : clang_O0.ll
 	$(LLC) $^ -o $@
 
-clang_O2.s : clang_O2.ll
+clang_Os.s : clang_Os.ll
 	$(LLC) $^ -o $@
 
 
 gcc_O0.s : main.c
 	$(GCC) $(LDFLAGS) -S -O0 $^ -o $@
 
-gcc_O2.s : main.c
-	$(GCC) $(LDFLAGS) -S -O2 $^ -o $@
+gcc_Os.s : main.c
+	$(GCC) $(LDFLAGS) -S -Os $^ -o $@
 
 
 .PHONY : clean
