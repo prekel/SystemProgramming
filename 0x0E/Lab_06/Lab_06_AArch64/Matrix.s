@@ -162,50 +162,6 @@ CountLine:                              // @CountLine
 	add	sp, sp, #48             // =48
 	ret
                                         // -- End function
-	.globl	main
-main:                                   // @main
-// %bb.0:
-	sub	sp, sp, #48             // =48
-	stp	x29, x30, [sp, #32]     // 16-byte Folded Spill
-	add	x29, sp, #32            // =32
-	stur	wzr, [x29, #-4]
-	sub	x0, x29, #8             // =8
-	sub	x1, x29, #12            // =12
-	bl	ReadMN
-	ldur	w8, [x29, #-8]
-	ldur	w9, [x29, #-12]
-	mul	w8, w8, w9
-	sbfiz	x0, x8, #2, #32
-	bl	malloc
-	str	x0, [sp, #8]
-	ldr	x0, [sp, #8]
-	ldur	w1, [x29, #-8]
-	ldur	w2, [x29, #-12]
-	bl	ReadMatrix
-	ldr	x0, [sp, #8]
-	ldur	w1, [x29, #-8]
-	ldur	w2, [x29, #-12]
-	bl	CountRow
-	str	w0, [sp, #4]
-	ldr	w1, [sp, #4]
-	adrp	x0, .L.str.1
-	add	x0, x0, :lo12:.L.str.1
-	bl	printf
-	ldr	x0, [sp, #8]
-	ldur	w1, [x29, #-8]
-	ldur	w2, [x29, #-12]
-	bl	CountLine
-	str	w0, [sp]
-	ldr	w1, [sp]
-	adrp	x0, .L.str.1
-	add	x0, x0, :lo12:.L.str.1
-	bl	printf
-	ldr	x0, [sp, #8]
-	bl	free
-	mov	w0, wzr
-	ldp	x29, x30, [sp, #32]     // 16-byte Folded Reload
-	add	sp, sp, #48             // =48
-	ret
 
 .L.str:
 	.asciz	"%d"
