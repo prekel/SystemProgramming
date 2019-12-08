@@ -24,6 +24,5 @@ project(SystemProgramming)
 
 #add_subdirectory(0x0A/Lab_05)
 
-add_subdirectory(0x0E/Lab_06_C)
-#add_subdirectory(0x0E/Lab_06_AArch64)
-add_subdirectory(0x0E/Lab_06_i386)
+add_subdirectory(0x0E/Lab_06_C1)
+add_subdirectory(0x0E/Lab_06)
