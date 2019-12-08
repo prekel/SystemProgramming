@@ -1,13 +1,13 @@
-AS = as 
-GCC = gcc 
+AS = aarch64-linux-gnu-as
+GCC = aarch64-linux-gnu-gcc 
 LLVMVERSION=-8
 CLANG = clang$(LLVMVERSION) 
 LLC = llc$(LLVMVERSION)
 OPT = opt$(LLVMVERSION)
 
-ASFLAGS = --32
-CLANGFLAGS = -c -target i386
-LDFLAGS = -m32
+ASFLAGS = 
+CLANGFLAGS = -c -target aarch64
+LDFLAGS = -static
 
 all : clang_O0 clang_O2 gcc_O0 gcc_O2
 
@@ -48,16 +48,16 @@ gcc_O2.o : gcc_O2.s
 
 
 clang_O0 : clang_O0.o
-	$(CLANG) $(LDFLAGS) $^ -o $@
+	$(GCC) $(LDFLAGS) $^ -o $@
 
 clang_O2 : clang_O2.o
-	$(CLANG) $(LDFLAGS) $^ -o $@
+	$(GCC) $(LDFLAGS) $^ -o $@
 
 gcc_O0 : gcc_O0.o
-	$(CLANG) $(LDFLAGS) $^ -o $@
+	$(GCC) $(LDFLAGS) $^ -o $@
 
 gcc_O2 : gcc_O2.o
-	$(CLANG) $(LDFLAGS) $^ -o $@
+	$(GCC) $(LDFLAGS) $^ -o $@
 
 .PHONY : clean
 clean :

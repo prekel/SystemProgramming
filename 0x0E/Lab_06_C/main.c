@@ -4,9 +4,10 @@
 
 bool Check(const int* pArray, int step, int size)
 {
-    for (int i = 0; i < size * step; i += step)
+    int max = size * step;
+    for (int i = 0; i < max; i += step)
     {
-        for (int j = i + step; j < size * step; j += step)
+        for (int j = i + step; j < max; j += step)
         {
             if (pArray[i] == pArray[j])
             {
@@ -39,7 +40,8 @@ int CountRow(int* pMatrix, int m, int n)
     int c = 0;
     for (int i = 0; i < n; i++)
     {
-        if (Check(pMatrix + i, n, m))
+        bool check = Check(pMatrix + i, n, m);
+        if (check)
         {
             c++;
         }
@@ -52,7 +54,8 @@ int CountLine(int* pMatrix, int m, int n)
     int c = 0;
     for (int i = 0; i < m; i++)
     {
-        if (Check(pMatrix + i * n, 1, n))
+        bool check = Check(pMatrix + i * n, 1, n);
+        if (check)
         {
             c++;
         }
@@ -71,8 +74,10 @@ int main()
 
     ReadMatrix(pMatrix, m, n);
 
-    printf("%d\n", CountRow(pMatrix, m, n));
-    printf("%d\n", CountLine(pMatrix, m, n));
+    int countRow = CountRow(pMatrix, m, n);
+    printf("%d\n", countRow);
+    int countLine = CountLine(pMatrix, m, n);
+    printf("%d\n", countLine);
 
     free(pMatrix);
 
