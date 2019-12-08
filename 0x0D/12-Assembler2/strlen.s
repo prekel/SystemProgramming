@@ -15,7 +15,7 @@ my_strlen:
 
         pushl %edi
 
-        movl  8(%ebp), %edi             /* цепочка */
+        movl  8(%ebp), %edi             /* я├п╣п©п╬я┤п╨п╟ */
 
         movl  $0xffffffff, %ecx
         xorl  %eax, %eax                /* %eax = 0 */
