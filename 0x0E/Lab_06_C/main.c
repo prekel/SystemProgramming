@@ -2,30 +2,79 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-typedef struct
+bool Check(const int* pArray, int step, int size)
 {
-    int M;
-    int N;
-    int** pData;
-} Matrix;
-
-bool IsOnly(Matrix* pMatrix, int k, bool isRow)
-{
-    for (int i = 0; i < pMatrix->M; i++)
+    for (int i = 0; i < size * step; i += step)
     {
-        for (int j = 0; j < pMatrix->N; j++)
+        for (int j = i + step; j < size * step; j += step)
         {
-            if (pMatrix->pData[k][i] == pMatrix->pData[k][j])
+            if (pArray[i] == pArray[j])
             {
                 return false;
             }
         }
     }
-
     return true;
+}
+
+void ReadMatrix(int* pMatrix, int m, int n)
+{
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            scanf("%d", &pMatrix[i * n + j]);
+        }
+    }
+}
+
+void ReadMN(int* pM, int* pN)
+{
+    scanf("%d", pM);
+    scanf("%d", pN);
+}
+
+int CountRow(int* pMatrix, int m, int n)
+{
+    int c = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (Check(pMatrix + i, n, m))
+        {
+            c++;
+        }
+    }
+    return c;
+}
+
+int CountLine(int* pMatrix, int m, int n)
+{
+    int c = 0;
+    for (int i = 0; i < m; i++)
+    {
+        if (Check(pMatrix + i * n, 1, n))
+        {
+            c++;
+        }
+    }
+    return c;
 }
 
 int main()
 {
+    int m;
+    int n;
+
+    ReadMN(&m, &n);
+
+    int* pMatrix = malloc(m * n * sizeof(int));
+
+    ReadMatrix(pMatrix, m, n);
+
+    printf("%d\n", CountRow(pMatrix, m, n));
+    printf("%d\n", CountLine(pMatrix, m, n));
+
+    free(pMatrix);
+
     return 0;
 }
