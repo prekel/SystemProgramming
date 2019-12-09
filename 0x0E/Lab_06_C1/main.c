@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-bool Check(const int* pArray, int step, int size)
+bool CheckAllDifferent(const int* pArray, int step, int size)
 {
     int max = size * step;
     for (int i = 0; i < max; i += step)
@@ -18,49 +18,63 @@ bool Check(const int* pArray, int step, int size)
     return true;
 }
 
+int CountDifferentLines(int* pMatrix, int m, int n)
+{
+    int c = 0;
+    for (int i = 0; i < m; i++)
+    {
+        bool check = CheckAllDifferent(pMatrix + i * n, 1, n);
+        if (check)
+        {
+            c++;
+        }
+    }
+    return c;
+}
+
+int CountDifferentRows(int* pMatrix, int m, int n)
+{
+    int c = 0;
+    for (int i = 0; i < n; i++)
+    {
+        bool check = CheckAllDifferent(pMatrix + i, n, m);
+        if (check)
+        {
+            c++;
+        }
+    }
+    return c;
+}
+
+void ReadMN(int* pM, int* pN)
+{
+    printf("Введите M и N (кол-во строк и столбцов, a[M][N]): ");
+    scanf("%d%d", pM, pN);
+}
+
 void ReadMatrix(int* pMatrix, int m, int n)
 {
     for (int i = 0; i < m; i++)
     {
         for (int j = 0; j < n; j++)
         {
+            printf("Введите a[%d][%d]: ", i, j);
             scanf("%d", &pMatrix[i * n + j]);
         }
     }
 }
 
-void ReadMN(int* pM, int* pN)
+void WriteMatrix(int* pMatrix, int m, int n)
 {
-    scanf("%d", pM);
-    scanf("%d", pN);
-}
-
-int CountRow(int* pMatrix, int m, int n)
-{
-    int c = 0;
-    for (int i = 0; i < n; i++)
-    {
-        bool check = Check(pMatrix + i, n, m);
-        if (check)
-        {
-            c++;
-        }
-    }
-    return c;
-}
-
-int CountLine(int* pMatrix, int m, int n)
-{
-    int c = 0;
+    printf("\nМатрица a[%d][%d]:\n", m, n);
     for (int i = 0; i < m; i++)
     {
-        bool check = Check(pMatrix + i * n, 1, n);
-        if (check)
+        for (int j = 0; j < n; j++)
         {
-            c++;
+            printf("%d ", pMatrix[i * n + j]);
         }
+        printf("\n");
     }
-    return c;
 }
 
 int main()
@@ -70,14 +84,16 @@ int main()
 
     ReadMN(&m, &n);
 
-    int* pMatrix = malloc(m * n * sizeof(int));
+    int* pMatrix = (int*) malloc(m * n * sizeof(int));
 
     ReadMatrix(pMatrix, m, n);
 
-    int countRow = CountRow(pMatrix, m, n);
-    printf("%d\n", countRow);
-    int countLine = CountLine(pMatrix, m, n);
-    printf("%d\n", countLine);
+    WriteMatrix(pMatrix, m, n);
+
+    int countLine = CountDifferentLines(pMatrix, m, n);
+    printf("Кол-во строк, все элементы которых различны: %d\n", countLine);
+    int countRow = CountDifferentRows(pMatrix, m, n);
+    printf("Кол-во столбцов, все элементы которых различны: %d\n", countRow);
 
     free(pMatrix);
 
