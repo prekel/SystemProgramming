@@ -12,10 +12,10 @@ LDFLAGS = -static
 all : clang_O0 clang_Os gcc_O0 gcc_Os
 
 clang_O0.ll : main.c
-	$(CLANG) $(CLANGFLAGS) -S -emit-llvm -O0 -mcmodel=tiny $^ -o $@
+	$(CLANG) $(CLANGFLAGS) -S -emit-llvm -O0 -fno-stack-protector $^ -o $@
 
 clang_Os.ll : main.c
-	$(CLANG) $(CLANGFLAGS) -S -emit-llvm -Os -mcmodel=tiny $^ -o $@
+	$(CLANG) $(CLANGFLAGS) -S -emit-llvm -Os -fno-stack-protector $^ -o $@
 
 clang_O0.s : clang_O0.ll
 	$(LLC) $^ -o $@
@@ -25,10 +25,10 @@ clang_Os.s : clang_Os.ll
 
 
 gcc_O0.s : main.c
-	$(GCC) $(LDFLAGS) -S -O0 -mcmodel=tiny $^ -o $@
+	$(GCC) $(LDFLAGS) -S -O0 -fno-stack-protector $^ -o $@
 
 gcc_Os.s : main.c
-	$(GCC) $(LDFLAGS) -S -Os -mcmodel=tiny $^ -o $@
+	$(GCC) $(LDFLAGS) -S -Os -mcmodel=tiny -fno-stack-protector $^ -o $@
 
 
 

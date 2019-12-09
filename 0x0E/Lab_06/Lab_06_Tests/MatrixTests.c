@@ -30,4 +30,6 @@ void Test1()
     }
     CU_ASSERT_EQUAL(CountLine(pMatrix, m, n), m);
     CU_ASSERT_EQUAL(CountRow(pMatrix, m, n), n);
+
+    free(pMatrix);
 }
