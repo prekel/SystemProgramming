@@ -40,38 +40,43 @@ CountDifferentLines:
     str x23, [sp, #-8]!
     str x24, [sp, #-8]!
     str x25, [sp, #-8]!
+    str x26, [sp, #-8]!
 
     mov x23, x0                                 // x23 <- x0
-    mov x24, x1                                 // x24 <- x1
-    mov x25, x2                                 // x25 <- x2
+    mov w24, w1                                 // w24 <- w1
+    mov w25, w2                                 // w25 <- w2
+
+    mov x26, x0
 
     mov w19, #0                                 // x19 <- 0
 
-    // for (x20 = 0, x20 < x24, x20++)
+    // for (w20 = 0, w20 < w24, w20++)
     Loop3_Start:
-        mov x20, #0                             // x20 <- 0
+        mov w20, #0                             // x20 <- 0
         b Loop3_Check                           // goto Loop3_Check
         Loop3_Body:
-            madd x0, x20, x25, x23              // x0 <- x20 * x25 + x23
-            mov x1, #1                          // x1 <- 1
-            mov x2, x25                         // x2 <- x25
+            mov x0, x26
+            mov w1, #1                          // x1 <- 1
+            mov w2, w25                         // x2 <- x25
             bl CheckAllDifferent                // call CheckAllDifferent
-            cmp x0, #0                          //  if x0 == false
+            cmp w0, #0                          //  if x0 == false
             b.eq Loop3_Continue                 //  goto Loop3_Continue
             add w19, w19, #1                    // w19++
 
             adr x0, DecimalIntDebugFormat
-            mov w1, x20
+            mov w1, w20
             bl printf
 
             Loop3_Continue:
-                add x20, x20, #1                // x20++
+                add x26, x26, x25
+                add w20, w20, #1                // x20++
         Loop3_Check:
-            cmp x20, x24                        //  if x20 < x24
+            cmp w20, w24                        //  if x20 < x24
             b.lt Loop3_Body                     //  goto Loop3_Body
 
 	mov w0, w19
 
+    ldr x26, [sp], #8
     ldr x25, [sp], #8
     ldr x24, [sp], #8
     ldr x23, [sp], #8
@@ -108,6 +113,11 @@ CountDifferentRows:
             cmp x0, #0                          //  if x0 == false
             b.eq Loop4_Continue                 //  goto Loop4_Continue
             add w19, w19, #1                    // w19++
+
+            adr x0, DecimalIntDebugFormat1
+            mov x1, x20
+            bl printf
+
             Loop4_Continue:
                 add x20, x20, #1                // x20++
         Loop4_Check:
@@ -126,4 +136,8 @@ CountDifferentRows:
 	ret
 
 DecimalIntDebugFormat:
-    .asciz "|-%d--"
+    .asciz "|l-%d--"
+
+
+DecimalIntDebugFormat1:
+    .asciz "|r--%d-"

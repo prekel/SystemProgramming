@@ -32,6 +32,7 @@ static void MatrixTestsAddTests(CU_pSuite* pSuite)
     CU_ADD_TEST(*pSuite, Test_CountLineRowAndWrite_5x4_OneDiff);
     CU_ADD_TEST(*pSuite, Test_CheckLines_5x4_1);
     CU_ADD_TEST(*pSuite, Test_CheckLine5_Custom);
+    CU_ADD_TEST(*pSuite, Test_CheckLine4_Custom);
     CU_ADD_TEST(*pSuite, Test_CheckRows_5x4_1);
     CU_ADD_TEST(*pSuite, Test_CountLineRowAndWrite_1x1_1);
     CU_ADD_TEST(*pSuite, Test_CountLineRowAndWrite_0x0_1);
@@ -183,6 +184,30 @@ void Test_CheckLine5_Custom()
 
     int pMatrix12[5] = {5,-1,-1,-1,-1};
     CU_ASSERT_FALSE(CheckAllDifferent(pMatrix12, 1, n));
+
+    TEST_EPILOGUE();
+}
+
+void Test_CheckLine4_Custom()
+{
+    TEST_PROLOGUE();
+
+    const int n = 4;
+
+    int pMatrix1[4] = {0,1,2,3};
+    CU_ASSERT_TRUE(CheckAllDifferent(pMatrix1, 1, n));
+
+    int pMatrix2[4] = {4,0,0,0};
+    CU_ASSERT_FALSE(CheckAllDifferent(pMatrix2, 1, n));
+
+    int pMatrix3[4] = {8,0,0,0};
+    CU_ASSERT_FALSE(CheckAllDifferent(pMatrix3, 1, n));
+
+    int pMatrix4[4] = {12,0,0,0};
+    CU_ASSERT_FALSE(CheckAllDifferent(pMatrix4, 1, n));
+
+    int pMatrix5[4] = {16,0,0,0};
+    CU_ASSERT_FALSE(CheckAllDifferent(pMatrix5, 1, n));
 
     TEST_EPILOGUE();
 }
