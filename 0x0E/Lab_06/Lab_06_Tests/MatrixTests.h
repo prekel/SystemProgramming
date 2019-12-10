@@ -15,9 +15,11 @@ void Test_CountLineRowAndWrite_5x4_All0();
 
 void Test_CountLineRowAndWrite_5x4_OneDiff();
 
-void Test_CheckLine_1();
+void Test_CheckLines_5x4_1();
 
-void Test_CheckRow_1();
+void Test_CheckLine5_Custom();
+
+void Test_CheckRows_5x4_1();
 
 void Test_CountLineRowAndWrite_1x1_1();
 
