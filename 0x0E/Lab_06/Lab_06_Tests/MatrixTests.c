@@ -162,7 +162,6 @@ void Test_CheckRow_1()
     CU_ASSERT_FALSE(CheckAllDifferent(pMatrix + 1, n, m));
     CU_ASSERT_FALSE(CheckAllDifferent(pMatrix + 2, n, m));
     CU_ASSERT_FALSE(CheckAllDifferent(pMatrix + 3, n, m));
-    CU_ASSERT_FALSE(CheckAllDifferent(pMatrix + 5, n, m));
 
     WriteMatrix(pMatrix, m, n);
     PRINT_COUNTS(pMatrix, m, n);
