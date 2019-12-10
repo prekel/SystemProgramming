@@ -20,7 +20,7 @@ bool CheckAllDifferent(const int* pArray, int step, int size)
     return true;
 }
 
-int CountDifferentLines(int* pMatrix, int m, int n)
+int CountDifferentLines(const int* pMatrix, int m, int n)
 {
     int c = 0;
     for (int i = 0; i < m; i++)
@@ -34,7 +34,7 @@ int CountDifferentLines(int* pMatrix, int m, int n)
     return c;
 }
 
-int CountDifferentRows(int* pMatrix, int m, int n)
+int CountDifferentRows(const int* pMatrix, int m, int n)
 {
     int c = 0;
     for (int i = 0; i < n; i++)
