@@ -11,7 +11,7 @@ int main()
 
     ReadMN(&m, &n);
 
-    int pMatrix[m * n];
+    int* pMatrix = (int*) malloc(m * n * sizeof(int));
 
     ReadMatrix(pMatrix, m, n);
 
@@ -23,6 +23,8 @@ int main()
            CountDifferentLines(pMatrix, m, n));
     printf("Кол-во столбцов, все элементы которых различны: %d\n",
            CountDifferentRows(pMatrix, m, n));
+
+    free(pMatrix);
 
     return 0;
 }
