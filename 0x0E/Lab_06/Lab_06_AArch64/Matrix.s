@@ -55,9 +55,16 @@ CountDifferentLines:
         mov w20, #0                             // x20 <- 0
         b Loop3_Check                           // goto Loop3_Check
         Loop3_Body:
+
+            adr x0, DecimalIntDebugFormat2
+            ldr w1, [x26]
+            bl printf
+
+
             mov x0, x26
             mov w1, #1                          // x1 <- 1
             mov w2, w25                         // x2 <- x25
+
             bl CheckAllDifferent                // call CheckAllDifferent
             cmp w0, #0                          //  if x0 == false
             b.eq Loop3_Continue                 //  goto Loop3_Continue
@@ -141,3 +148,6 @@ DecimalIntDebugFormat:
 
 DecimalIntDebugFormat1:
     .asciz "|r--%d-"
+
+DecimalIntDebugFormat2:
+    .asciz "|a--%d--"
