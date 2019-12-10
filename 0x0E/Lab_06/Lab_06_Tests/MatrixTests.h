@@ -9,7 +9,23 @@
 
 CU_pSuite* MatrixTestsSuiteCreate();
 
-void TestCountLineRowAndWrite();
+void Test_CountLineRowAndWrite_5x4_0to19();
+
+void Test_CountLineRowAndWrite_5x4_All0();
+
+void Test_CountLineRowAndWrite_5x4_OneDiff();
+
+void Test_CheckLine_1();
+
+void Test_CheckRow_1();
+
+void Test_CountLineRowAndWrite_1x1_1();
+
+void Test_CountLineRowAndWrite_0x0_1();
+
+void Test_CountLineRowAndWrite_3x3_Custom1();
+
+void Test_CountLineRowAndWrite_3x3_Custom2();
 
 #endif //MATRIXTESTS_H
 
