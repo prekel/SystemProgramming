@@ -11,18 +11,18 @@ int main()
 
     ReadMN(&m, &n);
 
-    int* pMatrix = (int*) malloc(m * n * sizeof(int));
+    int pMatrix[m * n];
 
     ReadMatrix(pMatrix, m, n);
 
+    printf("\n");
+
     WriteMatrix(pMatrix, m, n);
 
-    int countLine = CountDifferentLines(pMatrix, m, n);
-    printf("\nКол-во строк, все элементы которых различны: %d\n", countLine);
-    int countRow = CountDifferentRows(pMatrix, m, n);
-    printf("Кол-во столбцов, все элементы которых различны: %d\n", countRow);
-
-    free(pMatrix);
+    printf("Кол-во строк, все элементы которых различны: %d\n",
+           CountDifferentLines(pMatrix, m, n));
+    printf("Кол-во столбцов, все элементы которых различны: %d\n",
+           CountDifferentRows(pMatrix, m, n));
 
     return 0;
 }

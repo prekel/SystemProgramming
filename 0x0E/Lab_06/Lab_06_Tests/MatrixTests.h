@@ -27,5 +27,9 @@ void Test_CountLineRowAndWrite_3x3_Custom1();
 
 void Test_CountLineRowAndWrite_3x3_Custom2();
 
+void Example_CountLineRowAndWrite_3x6_RandomThrice();
+
+void Example_CountLineRowAndWrite_10x15_RandomThrice();
+
 #endif //MATRIXTESTS_H
 

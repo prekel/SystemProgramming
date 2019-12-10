@@ -8,7 +8,7 @@ INC =
 
 
 
-SOURCES = main.s Matrix.s
+SOURCES = main.s Matrix.s MatrixIO.s
 OBJECTS = $(SOURCES:.s=.o)
 
 OUTFILE = Lab_06_AArch64
@@ -24,3 +24,4 @@ $(OUTFILE): $(OBJECTS)
 .PHONY: clean
 clean:
 	rm $(OUTFILE) *.o
+

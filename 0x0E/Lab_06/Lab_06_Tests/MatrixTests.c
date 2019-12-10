@@ -1,5 +1,7 @@
 #include <stdbool.h>
 #include <malloc.h>
+#include <stdlib.h>
+#include <time.h>
 
 #include <CUnit/Basic.h>
 
@@ -8,6 +10,15 @@
 
 #include "Matrix.h"
 #include "MatrixIO.h"
+
+#define PrintCounts(pMatrix, m, n) \
+do { \
+printf("Кол-во строк, все элементы которых различны: %d\n", \
+CountDifferentLines(pMatrix, m, n)); \
+printf("Кол-во столбцов, все элементы которых различны: %d\n", \
+CountDifferentRows(pMatrix, m, n)); \
+} while (false) \
+
 
 static void MatrixTestsAddTests(CU_pSuite* pSuite)
 {
@@ -20,6 +31,8 @@ static void MatrixTestsAddTests(CU_pSuite* pSuite)
     CU_ADD_TEST(*pSuite, Test_CountLineRowAndWrite_0x0_1);
     CU_ADD_TEST(*pSuite, Test_CountLineRowAndWrite_3x3_Custom1);
     CU_ADD_TEST(*pSuite, Test_CountLineRowAndWrite_3x3_Custom2);
+    CU_ADD_TEST(*pSuite, Example_CountLineRowAndWrite_3x6_RandomThrice);
+    CU_ADD_TEST(*pSuite, Example_CountLineRowAndWrite_10x15_RandomThrice);
 }
 
 CU_pSuite* MatrixTestsSuiteCreate()
@@ -42,6 +55,7 @@ void Test_CountLineRowAndWrite_5x4_0to19()
     CU_ASSERT_EQUAL(CountDifferentRows(pMatrix, m, n), n);
 
     WriteMatrix(pMatrix, m, n);
+    PrintCounts(pMatrix, m, n);
 
     free(pMatrix);
 }
@@ -61,6 +75,7 @@ void Test_CountLineRowAndWrite_5x4_All0()
     CU_ASSERT_EQUAL(CountDifferentRows(pMatrix, m, n), 0);
 
     WriteMatrix(pMatrix, m, n);
+    PrintCounts(pMatrix, m, n);
 }
 
 void Test_CountLineRowAndWrite_5x4_OneDiff()
@@ -83,6 +98,7 @@ void Test_CountLineRowAndWrite_5x4_OneDiff()
     CU_ASSERT_EQUAL(CountDifferentRows(pMatrix, m, n), 1);
 
     WriteMatrix(pMatrix, m, n);
+    PrintCounts(pMatrix, m, n);
 }
 
 void Test_CheckLine_1()
@@ -106,9 +122,10 @@ void Test_CheckLine_1()
     CU_ASSERT_FALSE(CheckAllDifferent(pMatrix + n, 1, n));
     CU_ASSERT_FALSE(CheckAllDifferent(pMatrix + 2 * n, 1, n));
     CU_ASSERT_FALSE(CheckAllDifferent(pMatrix + 3 * n, 1, n));
-    CU_ASSERT_FALSE(CheckAllDifferent(pMatrix + 5 * n, 1, n));
+    CU_ASSERT_FALSE(CheckAllDifferent(pMatrix + 4 * n, 1, n));
 
     WriteMatrix(pMatrix, m, n);
+    PrintCounts(pMatrix, m, n);
 }
 
 void Test_CheckRow_1()
@@ -135,6 +152,7 @@ void Test_CheckRow_1()
     CU_ASSERT_FALSE(CheckAllDifferent(pMatrix + 5, n, m));
 
     WriteMatrix(pMatrix, m, n);
+    PrintCounts(pMatrix, m, n);
 }
 
 void Test_CountLineRowAndWrite_1x1_1()
@@ -150,6 +168,7 @@ void Test_CountLineRowAndWrite_1x1_1()
     CU_ASSERT_EQUAL(CountDifferentRows(pMatrix, m, n), 1);
 
     WriteMatrix(pMatrix, m, n);
+    PrintCounts(pMatrix, m, n);
 }
 
 void Test_CountLineRowAndWrite_0x0_1()
@@ -165,6 +184,7 @@ void Test_CountLineRowAndWrite_0x0_1()
     CU_ASSERT_EQUAL(CountDifferentRows(pMatrix, m, n), 0);
 
     WriteMatrix(pMatrix, m, n);
+    PrintCounts(pMatrix, m, n);
 }
 
 void Test_CountLineRowAndWrite_3x3_Custom1()
@@ -182,6 +202,7 @@ void Test_CountLineRowAndWrite_3x3_Custom1()
     CU_ASSERT_EQUAL(CountDifferentRows(pMatrix, m, n), 2);
 
     WriteMatrix(pMatrix, m, n);
+    PrintCounts(pMatrix, m, n);
 }
 
 
@@ -200,4 +221,51 @@ void Test_CountLineRowAndWrite_3x3_Custom2()
     CU_ASSERT_EQUAL(CountDifferentRows(pMatrix, m, n), 1);
 
     WriteMatrix(pMatrix, m, n);
+    PrintCounts(pMatrix, m, n);
+}
+
+void Example_CountLineRowAndWrite_3x6_RandomThrice()
+{
+    printf("%s\n", CU_get_current_test()->pName);
+
+    srand(time(0));
+
+    const int m = 3;
+    const int n = 6;
+
+    int pMatrix[m * n];
+
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < m * n; j++)
+        {
+            pMatrix[j] = rand() % 10;
+        }
+        WriteMatrix(pMatrix, m, n);
+
+        PrintCounts(pMatrix, m, n);
+    }
+}
+
+void Example_CountLineRowAndWrite_10x15_RandomThrice()
+{
+    printf("%s\n", CU_get_current_test()->pName);
+
+    srand(time(0));
+
+    const int m = 10;
+    const int n = 15;
+
+    int pMatrix[m * n];
+
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < m * n; j++)
+        {
+            pMatrix[j] = rand() % 90 + 10;
+        }
+        WriteMatrix(pMatrix, m, n);
+
+        PrintCounts(pMatrix, m, n);
+    }
 }

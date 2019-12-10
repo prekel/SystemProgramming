@@ -3,7 +3,7 @@ CC = gcc
 
 
 CFLAGS = -O0 -g -Wall -std=gnu99
-LDFLAGS = ../Lab_06_C/Matrix.o -lcunit
+LDFLAGS = ../Lab_06_C/Matrix.o ../Lab_06_C/MatrixIO.o -lcunit
 INC = -I..
 
 

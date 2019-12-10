@@ -3,7 +3,7 @@ CC = aarch64-linux-gnu-gcc
 
 
 CFLAGS = -O0 -g -Wall -std=gnu99
-LDFLAGS = ../Lab_06_AArch64/Matrix.o -lcunit -static
+LDFLAGS = ../Lab_06_AArch64/Matrix.o ../Lab_06_AArch64/MatrixIO.o -lcunit -static
 INC = -I.. 
 
 

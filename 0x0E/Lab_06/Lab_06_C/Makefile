@@ -1,8 +1,7 @@
 CC = gcc
 
 
-
-CFLAGS = -O0 -g -Wall -std=gnu99
+CFLAGS = -O0 -Wall -std=gnu99
 LDFLAGS = 
 INC = -I..
 
@@ -13,14 +12,16 @@ OBJECTS = $(SOURCES:.c=.o)
 
 OUTFILE = Lab_06_C
 
-all: $(SOURCES) $(OUTFILE)
-
-$(OUTFILE): $(OBJECTS)
-	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+all: $(SOURCES) $(OUTFILE) 
 
 %.o: %.c
 	$(CC) -c $(INC) $(CFLAGS) $< -o $@
 
+$(OUTFILE): $(OBJECTS)
+	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+
+
 .PHONY: clean
 clean:
-	rm $(OUTFILE) *.o
+	rm $(OUTFILE) $(OBJECTS) 
+

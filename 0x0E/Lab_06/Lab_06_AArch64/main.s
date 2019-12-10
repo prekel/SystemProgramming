@@ -1,131 +1,159 @@
-	.globl	ReadMatrix              // -- Begin function ReadMatrix
-	.p2align	2
-	.type	ReadMatrix,@function
-ReadMatrix:                             // @ReadMatrix
-// %bb.0:
-	sub	sp, sp, #48             // =48
-	stp	x29, x30, [sp, #32]     // 16-byte Folded Spill
-	add	x29, sp, #32            // =32
-	stur	x0, [x29, #-8]
-	stur	w1, [x29, #-12]
-	str	w2, [sp, #16]
-	str	wzr, [sp, #12]
-.LBB1_1:                                // =>This Loop Header: Depth=1
-                                        //     Child Loop BB1_3 Depth 2
-	ldr	w8, [sp, #12]
-	ldur	w9, [x29, #-12]
-	cmp	w8, w9
-	b.ge	.LBB1_8
-// %bb.2:                               //   in Loop: Header=BB1_1 Depth=1
-	str	wzr, [sp, #8]
-.LBB1_3:                                //   Parent Loop BB1_1 Depth=1
-                                        // =>  This Inner Loop Header: Depth=2
-	ldr	w8, [sp, #8]
-	ldr	w9, [sp, #16]
-	cmp	w8, w9
-	b.ge	.LBB1_6
-// %bb.4:                               //   in Loop: Header=BB1_3 Depth=2
-	ldur	x8, [x29, #-8]
-	ldr	w9, [sp, #12]
-	ldr	w10, [sp, #16]
-	ldr	w11, [sp, #8]
-	madd	w9, w9, w10, w11
-	sxtw	x9, w9
-	orr	x10, xzr, #0x4
-	madd	x1, x9, x10, x8
-	adrp	x0, .L.str
-	add	x0, x0, :lo12:.L.str
-	bl	__isoc99_scanf
-// %bb.5:                               //   in Loop: Header=BB1_3 Depth=2
-	ldr	w8, [sp, #8]
-	add	w8, w8, #1              // =1
-	str	w8, [sp, #8]
-	b	.LBB1_3
-.LBB1_6:                                //   in Loop: Header=BB1_1 Depth=1
-	b	.LBB1_7
-.LBB1_7:                                //   in Loop: Header=BB1_1 Depth=1
-	ldr	w8, [sp, #12]
-	add	w8, w8, #1              // =1
-	str	w8, [sp, #12]
-	b	.LBB1_1
-.LBB1_8:
-	ldp	x29, x30, [sp, #32]     // 16-byte Folded Reload
-	add	sp, sp, #48             // =48
-	ret
-.Lfunc_end1:
-	.size	ReadMatrix, .Lfunc_end1-ReadMatrix
-                                        // -- End function
-	.globl	ReadMN                  // -- Begin function ReadMN
-	.p2align	2
-	.type	ReadMN,@function
-ReadMN:                                 // @ReadMN
-// %bb.0:
-	sub	sp, sp, #32             // =32
-	stp	x29, x30, [sp, #16]     // 16-byte Folded Spill
-	add	x29, sp, #16            // =16
-	str	x0, [sp, #8]
-	str	x1, [sp]
-	ldr	x1, [sp, #8]
-	adrp	x0, .L.str
-	add	x0, x0, :lo12:.L.str
-	bl	__isoc99_scanf
-	ldr	x1, [sp]
-	adrp	x0, .L.str
-	add	x0, x0, :lo12:.L.str
-	bl	__isoc99_scanf
-	ldp	x29, x30, [sp, #16]     // 16-byte Folded Reload
-	add	sp, sp, #32             // =32
-	ret
-	
-	.globl	main                    // -- Begin function main
-	.p2align	2
-	.type	main,@function
-main:                                   // @main
-// %bb.0:
-	sub	sp, sp, #48             // =48
-	stp	x29, x30, [sp, #32]     // 16-byte Folded Spill
-	add	x29, sp, #32            // =32
-	stur	wzr, [x29, #-4]
-	sub	x0, x29, #8             // =8
-	sub	x1, x29, #12            // =12
+	.arch armv8-a
+	.file	"main.c"
+	.text
+	.section	.rodata
+	.align	3
+.LC0:
+	.string	"\320\232\320\276\320\273-\320\262\320\276 \321\201\321\202\321\200\320\276\320\272, \320\262\321\201\320\265 \321\215\320\273\320\265\320\274\320\265\320\275\321\202\321\213 \320\272\320\276\321\202\320\276\321\200\321\213\321\205 \321\200\320\260\320\267\320\273\320\270\321\207\320\275\321\213: %d\n"
+	.align	3
+.LC1:
+	.string	"\320\232\320\276\320\273-\320\262\320\276 \321\201\321\202\320\276\320\273\320\261\321\206\320\276\320\262, \320\262\321\201\320\265 \321\215\320\273\320\265\320\274\320\265\320\275\321\202\321\213 \320\272\320\276\321\202\320\276\321\200\321\213\321\205 \321\200\320\260\320\267\320\273\320\270\321\207\320\275\321\213: %d\n"
+	.text
+	.align	2
+	.global	main
+	.type	main, %function
+main:
+.LFB0:
+	.cfi_startproc
+	stp	x29, x30, [sp, -128]!
+	.cfi_def_cfa_offset 128
+	.cfi_offset 29, -128
+	.cfi_offset 30, -120
+	mov	x29, sp
+	.cfi_def_cfa_register 29
+	stp	x19, x20, [sp, 16]
+	stp	x21, x22, [sp, 32]
+	stp	x23, x24, [sp, 48]
+	stp	x25, x26, [sp, 64]
+	str	x27, [sp, 80]
+	sub	sp, sp, #16
+	.cfi_offset 19, -112
+	.cfi_offset 20, -104
+	.cfi_offset 21, -96
+	.cfi_offset 22, -88
+	.cfi_offset 23, -80
+	.cfi_offset 24, -72
+	.cfi_offset 25, -64
+	.cfi_offset 26, -56
+	.cfi_offset 27, -48
+	adrp	x0, :got:__stack_chk_guard
+	ldr	x0, [x0, #:got_lo12:__stack_chk_guard]
+	ldr	x1, [x0]
+	str	x1, [x29, 120]
+	mov	x1,0
+	mov	x0, sp
+	mov	x19, x0
+	add	x1, x29, 100
+	add	x0, x29, 96
 	bl	ReadMN
-	ldur	w8, [x29, #-8]
-	ldur	w9, [x29, #-12]
-	mul	w8, w8, w9
-	sbfiz	x0, x8, #2, #32
-	bl	malloc
-	str	x0, [sp, #8]
-	ldr	x0, [sp, #8]
-	ldur	w1, [x29, #-8]
-	ldur	w2, [x29, #-12]
+	ldr	w1, [x29, 96]
+	ldr	w0, [x29, 100]
+	mul	w0, w1, w0
+	sxtw	x1, w0
+	sub	x1, x1, #1
+	str	x1, [x29, 104]
+	sxtw	x1, w0
+	mov	x26, x1
+	mov	x27, 0
+	lsr	x1, x26, 59
+	lsl	x23, x27, 5
+	orr	x23, x1, x23
+	lsl	x22, x26, 5
+	sxtw	x1, w0
+	mov	x24, x1
+	mov	x25, 0
+	lsr	x1, x24, 59
+	lsl	x21, x25, 5
+	orr	x21, x1, x21
+	lsl	x20, x24, 5
+	sxtw	x0, w0
+	lsl	x0, x0, 2
+	add	x0, x0, 15
+	lsr	x0, x0, 4
+	lsl	x0, x0, 4
+	and	x1, x0, -65536
+	sub	x1, sp, x1
+.L2:
+	cmp	sp, x1
+	beq	.L3
+	sub	sp, sp, #65536
+	str	xzr, [sp, 1024]
+	b	.L2
+.L3:
+	and	x1, x0, 65535
+	sub	sp, sp, x1
+	str	xzr, [sp]
+	and	x0, x0, 65535
+	cmp	x0, 1024
+	bcc	.L4
+	str	xzr, [sp, 1024]
+.L4:
+	add	x0, sp, 16
+	add	x0, x0, 3
+	lsr	x0, x0, 2
+	lsl	x0, x0, 2
+	str	x0, [x29, 112]
+	ldr	x0, [x29, 112]
+	ldr	w1, [x29, 96]
+	ldr	w2, [x29, 100]
 	bl	ReadMatrix
-	ldr	x0, [sp, #8]
-	ldur	w1, [x29, #-8]
-	ldur	w2, [x29, #-12]
-	bl	CountRow
-	str	w0, [sp, #4]
-	ldr	w1, [sp, #4]
-	adrp	x0, .L.str.1
-	add	x0, x0, :lo12:.L.str.1
+	mov	w0, 10
+	bl	putchar
+	ldr	x0, [x29, 112]
+	ldr	w1, [x29, 96]
+	ldr	w2, [x29, 100]
+	bl	WriteMatrix
+	ldr	x0, [x29, 112]
+	ldr	w1, [x29, 96]
+	ldr	w2, [x29, 100]
+	bl	CountDifferentLines
+	mov	w1, w0
+	adrp	x0, .LC0
+	add	x0, x0, :lo12:.LC0
 	bl	printf
-	ldr	x0, [sp, #8]
-	ldur	w1, [x29, #-8]
-	ldur	w2, [x29, #-12]
-	bl	CountLine
-	str	w0, [sp]
-	ldr	w1, [sp]
-	adrp	x0, .L.str.1
-	add	x0, x0, :lo12:.L.str.1
+	ldr	x0, [x29, 112]
+	ldr	w1, [x29, 96]
+	ldr	w2, [x29, 100]
+	bl	CountDifferentRows
+	mov	w1, w0
+	adrp	x0, .LC1
+	add	x0, x0, :lo12:.LC1
 	bl	printf
-	ldr	x0, [sp, #8]
-	bl	free
-	mov	w0, wzr
-	ldp	x29, x30, [sp, #32]     // 16-byte Folded Reload
-	add	sp, sp, #48             // =48
+	mov	w0, 0
+	mov	sp, x19
+	mov	w1, w0
+	adrp	x0, :got:__stack_chk_guard
+	ldr	x0, [x0, #:got_lo12:__stack_chk_guard]
+	ldr	x2, [x29, 120]
+	ldr	x0, [x0]
+	eor	x0, x2, x0
+	cmp	x0, 0
+	beq	.L6
+	bl	__stack_chk_fail
+.L6:
+	mov	w0, w1
+	mov	sp, x29
+	ldp	x19, x20, [sp, 16]
+	ldp	x21, x22, [sp, 32]
+	ldp	x23, x24, [sp, 48]
+	ldp	x25, x26, [sp, 64]
+	ldr	x27, [sp, 80]
+	ldp	x29, x30, [sp], 128
+	.cfi_restore 30
+	.cfi_restore 29
+	.cfi_restore 27
+	.cfi_restore 25
+	.cfi_restore 26
+	.cfi_restore 23
+	.cfi_restore 24
+	.cfi_restore 21
+	.cfi_restore 22
+	.cfi_restore 19
+	.cfi_restore 20
+	.cfi_def_cfa 31, 0
 	ret
-	
-.L.str:
-	.asciz	"%d"
-	
-.L.str.1:
-	.asciz	"%d\n"
+	.cfi_endproc
+.LFE0:
+	.size	main, .-main
+	.ident	"GCC: (Ubuntu 9.2.1-9ubuntu2) 9.2.1 20191008"
+	.section	.note.GNU-stack,"",@progbits
