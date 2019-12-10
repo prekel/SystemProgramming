@@ -11,7 +11,7 @@
 #include "Matrix.h"
 #include "MatrixIO.h"
 
-#define PrintCounts(pMatrix, m, n) \
+#define PRINT_COUNTS(pMatrix, m, n) \
 do { \
 printf("Кол-во строк, все элементы которых различны: %d\n", \
 CountDifferentLines(pMatrix, m, n)); \
@@ -19,6 +19,11 @@ printf("Кол-во столбцов, все элементы которых р�
 CountDifferentRows(pMatrix, m, n)); \
 } while (false) \
 
+#define TEST_PROLOGUE() \
+printf("\n ----- %s\n", CU_get_current_test()->pName) \
+
+#define TEST_EPILOGUE() \
+printf("\n") \
 
 static void MatrixTestsAddTests(CU_pSuite* pSuite)
 {
@@ -42,7 +47,7 @@ CU_pSuite* MatrixTestsSuiteCreate()
 
 void Test_CountLineRowAndWrite_5x4_0to19()
 {
-    printf("%s\n", CU_get_current_test()->pName);
+    TEST_PROLOGUE();
 
     int m = 5;
     int n = 4;
@@ -55,14 +60,16 @@ void Test_CountLineRowAndWrite_5x4_0to19()
     CU_ASSERT_EQUAL(CountDifferentRows(pMatrix, m, n), n);
 
     WriteMatrix(pMatrix, m, n);
-    PrintCounts(pMatrix, m, n);
+    PRINT_COUNTS(pMatrix, m, n);
 
     free(pMatrix);
+
+    TEST_EPILOGUE();
 }
 
 void Test_CountLineRowAndWrite_5x4_All0()
 {
-    printf("%s\n", CU_get_current_test()->pName);
+    TEST_PROLOGUE();
 
     const int m = 5;
     const int n = 4;
@@ -75,12 +82,14 @@ void Test_CountLineRowAndWrite_5x4_All0()
     CU_ASSERT_EQUAL(CountDifferentRows(pMatrix, m, n), 0);
 
     WriteMatrix(pMatrix, m, n);
-    PrintCounts(pMatrix, m, n);
+    PRINT_COUNTS(pMatrix, m, n);
+
+    TEST_EPILOGUE();
 }
 
 void Test_CountLineRowAndWrite_5x4_OneDiff()
 {
-    printf("%s\n", CU_get_current_test()->pName);
+    TEST_PROLOGUE();
 
     const int m = 5;
     const int n = 4;
@@ -98,12 +107,14 @@ void Test_CountLineRowAndWrite_5x4_OneDiff()
     CU_ASSERT_EQUAL(CountDifferentRows(pMatrix, m, n), 1);
 
     WriteMatrix(pMatrix, m, n);
-    PrintCounts(pMatrix, m, n);
+    PRINT_COUNTS(pMatrix, m, n);
+
+    TEST_EPILOGUE();
 }
 
 void Test_CheckLine_1()
 {
-    printf("%s\n", CU_get_current_test()->pName);
+    TEST_PROLOGUE();
 
     const int m = 5;
     const int n = 4;
@@ -125,12 +136,14 @@ void Test_CheckLine_1()
     CU_ASSERT_FALSE(CheckAllDifferent(pMatrix + 4 * n, 1, n));
 
     WriteMatrix(pMatrix, m, n);
-    PrintCounts(pMatrix, m, n);
+    PRINT_COUNTS(pMatrix, m, n);
+
+    TEST_EPILOGUE();
 }
 
 void Test_CheckRow_1()
 {
-    printf("%s\n", CU_get_current_test()->pName);
+    TEST_PROLOGUE();
 
     const int m = 5;
     const int n = 4;
@@ -152,12 +165,14 @@ void Test_CheckRow_1()
     CU_ASSERT_FALSE(CheckAllDifferent(pMatrix + 5, n, m));
 
     WriteMatrix(pMatrix, m, n);
-    PrintCounts(pMatrix, m, n);
+    PRINT_COUNTS(pMatrix, m, n);
+
+    TEST_EPILOGUE();
 }
 
 void Test_CountLineRowAndWrite_1x1_1()
 {
-    printf("%s\n", CU_get_current_test()->pName);
+    TEST_PROLOGUE();
 
     const int m = 1;
     const int n = 1;
@@ -168,12 +183,14 @@ void Test_CountLineRowAndWrite_1x1_1()
     CU_ASSERT_EQUAL(CountDifferentRows(pMatrix, m, n), 1);
 
     WriteMatrix(pMatrix, m, n);
-    PrintCounts(pMatrix, m, n);
+    PRINT_COUNTS(pMatrix, m, n);
+
+    TEST_EPILOGUE();
 }
 
 void Test_CountLineRowAndWrite_0x0_1()
 {
-    printf("%s\n", CU_get_current_test()->pName);
+    TEST_PROLOGUE();
 
     const int m = 0;
     const int n = 0;
@@ -184,12 +201,14 @@ void Test_CountLineRowAndWrite_0x0_1()
     CU_ASSERT_EQUAL(CountDifferentRows(pMatrix, m, n), 0);
 
     WriteMatrix(pMatrix, m, n);
-    PrintCounts(pMatrix, m, n);
+    PRINT_COUNTS(pMatrix, m, n);
+
+    TEST_EPILOGUE();
 }
 
 void Test_CountLineRowAndWrite_3x3_Custom1()
 {
-    printf("%s\n", CU_get_current_test()->pName);
+    TEST_PROLOGUE();
 
     const int m = 3;
     const int n = 3;
@@ -202,13 +221,15 @@ void Test_CountLineRowAndWrite_3x3_Custom1()
     CU_ASSERT_EQUAL(CountDifferentRows(pMatrix, m, n), 2);
 
     WriteMatrix(pMatrix, m, n);
-    PrintCounts(pMatrix, m, n);
+    PRINT_COUNTS(pMatrix, m, n);
+
+    TEST_EPILOGUE();
 }
 
 
 void Test_CountLineRowAndWrite_3x3_Custom2()
 {
-    printf("%s\n", CU_get_current_test()->pName);
+    TEST_PROLOGUE();
 
     const int m = 3;
     const int n = 3;
@@ -221,12 +242,14 @@ void Test_CountLineRowAndWrite_3x3_Custom2()
     CU_ASSERT_EQUAL(CountDifferentRows(pMatrix, m, n), 1);
 
     WriteMatrix(pMatrix, m, n);
-    PrintCounts(pMatrix, m, n);
+    PRINT_COUNTS(pMatrix, m, n);
+
+    TEST_EPILOGUE();
 }
 
 void Example_CountLineRowAndWrite_3x6_RandomThrice()
 {
-    printf("%s\n", CU_get_current_test()->pName);
+    TEST_PROLOGUE();
 
     srand(time(0));
 
@@ -243,13 +266,15 @@ void Example_CountLineRowAndWrite_3x6_RandomThrice()
         }
         WriteMatrix(pMatrix, m, n);
 
-        PrintCounts(pMatrix, m, n);
+        PRINT_COUNTS(pMatrix, m, n);
     }
+
+    TEST_EPILOGUE();
 }
 
 void Example_CountLineRowAndWrite_10x15_RandomThrice()
 {
-    printf("%s\n", CU_get_current_test()->pName);
+    TEST_PROLOGUE();
 
     srand(time(0));
 
@@ -266,6 +291,8 @@ void Example_CountLineRowAndWrite_10x15_RandomThrice()
         }
         WriteMatrix(pMatrix, m, n);
 
-        PrintCounts(pMatrix, m, n);
+        PRINT_COUNTS(pMatrix, m, n);
     }
+
+    TEST_EPILOGUE();
 }
