@@ -66,7 +66,7 @@ void ReadMatrix(int* pMatrix, int m, int n)
 
 void WriteMatrix(int* pMatrix, int m, int n)
 {
-    printf("\nМатрица a[%d][%d]:\n", m, n);
+    printf("Матрица a[%d][%d]:\n", m, n);
     for (int i = 0; i < m; i++)
     {
         for (int j = 0; j < n; j++)
@@ -91,7 +91,7 @@ int main()
     WriteMatrix(pMatrix, m, n);
 
     int countLine = CountDifferentLines(pMatrix, m, n);
-    printf("Кол-во строк, все элементы которых различны: %d\n", countLine);
+    printf("\nКол-во строк, все элементы которых различны: %d\n", countLine);
     int countRow = CountDifferentRows(pMatrix, m, n);
     printf("Кол-во столбцов, все элементы которых различны: %d\n", countRow);
 

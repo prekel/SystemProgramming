@@ -9,7 +9,7 @@
 
 CU_pSuite* MatrixTestsSuiteCreate();
 
-void Test1();
+void TestCountLineRowAndWrite();
 
 #endif //MATRIXTESTS_H
 

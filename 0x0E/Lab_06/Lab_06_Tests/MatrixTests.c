@@ -3,13 +3,15 @@
 
 #include <CUnit/Basic.h>
 
-#include "Matrix.h"
 #include "MatrixTests.h"
 #include "Suite.h"
 
+#include "Matrix.h"
+#include "MatrixIO.h"
+
 static void MatrixTestsAddTests(CU_pSuite* pSuite)
 {
-    CU_ADD_TEST(*pSuite, Test1);
+    CU_ADD_TEST(*pSuite, TestCountLineRowAndWrite);
 }
 
 CU_pSuite* MatrixTestsSuiteCreate()
@@ -17,8 +19,10 @@ CU_pSuite* MatrixTestsSuiteCreate()
     return SuiteCreate("MatrixTests", MatrixTestsAddTests);
 }
 
-void Test1()
+void TestCountLineRowAndWrite()
 {
+    printf("%s\n", CU_get_current_test()->pName);
+
     CU_ASSERT_EQUAL(123,123);
 
     int m = 5;
@@ -28,8 +32,10 @@ void Test1()
     {
         pMatrix[i] = i;
     }
-    CU_ASSERT_EQUAL(CountLine(pMatrix, m, n), m);
-    CU_ASSERT_EQUAL(CountRow(pMatrix, m, n), n);
+    CU_ASSERT_EQUAL(CountDifferentLines(pMatrix, m, n), m);
+    CU_ASSERT_EQUAL(CountDifferentRows(pMatrix, m, n), n);
+
+    WriteMatrix(pMatrix, m, n);
 
     free(pMatrix);
 }

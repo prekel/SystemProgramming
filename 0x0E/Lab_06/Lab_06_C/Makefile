@@ -8,7 +8,7 @@ INC = -I..
 
 
 
-SOURCES = main.c Matrix.c
+SOURCES = main.c Matrix.c MatrixIO.c
 OBJECTS = $(SOURCES:.c=.o)
 
 OUTFILE = Lab_06_C

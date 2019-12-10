@@ -4,7 +4,7 @@
 
 #include "Matrix.h"
 
-bool Check(const int* pArray, int step, int size)
+bool CheckAllDifferent(const int* pArray, int step, int size)
 {
     int max = size * step;
     for (int i = 0; i < max; i += step)
@@ -20,12 +20,12 @@ bool Check(const int* pArray, int step, int size)
     return true;
 }
 
-int CountRow(int* pMatrix, int m, int n)
+int CountDifferentLines(int* pMatrix, int m, int n)
 {
     int c = 0;
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < m; i++)
     {
-        bool check = Check(pMatrix + i, n, m);
+        bool check = CheckAllDifferent(pMatrix + i * n, 1, n);
         if (check)
         {
             c++;
@@ -34,12 +34,12 @@ int CountRow(int* pMatrix, int m, int n)
     return c;
 }
 
-int CountLine(int* pMatrix, int m, int n)
+int CountDifferentRows(int* pMatrix, int m, int n)
 {
     int c = 0;
-    for (int i = 0; i < m; i++)
+    for (int i = 0; i < n; i++)
     {
-        bool check = Check(pMatrix + i * n, 1, n);
+        bool check = CheckAllDifferent(pMatrix + i, n, m);
         if (check)
         {
             c++;

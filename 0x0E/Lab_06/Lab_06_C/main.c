@@ -1,25 +1,8 @@
-#include <stdlib.h>
 #include <stdio.h>
-#include <stdbool.h>
+#include <malloc.h>
 
 #include "Matrix.h"
-
-void ReadMatrix(int* pMatrix, int m, int n)
-{
-    for (int i = 0; i < m; i++)
-    {
-        for (int j = 0; j < n; j++)
-        {
-            scanf("%d", &pMatrix[i * n + j]);
-        }
-    }
-}
-
-void ReadMN(int* pM, int* pN)
-{
-    scanf("%d", pM);
-    scanf("%d", pN);
-}
+#include "MatrixIO.h"
 
 int main()
 {
@@ -28,14 +11,16 @@ int main()
 
     ReadMN(&m, &n);
 
-    int* pMatrix = malloc(m * n * sizeof(int));
+    int* pMatrix = (int*) malloc(m * n * sizeof(int));
 
     ReadMatrix(pMatrix, m, n);
 
-    int countRow = CountRow(pMatrix, m, n);
-    printf("%d\n", countRow);
-    int countLine = CountLine(pMatrix, m, n);
-    printf("%d\n", countLine);
+    WriteMatrix(pMatrix, m, n);
+
+    int countLine = CountDifferentLines(pMatrix, m, n);
+    printf("\nКол-во строк, все элементы которых различны: %d\n", countLine);
+    int countRow = CountDifferentRows(pMatrix, m, n);
+    printf("Кол-во столбцов, все элементы которых различны: %d\n", countRow);
 
     free(pMatrix);
 
