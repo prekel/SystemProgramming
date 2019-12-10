@@ -15,12 +15,13 @@ OUTFILE = Lab_06_Tests
 
 all: $(SOURCES) $(OUTFILE)
 
-$(OUTFILE): $(OBJECTS)
-	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
-
 %.o: %.c
 	$(CC) -c $(INC) $(CFLAGS) $< -o $@
 
+$(OUTFILE): $(OBJECTS)
+	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+
 .PHONY: clean
 clean:
-	rm $(OUTFILE) *.o
+	rm $(OUTFILE) $(OBJECTS)
+

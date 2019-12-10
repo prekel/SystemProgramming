@@ -23,5 +23,5 @@ $(OUTFILE): $(OBJECTS)
 
 .PHONY: clean
 clean:
-	rm $(OUTFILE) *.o
+	rm $(OUTFILE) $(OBJECTS)
 
