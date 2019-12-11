@@ -109,7 +109,6 @@ WriteMatrix:
                 Loop2_Check:
                     cmp w23, w21                //  if w23 < w21
                     b.lt Loop2_Body             //  goto Loop2_Body
-                add w23, w23, #1                // w23++
             adr x0, NewLine						// x0 <- &NewLine
             bl printf							// call printf
             add w22, w22, #1					// w22++
