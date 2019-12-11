@@ -20,7 +20,7 @@ void ReadMatrix(int* pMatrix, int m, int n)
     }
 }
 
-void WriteMatrix(const int* pMatrix, int m, int n)
+void WriteMatrix(int* pMatrix, int m, int n)
 {
     printf("Матрица a[%d][%d]:\n", m, n);
     for (int i = 0; i < m; i++)
