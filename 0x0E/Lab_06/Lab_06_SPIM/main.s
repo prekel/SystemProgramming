@@ -2,37 +2,37 @@
 
     .globl	CheckAllDifferent
 CheckAllDifferent:
-    mul $t3, $a1, $a2                              # w3 <- w1 * w2
+    mul $t3, $a1, $a2                           # $t3 <- $a1 * $a2
 
     Loop5_Start:
-        li $t4, 0                              # w4 <- 0
+        li $t4, 0                               # $t4 <- 0
         j Loop5_Check                           # goto Loop5_Check
         Loop5_Body:
             Loop6_Start:
-                add $t5, $t4, $a1                  # w5 <- w4 + w1
-                j Loop6_Check
+                add $t5, $t4, $a1               # $t5 <- $t4 + $a1
+                j Loop6_Check                   # goto Loop6_Check
                 Loop6_Body:
-                    li $t6, 4
-                    mul $t6, $t6, $t4
-                    add $t6, $t6, $a0
-                    lw $t6, ($t6)
-                    li $t7, 4
-                    mul $t7, $t7, $t5
-                    add $t7, $t7, $a0
-                    lw $t7, ($t7)
-                    bne $t6, $t7, Loop6_Continue   #  goto Loop6_Continue
+                    li $t6, 4                   # $t6 <- 4
+                    mul $t6, $t6, $t4           # $t6 *= $t4
+                    add $t6, $t6, $a0           # $t6 += $a0
+                    lw $t6, ($t6)               # $t6 <- *t6
+                    li $t7, 4                   # $t7 <- 4
+                    mul $t7, $t7, $t5           # $t7 *= $t5
+                    add $t7, $t7, $a0           # $t7 += $a0
+                    lw $t7, ($t7)               # $t7 <- *t7
+                    bne $t6, $t7, Loop6_Continue # if $t6 != $t7 goto Loop6_Continue
                     li $v0, 0                   # return false
-                    jr $ra 
+                    jr $ra                      # go back to $ra
                     Loop6_Continue:
-                        add $t5, $t5, $a1          # w5 += w1
+                        add $t5, $t5, $a1       # $t5 += $a1
                 Loop6_Check:
-                    blt $t5, $t3, Loop6_Body             #  goto Loop6_Body
-                add $t4, $t4, $a1                  # w4 += w1
+                    blt $t5, $t3, Loop6_Body    # if $t5 < $t3 goto Loop6_Body
+                add $t4, $t4, $a1               # $t4 += $a1
         Loop5_Check:
-            blt $t4, $t3, Loop5_Body                     #  goto Loop5_Body
+            blt $t4, $t3, Loop5_Body            # if $t4 < $t3 goto Loop5_Body
 
-    li $v0, 1                                  # return true
-    jr $ra 
+    li $v0, 1                                   # return true
+    jr $ra                                      # go back to $ra
 
 
     .globl	CountDifferentLines
@@ -52,34 +52,34 @@ CountDifferentLines:
     addi $sp, $sp, -4		
     sw $s5, ($sp)
 
-    move $s0, $a0                                 # $s0 <- $a0
-    move $s1, $a1                                 # $s1 <- $a1
-    move $s2, $a2                                # $s2 <- w2
+    move $s0, $a0                               # $s0 <- $a0
+    move $s1, $a1                               # $s1 <- $a1
+    move $s2, $a2                               # $s2 <- w2
 
     li $s3, 0									# $s3 <- 0
 
-    li $s5, 0                                 # $s5 <- 0
+    li $s5, 0                                   # $s5 <- 0
 
     # for ($s4 = 0, $s4 < $s1, $s4++)
     Loop7_Start:
-        li $s4, 0                             # $s4 <- 0
+        li $s4, 0                               # $s4 <- 0
         j Loop7_Check                           # goto Loop7_Check
         Loop7_Body:
 			li $a0, 4							# $a0 <- 4
             mul $a0, $a0, $s3                   # $a0 <- $s3 * 4
             add $a0, $a0, $s0				    # $a0 += $s0 
-            li $a1, 1                          # $a1 <- 1
-            move $a2, $s2                         # $a2 <- $s2
-            jal CheckAllDifferent                # call CheckAllDifferent
-            beq $v0, $zero, Loop7_Continue                 #  if $a0 == false goto Loop7_Continue
-            add $s5, $s5, 1                    # $s5++
+            li $a1, 1                           # $a1 <- 1
+            move $a2, $s2                       # $a2 <- $s2
+            jal CheckAllDifferent               # call CheckAllDifferent
+            beq $v0, $zero, Loop7_Continue      #  if $a0 == false goto Loop7_Continue
+            add $s5, $s5, 1                     # $s5++
             Loop7_Continue:
                 add $s3, $s3, $s2				# $s3 += $s2
-                add $s4, $s4, 1                # $s4++
+                add $s4, $s4, 1                 # $s4++
         Loop7_Check:
-            blt $s4, $s1, Loop7_Body                     #  if $s4 < $s1 goto Loop7_Body
+            blt $s4, $s1, Loop7_Body            #  if $s4 < $s1 goto Loop7_Body
 
-    move $v0, $s5									# $a0 <- $s5
+    move $v0, $s5								# return $s5
 
 	lw $s5, ($sp)		
 	addi $sp, $sp, 4
@@ -95,12 +95,67 @@ CountDifferentLines:
 	addi $sp, $sp, 4	
 	lw $ra, ($sp)		
 	addi $sp, $sp, 4	
-    jr $ra 
+    jr $ra                                      # go back to $ra
 
 
     .globl	CountDifferentRows
 CountDifferentRows:
-    jr $ra 
+    addi $sp, $sp, -4		
+    sw $ra, ($sp)		
+    addi $sp, $sp, -4		
+    sw $s0, ($sp)	
+    addi $sp, $sp, -4		
+    sw $s1, ($sp)	
+    addi $sp, $sp, -4		
+    sw $s2, ($sp)	
+    addi $sp, $sp, -4		
+    sw $s3, ($sp)	
+    addi $sp, $sp, -4		
+    sw $s4, ($sp)	
+    addi $sp, $sp, -4		
+    sw $s5, ($sp)
+
+    move $s0, $a0                               # $s0 <- $a0
+    move $s1, $a1                               # $s1 <- $a1
+    move $s2, $a2                               # $s2 <- w2
+
+    li $s5, 0                                   # $s5 <- 0
+
+    # for ($s4 = 0, $s4 < $s2, $s4++)
+    Loop8_Start:
+        li $s4, 0                               # $s4 <- 0
+        j Loop8_Check                           # goto Loop8_Check
+        Loop8_Body:
+			li $a0, 4							# $a0 <- 4
+            mul $a0, $a0, $s4                   # $a0 <- $s4 * 4
+            add $a0, $a0, $s0				    # $a0 += $s0 
+            move $a1, $s2                       # $a1 <- $s2
+            move $a2, $s1                       # $a2 <- $s1
+            jal CheckAllDifferent               # call CheckAllDifferent
+            beq $v0, $zero, Loop8_Continue      # if $a0 == false goto Loop8_Continue
+            add $s5, $s5, 1                     # $s5++
+            Loop8_Continue:
+                add $s4, $s4, 1                 # $s4++
+        Loop8_Check:
+            blt $s4, $s2, Loop8_Body            # if $s4 < $s2 goto Loop8_Body
+
+    move $v0, $s5							    # $a0 <- $s5
+
+	lw $s5, ($sp)		
+	addi $sp, $sp, 4
+	lw $s4, ($sp)		
+	addi $sp, $sp, 4	
+	lw $s3, ($sp)		
+	addi $sp, $sp, 4	
+	lw $s2, ($sp)		
+	addi $sp, $sp, 4	
+	lw $s1, ($sp)		
+	addi $sp, $sp, 4	
+	lw $s0, ($sp)		
+	addi $sp, $sp, 4	
+	lw $ra, ($sp)		
+	addi $sp, $sp, 4	
+    jr $ra                                      # go back to $ra
 
 
     .globl	ReadMN
@@ -119,22 +174,22 @@ ReadMN:
     sw $s4, ($sp)
 
 
-    move $s0, $a0
-    move $s1, $a1
+    move $s0, $a0                               # $s0 <- $a0
+    move $s1, $a1                               # $s1 <- $a1
 
-    li $v0, 4
-    la $a0, InputMNMessage1
-    syscall
+    li $v0, 4                                   # $v0 <- 4
+    la $a0, InputMNMessage1                     # $a0 <- &InputMNMessage1
+    syscall                                     # syscall print_string
 
-    li $v0, 5
-    syscall
+    li $v0, 5                                   # $v0 <- 5
+    syscall                                     # syscall read_int
 
-    sw $v0, ($s0)
+    sw $v0, ($s0)                               # *$s0 <- $v0
 
-    li $v0, 5
-    syscall
+    li $v0, 5                                   # $v0 <- 5
+    syscall                                     # syscall read_int
 
-    sw $v0, ($s1)
+    sw $v0, ($s1)                               # *$s1 <- $v0
 
 	lw $s4, ($sp)		
 	addi $sp, $sp, 4	
@@ -149,7 +204,7 @@ ReadMN:
 	lw $ra, ($sp)		
 	addi $sp, $sp, 4		
 
-    jr $ra           
+    jr $ra                                      # go back to $ra  
 
 
     .globl	ReadMatrix
@@ -182,7 +237,6 @@ ReadMatrix:
                 li $s4, 0                       # $s4 <- 0
                 j Loop4_Check                   # goto Loop4_Check
                 Loop4_Body:
-
                     li $v0, 4
                     la $a0, InputMessagePart1
                     syscall
@@ -198,11 +252,9 @@ ReadMatrix:
                     li $v0, 4
                     la $a0, InputMessagePart3
                     syscall
-
                     li $v0, 5                   # $v0 <- 5
                     syscall                     # syscall read_int
                     move $t3, $v0
-
                     mul $t0, $s3, $s2           # $t0 <- $s3 * $s2
                     add $t0, $t0, $s4           # t0 += $s4
                     li $t1, 4                   # $t1 <- 4
@@ -216,7 +268,6 @@ ReadMatrix:
             addi $s3, $s3, 1                    # $s3++
         Loop3_Check:
             blt $s3, $s1, Loop3_Body            # if $s3 < $s1 goto Loop3_Body
-
 
 	lw $s4, ($sp)		
 	addi $sp, $sp, 4	
@@ -313,7 +364,7 @@ WriteMatrix:
 	lw $ra, ($sp)		
 	addi $sp, $sp, 4		
 
-    jr $ra                                      # return
+    jr $ra                                      # go back to $ra
 
 
     .globl	main
@@ -380,6 +431,7 @@ main:
 
 
     .data
+    
 Space1:	
     .asciiz	" "
 NewLine1:
@@ -401,10 +453,7 @@ OutputFormatMatrixPart3:
 
 InputMNMessage1:
 	.asciiz "Введите M и N (кол-во строк и столбцов, a[M][N]): "
-
-
 MessageCountLinesFormat1:
 	.asciiz "Кол-во строк, все элементы которых различны: "
-
 MessageCountRowsFormat1:
 	.asciiz "Кол-во столбцов, все элементы которых различны: "
