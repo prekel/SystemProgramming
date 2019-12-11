@@ -26,25 +26,6 @@ main:
 
 	mov x21, x0									// x21 <- x0
 
-	//mov w0, #1
-	//mov x1, #0
-	//str w0, [x21, x1, lsl #2]					// x21[0] <- 1
-	//mov w0, #5
-	//mov x1, #1
-	//str w0, [x21, x1, lsl #2]					// x21[1] <- 5
-	//mov w0, #3
-	//mov x1, #2
-	//str w0, [x21, x1, lsl #2]					// x21[2] <- 3
-	//mov w0, #4
-	//mov x1, #3
-	//str w0, [x21, x1, lsl #2]					// x21[3] <- 4
-	//mov w0, #5
-	//mov x1, #4
-	//str w0, [x21, x1, lsl #2]					// x21[4] <- 5
-	//mov w0, #6
-	//mov x1, #5
-	//str w0, [x21, x1, lsl #2]					// x21[5] <- 6
-
 	mov x0, x21
 	mov w1, w19
 	mov w2, w20
@@ -74,6 +55,9 @@ main:
 	mov w1, w0
 	adr x0, MessageCountRowsFormat1
 	bl printf
+
+	mov x0, x21
+	bl free
 
     ldr x21, [sp], #8
     ldr x20, [sp], #8
