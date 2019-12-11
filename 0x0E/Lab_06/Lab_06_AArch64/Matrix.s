@@ -16,8 +16,8 @@ CheckAllDifferent:
                     ldr w7, [x0, x5, lsl #2]    // w7 <- x0[x5]
                     cmp w6, w7                  //  if w6 != w7
                     b.ne Loop2_Continue         //  goto Loop2_Continue
-                        mov w0, #0              // return false
-                        ret
+                    mov w0, #0              // return false
+                    ret
                     Loop2_Continue:
                         add w5, w5, w1          // w5 += w1
                 Loop2_Check:
@@ -48,7 +48,7 @@ CountDifferentLines:
 
     mov x26, #0									// x26 <- 0
 
-    mov w19, #0                                 // x19 <- 0
+    mov w19, #0                                 // w19 <- 0
 
     // for (w20 = 0, w20 < w24, w20++)
     Loop3_Start:
