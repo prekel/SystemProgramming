@@ -6,16 +6,16 @@ ReadMN:
     str x19, [sp, #-8]!
     str x20, [sp, #-8]!
 
-	mov x19, x0
-	mov x20, x1
+	mov x19, x0                                 // x19 <- x0
+	mov x20, x1                                 // x20 <- x1 
 
-	adr x0, InputMNMessage1
-	bl printf
+	adr x0, InputMNMessage1                     // x0 <- &InputMNMessage1
+	bl printf                                   // call printf
 
-	adr x0, InputMNFormat1
-	mov x1, x19
-	mov x2, x20
-	bl scanf
+	adr x0, InputMNFormat1                      // x0 <- &InputMNFormat1
+	mov x1, x19                                 // x1 <- x19 
+	mov x2, x20                                 // x2 <- x20
+	bl scanf                                    // call scanf
 
     ldr x20, [sp], #8
     ldr x19, [sp], #8
@@ -45,22 +45,20 @@ ReadMatrix:
                 mov w23, #0                 	// w23 <- 0
                 b Loop4_Check					// goto Loop4_Check
                 Loop4_Body:
-                    adr x0, InputMessageFormat1		// x0 <- &InputMessageFormat1
-					mov w1, w22
-					mov w2, w23
-					bl printf
-					adr x0, InputFormat1
-                    madd w1, w22, w21, w23
-					mov w2, #4
-					mul w1, w1, w2
-					add x1, x19, x1
+                    adr x0, InputMessageFormat1	// x0 <- &InputMessageFormat1
+					mov w1, w22                 // w1 <- w22
+					mov w2, w23                 // w2 <- w23
+					bl printf                   // call printf
+					adr x0, InputFormat1        // x0 <- &InputFormat1
+                    madd w1, w22, w21, w23      // w1 <- w22 * w21 + w23
+					mov w2, #4                  // w2 <- 4
+					mul w1, w1, w2              // w1 *= w2
+					add x1, x19, x1             // x1 += x19
                     bl scanf					// call scanf
-                    Loop4_Continue:
-                        add w23, w23, #1        // w23++
+                    add w23, w23, #1            // w23++
                 Loop4_Check:
                     cmp w23, w21                //  if w23 < w21
                     b.lt Loop4_Body             //  goto Loop4_Body
-                add w23, w23, #1                // w23++
             add w22, w22, #1					// w22++
         Loop3_Check:
             cmp w22, w20                        //  if w22 < w20
@@ -104,8 +102,7 @@ WriteMatrix:
                     madd w1, w22, w21, w23 		// w1 <- w22 * w21 + w23
                     ldr w1, [x19, x1, lsl#2]	// w1 <- x19[x1]
                     bl printf					// call printf
-                    Loop2_Continue:
-                        add w23, w23, #1        // w23++
+                    add w23, w23, #1            // w23++
                 Loop2_Check:
                     cmp w23, w21                //  if w23 < w21
                     b.lt Loop2_Body             //  goto Loop2_Body
@@ -145,4 +142,3 @@ InputMNMessage1:
 
 InputMNFormat1:
 	.asciz "%d%d"
-
