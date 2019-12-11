@@ -129,12 +129,3 @@ CountDifferentRows:
 
     ret											// return w0 = w19
 
-DecimalIntDebugFormat:
-    .asciz "|l-%d--"
-
-
-DecimalIntDebugFormat1:
-    .asciz "|r--%d-"
-
-DecimalIntDebugFormat2:
-    .asciz "|a--%d--"

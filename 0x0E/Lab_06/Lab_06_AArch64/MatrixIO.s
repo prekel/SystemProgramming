@@ -5,9 +5,6 @@ ReadMN:
     str x30, [sp, #-8]!
     str x19, [sp, #-8]!
     str x20, [sp, #-8]!
-    str x21, [sp, #-8]!
-    str x22, [sp, #-8]!
-    str x23, [sp, #-8]!
 
 	mov x19, x0
 	mov x20, x1
@@ -20,9 +17,6 @@ ReadMN:
 	mov x2, x20
 	bl scanf
 
-    ldr x23, [sp], #8
-    ldr x22, [sp], #8
-    ldr x21, [sp], #8
     ldr x20, [sp], #8
     ldr x19, [sp], #8
     ldr x30, [sp], #8
@@ -129,7 +123,8 @@ WriteMatrix:
     ldr x20, [sp], #8
     ldr x19, [sp], #8
     ldr x30, [sp], #8
-    ret
+    ret 
+
 
 OutputFormatMatrix1:
     .asciz "Матрица a[%d][%d]:\n"
