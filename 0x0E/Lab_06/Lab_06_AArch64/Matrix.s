@@ -34,13 +34,10 @@ CheckAllDifferent:
 
     .global	CountDifferentLines
 CountDifferentLines:
-    str x30, [sp, #-16]!
-    str x19, [sp, #-16]!
-    str x20, [sp, #-16]!
-    str x23, [sp, #-16]!
-    str x24, [sp, #-16]!
-    str x25, [sp, #-16]!
-    str x26, [sp, #-16]!
+    stp x19, x30, [sp, #-16]!
+    stp x23, x20, [sp, #-16]!
+    stp x25, x24, [sp, #-16]!
+    stp xzr, x26, [sp, #-16]!
 
     mov x23, x0                                 // x23 <- x0
     mov w24, w1                                 // w24 <- w1
@@ -59,7 +56,6 @@ CountDifferentLines:
             madd x0, x26, x0, x23				// x0 <- x26 * 4 + x23 
             mov w1, #1                          // w1 <- 1
             mov x2, x25                         // x2 <- x25
-
             bl CheckAllDifferent                // call CheckAllDifferent
             cmp w0, #0                          //  if x0 == false
             b.eq Loop3_Continue                 //  goto Loop3_Continue
@@ -73,29 +69,22 @@ CountDifferentLines:
 
     mov w0, w19									// w0 <- w19
 
-    ldr x26, [sp], #16
-    ldr x25, [sp], #16
-    ldr x24, [sp], #16
-    ldr x23, [sp], #16
-    ldr x20, [sp], #16
-    ldr x19, [sp], #16
-    ldr x30, [sp], #16
-
+    ldp xzr, x26, [sp], #16
+    ldp x25, x24, [sp], #16
+    ldp x23, x20, [sp], #16
+    ldp x19, x30, [sp], #16
     ret											// return w0 = w19
+
 
     .global	CountDifferentRows
 CountDifferentRows:
-    str x30, [sp, #-16]!
-    str x19, [sp, #-16]!
-    str x20, [sp, #-16]!
-    str x23, [sp, #-16]!
-    str x24, [sp, #-16]!
-    str x25, [sp, #-16]!
+    stp x19, x30, [sp, #-16]!
+    stp x23, x20, [sp, #-16]!
+    stp x25, x24, [sp, #-16]!
 
     mov x23, x0                                 // x23 <- x0
     mov w24, w1                                 // w24 <- w1
     mov w25, w2                                 // w25 <- w2
-
 
     mov w19, #0                                 // w19 <- 0
 
@@ -120,12 +109,8 @@ CountDifferentRows:
 
     mov w0, w19									// w0 <- w19
 
-    ldr x25, [sp], #16
-    ldr x24, [sp], #16
-    ldr x23, [sp], #16
-    ldr x20, [sp], #16
-    ldr x19, [sp], #16
-    ldr x30, [sp], #16
-
+    ldp x25, x24, [sp], #16
+    ldp x23, x20, [sp], #16
+    ldp x19, x30, [sp], #16
     ret											// return w0 = w19
 

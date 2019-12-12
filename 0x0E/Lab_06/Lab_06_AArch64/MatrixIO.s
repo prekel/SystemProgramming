@@ -2,9 +2,8 @@
 
     .global	ReadMN
 ReadMN:
-    str x30, [sp, #-16]!
-    str x19, [sp, #-16]!
-    str x20, [sp, #-16]!
+    stp x19, x30, [sp, #-16]!
+    stp xzr, x20, [sp, #-16]!
 
 	mov x19, x0                                 // x19 <- x0
 	mov x20, x1                                 // x20 <- x1 
@@ -17,19 +16,16 @@ ReadMN:
 	mov x2, x20                                 // x2 <- x20
 	bl scanf                                    // call scanf
 
-    ldr x20, [sp], #16
-    ldr x19, [sp], #16
-    ldr x30, [sp], #16
+    ldp xzr, x20, [sp], #16
+    ldp x19, x30, [sp], #16
     ret
+
 
     .global	ReadMatrix
 ReadMatrix:
-    str x30, [sp, #-16]!
-    str x19, [sp, #-16]!
-    str x20, [sp, #-16]!
-    str x21, [sp, #-16]!
-    str x22, [sp, #-16]!
-    str x23, [sp, #-16]!
+    stp x19, x30, [sp, #-16]!
+    stp x21, x20, [sp, #-16]!
+    stp x23, x22, [sp, #-16]!
 
     mov x19, x0									// x19 <- x0
     mov w20, w1									// w20 <- w1
@@ -64,22 +60,17 @@ ReadMatrix:
             cmp w22, w20                        //  if w22 < w20
             b.lt Loop3_Body 					//  goto Loop3_Body
 
-    ldr x23, [sp], #16
-    ldr x22, [sp], #16
-    ldr x21, [sp], #16
-    ldr x20, [sp], #16
-    ldr x19, [sp], #16
-    ldr x30, [sp], #16
+    ldp x23, x22, [sp], #16
+    ldp x21, x20, [sp], #16
+    ldp x19, x30, [sp], #16
     ret
+
 
     .global	WriteMatrix
 WriteMatrix:
-    str x30, [sp, #-16]!
-    str x19, [sp, #-16]!
-    str x20, [sp, #-16]!
-    str x21, [sp, #-16]!
-    str x22, [sp, #-16]!
-    str x23, [sp, #-16]!
+    stp x19, x30, [sp, #-16]!
+    stp x21, x20, [sp, #-16]!
+    stp x23, x22, [sp, #-16]!
 
     mov x19, x0									// x19 <- x0
     mov w20, w1									// w20 <- w1
@@ -113,12 +104,9 @@ WriteMatrix:
             cmp w22, w20                        //  if w22 < w20
             b.lt Loop1_Body 					//  goto Loop1_Body
 
-    ldr x23, [sp], #16
-    ldr x22, [sp], #16
-    ldr x21, [sp], #16
-    ldr x20, [sp], #16
-    ldr x19, [sp], #16
-    ldr x30, [sp], #16
+    ldp x23, x22, [sp], #16
+    ldp x21, x20, [sp], #16
+    ldp x19, x30, [sp], #16
     ret 
 
 
@@ -142,3 +130,4 @@ InputMNMessage1:
 
 InputMNFormat1:
 	.asciz "%d%d"
+
