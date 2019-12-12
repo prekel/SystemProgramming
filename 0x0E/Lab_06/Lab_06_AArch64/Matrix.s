@@ -1,6 +1,6 @@
-	.text
+    .text
 
-    .global	CheckAllDifferent
+    .global CheckAllDifferent
 CheckAllDifferent:
     mul w3, w1, w2                              // w3 <- w1 * w2
 
@@ -16,7 +16,7 @@ CheckAllDifferent:
                     ldr w7, [x0, x5, lsl #2]    // w7 <- x0[x5]
                     cmp w6, w7                  //  if w6 != w7
                     b.ne Loop2_Continue         //  goto Loop2_Continue
-                    mov w0, #0              // return false
+                    mov w0, #0                  // return false
                     ret
                     Loop2_Continue:
                         add w5, w5, w1          // w5 += w1
@@ -32,7 +32,7 @@ CheckAllDifferent:
     ret
 
 
-    .global	CountDifferentLines
+    .global CountDifferentLines
 CountDifferentLines:
     stp x19, x30, [sp, #-16]!
     stp x23, x20, [sp, #-16]!
@@ -43,7 +43,7 @@ CountDifferentLines:
     mov w24, w1                                 // w24 <- w1
     sxtw x25, w2                                // x25 <- w2
 
-    mov x26, #0									// x26 <- 0
+    mov x26, #0                                 // x26 <- 0
 
     mov w19, #0                                 // w19 <- 0
 
@@ -52,8 +52,8 @@ CountDifferentLines:
         mov w20, #0                             // w20 <- 0
         b Loop3_Check                           // goto Loop3_Check
         Loop3_Body:
-			mov x0, #4							// x0 <- 4
-            madd x0, x26, x0, x23				// x0 <- x26 * 4 + x23 
+            mov x0, #4                          // x0 <- 4
+            madd x0, x26, x0, x23               // x0 <- x26 * 4 + x23 
             mov w1, #1                          // w1 <- 1
             mov x2, x25                         // x2 <- x25
             bl CheckAllDifferent                // call CheckAllDifferent
@@ -61,22 +61,22 @@ CountDifferentLines:
             b.eq Loop3_Continue                 //  goto Loop3_Continue
             add w19, w19, #1                    // w19++
             Loop3_Continue:
-                add x26, x26, x25				// x26 += x25
+                add x26, x26, x25               // x26 += x25
                 add w20, w20, #1                // x20++
         Loop3_Check:
             cmp w20, w24                        //  if x20 < x24
             b.lt Loop3_Body                     //  goto Loop3_Body
 
-    mov w0, w19									// w0 <- w19
+    mov w0, w19                                 // w0 <- w19
 
     ldp xzr, x26, [sp], #16
     ldp x25, x24, [sp], #16
     ldp x23, x20, [sp], #16
     ldp x19, x30, [sp], #16
-    ret											// return w0 = w19
+    ret                                         // return w0 = w19
 
 
-    .global	CountDifferentRows
+    .global CountDifferentRows
 CountDifferentRows:
     stp x19, x30, [sp, #-16]!
     stp x23, x20, [sp, #-16]!
@@ -93,8 +93,8 @@ CountDifferentRows:
         mov w20, #0                             // w20 <- 0
         b Loop4_Check                           // goto Loop4_Check
         Loop4_Body:
-			mov x0, #4							// x0 <- 4
-            madd x0, x20, x0, x23				// x0 <- x20 * 4 + x23
+            mov x0, #4                          // x0 <- 4
+            madd x0, x20, x0, x23               // x0 <- x20 * 4 + x23
             mov w1, w25                         // w1 <- w25
             mov w2, w24                         // w2 <- w24
             bl CheckAllDifferent                // call CheckAllDifferent
@@ -107,10 +107,9 @@ CountDifferentRows:
             cmp w20, w25                        //  if w20 < w25
             b.lt Loop4_Body                     //  goto Loop4_Body
 
-    mov w0, w19									// w0 <- w19
+    mov w0, w19                                 // w0 <- w19
 
     ldp x25, x24, [sp], #16
     ldp x23, x20, [sp], #16
     ldp x19, x30, [sp], #16
-    ret											// return w0 = w19
-
+    ret                                         // return w0 = w19
