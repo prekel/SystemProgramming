@@ -1,4 +1,5 @@
 	.text
+	.balign 4
 
     .global	main
 main:

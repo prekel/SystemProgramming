@@ -1,4 +1,5 @@
-.text
+	.text
+	.balign 4
 
     .global	ReadMN
 ReadMN:
