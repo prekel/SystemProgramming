@@ -25,6 +25,7 @@ printf("\n ----- %s\n", CU_get_current_test()->pName) \
 #define TEST_EPILOGUE() \
 printf("\n") \
 
+
 static void MatrixTestsAddTests(CU_pSuite* pSuite)
 {
     CU_ADD_TEST(*pSuite, Test_CountLineRowAndWrite_5x4_0to19);
@@ -39,7 +40,8 @@ static void MatrixTestsAddTests(CU_pSuite* pSuite)
     CU_ADD_TEST(*pSuite, Test_CountLineRowAndWrite_3x3_Custom1);
     CU_ADD_TEST(*pSuite, Test_CountLineRowAndWrite_3x3_Custom2);
     CU_ADD_TEST(*pSuite, Example_CountLineRowAndWrite_3x6_RandomThrice);
-    CU_ADD_TEST(*pSuite, Example_CountLineRowAndWrite_10x15_RandomThrice);
+    CU_ADD_TEST(*pSuite, Benchmark_CountLinesRows_10x15x20x500);
+    CU_ADD_TEST(*pSuite, Benchmark_CountLinesRows_500x1000x5);
 }
 
 CU_pSuite* MatrixTestsSuiteCreate()
@@ -149,40 +151,40 @@ void Test_CheckLine5_Custom()
 
     const int n = 5;
 
-    int pMatrix1[5] = {1,2,3,4,5};
+    int pMatrix1[5] = {1, 2, 3, 4, 5};
     CU_ASSERT_TRUE(CheckAllDifferent(pMatrix1, 1, n));
 
-    int pMatrix2[5] = {1,1,3,4,5};
+    int pMatrix2[5] = {1, 1, 3, 4, 5};
     CU_ASSERT_FALSE(CheckAllDifferent(pMatrix2, 1, n));
 
-    int pMatrix3[5] = {1,123,3,2423,5};
+    int pMatrix3[5] = {1, 123, 3, 2423, 5};
     CU_ASSERT_TRUE(CheckAllDifferent(pMatrix3, 1, n));
 
-    int pMatrix4[5] = {1,1,1,1,1};
+    int pMatrix4[5] = {1, 1, 1, 1, 1};
     CU_ASSERT_FALSE(CheckAllDifferent(pMatrix4, 1, n));
 
-    int pMatrix5[5] = {0,1,-1,3,-45652};
+    int pMatrix5[5] = {0, 1, -1, 3, -45652};
     CU_ASSERT_TRUE(CheckAllDifferent(pMatrix5, 1, n));
 
-    int pMatrix6[5] = {123,12,23,112,123};
+    int pMatrix6[5] = {123, 12, 23, 112, 123};
     CU_ASSERT_FALSE(CheckAllDifferent(pMatrix6, 1, n));
 
-    int pMatrix7[5] = {1,2,3,4,5};
+    int pMatrix7[5] = {1, 2, 3, 4, 5};
     CU_ASSERT_TRUE(CheckAllDifferent(pMatrix7, 1, n));
 
-    int pMatrix8[5] = {12,1,3,1321,1321};
+    int pMatrix8[5] = {12, 1, 3, 1321, 1321};
     CU_ASSERT_FALSE(CheckAllDifferent(pMatrix8, 1, n));
 
-    int pMatrix9[5] = {-54,1,12,4,12};
+    int pMatrix9[5] = {-54, 1, 12, 4, 12};
     CU_ASSERT_FALSE(CheckAllDifferent(pMatrix9, 1, n));
 
-    int pMatrix10[5] = {12,1,3,3,3};
+    int pMatrix10[5] = {12, 1, 3, 3, 3};
     CU_ASSERT_FALSE(CheckAllDifferent(pMatrix10, 1, n));
 
-    int pMatrix11[5] = {1,1,1,1,5};
+    int pMatrix11[5] = {1, 1, 1, 1, 5};
     CU_ASSERT_FALSE(CheckAllDifferent(pMatrix11, 1, n));
 
-    int pMatrix12[5] = {5,-1,-1,-1,-1};
+    int pMatrix12[5] = {5, -1, -1, -1, -1};
     CU_ASSERT_FALSE(CheckAllDifferent(pMatrix12, 1, n));
 
     TEST_EPILOGUE();
@@ -194,19 +196,19 @@ void Test_CheckLine4_Custom()
 
     const int n = 4;
 
-    int pMatrix1[4] = {0,1,2,3};
+    int pMatrix1[4] = {0, 1, 2, 3};
     CU_ASSERT_TRUE(CheckAllDifferent(pMatrix1, 1, n));
 
-    int pMatrix2[4] = {4,0,0,0};
+    int pMatrix2[4] = {4, 0, 0, 0};
     CU_ASSERT_FALSE(CheckAllDifferent(pMatrix2, 1, n));
 
-    int pMatrix3[4] = {8,0,0,0};
+    int pMatrix3[4] = {8, 0, 0, 0};
     CU_ASSERT_FALSE(CheckAllDifferent(pMatrix3, 1, n));
 
-    int pMatrix4[4] = {12,0,0,0};
+    int pMatrix4[4] = {12, 0, 0, 0};
     CU_ASSERT_FALSE(CheckAllDifferent(pMatrix4, 1, n));
 
-    int pMatrix5[4] = {16,0,0,0};
+    int pMatrix5[4] = {16, 0, 0, 0};
     CU_ASSERT_FALSE(CheckAllDifferent(pMatrix5, 1, n));
 
     TEST_EPILOGUE();
@@ -342,7 +344,7 @@ void Example_CountLineRowAndWrite_3x6_RandomThrice()
     TEST_EPILOGUE();
 }
 
-void Example_CountLineRowAndWrite_10x15_RandomThrice()
+void Benchmark_CountLinesRows_10x15x20x500()
 {
     TEST_PROLOGUE();
 
@@ -353,16 +355,48 @@ void Example_CountLineRowAndWrite_10x15_RandomThrice()
 
     int pMatrix[m * n];
 
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 20; i++)
     {
         for (int j = 0; j < m * n; j++)
         {
             pMatrix[j] = rand() % 90 + 10;
         }
-        WriteMatrix(pMatrix, m, n);
-
-        PRINT_COUNTS(pMatrix, m, n);
+        for (int j = 0; j < 500; j++)
+        {
+            CountDifferentLines(pMatrix, m, n);
+            CountDifferentRows(pMatrix, m, n);
+        }
     }
+
+    TEST_EPILOGUE();
+}
+
+void Benchmark_CountLinesRows_500x1000x5()
+{
+    TEST_PROLOGUE();
+
+    printf("- - - %lf\n", CU_get_elapsed_time());
+
+    srand(time(0));
+
+    const int m = 500;
+    const int n = 1000;
+
+    int pMatrix[m * n];
+
+    for (int i = 0; i < m * n; i++)
+    {
+        pMatrix[i] = i;
+    }
+    printf("- - - %lf\n", CU_get_elapsed_time());
+
+    for (int i = 0; i < 1; i++)
+    {
+        CountDifferentLines(pMatrix, m, n);
+        CountDifferentRows(pMatrix, m, n);
+    }
+
+    printf("- - - %lf\n", CU_get_elapsed_time());
 
     TEST_EPILOGUE();
 }
