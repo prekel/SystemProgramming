@@ -1,9 +1,9 @@
+AS = as
 CC = clang
 
 
-
 CFLAGS = 
-LDFLAGS = 
+LDFLAGS =
 INC = 
 
 
@@ -16,7 +16,7 @@ OUTFILE = Lab_06_AArch64
 all: $(SOURCES) $(OUTFILE)
 
 %.o: %.s
-	$(CC) -c $(INC) $(CFLAGS) $< -o $@
+	$(AS) -c $(INC) $(CFLAGS) $< -o $@
 
 $(OUTFILE): $(OBJECTS)
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
