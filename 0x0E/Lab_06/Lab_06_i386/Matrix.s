@@ -1,10 +1,7 @@
 	.text
-	.file	"Matrix.c"
-	.globl	CheckAllDifferent       # -- Begin function CheckAllDifferent
-	.p2align	4, 0x90
-	.type	CheckAllDifferent,@function
-CheckAllDifferent:                      # @CheckAllDifferent
-# %bb.0:
+	
+	.globl	CheckAllDifferent
+CheckAllDifferent:
 	pushl	%ebp
 	movl	%esp, %ebp
 	pushl	%esi
@@ -16,21 +13,17 @@ CheckAllDifferent:                      # @CheckAllDifferent
 	imull	12(%ebp), %esi
 	movl	%esi, -12(%ebp)
 	movl	$0, -16(%ebp)
-.LBB0_1:                                # =>This Loop Header: Depth=1
-                                        #     Child Loop BB0_3 Depth 2
+.LBB0_1:
 	movl	-16(%ebp), %eax
 	cmpl	-12(%ebp), %eax
 	jge	.LBB0_10
-# %bb.2:                                #   in Loop: Header=BB0_1 Depth=1
 	movl	-16(%ebp), %eax
 	addl	12(%ebp), %eax
 	movl	%eax, -20(%ebp)
-.LBB0_3:                                #   Parent Loop BB0_1 Depth=1
-                                        # =>  This Inner Loop Header: Depth=2
+.LBB0_3:
 	movl	-20(%ebp), %eax
 	cmpl	-12(%ebp), %eax
 	jge	.LBB0_8
-# %bb.4:                                #   in Loop: Header=BB0_3 Depth=2
 	movl	8(%ebp), %eax
 	movl	-16(%ebp), %ecx
 	movl	(%eax,%ecx,4), %eax
@@ -38,19 +31,18 @@ CheckAllDifferent:                      # @CheckAllDifferent
 	movl	-20(%ebp), %edx
 	cmpl	(%ecx,%edx,4), %eax
 	jne	.LBB0_6
-# %bb.5:
 	movb	$0, -5(%ebp)
 	jmp	.LBB0_11
-.LBB0_6:                                #   in Loop: Header=BB0_3 Depth=2
+.LBB0_6:
 	jmp	.LBB0_7
-.LBB0_7:                                #   in Loop: Header=BB0_3 Depth=2
+.LBB0_7:
 	movl	12(%ebp), %eax
 	addl	-20(%ebp), %eax
 	movl	%eax, -20(%ebp)
 	jmp	.LBB0_3
-.LBB0_8:                                #   in Loop: Header=BB0_1 Depth=1
+.LBB0_8:
 	jmp	.LBB0_9
-.LBB0_9:                                #   in Loop: Header=BB0_1 Depth=1
+.LBB0_9:
 	movl	12(%ebp), %eax
 	addl	-16(%ebp), %eax
 	movl	%eax, -16(%ebp)
@@ -65,14 +57,10 @@ CheckAllDifferent:                      # @CheckAllDifferent
 	popl	%esi
 	popl	%ebp
 	retl
-.Lfunc_end0:
-	.size	CheckAllDifferent, .Lfunc_end0-CheckAllDifferent
-                                        # -- End function
-	.globl	CountDifferentLines     # -- Begin function CountDifferentLines
-	.p2align	4, 0x90
-	.type	CountDifferentLines,@function
-CountDifferentLines:                    # @CountDifferentLines
-# %bb.0:
+	
+
+	.globl	CountDifferentLines
+CountDifferentLines:
 	pushl	%ebp
 	movl	%esp, %ebp
 	subl	$24, %esp
@@ -81,11 +69,10 @@ CountDifferentLines:                    # @CountDifferentLines
 	movl	8(%ebp), %edx
 	movl	$0, -4(%ebp)
 	movl	$0, -8(%ebp)
-.LBB1_1:                                # =>This Inner Loop Header: Depth=1
+.LBB1_1:
 	movl	-8(%ebp), %eax
 	cmpl	12(%ebp), %eax
 	jge	.LBB1_6
-# %bb.2:                                #   in Loop: Header=BB1_1 Depth=1
 	movl	8(%ebp), %eax
 	movl	-8(%ebp), %ecx
 	imull	16(%ebp), %ecx
@@ -100,13 +87,12 @@ CountDifferentLines:                    # @CountDifferentLines
 	movb	%al, -9(%ebp)
 	testb	$1, -9(%ebp)
 	je	.LBB1_4
-# %bb.3:                                #   in Loop: Header=BB1_1 Depth=1
 	movl	-4(%ebp), %eax
 	addl	$1, %eax
 	movl	%eax, -4(%ebp)
-.LBB1_4:                                #   in Loop: Header=BB1_1 Depth=1
+.LBB1_4:
 	jmp	.LBB1_5
-.LBB1_5:                                #   in Loop: Header=BB1_1 Depth=1
+.LBB1_5:
 	movl	-8(%ebp), %eax
 	addl	$1, %eax
 	movl	%eax, -8(%ebp)
@@ -116,14 +102,10 @@ CountDifferentLines:                    # @CountDifferentLines
 	addl	$24, %esp
 	popl	%ebp
 	retl
-.Lfunc_end1:
-	.size	CountDifferentLines, .Lfunc_end1-CountDifferentLines
-                                        # -- End function
-	.globl	CountDifferentRows      # -- Begin function CountDifferentRows
-	.p2align	4, 0x90
-	.type	CountDifferentRows,@function
-CountDifferentRows:                     # @CountDifferentRows
-# %bb.0:
+	
+
+	.globl	CountDifferentRows
+CountDifferentRows:
 	pushl	%ebp
 	movl	%esp, %ebp
 	subl	$24, %esp
@@ -132,11 +114,10 @@ CountDifferentRows:                     # @CountDifferentRows
 	movl	8(%ebp), %edx
 	movl	$0, -4(%ebp)
 	movl	$0, -8(%ebp)
-.LBB2_1:                                # =>This Inner Loop Header: Depth=1
+.LBB2_1:
 	movl	-8(%ebp), %eax
 	cmpl	16(%ebp), %eax
 	jge	.LBB2_6
-# %bb.2:                                #   in Loop: Header=BB2_1 Depth=1
 	movl	8(%ebp), %eax
 	movl	-8(%ebp), %ecx
 	shll	$2, %ecx
@@ -151,13 +132,12 @@ CountDifferentRows:                     # @CountDifferentRows
 	movb	%al, -9(%ebp)
 	testb	$1, -9(%ebp)
 	je	.LBB2_4
-# %bb.3:                                #   in Loop: Header=BB2_1 Depth=1
 	movl	-4(%ebp), %eax
 	addl	$1, %eax
 	movl	%eax, -4(%ebp)
-.LBB2_4:                                #   in Loop: Header=BB2_1 Depth=1
+.LBB2_4:
 	jmp	.LBB2_5
-.LBB2_5:                                #   in Loop: Header=BB2_1 Depth=1
+.LBB2_5:
 	movl	-8(%ebp), %eax
 	addl	$1, %eax
 	movl	%eax, -8(%ebp)
@@ -167,10 +147,3 @@ CountDifferentRows:                     # @CountDifferentRows
 	addl	$24, %esp
 	popl	%ebp
 	retl
-.Lfunc_end2:
-	.size	CountDifferentRows, .Lfunc_end2-CountDifferentRows
-                                        # -- End function
-
-	.ident	"clang version 9.0.0-2 (tags/RELEASE_900/final)"
-	.section	".note.GNU-stack","",@progbits
-
