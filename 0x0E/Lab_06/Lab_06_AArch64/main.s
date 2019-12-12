@@ -2,21 +2,20 @@
 
     .global	main
 main:
-    str x30, [sp, #-16]!
-    str x19, [sp, #-16]!
-    str x20, [sp, #-16]!
-    str x21, [sp, #-16]!
+    stp x19, x30, [sp, #-16]!
+    stp x21, x20, [sp, #-16]!
 	
-	sub sp, sp, #8 								// добавление места в стеке для двух 4-байтных числа
-	mov x0, sp									// x1 <- указатель на последнее число в стеке
-	add sp, sp, #4								
-	mov x1, sp
-	sub sp, sp, #4
+	sub sp, sp, #16 								// добавление места в стеке для двух 4-байтных числа и выравнивание до 16 байт
+	mov x20, sp									// x20 <- sp
+	mov x0, x20									// x1 <- адрес последнее число в стеке
+	add x20, x20, #4							//						
+	mov x1, x20
 	bl ReadMN	
-	ldr w19, [sp]
-	add sp, sp, #4
-	ldr w20, [sp]
-	add sp, sp, #4
+	ldr w19, [x20]
+	sub x20, x20, #4
+	ldr w21, [x20]
+	add sp, sp, #16
+	mov w20, w21
 
 	mul w0, w19, w20							// w0 <- w19 * w20
 	mov w1, #4
@@ -57,10 +56,8 @@ main:
 	mov x0, x21
 	bl free
 
-    ldr x21, [sp], #16
-    ldr x20, [sp], #16
-    ldr x19, [sp], #16
-    ldr x30, [sp], #16
+    ldp x21, x20, [sp], #16
+    ldp x19, x30, [sp], #16
 
     mov x0, #0
 
