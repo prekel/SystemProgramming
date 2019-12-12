@@ -2,14 +2,14 @@ CC = clang
 
 
 CFLAGS = -O0 -Wall -std=gnu99
-LDFLAGS = -static
+LDFLAGS = -L. -static
 INC = -I.. 
 
 
 SOURCES = main.c MatrixTests.c Suite.c
 OBJECTS = $(SOURCES:.c=.o)
 
-LCUNIT = libcunit-aarch64.a
+LCUNIT = libcunit-termux.a
 PROJOBJ = ../Lab_06_AArch64/Matrix.o ../Lab_06_AArch64/MatrixIO.o
 
 OUTFILE = Lab_06_Tests
