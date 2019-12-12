@@ -1,5 +1,4 @@
 	.text
-	.balign 4
 
     .global	CheckAllDifferent
 CheckAllDifferent:
@@ -35,13 +34,13 @@ CheckAllDifferent:
 
     .global	CountDifferentLines
 CountDifferentLines:
-    str x30, [sp, #-8]!
-    str x19, [sp, #-8]!
-    str x20, [sp, #-8]!
-    str x23, [sp, #-8]!
-    str x24, [sp, #-8]!
-    str x25, [sp, #-8]!
-    str x26, [sp, #-8]!
+    str x30, [sp, #-16]!
+    str x19, [sp, #-16]!
+    str x20, [sp, #-16]!
+    str x23, [sp, #-16]!
+    str x24, [sp, #-16]!
+    str x25, [sp, #-16]!
+    str x26, [sp, #-16]!
 
     mov x23, x0                                 // x23 <- x0
     mov w24, w1                                 // w24 <- w1
@@ -74,24 +73,24 @@ CountDifferentLines:
 
     mov w0, w19									// w0 <- w19
 
-    ldr x26, [sp], #8
-    ldr x25, [sp], #8
-    ldr x24, [sp], #8
-    ldr x23, [sp], #8
-    ldr x20, [sp], #8
-    ldr x19, [sp], #8
-    ldr x30, [sp], #8
+    ldr x26, [sp], #16
+    ldr x25, [sp], #16
+    ldr x24, [sp], #16
+    ldr x23, [sp], #16
+    ldr x20, [sp], #16
+    ldr x19, [sp], #16
+    ldr x30, [sp], #16
 
     ret											// return w0 = w19
 
     .global	CountDifferentRows
 CountDifferentRows:
-    str x30, [sp, #-8]!
-    str x19, [sp, #-8]!
-    str x20, [sp, #-8]!
-    str x23, [sp, #-8]!
-    str x24, [sp, #-8]!
-    str x25, [sp, #-8]!
+    str x30, [sp, #-16]!
+    str x19, [sp, #-16]!
+    str x20, [sp, #-16]!
+    str x23, [sp, #-16]!
+    str x24, [sp, #-16]!
+    str x25, [sp, #-16]!
 
     mov x23, x0                                 // x23 <- x0
     mov w24, w1                                 // w24 <- w1
@@ -121,12 +120,12 @@ CountDifferentRows:
 
     mov w0, w19									// w0 <- w19
 
-    ldr x25, [sp], #8
-    ldr x24, [sp], #8
-    ldr x23, [sp], #8
-    ldr x20, [sp], #8
-    ldr x19, [sp], #8
-    ldr x30, [sp], #8
+    ldr x25, [sp], #16
+    ldr x24, [sp], #16
+    ldr x23, [sp], #16
+    ldr x20, [sp], #16
+    ldr x19, [sp], #16
+    ldr x30, [sp], #16
 
     ret											// return w0 = w19
 

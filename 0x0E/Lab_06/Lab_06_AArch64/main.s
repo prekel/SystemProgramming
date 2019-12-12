@@ -1,12 +1,11 @@
 	.text
-	.balign 4
 
     .global	main
 main:
-    str x30, [sp, #-8]!
-    str x19, [sp, #-8]!
-    str x20, [sp, #-8]!
-    str x21, [sp, #-8]!
+    str x30, [sp, #-16]!
+    str x19, [sp, #-16]!
+    str x20, [sp, #-16]!
+    str x21, [sp, #-16]!
 	
 	sub sp, sp, #8 								// добавление места в стеке для двух 4-байтных числа
 	mov x0, sp									// x1 <- указатель на последнее число в стеке
@@ -58,10 +57,10 @@ main:
 	mov x0, x21
 	bl free
 
-    ldr x21, [sp], #8
-    ldr x20, [sp], #8
-    ldr x19, [sp], #8
-    ldr x30, [sp], #8
+    ldr x21, [sp], #16
+    ldr x20, [sp], #16
+    ldr x19, [sp], #16
+    ldr x30, [sp], #16
 
     mov x0, #0
 
