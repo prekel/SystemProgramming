@@ -6,70 +6,77 @@ CheckAllDifferent:
     movl	%esp, %ebp
     subl	$20, %esp
 
-	#  16(%ebp) size
-	#  12(%ebp) step
-	#   8(%ebp) pArray
-	#   4(%ebp) old %ebp
-	#   0(%ebp) old %esi
-	#  -4(%ebp) result
-	#  -8(%ebp) 
-	# -12(%ebp) max = step * size
-	# -16(%ebp) i
-	# -20(%ebp) j
+    # Занятый стек 40 байт:
+    #  16(%ebp) [4] size
+    #  12(%ebp) [4] step
+    #   8(%ebp) [4] pArray
+    #   4(%ebp) [4] old %ebp
+    #   0(%ebp) [4] 
+    #  -4(%ebp) [4] 
+    #  -5(%ebp) [1] result
+    #  -6(%ebp) [1] 
+    #  -7(%ebp) [1] 
+    #  -8(%ebp) [1] 
+    # -12(%ebp) [4] max = step * size
+    # -16(%ebp) [4] i
+    # -20(%ebp) [4] j
 
-	# -12(%ebp) <- 16(%ebp) * 12(%ebp)
+    # -12(%ebp) <- 16(%ebp) * 12(%ebp)
     movl 12(%ebp), %eax
-	mull 16(%ebp)
+    mull 16(%ebp)
     movl %eax, -12(%ebp)
 
-	# for (-16(%ebp) <- 0; -16(%ebp) < -12(%ebp); -16(%ebp) += 12(%ebp))
-	Loop1_Start:
-		# -16(%ebp) <- 0
-    	movl $0, -16(%ebp)
-		jmp Loop1_Check
+    # for (-16(%ebp) <- 0; -16(%ebp) < -12(%ebp); -16(%ebp) += 12(%ebp))
+    Loop1_Start:
+        # -16(%ebp) <- 0
+        movl $0, -16(%ebp)
+        jmp Loop1_Check
         Loop1_Body:
-			# for (-20(%ebp) <- -16(%ebp) + 12(%ebp); -20(%ebp) < -12(%ebp); -20(%ebp) += 12(%ebp))
+            # for (-20(%ebp) <- -16(%ebp) + 12(%ebp); -20(%ebp) < -12(%ebp); -20(%ebp) += 12(%ebp))
             Loop2_Start:
-				# -20(%ebp) <- -16(%ebp) + 12(%ebp)
-    			movl -16(%ebp), %eax
-    			addl 12(%ebp), %eax
-    			movl %eax, -20(%ebp)
-				jmp Loop2_Check
+                # -20(%ebp) <- -16(%ebp) + 12(%ebp)
+                movl -16(%ebp), %eax
+                addl 12(%ebp), %eax
+                movl %eax, -20(%ebp)
+                jmp Loop2_Check
                 Loop2_Body:
-					# %eax <- 8(%ebp)[-16(%ebp)]
-    				movl 8(%ebp), %eax
-    				movl -16(%ebp), %ecx
-    				movl (%eax,%ecx,4), %eax
-					# ;if %eax != 8(%ebp)[-20(%ebp)] goto Loop2_Continue
-    				movl 8(%ebp), %ecx
-    				movl -20(%ebp), %edx
-    				cmpl (%ecx,%edx,4), %eax
-					jne Loop2_Continue
-					# -5(%ebp) <- $0
-    				movb $0, -5(%ebp)
-					jmp Return1
+                    # %eax <- 8(%ebp)[-16(%ebp)]
+                    movl 8(%ebp), %eax
+                    movl -16(%ebp), %ecx
+                    movl (%eax,%ecx,4), %eax
+                    # ;if %eax != 8(%ebp)[-20(%ebp)] goto Loop2_Continue
+                    movl 8(%ebp), %ecx
+                    movl -20(%ebp), %edx
+                    cmpl (%ecx,%edx,4), %eax
+                    jne Loop2_Continue
+                    # -5(%ebp) <- $0
+                    movb $0, -5(%ebp)
+                    jmp Return1
                     Loop2_Continue:
-						# -20(%ebp) += 12(%ebp)
-						movl 12(%ebp), %eax
-						addl %eax, -20(%ebp)
+                        # -20(%ebp) += 12(%ebp)
+                        movl 12(%ebp), %eax
+                        addl %eax, -20(%ebp)
                 Loop2_Check:
-					# ;if -20(%ebp) < -12(%ebp) goto Loop2_Body
-					movl -20(%ebp), %eax
-    				cmpl -12(%ebp), %eax
-					jl Loop2_Body
-				# -16(%ebp) += 12(%ebp)
-				movl	12(%ebp), %eax
-    			addl	%eax, -16(%ebp)
+                    # ;if -20(%ebp) < -12(%ebp) goto Loop2_Body
+                    movl -20(%ebp), %eax
+                    cmpl -12(%ebp), %eax
+                    jl Loop2_Body
+                # -16(%ebp) += 12(%ebp)
+                movl	12(%ebp), %eax
+                addl	%eax, -16(%ebp)
         Loop1_Check:
-			# ;if -16(%ebp) < -12(%ebp) goto Loop1_Body
-			movl	-16(%ebp), %eax
-    		cmpl	-12(%ebp), %eax
-			jl Loop1_Body
+            # ;if -16(%ebp) < -12(%ebp) goto Loop1_Body
+            movl	-16(%ebp), %eax
+            cmpl	-12(%ebp), %eax
+            jl Loop1_Body
 
+    # -5(%ebp) <- $1
     movb	$1, -5(%ebp)
 
-	Return1:
+    Return1:
+    # %al <- -5(%ebp)
     movb	-5(%ebp), %al
+    
     addl	$20, %esp
     pop	%ebp
     ret
