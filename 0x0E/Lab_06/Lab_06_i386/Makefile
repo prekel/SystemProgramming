@@ -8,19 +8,20 @@ INC =
 
 
 
-SOURCES = main.s Matrix.s 
+SOURCES = main.s Matrix.s MatrixIO.s 
 OBJECTS = $(SOURCES:.s=.o)
 
 OUTFILE = Lab_06_i386
 
-all: $(SOURCES) $(OUTFILE)
-
-$(OUTFILE): $(OBJECTS)
-	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+all: $(SOURCES) $(OBJECTS) $(OUTFILE)
 
 %.o: %.s
 	$(AS) -c $(INC) $(CFLAGS) $< -o $@
 
+$(OUTFILE): $(OBJECTS)
+	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+
 .PHONY: clean
 clean:
-	rm $(OUTFILE) *.o
+	rm $(OUTFILE) $(OBJECTS)
+

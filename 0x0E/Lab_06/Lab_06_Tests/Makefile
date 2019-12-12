@@ -1,25 +1,26 @@
 CC = gcc
 
 
-
-CFLAGS = -O0 -g -Wall -std=gnu99
-LDFLAGS = ../Lab_06_C/Matrix.o ../Lab_06_C/MatrixIO.o -lcunit
+CFLAGS = -O0 -Wall -std=gnu99
+LDFLAGS = -static
 INC = -I..
-
 
 
 SOURCES = main.c MatrixTests.c Suite.c
 OBJECTS = $(SOURCES:.c=.o)
 
+LCUNIT = -lcunit
+PROJOBJ = ../Lab_06_C/Matrix.o ../Lab_06_C/MatrixIO.o
+
 OUTFILE = Lab_06_Tests
 
-all: $(SOURCES) $(OUTFILE)
+all: $(SOURCES) $(PROJOBJ) $(OBJECTS) $(OUTFILE)
 
 %.o: %.c
 	$(CC) -c $(INC) $(CFLAGS) $< -o $@
 
 $(OUTFILE): $(OBJECTS)
-	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+	$(CC) $(OBJECTS) $(PROJOBJ) $(LCUNIT) $(LDFLAGS) -o $@
 
 .PHONY: clean
 clean:
