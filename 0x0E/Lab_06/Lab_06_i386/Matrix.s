@@ -88,9 +88,22 @@ CountDifferentLines:
     movl	%esp, %ebp
     subl	$24, %esp
 
-    movl	16(%ebp), %eax
-    movl	12(%ebp), %ecx
-    movl	8(%ebp), %edx
+    # Занятый стек 44 байт:
+    #  16(%ebp) [4] n
+    #  12(%ebp) [4] m
+    #   8(%ebp) [4] pMatrix
+    #   4(%ebp) [4] old %ebp
+    #   0(%ebp) [4] 
+    #  -4(%ebp) [4] c
+    #  -8(%ebp) [4] i
+    #  -9(%ebp) [1] check
+    # -10(%ebp) [1] 
+    # -11(%ebp) [1] 
+    # -12(%ebp) [1] 
+    # -16(%ebp) [4] 8(%esp) n
+    # -20(%ebp) [4] 4(%esp) 1
+    # -24(%ebp) [4] 0(%esp) pMatrix + i * n
+
     movl	$0, -4(%ebp)
     movl	$0, -8(%ebp)
 .LBB1_1:
@@ -123,6 +136,7 @@ CountDifferentLines:
     jmp	.LBB1_1
 .LBB1_6:
     movl	-4(%ebp), %eax
+
     addl	$24, %esp
     popl	%ebp
     retl
