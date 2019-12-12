@@ -2,105 +2,75 @@
 
     .globl	CheckAllDifferent
 CheckAllDifferent:
-    pushl	%ebp
+    push	%ebp
     movl	%esp, %ebp
-    pushl	%esi
-    subl	$16, %esp
+    subl	$20, %esp
 
-    # movl	16(%ebp), %eax
-    # movl	12(%ebp), %ecx
-    # movl	8(%ebp), %edx
+	#  16(%ebp) size
+	#  12(%ebp) step
+	#   8(%ebp) pArray
+	#   4(%ebp) old %ebp
+	#   0(%ebp) old %esi
+	#  -4(%ebp) result
+	#  -8(%ebp) 
+	# -12(%ebp) max = step * size
+	# -16(%ebp) i
+	# -20(%ebp) j
 
 	# -12(%ebp) <- 16(%ebp) * 12(%ebp)
     movl 12(%ebp), %eax
 	mull 16(%ebp)
     movl %eax, -12(%ebp)
 
+	# for (-16(%ebp) <- 0; -16(%ebp) < -12(%ebp); -16(%ebp) += 12(%ebp))
 	Loop1_Start:
 		# -16(%ebp) <- 0
     	movl $0, -16(%ebp)
 		jmp Loop1_Check
         Loop1_Body:
+			# for (-20(%ebp) <- -16(%ebp) + 12(%ebp); -20(%ebp) < -12(%ebp); -20(%ebp) += 12(%ebp))
             Loop2_Start:
 				# -20(%ebp) <- -16(%ebp) + 12(%ebp)
     			movl -16(%ebp), %eax
     			addl 12(%ebp), %eax
     			movl %eax, -20(%ebp)
+				jmp Loop2_Check
                 Loop2_Body:
+					# %eax <- 8(%ebp)[-16(%ebp)]
     				movl 8(%ebp), %eax
     				movl -16(%ebp), %ecx
     				movl (%eax,%ecx,4), %eax
+					# ;if %eax != 8(%ebp)[-20(%ebp)] goto Loop2_Continue
     				movl 8(%ebp), %ecx
     				movl -20(%ebp), %edx
     				cmpl (%ecx,%edx,4), %eax
 					jne Loop2_Continue
+					# -5(%ebp) <- $0
     				movb $0, -5(%ebp)
+					jmp Return1
                     Loop2_Continue:
 						# -20(%ebp) += 12(%ebp)
 						movl 12(%ebp), %eax
-    					addl -20(%ebp), %eax
-    					movl %eax, -20(%ebp)
+						addl %eax, -20(%ebp)
                 Loop2_Check:
+					# ;if -20(%ebp) < -12(%ebp) goto Loop2_Body
 					movl -20(%ebp), %eax
     				cmpl -12(%ebp), %eax
 					jl Loop2_Body
+				# -16(%ebp) += 12(%ebp)
 				movl	12(%ebp), %eax
-    			addl	-16(%ebp), %eax
-    			movl	%eax, -16(%ebp)
+    			addl	%eax, -16(%ebp)
         Loop1_Check:
+			# ;if -16(%ebp) < -12(%ebp) goto Loop1_Body
 			movl	-16(%ebp), %eax
     		cmpl	-12(%ebp), %eax
 			jl Loop1_Body
 
-
-
-; 	# -16(%ebp) <- 0
-;     movl	$0, -16(%ebp)
-
-; .LBB0_1:
-;     movl	-16(%ebp), %eax
-;     cmpl	-12(%ebp), %eax
-;     jge	.LBB0_10
-;     movl	-16(%ebp), %eax
-;     addl	12(%ebp), %eax
-;     movl	%eax, -20(%ebp)
-; .LBB0_3:
-;     movl	-20(%ebp), %eax
-;     cmpl	-12(%ebp), %eax
-;     jge	.LBB0_8
-;     movl	8(%ebp), %eax
-;     movl	-16(%ebp), %ecx
-;     movl	(%eax,%ecx,4), %eax
-;     movl	8(%ebp), %ecx
-;     movl	-20(%ebp), %edx
-;     cmpl	(%ecx,%edx,4), %eax
-;     jne	.LBB0_6
-;     movb	$0, -5(%ebp)
-;     jmp	.LBB0_11
-; .LBB0_6:
-;     jmp	.LBB0_7
-; .LBB0_7:
-;     movl	12(%ebp), %eax
-;     addl	-20(%ebp), %eax
-;     movl	%eax, -20(%ebp)
-;     jmp	.LBB0_3
-; .LBB0_8:
-;     jmp	.LBB0_9
-; .LBB0_9:
-;     movl	12(%ebp), %eax
-;     addl	-16(%ebp), %eax
-;     movl	%eax, -16(%ebp)
-;     jmp	.LBB0_1
-; .LBB0_10:
-;     movb	$1, -5(%ebp)
-; .LBB0_11:
+    movb	$1, -5(%ebp)
 
 	Return1:
     movb	-5(%ebp), %al
-    # andb	$1, %al
-    # movzbl	%al, %eax
-    addl	$16, %esp
-    pop	%esi
+    addl	$20, %esp
     pop	%ebp
     ret
 
@@ -110,6 +80,7 @@ CountDifferentLines:
     pushl	%ebp
     movl	%esp, %ebp
     subl	$24, %esp
+
     movl	16(%ebp), %eax
     movl	12(%ebp), %ecx
     movl	8(%ebp), %edx
