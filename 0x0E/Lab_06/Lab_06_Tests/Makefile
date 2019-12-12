@@ -19,7 +19,7 @@ all: $(SOURCES) $(PROJOBJ) $(OBJECTS) $(OUTFILE)
 %.o: %.c
 	$(CC) -c $(INC) $(CFLAGS) $< -o $@
 
-$(OUTFILE): $(OBJECTS)
+$(OUTFILE): $(OBJECTS) $(PROJOBJ)
 	$(CC) $(OBJECTS) $(PROJOBJ) $(LCUNIT) $(LDFLAGS) -o $@
 
 .PHONY: clean
