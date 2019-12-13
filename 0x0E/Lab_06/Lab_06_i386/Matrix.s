@@ -2,7 +2,7 @@
 
     .globl CheckAllDifferent
 CheckAllDifferent:
-    push %ebp
+    pushl %ebp
     movl %esp, %ebp
     subl $20, %esp
 
@@ -78,8 +78,8 @@ CheckAllDifferent:
     movb -5(%ebp), %al
     
     addl $20, %esp
-    pop %ebp
-    ret
+    popl %ebp
+    retl
 
 
     .globl CountDifferentLines
