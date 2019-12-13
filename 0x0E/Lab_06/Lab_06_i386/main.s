@@ -6,6 +6,7 @@ main:
     movl	%esp, %ebp
     pushl	%esi
     subl	$52, %esp
+
     movl	$0, -8(%ebp)
     leal	-12(%ebp), %eax
     movl	%eax, (%esp)
@@ -64,6 +65,7 @@ main:
     movl	%eax, -32(%ebp)
     calll	free
     xorl	%eax, %eax
+    
     addl	$52, %esp
     popl	%esi
     popl	%ebp
