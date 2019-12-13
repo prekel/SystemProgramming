@@ -12,7 +12,7 @@ OBJECTS = $(SOURCES:.c=.o)
 
 OUTFILE = Lab_06_C
 
-all: $(SOURCES) $(OUTFILE) 
+all: $(SOURCES) $(OBJECTS) $(OUTFILE) 
 
 %.o: %.c
 	$(CC) -c $(INC) $(CFLAGS) $< -o $@
@@ -20,8 +20,6 @@ all: $(SOURCES) $(OUTFILE)
 $(OUTFILE): $(OBJECTS)
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 
-
 .PHONY: clean
 clean:
 	rm $(OUTFILE) $(OBJECTS) 
-

@@ -2,15 +2,15 @@ CC = clang
 
 
 CFLAGS = -O0 -Wall -std=gnu99
-LDFLAGS = -L. -static
-INC = -I.. 
+LDFLAGS =
+INC = -I.. -I./CUnit
 
 
 SOURCES = main.c MatrixTests.c Suite.c
 OBJECTS = $(SOURCES:.c=.o)
 
-LCUNIT = libcunit-termux.a
-PROJOBJ = ../Lab_06_AArch64/Matrix.o ../Lab_06_AArch64/MatrixIO.o
+LCUNIT = -L./CUnit/android -lcunit
+PROJOBJ = ../Lab_06_aarch64-gas/Matrix.o ../Lab_06_aarch64-gas/MatrixIO.o
 
 OUTFILE = Lab_06_Tests
 
@@ -25,4 +25,3 @@ $(OUTFILE): $(OBJECTS) $(PROJOBJ)
 .PHONY: clean
 clean:
 	rm $(OUTFILE) $(OBJECTS)
-

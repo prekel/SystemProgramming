@@ -2,7 +2,7 @@ CC = gcc
 
 
 CFLAGS = -O0 -Wall -std=gnu99
-LDFLAGS = -static
+LDFLAGS = -no-pie 
 INC = -I..
 
 

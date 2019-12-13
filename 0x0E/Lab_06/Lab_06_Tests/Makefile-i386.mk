@@ -2,15 +2,15 @@ CC = gcc
 
 
 CFLAGS = -O0 -Wall -std=gnu99 -m32
-LDFLAGS = -m32 -static
-INC = -I.. 
+LDFLAGS = -m32
+INC = -I.. -I./CUnit
 
 
 SOURCES = main.c MatrixTests.c Suite.c
 OBJECTS = $(SOURCES:.c=.o)
 
-LCUNIT = libcunit-i386.a
-PROJOBJ = ../Lab_06_i386/Matrix.o ../Lab_06_i386/MatrixIO.o
+LCUNIT = -L./CUnit/i386 -lcunit
+PROJOBJ = ../Lab_06_i386-gas/Matrix.o ../Lab_06_i386-gas/MatrixIO.o
 
 OUTFILE = Lab_06_Tests
 
@@ -25,4 +25,3 @@ $(OUTFILE): $(OBJECTS) $(PROJOBJ)
 .PHONY: clean
 clean:
 	rm $(OUTFILE) $(OBJECTS)
-

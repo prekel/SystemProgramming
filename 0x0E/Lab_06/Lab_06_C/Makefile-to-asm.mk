@@ -1,8 +1,8 @@
 CC = gcc
 
 
-CFLAGS = -O0 -Wall -fno-stack-protector -std=gnu99 -m32
-LDFLAGS = -m32
+CFLAGS = -O0 -Wall -fno-stack-protector -std=gnu99
+LDFLAGS = 
 INC = -I..
 
 
