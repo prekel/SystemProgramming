@@ -75,6 +75,7 @@ CheckAllDifferent:
 
     Return1:
     # %al <- -5(%ebp)
+    # return -5(%ebp)
     movb -5(%ebp), %al
     
     addl $20, %esp
