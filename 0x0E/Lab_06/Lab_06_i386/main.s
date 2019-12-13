@@ -1,5 +1,6 @@
     .text
 
+# int main()
     .globl main
 main:
     pushl %ebp

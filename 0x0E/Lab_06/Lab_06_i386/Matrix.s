@@ -1,5 +1,6 @@
     .text
 
+# bool CheckAllDifferent(int* pArray, int step, int size)
     .globl CheckAllDifferent
 CheckAllDifferent:
     pushl %ebp
@@ -83,6 +84,7 @@ CheckAllDifferent:
     retl
 
 
+# int CountDifferentLines(int* pMatrix, int m, int n)
     .globl CountDifferentLines
 CountDifferentLines:
     pushl %ebp
@@ -148,6 +150,7 @@ CountDifferentLines:
     retl
 
 
+# int CountDifferentRows(int* pMatrix, int m, int n)
     .globl CountDifferentRows
 CountDifferentRows:
     pushl %ebp

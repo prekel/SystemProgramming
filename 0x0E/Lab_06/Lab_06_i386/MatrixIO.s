@@ -1,5 +1,6 @@
     .text
 
+# void ReadMN(int* pM, int* pN)
     .globl ReadMN
 ReadMN:
     pushl   %ebp
@@ -41,6 +42,7 @@ ReadMN:
     retl
 
 
+# void ReadMatrix(int* pMatrix, int m, int n)
     .globl ReadMatrix
 ReadMatrix:
     pushl %ebp
@@ -75,17 +77,18 @@ ReadMatrix:
                     movl %eax, 4(%esp)
                     movl %ecx, 8(%esp)
                     calll printf
+
                     movl 8(%ebp), %ecx
                     movl -4(%ebp), %edx
                     imull 16(%ebp), %edx
                     addl -8(%ebp), %edx
-                    shll $2, %edx
+                    imull $4, %edx
                     addl %edx, %ecx
                     leal InputFormat1, %edx
                     movl %edx, (%esp)
                     movl %ecx, 4(%esp)
-                    movl %eax, -12(%ebp)
                     calll scanf
+
                     movl -8(%ebp), %eax
                     addl $1, %eax
                     movl %eax, -8(%ebp)
@@ -106,6 +109,7 @@ ReadMatrix:
     retl
 
 
+# void WriteMatrix(int* pMatrix, int m, int n)
     .globl WriteMatrix
 WriteMatrix:
     pushl %ebp
