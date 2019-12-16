@@ -1,5 +1,9 @@
+# Вариант 4. 
+# Дана целочисленная матрица размера M x N. 
+# Найти количество ее строк и столбцов, все элементы которых различны.
     .text
 
+# bool CheckAllDifferent(int* pArray, int step, int size)
     .globl CheckAllDifferent
 CheckAllDifferent:
     mul $t3, $a1, $a2                           # $t3 <- $a1 * $a2
@@ -35,6 +39,7 @@ CheckAllDifferent:
     jr $ra                                      # go back to $ra
 
 
+# int CountDifferentLines(int* pMatrix, int m, int n)
     .globl CountDifferentLines
 CountDifferentLines:
     addi $sp, $sp, -4        
@@ -71,13 +76,13 @@ CountDifferentLines:
             li $a1, 1                           # $a1 <- 1
             move $a2, $s2                       # $a2 <- $s2
             jal CheckAllDifferent               # call CheckAllDifferent
-            beq $v0, $zero, Loop7_Continue      #  if $a0 == false goto Loop7_Continue
+            beq $v0, $zero, Loop7_Continue      # if $a0 == false goto Loop7_Continue
             add $s5, $s5, 1                     # $s5++
             Loop7_Continue:
                 add $s3, $s3, $s2               # $s3 += $s2
                 add $s4, $s4, 1                 # $s4++
         Loop7_Check:
-            blt $s4, $s1, Loop7_Body            #  if $s4 < $s1 goto Loop7_Body
+            blt $s4, $s1, Loop7_Body            # if $s4 < $s1 goto Loop7_Body
 
     move $v0, $s5                               # return $s5
 
@@ -98,6 +103,7 @@ CountDifferentLines:
     jr $ra                                      # go back to $ra
 
 
+# int CountDifferentRows(int* pMatrix, int m, int n)
     .globl CountDifferentRows
 CountDifferentRows:
     addi $sp, $sp, -4        
@@ -158,6 +164,7 @@ CountDifferentRows:
     jr $ra                                      # go back to $ra
 
 
+# void ReadMN(int* pM, int* pN)
     .globl ReadMN
 ReadMN:
     addi $sp, $sp, -4        
@@ -207,6 +214,7 @@ ReadMN:
     jr $ra                                      # go back to $ra  
 
 
+# void ReadMatrix(int* pMatrix, int m, int n)
     .globl ReadMatrix
 ReadMatrix:
     addi $sp, $sp, -4        
@@ -285,6 +293,7 @@ ReadMatrix:
     jr $ra           
 
 
+# void WriteMatrix(int* pMatrix, int m, int n)
     .globl WriteMatrix
 WriteMatrix:
     addi $sp, $sp, -4        
@@ -367,67 +376,68 @@ WriteMatrix:
     jr $ra                                      # go back to $ra
 
 
+# int main()
     .globl main
 main:
-    move $a0, $sp
-    addi $sp, $sp, -4
-    move $a1, $sp
-    jal ReadMN
+    move $a0, $sp                               # $a0 <- $sp
+    addi $sp, $sp, -4                           # $sp -= 4
+    move $a1, $sp                               # $a1 <- $sp
+    jal ReadMN                                  # call ReadMN
 
-    lw $s1, ($sp)
-    addi $sp, $sp, 4
-    lw $s0, ($sp) 
+    lw $s1, ($sp)                               # $s1 <- *$sp
+    addi $sp, $sp, 4                            # $sp += 4
+    lw $s0, ($sp)                               # $s0 <- *$sp
 
-    li $t0, 4
-    mul $t0, $t0, $s0 
-    mul $t0, $t0, $s1
+    li $t0, 4                                   # $t0 <- 4
+    mul $t0, $t0, $s0                           # $t0 *= $s0
+    mul $t0, $t0, $s1                           # $t0 *= $s1
     
-    sub $sp, $sp, $t0
+    sub $sp, $sp, $t0                           # $sp += $t0
 
-    move $a0, $sp 
-    move $a1, $s0
-    move $a2, $s1
-    jal ReadMatrix
+    move $a0, $sp                               # $a0 <- $sp
+    move $a1, $s0                               # $a1 <- $s0
+    move $a2, $s1                               # $a2 <- $s1
+    jal ReadMatrix                              # call ReadMatrix
 
-    li $v0, 4
-    la $a0, NewLine1
-    syscall
+    li $v0, 4                                   # $v0 <- 4
+    la $a0, NewLine1                            # $a0 <- &NewLine1
+    syscall                                     # syscall print_string
 
-    move $a0, $sp 
-    move $a1, $s0
-    move $a2, $s1
-    jal WriteMatrix
+    move $a0, $sp                               # $a0 <- $sp
+    move $a1, $s0                               # $a1 <- $s0
+    move $a2, $s1                               # $a2 <- $s1
+    jal WriteMatrix                             # call WriteMatrix
 
-    li $v0, 4
-    la $a0, MessageCountLinesFormat1
-    syscall
-    move $a0, $sp 
-    move $a1, $s0
-    move $a2, $s1
-    jal CountDifferentLines
-    move $a0, $v0
-    li $v0, 1
-    syscall
-    li $v0, 4
-    la $a0, NewLine1
-    syscall
+    li $v0, 4                                   # $v0 <- 4
+    la $a0, MessageCountLinesFormat1            # $a0 <- &MessageCountLinesFormat1
+    syscall                                     # syscall print_string
+    move $a0, $sp                               # $a0 <- $sp
+    move $a1, $s0                               # $a1 <- $s0
+    move $a2, $s1                               # $a2 <- $s1
+    jal CountDifferentLines                     # call CountDifferentLines
+    move $a0, $v0                               # $a0 <- $v0
+    li $v0, 1                                   # $v0 <- 1
+    syscall                                     # syscall print_int
+    li $v0, 4                                   # $v0 <- 4
+    la $a0, NewLine1                            # $a0 <- &NewLine1
+    syscall                                     # syscall print_string
     
-    li $v0, 4
-    la $a0, MessageCountRowsFormat1
-    syscall
-    move $a0, $sp 
-    move $a1, $s0
-    move $a2, $s1
-    jal CountDifferentRows
-    move $a0, $v0
-    li $v0, 1
-    syscall
-    li $v0, 4
-    la $a0, NewLine1
-    syscall
+    li $v0, 4                                   # $v0 <- 4
+    la $a0, MessageCountRowsFormat1             # $a0 <- &MessageCountRowsFormat1
+    syscall                                     # syscall print_string
+    move $a0, $sp                               # $a0 <- $sp
+    move $a1, $s0                               # $a1 <- $s0
+    move $a2, $s1                               # $a2 <- $s1
+    jal CountDifferentRows                      # call CountDifferentRows
+    move $a0, $v0                               # $a0 <- $v0
+    li $v0, 1                                   # $v0 <- 1
+    syscall                                     # syscall print_int
+    li $v0, 4                                   # $v0 <- 4
+    la $a0, NewLine1                            # $a0 <- &NewLine1
+    syscall                                     # syscall print_string
 
-    li $v0, 10
-    syscall
+    li $v0, 10                                  # $v0 <- 10
+    syscall                                     # syscall exit
 
 
     .data

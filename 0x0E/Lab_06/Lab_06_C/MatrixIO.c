@@ -1,3 +1,7 @@
+/// \file
+/// \brief Реализация функций из MatrixIO.h
+/// \details Реализация функций из MatrixIO.h.
+
 #include <stdio.h>
 
 #include "MatrixIO.h"

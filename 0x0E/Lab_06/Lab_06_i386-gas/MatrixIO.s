@@ -27,8 +27,8 @@ ReadMN:
     #  12(%ebp) [4] pN
     #   8(%ebp) [4] pM
     #   4(%ebp) [4] old %ebp
-    #   0(%ebp) [4] 8(%esp) 12(%ebp)
-    #  -4(%ebp) [4] 4(%esp) 8(%ebp)
+    #   0(%ebp) [4] 8(%esp) pN
+    #  -4(%ebp) [4] 4(%esp) pM
     #  -8(%ebp) [4] 0(%esp) &InputMNFormat1
 
     pushl 12(%ebp)

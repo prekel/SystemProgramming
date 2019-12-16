@@ -1,3 +1,7 @@
+/// \file
+/// \brief Реализация функций из Matrix.h
+/// \details Реализация функций из Matrix.h.
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>

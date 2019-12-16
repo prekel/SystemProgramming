@@ -1,5 +1,6 @@
     .text
 
+// bool CheckAllDifferent(int* pArray, int step, int size)
     .global CheckAllDifferent
 CheckAllDifferent:
     mul w3, w1, w2                              // w3 <- w1 * w2
@@ -32,6 +33,7 @@ CheckAllDifferent:
     ret
 
 
+// int CountDifferentLines(int* pMatrix, int m, int n)
     .global CountDifferentLines
 CountDifferentLines:
     stp x19, x30, [sp, #-16]!
@@ -76,6 +78,7 @@ CountDifferentLines:
     ret                                         // return w0 = w19
 
 
+// int CountDifferentRows(int* pMatrix, int m, int n)
     .global CountDifferentRows
 CountDifferentRows:
     stp x19, x30, [sp, #-16]!

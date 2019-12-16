@@ -1,6 +1,6 @@
 /// \file
-/// \brief Набор тестов матрицы
-/// \details Набор тестов матрицы.
+/// \brief Набор тестов
+/// \details Набор тестов матрицы, тесты-примеры и бенчмарки.
 
 #ifndef MATRIXTESTS_H
 #define MATRIXTESTS_H
@@ -35,7 +35,7 @@ void Example_CountLineRowAndWrite_3x6_RandomThrice();
 
 void Benchmark_CountLinesRows_10x15x20x500();
 
-void Benchmark_CountLinesRows_500x1000x5();
+void Benchmark_CountLinesRows_500x1000x1();
 
 #endif //MATRIXTESTS_H
 

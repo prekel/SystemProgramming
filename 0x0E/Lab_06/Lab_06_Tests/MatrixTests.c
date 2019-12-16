@@ -1,3 +1,7 @@
+/// \file
+/// \brief Реализация функций из MatrixTests.h
+/// \details Реализация функций из MatrixTests.h.
+
 #include <stdbool.h>
 #include <malloc.h>
 #include <stdlib.h>
@@ -17,13 +21,18 @@ printf("Кол-во строк, все элементы которых разл�
 CountDifferentLines(pMatrix, m, n)); \
 printf("Кол-во столбцов, все элементы которых различны: %d\n", \
 CountDifferentRows(pMatrix, m, n)); \
-} while (false) \
+} while (0) \
 
 #define TEST_PROLOGUE() \
-printf("\n ----- %s\n", CU_get_current_test()->pName) \
+double starttime__ = CU_get_elapsed_time(); \
+do { \
+printf("\n -----  Начат  %s\n", CU_get_current_test()->pName); \
+} while (0) \
 
 #define TEST_EPILOGUE() \
-printf("\n") \
+do { \
+printf("\n ---- Закончен %s, прошло %lf секунд\n", CU_get_current_test()->pName, CU_get_elapsed_time() - starttime__); \
+} while (0) \
 
 
 static void MatrixTestsAddTests(CU_pSuite* pSuite)
@@ -41,7 +50,7 @@ static void MatrixTestsAddTests(CU_pSuite* pSuite)
     CU_ADD_TEST(*pSuite, Test_CountLineRowAndWrite_3x3_Custom2);
     CU_ADD_TEST(*pSuite, Example_CountLineRowAndWrite_3x6_RandomThrice);
     CU_ADD_TEST(*pSuite, Benchmark_CountLinesRows_10x15x20x500);
-    CU_ADD_TEST(*pSuite, Benchmark_CountLinesRows_500x1000x5);
+    CU_ADD_TEST(*pSuite, Benchmark_CountLinesRows_500x1000x1);
 }
 
 CU_pSuite* MatrixTestsSuiteCreate()
@@ -371,11 +380,9 @@ void Benchmark_CountLinesRows_10x15x20x500()
     TEST_EPILOGUE();
 }
 
-void Benchmark_CountLinesRows_500x1000x5()
+void Benchmark_CountLinesRows_500x1000x1()
 {
     TEST_PROLOGUE();
-
-    printf("- - - %lf\n", CU_get_elapsed_time());
 
     srand(time(0));
 
@@ -388,15 +395,12 @@ void Benchmark_CountLinesRows_500x1000x5()
     {
         pMatrix[i] = i;
     }
-    printf("- - - %lf\n", CU_get_elapsed_time());
 
     for (int i = 0; i < 1; i++)
     {
         CountDifferentLines(pMatrix, m, n);
         CountDifferentRows(pMatrix, m, n);
     }
-
-    printf("- - - %lf\n", CU_get_elapsed_time());
 
     TEST_EPILOGUE();
 }
