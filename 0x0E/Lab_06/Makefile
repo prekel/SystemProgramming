@@ -24,6 +24,11 @@ Main-aarch64 :
 Main-aarch64_clean :
 	$(MAKE) -C Lab_06_aarch64-gas clean
 
+Main-aarch64-android :
+	$(MAKE) -C Lab_06_aarch64-gas CC=clang
+Main-aarch64-android_clean :
+	$(MAKE) -C Lab_06_aarch64-gas clean
+
 Main-C :
 	$(MAKE) -C Lab_06_C
 Main-C_clean :
