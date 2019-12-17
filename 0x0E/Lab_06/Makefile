@@ -11,7 +11,7 @@ Tests-aarch64 Tests-aarch64_clean\
 Tests-aarch64-android Tests-aarch64-android_clean\
 Tests-C Tests-C-clean \
 Tests_clean \
-cleanall help \
+clean help \
 
 all : help
 
@@ -46,22 +46,22 @@ Tests-aarch64 : Main-aarch64
 	$(MAKE) -C Lab_06_Tests CC=aarch64-linux-gnu-gcc CFLAGS="-O0 -Wall -std=gnu99" LDFLAGS="-static" LCUNIT="-L./CUnit/aarch64 -lcunit" PROJOBJ="../Lab_06_aarch64-gas/Matrix.o ../Lab_06_aarch64-gas/MatrixIO.o"
 Tests-aarch64_clean : Tests_clean
 
+Tests-C : Main-C
+	$(MAKE) -C Lab_06_Tests
+Tests-C_clean : Tests_clean
+
 Tests-aarch64-android : Main-aarch64
 	$(MAKE) -C Lab_06_Tests CC=clang CFLAGS="-O0 -Wall -std=gnu99" LDFLAGS= LCUNIT="-L./CUnit/android -lcunit" PROJOBJ="../Lab_06_aarch64-gas/Matrix.o ../Lab_06_aarch64-gas/MatrixIO.o"
 Tests-aarch64-android_clean : Tests_clean
 
 Tests-C-android : Main-C
-	$(MAKE) -C Lab_06_Tests CC=clang CFLAGS="-O0 -Wall -std=gnu99" LDFLAGS= LCUNIT="-L./CUnit/android -lcunit" PROJOBJ="../Lab_06_aarch64-gas/Matrix.o ../Lab_06_aarch64-gas/MatrixIO.o"
+	$(MAKE) -C Lab_06_Tests CC=clang LCUNIT="-L./CUnit/android -lcunit" 
 Tests-C-android_clean : Tests_clean
-
-Tests-C : Main-C
-	$(MAKE) -C Lab_06_Tests
-Tests-C_clean : Tests_clean
 
 Tests_clean : 
 	$(MAKE) -C Lab_06_Tests clean
 
-cleanall : Main-All_clean Tests_clean
+clean : Main-All_clean Tests_clean
 
 help :
 	@echo \
