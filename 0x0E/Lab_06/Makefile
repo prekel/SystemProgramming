@@ -3,6 +3,7 @@ MAKE = make
 .PHONY : \
 Main-i386 Main-i386_clean \
 Main-aarch64 Main-aarch64_clean \
+Main-aarch64-android Main-aarch64-android_clean \
 Main-C Main-C_clean \
 Main-All Main-All_clean \
 Tests-i386 Tests-i386_clean \
@@ -25,7 +26,7 @@ Main-aarch64_clean :
 	$(MAKE) -C Lab_06_aarch64-gas clean
 
 Main-aarch64-android :
-	$(MAKE) -C Lab_06_aarch64-gas CC=clang
+	$(MAKE) -C Lab_06_aarch64-gas AS=as CC=clang LDFLAGS=
 Main-aarch64-android_clean :
 	$(MAKE) -C Lab_06_aarch64-gas clean
 
