@@ -25,3 +25,4 @@ $(OUTFILE): $(OBJECTS) $(PROJOBJ)
 .PHONY: clean
 clean:
 	rm -f $(OUTFILE) $(OBJECTS)
+

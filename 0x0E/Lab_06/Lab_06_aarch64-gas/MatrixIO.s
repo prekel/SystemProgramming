@@ -1,5 +1,6 @@
     .text
 
+// void ReadMN(int* pM, int* pN)
     .global ReadMN
 ReadMN:
     stp x19, x30, [sp, #-16]!
@@ -21,6 +22,7 @@ ReadMN:
     ret
 
 
+// void ReadMatrix(int* pMatrix, int m, int n)
     .global ReadMatrix
 ReadMatrix:
     stp x19, x30, [sp, #-16]!
@@ -66,6 +68,7 @@ ReadMatrix:
     ret
 
 
+// void WriteMatrix(int* pMatrix, int m, int n)
     .global WriteMatrix
 WriteMatrix:
     stp x19, x30, [sp, #-16]!
