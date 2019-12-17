@@ -3,7 +3,7 @@ CC = aarch64-linux-gnu-gcc
 
 CFLAGS = -O0 -Wall -std=gnu99
 LDFLAGS = -static
-INC = -I.. -I./CUnit
+INC = -I.. -I.
 
 
 SOURCES = main.c MatrixTests.c Suite.c

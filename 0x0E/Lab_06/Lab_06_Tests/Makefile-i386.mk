@@ -3,7 +3,7 @@ CC = gcc
 
 CFLAGS = -O0 -Wall -std=gnu99 -m32
 LDFLAGS = -m32
-INC = -I.. -I./CUnit
+INC = -I.. -I.
 
 
 SOURCES = main.c MatrixTests.c Suite.c

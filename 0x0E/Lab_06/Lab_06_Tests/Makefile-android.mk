@@ -3,7 +3,7 @@ CC = clang
 
 CFLAGS = -O0 -Wall -std=gnu99
 LDFLAGS =
-INC = -I.. -I./CUnit
+INC = -I.. -I.
 
 
 SOURCES = main.c MatrixTests.c Suite.c
