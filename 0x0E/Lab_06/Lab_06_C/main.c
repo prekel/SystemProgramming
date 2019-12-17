@@ -1,3 +1,8 @@
+// \file
+// \brief Вариант 4.
+// \details Дана целочисленная матрица размера M x N.
+// Найти количество ее строк и столбцов, все элементы которых различны.
+
 #include <stdio.h>
 #include <malloc.h>
 
@@ -11,7 +16,7 @@ int main()
 
     ReadMN(&m, &n);
 
-    int* pMatrix = (int*) malloc(m * n * sizeof(int));
+    int* pMatrix = (int*) malloc(m * n * sizeof (int));
 
     ReadMatrix(pMatrix, m, n);
 

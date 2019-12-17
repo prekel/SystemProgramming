@@ -64,7 +64,7 @@ void Test_CountLineRowAndWrite_5x4_0to19()
 
     int m = 5;
     int n = 4;
-    int* pMatrix = (int*) malloc(m * n * sizeof(int));
+    int* pMatrix = (int*) malloc(m * n * sizeof (int));
     for (int i = 0; i < m * n; i++)
     {
         pMatrix[i] = i;
