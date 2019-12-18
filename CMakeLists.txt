@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 project(SystemProgramming)
 
-#add_subdirectory(cunit/CUnit)
+add_subdirectory(cunit/CUnit)
 
 #add_subdirectory(0x01/1-UnitTesting)
 
@@ -22,4 +22,8 @@ project(SystemProgramming)
 
 #add_subdirectory(0x08/Lab_04)
 
-add_subdirectory(0x0A/Lab_05)
+#add_subdirectory(0x0A/Lab_05)
+
+#add_subdirectory(0x0E/Lab_06_C1)
+add_subdirectory(0x0E/Lab_06/Lab_06_C)
+add_subdirectory(0x0E/Lab_06/Lab_06_Tests)

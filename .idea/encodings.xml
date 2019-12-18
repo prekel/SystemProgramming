@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/0x0C/11-Assembler1/fill_memory.s" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/0x0C/11-Assembler1/hello.s" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/0x0C/11-Assembler1/movsample.s" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/0x0D/12-Assembler2/arith_progress.s" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/0x0D/12-Assembler2/factorial_1.s" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/0x0D/12-Assembler2/factorial_2.s" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/0x0D/12-Assembler2/max_elem.s" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/0x0D/12-Assembler2/max_elem_2.s" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/0x0D/12-Assembler2/memcpy.s" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/0x0D/12-Assembler2/strlen.s" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/0x0E/13-Assembler3/macro.s" charset="UTF-8" />
+  </component>
+</project>

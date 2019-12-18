@@ -21,13 +21,13 @@ my_memcpy:
         pushl %esi
         pushl %edi
 
-        movl  8(%ebp), %edi     /* цепочка-назначение                */
-        movl  12(%ebp), %esi    /* цепочка-источник                  */
-        movl  16(%ebp), %ecx    /* длина                             */
+        movl  8(%ebp), %edi     /* я├п╣п©п╬я┤п╨п╟-п╫п╟п╥п╫п╟я┤п╣п╫п╦п╣                */
+        movl  12(%ebp), %esi    /* я├п╣п©п╬я┤п╨п╟-п╦я│я┌п╬я┤п╫п╦п╨                  */
+        movl  16(%ebp), %ecx    /* п╢п╩п╦п╫п╟                             */
 
         rep movsb
 
-        movl  8(%ebp), %eax     /* вернуть dest                      */
+        movl  8(%ebp), %eax     /* п╡п╣я─п╫я┐я┌я▄ dest                      */
 
         popl  %edi
         popl  %esi
