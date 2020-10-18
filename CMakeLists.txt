@@ -10,7 +10,7 @@ add_subdirectory(cunit/CUnit)
 
 #add_subdirectory(0x03/2-Threads)
 
-add_subdirectory(SDL-mirror)
+#add_subdirectory(SDL-mirror)
 
 #add_subdirectory(0x04/3-Synchro)
 
