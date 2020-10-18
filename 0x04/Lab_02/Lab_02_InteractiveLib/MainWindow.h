@@ -10,7 +10,7 @@
 #include <stdbool.h>
 #include <time.h>
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 #include "Table.h"
 #include "PhilosophersSpawnerThread.h"
@@ -100,6 +100,8 @@ void StartThreadsMainWindow(MainWindow* pMainWindow);
 /// \param pMainWindow Указатель на главное окно.
 /// \return 0 в случае успешного завершения
 int RendererMainWindow(MainWindow* pMainWindow);
+
+int MainCycleMainWindowPool(MainWindow* pMainWindow);
 
 /// Главный цикл приложения. Обрабатывает события. (Синхронный запуск).
 ///

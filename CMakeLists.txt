@@ -16,13 +16,13 @@ add_subdirectory(cunit/CUnit)
 
 add_subdirectory(0x04/Lab_02)
 
-add_subdirectory(0x06/Lab_03)
+#add_subdirectory(0x06/Lab_03)
 
 #add_subdirectory(0x08/4-Files)
 
-add_subdirectory(0x08/Lab_04)
+#add_subdirectory(0x08/Lab_04)
 
-add_subdirectory(0x0A/Lab_05)
+#add_subdirectory(0x0A/Lab_05)
 
 #add_subdirectory(0x0E/Lab_06_C1)
 #add_subdirectory(0x0E/Lab_06/Lab_06_C)
