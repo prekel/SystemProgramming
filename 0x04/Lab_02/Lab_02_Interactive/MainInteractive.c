@@ -152,7 +152,7 @@ int main(int argc, char** args)
                                 isInfinityDuration);
 
     FILE* pLogFile = fopen("log.log", "w+");
-    InitLogger(pTable, true, stdout, pLogFile, NULL, NULL);
+    InitLogger(pTable, false, stdout, pLogFile, NULL, NULL);
     LOG("Введены данные, создание объектов, запуск потоков");
 
     MainWindow* pMainWindow = CreateMainWindow(

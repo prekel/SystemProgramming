@@ -13,6 +13,8 @@
 #include "Actions.h"
 #include "ArchipelagoCollection.h"
 
+extern const int QWERTY;
+
 /// Главная функция программы.
 ///
 /// \param argc Кол-во аргументов.
@@ -24,6 +26,8 @@ int main(int argc, char** argv)
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
 #endif
+    printf("%d", QWERTY);
+
 
     ActionExec(NULL, ACTION_HELP);
 

@@ -11,6 +11,8 @@
 
 #include "Input.h"
 
+const QWERTY = 123;
+
 char* InputLineRealloc(int stepSize, bool isFinalReallocRequired)
 {
     assert(stepSize >= 2);
