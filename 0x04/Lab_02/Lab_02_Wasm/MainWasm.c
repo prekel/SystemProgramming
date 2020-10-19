@@ -31,7 +31,7 @@ int main(int argc, char** args)
             pTable,
             minSendIntervalDuration,
             maxSendIntervalDuration,
-            isAutoSpawnDisabled,
+            false,
             false,
             true);
 

@@ -157,16 +157,13 @@ int MainCycleStep(MainWindow* pMainWindow, SDL_Event event)
 
         if (!pMainWindow->pTable->IsEatingEnded)
         {
+            // TODO: lock??
             pthread_mutex_lock(pMainWindow->pTable->pMutex);
             LOG("Событие выхода из программы было послано без завершения "
                 "потоков и очистки");
             LOG("Завершение программы с кодом 1 (EXIT_FAILURE)");
             return EXIT_FAILURE;
         }
-
-        StopThreadsMainWindow(pMainWindow);
-
-        QuitVideoMainWindow(pMainWindow);
 
         LOG("Завершение программы с кодом 0 (EXIT_SUCCESS)");
 
@@ -258,7 +255,7 @@ int MainCycleStep(MainWindow* pMainWindow, SDL_Event event)
         }
     }
 
-    return 0;
+    return -1;
 }
 
 int MainCycleMainWindow(MainWindow* pMainWindow)
@@ -270,9 +267,8 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
     while (SDL_WaitEvent(&event) != 0)
     {
         int ret = MainCycleStep(pMainWindow, event);
-        if (ret == 0)
+        if (ret >= 0)
         {
-            LOG("Завершение программы (главного цикла) с кодом 0 (EXIT_SUCCESS)");
             return ret;
         }
     }

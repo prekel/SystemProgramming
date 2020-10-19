@@ -105,8 +105,6 @@ void StartThreadsMainWindow(MainWindow* pMainWindow);
 /// \return 0 в случае успешного завершения
 int RendererMainWindow(MainWindow* pMainWindow);
 
-int MainCycleMainWindowPool(MainWindow* pMainWindow);
-
 /// Главный цикл приложения. Обрабатывает события. (Синхронный запуск).
 ///
 /// \param pMainWindow Указатель на главное окно.
