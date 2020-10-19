@@ -6,6 +6,7 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_EXECUTABLE_SUFFIX .html)
 
 add_executable(Lab_02_Wasm MainWasm.c)
+set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "index")
 
 target_link_libraries(Lab_02_Wasm PRIVATE Lab_02_InteractiveLib)
 target_link_libraries(Lab_02_Wasm PRIVATE Lab_02_Lib)
