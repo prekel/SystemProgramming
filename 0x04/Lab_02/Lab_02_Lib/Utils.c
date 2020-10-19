@@ -9,11 +9,8 @@
 #include <math.h>
 #include <limits.h>
 #include <errno.h>
-#include <pthread.h>
-#include <semaphore.h>
 
 #include "Utils.h"
-#include "Logger.h"
 
 int RandomInterval(int min, int max)
 {
@@ -69,8 +66,6 @@ int SleepOrWaitSem(sem_t* pSemOnWaitingEnding, struct timespec duration,
         int timedwaitReturns = sem_timedwait(
                 pSemOnWaitingEnding,
                 &infinityTime);
-        //LOG("sem_timedwait");
-        //int timedwaitReturns = 1;
         return timedwaitReturns == 0;
     }
     else
@@ -90,8 +85,6 @@ int SleepOrWaitSem(sem_t* pSemOnWaitingEnding, struct timespec duration,
         int timedwaitReturns = sem_timedwait(
                 pSemOnWaitingEnding,
                 &endTime);
-        //LOG("sem_timedwait");
-        //int timedwaitReturns = 1;
         return timedwaitReturns == 0;
         //return errno == ETIMEDOUT;
     }

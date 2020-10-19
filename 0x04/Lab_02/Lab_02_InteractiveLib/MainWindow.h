@@ -10,7 +10,11 @@
 #include <stdbool.h>
 #include <time.h>
 
+#ifdef __EMSCRIPTEN__
 #include <SDL2/SDL.h>
+#else
+#include <SDL.h>
+#endif
 
 #include "Table.h"
 #include "PhilosophersSpawnerThread.h"

@@ -170,10 +170,6 @@ int MainCycleStep(MainWindow* pMainWindow, SDL_Event event)
 
         LOG("Завершение программы с кодом 0 (EXIT_SUCCESS)");
 
-        //DestroyTable(pMainWindow->pTable);
-        //DestroyMainWindow(pMainWindow);
-
-        fflush(stdout);
         return EXIT_SUCCESS;
     }
 
@@ -265,25 +261,6 @@ int MainCycleStep(MainWindow* pMainWindow, SDL_Event event)
     return 0;
 }
 
-int MainCycleMainWindowPool(MainWindow* pMainWindow)
-{
-    //LOG("Запуск главного цикла (SDL_PollEvent)");
-
-    SDL_Event event;
-
-    while (SDL_PollEvent(&event) != 0)
-    {
-        int ret = MainCycleStep(pMainWindow, event);
-        if (ret != 0)
-        {
-            LOG("Главный цикл (SDL_PollEvent) завершён по неизвестной ошибке: %s", SDL_GetError());
-            return ret;
-        }
-    }
-
-    return 0;
-}
-
 int MainCycleMainWindow(MainWindow* pMainWindow)
 {
     LOG("Запуск главного цикла");
@@ -293,14 +270,15 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
     while (SDL_WaitEvent(&event) != 0)
     {
         int ret = MainCycleStep(pMainWindow, event);
-        if (ret != 0)
+        if (ret == 0)
         {
+            LOG("Завершение программы (главного цикла) с кодом 0 (EXIT_SUCCESS)");
             return ret;
         }
     }
 
     LOG("Главный цикл завершён по неизвестной ошибке: %s", SDL_GetError());
-    LOG("Завершение программы с кодом 70 (EX_SOFTWARE)");
+    LOG("Завершение программы (главного цикла) с кодом 70 (EX_SOFTWARE)");
 
     //return EX_SOFTWARE;
     return 70;

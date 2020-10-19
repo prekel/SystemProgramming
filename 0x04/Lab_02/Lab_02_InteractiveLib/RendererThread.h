@@ -5,7 +5,11 @@
 #ifndef RENDERERTHREAD_H
 #define RENDERERTHREAD_H
 
+#ifdef __EMSCRIPTEN__
 #include <SDL2/SDL.h>
+#else
+#include <SDL.h>
+#endif
 
 #include "Table.h"
 

@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#include <SDL2/SDL.h>
 #include <emscripten.h>
+#include <SDL2/SDL.h>
 
 #include "Table.h"
 #include "Logger.h"
@@ -31,7 +31,7 @@ int main(int argc, char** args)
             pTable,
             minSendIntervalDuration,
             maxSendIntervalDuration,
-            false,
+            isAutoSpawnDisabled,
             false,
             true);
 
@@ -39,8 +39,9 @@ int main(int argc, char** args)
 
     StartThreadsMainWindow(pMainWindow);
 
-    emscripten_set_main_loop_arg( RenderFrame, pMainWindow->pRendererThreadOptions,
-                                 60, 1);
+    emscripten_set_main_loop_arg((em_arg_callback_func) RenderFrame,
+                                 pMainWindow->pRendererThreadOptions,
+                                 0, 1);
 
     DestroyMainWindow(pMainWindow);
     DestroyTable(pTable);
