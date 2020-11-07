@@ -62,11 +62,8 @@ int SleepOrWaitSem(sem_t* pSemOnWaitingEnding, struct timespec duration,
 {
     if (isInfinityDuration)
     {
-        struct timespec infinityTime = {INT_MAX, NS_IN_S - 1};
-        int timedwaitReturns = sem_timedwait(
-                pSemOnWaitingEnding,
-                &infinityTime);
-        return timedwaitReturns == 0;
+        int waitReturns = sem_wait(pSemOnWaitingEnding);
+        return waitReturns == 0;
     }
     else
     {

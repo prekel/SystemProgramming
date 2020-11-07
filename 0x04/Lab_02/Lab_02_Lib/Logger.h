@@ -13,9 +13,6 @@
 #include "Philosopher.h"
 #include "Utils.h"
 
-int(* g_pFunction1)(char*, ...);
-int(* g_pFunction2)(char*, va_list);
-
 /// Ширина в логе для имени файла
 #define LOG_FILE_WIDTH 32
 /// Формат аргументов для логгера генерируемых макросом

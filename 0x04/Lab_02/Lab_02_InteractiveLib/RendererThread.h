@@ -5,7 +5,11 @@
 #ifndef RENDERERTHREAD_H
 #define RENDERERTHREAD_H
 
+#ifdef __EMSCRIPTEN__
+#include <SDL2/SDL.h>
+#else
 #include <SDL.h>
+#endif
 
 #include "Table.h"
 
@@ -42,6 +46,8 @@ RendererThreadOptions* CreateRendererThreadOptions(
 ///
 /// \param pOptions Указатель на парамеры потока.
 void DestroyRendererThreadOptions(RendererThreadOptions* pOptions);
+
+void* RenderFrame(RendererThreadOptions* pOptions);
 
 /// Функция потока отрисовщика. Цикл, рисующий состояние стола примерно
 /// 60 раз в секунду. Тёмно-серый цвет - философ с незапущенным потоком,

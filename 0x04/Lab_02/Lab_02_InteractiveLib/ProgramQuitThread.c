@@ -72,6 +72,10 @@ void* ProgramQuitThread(void* pProgramQuitThreadOptions)
     event.type = SDL_QUIT;
     SDL_PushEvent(&event);
 
+    StopThreadsMainWindow(pOptions->pMainWindow);
+
+    QuitVideoMainWindow(pOptions->pMainWindow);
+
     DestroyProgramQuitThreadOptions(pOptions);
     LOG("Завершение потока");
 

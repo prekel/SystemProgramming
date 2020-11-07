@@ -95,7 +95,7 @@ int InitVideoMainWindow(MainWindow* pMainWindow)
     pMainWindow->pRenderer = SDL_CreateRenderer(
             pMainWindow->pWindow,
             -1,
-            SDL_RENDERER_ACCELERATED);
+            SDL_RENDERER_SOFTWARE);
     if (pMainWindow->pRenderer == NULL)
     {
         fprintf(stderr, "Не удаётся создать отрисовщик: %s\n",
@@ -149,6 +149,115 @@ int RendererMainWindow(MainWindow* pMainWindow)
     return 0;
 }
 
+int MainCycleStep(MainWindow* pMainWindow, SDL_Event event)
+{
+    if (event.type == SDL_QUIT)
+    {
+        LOG("Главный цикл завершён событием");
+
+        if (!pMainWindow->pTable->IsEatingEnded)
+        {
+            // TODO: lock??
+            pthread_mutex_lock(pMainWindow->pTable->pMutex);
+            LOG("Событие выхода из программы было послано без завершения "
+                "потоков и очистки");
+            LOG("Завершение программы с кодом 1 (EXIT_FAILURE)");
+            return EXIT_FAILURE;
+        }
+
+        LOG("Завершение программы с кодом 0 (EXIT_SUCCESS)");
+
+        return EXIT_SUCCESS;
+    }
+
+    if (event.type == SDL_KEYDOWN)
+    {
+        if ((event.key.keysym.sym == SDLK_ESCAPE
+             || event.key.keysym.sym == SDLK_AC_BACK)
+            && !pMainWindow->pTable->IsEatingMustEnd)
+        {
+            LOG("Начато завершение программы");
+
+            LOG("Запуск потока, который завершает потоки");
+
+            ProgramQuitThreadOptions* pProgramQuitThreadOptions =
+                    CreateProgramQuitThreadOptions(pMainWindow);
+            pthread_t programQuitThreadId;
+            pthread_create(&programQuitThreadId,
+                           NULL,
+                           ProgramQuitThread,
+                           pProgramQuitThreadOptions);
+        }
+        if (event.key.keysym.mod & KMOD_CTRL)
+        {
+            char button = event.key.keysym.sym;
+            if ('1' <= button && button <= '9')
+            {
+                int philosopherId = (int) (button - '0');
+                int phIndex = philosopherId - 1;
+                if (philosopherId <=
+                    pMainWindow->pTable->PhilosophersCount)
+                {
+                    pthread_mutex_lock(pMainWindow->pTable->pMutex);
+                    Philosopher* ph =
+                            pMainWindow->pTable->ppPhilosophers[phIndex];
+                    if (!ph->IsEating)
+                    {
+                        LOG("Переключение метки бесконечного времени "
+                            "приёма пищи для философа с номером %d",
+                            ph->PhilosopherId);
+                        ph->IsInfinityDuration = !ph->IsInfinityDuration;
+                    }
+                    else
+                    {
+                        LOG("Невозможно переключение метки бесконечного "
+                            "времени приёма пищи для философа с "
+                            "номером %d",
+                            ph->PhilosopherId);
+                    }
+                    pthread_mutex_unlock(pMainWindow->pTable->pMutex);
+                }
+            }
+        }
+        else if (event.key.keysym.mod & KMOD_ALT)
+        {
+            char button = event.key.keysym.sym;
+            if ('1' <= button && button <= '9')
+            {
+                int philosopherId = (int) (button - '0');
+                int phIndex = philosopherId - 1;
+                if (philosopherId <=
+                    pMainWindow->pTable->PhilosophersCount)
+                {
+                    Philosopher* ph =
+                            pMainWindow->pTable->ppPhilosophers[phIndex];
+                    InterruptEating(ph, pMainWindow->pTable->pMutex);
+                }
+            }
+        }
+        else if (!pMainWindow->pTable->IsEatingMustEnd)
+        {
+            char button = event.key.keysym.sym;
+            if ('1' <= button && button <= '9')
+            {
+                int philosopherId = (int) (button - '0');
+                int phIndex = philosopherId - 1;
+                if (philosopherId <=
+                    pMainWindow->pTable->PhilosophersCount)
+                {
+                    Philosopher* ph =
+                            pMainWindow->pTable->ppPhilosophers[phIndex];
+                    LOG("Философ с номером %d вручную отправлен есть",
+                        ph->PhilosopherId);
+                    SpawnPhilosopher(pMainWindow->pTable, ph);
+                }
+            }
+        }
+    }
+
+    return -1;
+}
+
 int MainCycleMainWindow(MainWindow* pMainWindow)
 {
     LOG("Запуск главного цикла");
@@ -157,120 +266,15 @@ int MainCycleMainWindow(MainWindow* pMainWindow)
 
     while (SDL_WaitEvent(&event) != 0)
     {
-        if (event.type == SDL_QUIT)
+        int ret = MainCycleStep(pMainWindow, event);
+        if (ret >= 0)
         {
-            LOG("Главный цикл завершён событием");
-
-            if (!pMainWindow->pTable->IsEatingEnded)
-            {
-                pthread_mutex_lock(pMainWindow->pTable->pMutex);
-                LOG("Событие выхода из программы было послано без завершения "
-                    "потоков и очистки");
-                LOG("Завершение программы с кодом 1 (EXIT_FAILURE)");
-                return EXIT_FAILURE;
-            }
-
-            StopThreadsMainWindow(pMainWindow);
-
-            QuitVideoMainWindow(pMainWindow);
-
-            LOG("Завершение программы с кодом 0 (EXIT_SUCCESS)");
-
-            //DestroyTable(pMainWindow->pTable);
-            //DestroyMainWindow(pMainWindow);
-
-            fflush(stdout);
-            return EXIT_SUCCESS;
-        }
-
-        if (event.type == SDL_KEYDOWN)
-        {
-            if ((event.key.keysym.sym == SDLK_ESCAPE
-                 || event.key.keysym.sym == SDLK_AC_BACK)
-                && !pMainWindow->pTable->IsEatingMustEnd)
-            {
-                LOG("Начато завершение программы");
-
-                LOG("Запуск потока, который завершает потоки");
-
-                ProgramQuitThreadOptions* pProgramQuitThreadOptions =
-                        CreateProgramQuitThreadOptions(pMainWindow);
-                pthread_t programQuitThreadId;
-                pthread_create(&programQuitThreadId,
-                               NULL,
-                               ProgramQuitThread,
-                               pProgramQuitThreadOptions);
-            }
-            if (event.key.keysym.mod & KMOD_CTRL)
-            {
-                char button = event.key.keysym.sym;
-                if ('1' <= button && button <= '9')
-                {
-                    int philosopherId = (int) (button - '0');
-                    int phIndex = philosopherId - 1;
-                    if (philosopherId <=
-                        pMainWindow->pTable->PhilosophersCount)
-                    {
-                        pthread_mutex_lock(pMainWindow->pTable->pMutex);
-                        Philosopher* ph =
-                                pMainWindow->pTable->ppPhilosophers[phIndex];
-                        if (!ph->IsEating)
-                        {
-                            LOG("Переключение метки бесконечного времени "
-                                "приёма пищи для философа с номером %d",
-                                ph->PhilosopherId);
-                            ph->IsInfinityDuration = !ph->IsInfinityDuration;
-                        }
-                        else
-                        {
-                            LOG("Невозможно переключение метки бесконечного "
-                                "времени приёма пищи для философа с "
-                                "номером %d",
-                                ph->PhilosopherId);
-                        }
-                        pthread_mutex_unlock(pMainWindow->pTable->pMutex);
-                    }
-                }
-            }
-            else if (event.key.keysym.mod & KMOD_ALT)
-            {
-                char button = event.key.keysym.sym;
-                if ('1' <= button && button <= '9')
-                {
-                    int philosopherId = (int) (button - '0');
-                    int phIndex = philosopherId - 1;
-                    if (philosopherId <=
-                        pMainWindow->pTable->PhilosophersCount)
-                    {
-                        Philosopher* ph =
-                                pMainWindow->pTable->ppPhilosophers[phIndex];
-                        InterruptEating(ph, pMainWindow->pTable->pMutex);
-                    }
-                }
-            }
-            else if (!pMainWindow->pTable->IsEatingMustEnd)
-            {
-                char button = event.key.keysym.sym;
-                if ('1' <= button && button <= '9')
-                {
-                    int philosopherId = (int) (button - '0');
-                    int phIndex = philosopherId - 1;
-                    if (philosopherId <=
-                        pMainWindow->pTable->PhilosophersCount)
-                    {
-                        Philosopher* ph =
-                                pMainWindow->pTable->ppPhilosophers[phIndex];
-                        LOG("Философ с номером %d вручную отправлен есть",
-                            ph->PhilosopherId);
-                        SpawnPhilosopher(pMainWindow->pTable, ph);
-                    }
-                }
-            }
+            return ret;
         }
     }
 
     LOG("Главный цикл завершён по неизвестной ошибке: %s", SDL_GetError());
-    LOG("Завершение программы с кодом 70 (EX_SOFTWARE)");
+    LOG("Завершение программы (главного цикла) с кодом 70 (EX_SOFTWARE)");
 
     //return EX_SOFTWARE;
     return 70;

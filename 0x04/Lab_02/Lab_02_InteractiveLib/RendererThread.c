@@ -5,7 +5,11 @@
 #include <malloc.h>
 #include <math.h>
 
+#ifdef __EMSCRIPTEN__
+#include <SDL2/SDL.h>
+#else
 #include <SDL.h>
+#endif
 
 #include "Logger.h"
 
@@ -125,6 +129,90 @@ void DrawSquare(
     SDL_RenderFillRect(pRenderer, &rect);
 }
 
+void* RenderFrame(RendererThreadOptions* pOptions)
+{
+    SDL_SetRenderDrawColor(pOptions->pRenderer,
+                           ZERO_RGBA, ZERO_RGBA, ZERO_RGBA, ZERO_RGBA);
+    SDL_RenderClear(pOptions->pRenderer);
+    SDL_SetRenderDrawColor(pOptions->pRenderer,
+                           FULL_RGBA, FULL_RGBA, FULL_RGBA, FULL_RGBA);
+
+
+    for (int i = 0; i < pOptions->pTable->PhilosophersCount; i++)
+    {
+        if (!pOptions->pTable->ppPhilosophers[i]->IsThreadRunning)
+        {
+            SDL_SetRenderDrawColor(pOptions->pRenderer,
+                                   THREAD_NOT_RUNNING_RGB,
+                                   THREAD_NOT_RUNNING_RGB,
+                                   THREAD_NOT_RUNNING_RGB,
+                                   FULL_RGBA);
+        }
+        else if (pOptions->pTable->ppPhilosophers[i]->IsEating)
+        {
+            SDL_SetRenderDrawColor(pOptions->pRenderer,
+                                   EATING_R, EATING_GB, EATING_GB,
+                                   FULL_RGBA);
+        }
+        else if (pOptions->pTable->ppPhilosophers[i]->IsWaiting)
+        {
+            SDL_SetRenderDrawColor(pOptions->pRenderer,
+                                   WAITING_R, WAITING_G, WAITING_B,
+                                   FULL_RGBA);
+        }
+        else if (!pOptions->pTable->ppPhilosophers[i]->IsEating)
+        {
+            SDL_SetRenderDrawColor(pOptions->pRenderer,
+                                   FREE_RGB, FREE_RGB, FREE_RGB,
+                                   FULL_RGBA);
+        }
+
+        double angle =
+                FULL_ANGLE / pOptions->pTable->PhilosophersCount * i -
+                RIGHT_ANGLE;
+
+        DrawSquare(pOptions->pRenderer,
+                   pOptions->ScreenWidth,
+                   pOptions->ScreenHeight,
+                   PHILOSOPHER_WIDTH,
+                   PHILOSOPHER_RADIUS,
+                   angle);
+    }
+
+
+    for (int i = 0; i < pOptions->pTable->PhilosophersCount; i++)
+    {
+        if (pOptions->pTable->ppForks[i]->IsInUse)
+        {
+            SDL_SetRenderDrawColor(pOptions->pRenderer,
+                                   USED_R, USED_G, USED_B, FULL_RGBA);
+        }
+        else
+        {
+            SDL_SetRenderDrawColor(pOptions->pRenderer,
+                                   NOT_USED_RGB, NOT_USED_RGB,
+                                   NOT_USED_RGB, FULL_RGBA);
+        }
+
+        double angle =
+                FULL_ANGLE / pOptions->pTable->PhilosophersCount * i -
+                (RIGHT_ANGLE - (FULL_ANGLE /
+                                (pOptions->pTable->PhilosophersCount *
+                                 2)));
+
+        DrawSquare(pOptions->pRenderer,
+                   pOptions->ScreenWidth,
+                   pOptions->ScreenHeight,
+                   FORK_WIDTH,
+                   FORK_RADIUS,
+                   angle);
+    }
+
+    SDL_RenderPresent(pOptions->pRenderer);
+
+    return NULL;
+}
+
 void* RendererThread(void* pRendererThreadOptions)
 {
     LOG("Запуск потока");
@@ -138,90 +226,14 @@ void* RendererThread(void* pRendererThreadOptions)
     {
         if (pOptions->pTable->IsEatingEnded) break;
 
-        SDL_SetRenderDrawColor(pOptions->pRenderer,
-                               ZERO_RGBA, ZERO_RGBA, ZERO_RGBA, ZERO_RGBA);
-        SDL_RenderClear(pOptions->pRenderer);
-        SDL_SetRenderDrawColor(pOptions->pRenderer,
-                               FULL_RGBA, FULL_RGBA, FULL_RGBA, FULL_RGBA);
-
-
-        for (int i = 0; i < pOptions->pTable->PhilosophersCount; i++)
-        {
-            if (!pOptions->pTable->ppPhilosophers[i]->IsThreadRunning)
-            {
-                SDL_SetRenderDrawColor(pOptions->pRenderer,
-                                       THREAD_NOT_RUNNING_RGB,
-                                       THREAD_NOT_RUNNING_RGB,
-                                       THREAD_NOT_RUNNING_RGB,
-                                       FULL_RGBA);
-            }
-            else if (pOptions->pTable->ppPhilosophers[i]->IsEating)
-            {
-                SDL_SetRenderDrawColor(pOptions->pRenderer,
-                                       EATING_R, EATING_GB, EATING_GB,
-                                       FULL_RGBA);
-            }
-            else if (pOptions->pTable->ppPhilosophers[i]->IsWaiting)
-            {
-                SDL_SetRenderDrawColor(pOptions->pRenderer,
-                                       WAITING_R, WAITING_G, WAITING_B,
-                                       FULL_RGBA);
-            }
-            else if (!pOptions->pTable->ppPhilosophers[i]->IsEating)
-            {
-                SDL_SetRenderDrawColor(pOptions->pRenderer,
-                                       FREE_RGB, FREE_RGB, FREE_RGB,
-                                       FULL_RGBA);
-            }
-
-            double angle =
-                    FULL_ANGLE / pOptions->pTable->PhilosophersCount * i -
-                    RIGHT_ANGLE;
-
-            DrawSquare(pOptions->pRenderer,
-                       pOptions->ScreenWidth,
-                       pOptions->ScreenHeight,
-                       PHILOSOPHER_WIDTH,
-                       PHILOSOPHER_RADIUS,
-                       angle);
-        }
-
-
-        for (int i = 0; i < pOptions->pTable->PhilosophersCount; i++)
-        {
-            if (pOptions->pTable->ppForks[i]->IsInUse)
-            {
-                SDL_SetRenderDrawColor(pOptions->pRenderer,
-                                       USED_R, USED_G, USED_B, FULL_RGBA);
-            }
-            else
-            {
-                SDL_SetRenderDrawColor(pOptions->pRenderer,
-                                       NOT_USED_RGB, NOT_USED_RGB,
-                                       NOT_USED_RGB, FULL_RGBA);
-            }
-
-            double angle =
-                    FULL_ANGLE / pOptions->pTable->PhilosophersCount * i -
-                    (RIGHT_ANGLE - (FULL_ANGLE /
-                                    (pOptions->pTable->PhilosophersCount *
-                                     2)));
-
-            DrawSquare(pOptions->pRenderer,
-                       pOptions->ScreenWidth,
-                       pOptions->ScreenHeight,
-                       FORK_WIDTH,
-                       FORK_RADIUS,
-                       angle);
-        }
+        RenderFrame(pOptions);
 
         unsigned int frameMs = SDL_GetTicks() - ticks1;
-
         ticks1 = SDL_GetTicks();
-
-        SDL_RenderPresent(pOptions->pRenderer);
-
-        if (frameMs < VSYNCMS) SDL_Delay(VSYNCMS - frameMs);
+        if (frameMs < VSYNCMS)
+        {
+            SDL_Delay(VSYNCMS - frameMs);
+        }
     }
 
     LOG("Завершение потока");
